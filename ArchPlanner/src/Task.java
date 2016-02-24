@@ -10,7 +10,6 @@ import java.sql.Date;
 public class Task implements Serializable {
 	
 	//These are the data members of Task object
-	public static String _name;
 	public static String _description;
 	public static String _tag;
 	public static Date _startTime;
