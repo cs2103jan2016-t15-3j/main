@@ -1,6 +1,8 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ public class Storage {
 	//This arraylist is used to store the strings of text in the file
 	private static ArrayList<Task> tasksList = new ArrayList<Task>();
 
-	private static void loadStorageFile() throws IOException {
+	private static void loadStorageFile() throws IOException, ClassNotFoundException {
 		_fileName = "Storage.srl";
 		_file = new File(_fileName);
 
@@ -35,7 +37,14 @@ public class Storage {
 		_file.createNewFile();
 	}
 	
-	private static void readStorageFile() throws IOException {
+	private static void readStorageFile() throws IOException, ClassNotFoundException {
+		FileInputStream fis = new FileInputStream("t.tmp");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		tasksList = (ArrayList<Task>) ois.readObject();
+		ois.close();
+	}
+	
+	private static void writeStorageFile() throws IOException {
 		FileOutputStream fos = new FileOutputStream("Storage.srl");
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(tasksList);
