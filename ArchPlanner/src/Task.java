@@ -10,58 +10,58 @@ import java.util.Date;
 public class Task implements Serializable {
 	
 	//These are the data members of Task object
-	public static String _description;
-	public static String _tag;
-	public static Date _startTime;
-	public static Date _endTime;
-	public static boolean _isDone;
-	public static boolean _isOverDue;
+	public String _description;
+	public String _tag;
+	public Date _startTime;
+	public Date _endTime;
+	public boolean _isDone;
+	public boolean _isOverDue;
 	
-	public static void setDescription(String description) {
+	public void setDescription(String description) {
 		_description = description;
 	}
 	
-	public static void setTag(String tag) {
+	public void setTag(String tag) {
 		_tag = tag;
 	}
 	
-	public static void setStartTime(Date startTime) {
+	public void setStartTime(Date startTime) {
 		_startTime = startTime;
 	}
 	
-	public static void setEndTime(Date endTime) {
+	public void setEndTime(Date endTime) {
 		_endTime = endTime;
 	}
 	
-	public static void setIsDone(boolean isDone) {
+	public void setIsDone(boolean isDone) {
 		_isDone = isDone;
 	}
 	
-	public static void setIsOverDue(boolean isOverDue) {
+	public void setIsOverDue(boolean isOverDue) {
 		_isOverDue = isOverDue;
 	}
 	
-	public static String getDescription() {
+	public String getDescription() {
 		return _description;
 	}
 	
-	public static String getTag() {
+	public String getTag() {
 		return _tag;
 	}
 	
-	public static Date getStartTime() {
+	public Date getStartTime() {
 		return _startTime;
 	}
 	
-	public static Date getEndTime() {
+	public Date getEndTime() {
 		return _endTime;
 	}
 	
-	public static boolean getIsDone() {
+	public boolean getIsDone() {
 		return _isDone;
 	}
 	
-	public static boolean getIsOverDue() {
+	public boolean getIsOverDue() {
 		return _isOverDue;
 	}
 }
