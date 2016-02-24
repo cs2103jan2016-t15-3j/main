@@ -1,5 +1,5 @@
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * This class contains the attributes of each task in ArchPlanner
