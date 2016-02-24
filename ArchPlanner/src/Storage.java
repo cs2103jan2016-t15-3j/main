@@ -17,10 +17,6 @@ public class Storage {
 	//This the File to be manipulated by the program
 	public static File _file;
 
-	//These are the error messages
-	private static final String ERROR_MESSAGE_FILE_CREATION_FAILED = "File creation failed!";
-	private static final String ERROR_MESSAGE_FILE_LOAD_FAILED = "Load file failed!";
-
 	//This arraylist is used to store the strings of text in the file
 	private static ArrayList<Task> tasksList = new ArrayList<Task>();
 
@@ -31,14 +27,18 @@ public class Storage {
 		if (!_file.exists() || !_file.isFile()) {
 			createStorageFile();
 		} else {
-			FileOutputStream fos = new FileOutputStream("Storage.srl");
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(tasksList);
-			oos.close();
+			readStorageFile();
 		}
 	}
 
 	private static void createStorageFile() throws IOException {
 		_file.createNewFile();
+	}
+	
+	private static void readStorageFile() throws IOException {
+		FileOutputStream fos = new FileOutputStream("Storage.srl");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(tasksList);
+		oos.close();
 	}
 }
