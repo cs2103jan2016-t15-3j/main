@@ -44,4 +44,32 @@ public class Task {
 	public static void setIsOverDue(boolean isOverDue) {
 		_isOverDue = isOverDue;
 	}
+	
+	public static String getName() {
+		return _name;
+	}
+	
+	public static String getDescription() {
+		return _description;
+	}
+	
+	public static String getTag() {
+		return _tag;
+	}
+	
+	public static Date getStartTime() {
+		return _startTime;
+	}
+	
+	public static Date getEndTime() {
+		return _endTime;
+	}
+	
+	public static boolean getIsDone() {
+		return _isDone;
+	}
+	
+	public static boolean getIsOverDue() {
+		return _isOverDue;
+	}
 }
