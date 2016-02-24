@@ -41,10 +41,6 @@ public class Task implements Serializable {
 		_isOverDue = isOverDue;
 	}
 	
-	public static String getName() {
-		return _name;
-	}
-	
 	public static String getDescription() {
 		return _description;
 	}
