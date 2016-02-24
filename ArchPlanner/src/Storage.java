@@ -30,7 +30,7 @@ public class Storage {
 		return _tasksList;
 	}
 
-	private void loadStorageFile() throws IOException, ClassNotFoundException {
+	public void loadStorageFile() throws IOException, ClassNotFoundException {
 		_fileName = "Storage.srl";
 		_file = new File(_fileName);
 
