@@ -1,3 +1,4 @@
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -46,14 +47,18 @@ public class Storage {
 	}
 	
 	public void readStorageFile() throws IOException, ClassNotFoundException {
-		FileInputStream fis = new FileInputStream("t.tmp");
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		_tasksList = (ArrayList<Task>) ois.readObject();
-		ois.close();
+		try {
+			FileInputStream fis = new FileInputStream(_fileName);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			_tasksList = (ArrayList<Task>) ois.readObject();
+			ois.close();
+		} catch (EOFException e) {
+			System.out.println("End Of File!");
+		}
 	}
 	
 	public void writeStorageFile() throws IOException {
-		FileOutputStream fos = new FileOutputStream("Storage.srl");
+		FileOutputStream fos = new FileOutputStream(_fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(_tasksList);
 		oos.close();
