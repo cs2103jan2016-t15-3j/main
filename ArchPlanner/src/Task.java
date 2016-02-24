@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -6,7 +7,7 @@ import java.sql.Date;
  *
  */
 
-public class Task {
+public class Task implements Serializable {
 	
 	//These are the data members of Task object
 	public static String _name;
