@@ -14,15 +14,23 @@ import java.util.ArrayList;
 public class Storage {
 
 	//This is the name of the file to be manipulated
-	public static String _fileName;
+	public String _fileName;
 
 	//This the File to be manipulated by the program
-	public static File _file;
+	public File _file;
 
 	//This arraylist is used to store the strings of text in the file
-	private static ArrayList<Task> tasksList = new ArrayList<Task>();
+	public ArrayList<Task> _tasksList = new ArrayList<Task>();
+	
+	public void setTasksList(ArrayList<Task> tasksList) {
+		_tasksList = tasksList;
+	}
+	
+	public ArrayList<Task> getTasksList() {
+		return _tasksList;
+	}
 
-	private static void loadStorageFile() throws IOException, ClassNotFoundException {
+	private void loadStorageFile() throws IOException, ClassNotFoundException {
 		_fileName = "Storage.srl";
 		_file = new File(_fileName);
 
@@ -33,21 +41,21 @@ public class Storage {
 		}
 	}
 
-	private static void createStorageFile() throws IOException {
+	public void createStorageFile() throws IOException {
 		_file.createNewFile();
 	}
 	
-	private static void readStorageFile() throws IOException, ClassNotFoundException {
+	public void readStorageFile() throws IOException, ClassNotFoundException {
 		FileInputStream fis = new FileInputStream("t.tmp");
 		ObjectInputStream ois = new ObjectInputStream(fis);
-		tasksList = (ArrayList<Task>) ois.readObject();
+		_tasksList = (ArrayList<Task>) ois.readObject();
 		ois.close();
 	}
 	
-	private static void writeStorageFile() throws IOException {
+	public void writeStorageFile() throws IOException {
 		FileOutputStream fos = new FileOutputStream("Storage.srl");
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(tasksList);
+		oos.writeObject(_tasksList);
 		oos.close();
 	}
 }
