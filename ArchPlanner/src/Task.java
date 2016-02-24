@@ -17,10 +17,6 @@ public class Task implements Serializable {
 	public static boolean _isDone;
 	public static boolean _isOverDue;
 	
-	public static void setName(String name) {
-		_name = name;
-	}
-	
 	public static void setDescription(String description) {
 		_description = description;
 	}
