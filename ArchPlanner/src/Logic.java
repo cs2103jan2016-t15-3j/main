@@ -15,8 +15,6 @@ public class Logic {
 	public ArrayList<Task> _mainList;
 	public ArrayList<Task> _viewList;
 
-	public int numberOfTags;
-
 	public Storage storage = new Storage();
 
 	public Logic() throws ClassNotFoundException, IOException {
