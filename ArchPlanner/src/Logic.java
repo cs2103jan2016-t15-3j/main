@@ -86,9 +86,7 @@ public class Logic {
 	}
 
 	public ArrayList<Task> viewAll() {
-		ArrayList<Task> viewAllList= new ArrayList<Task>();
-		viewAllList= getSortedListWithDescription(_mainList);
-		return viewAllList;
+		return _mainList;
 	}
 
 	public void undo(int number) {
@@ -118,7 +116,6 @@ public class Logic {
 				floatingTasksList.add(_mainList.get(i));
 			}
 		}
-		floatingTasksList = getSortedListWithDescription(floatingTasksList);
 		return floatingTasksList;
 	}
 
@@ -133,6 +130,17 @@ public class Logic {
 		deadLineTasksList = getSortedListWithEndTime(deadLineTasksList);
 		deadLineTasksList = getSortedListWithDescription(deadLineTasksList);
 		return deadLineTasksList;
+	}
+	
+	public ArrayList<Task> updateViewTagTasksList(String tag) {
+		ArrayList<Task> tagTasksList = new ArrayList<Task>();
+
+		for (int i = 0; i < _mainList.size(); i++) {
+			if (getTaskTag(_mainList, i).equals(tag)) {
+				tagTasksList.add(_mainList.get(i));
+			}
+		}
+		return tagTasksList;
 	}
 
 	public ArrayList<Task> updateViewTimeLineTasksList() {
