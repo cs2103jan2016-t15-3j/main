@@ -37,47 +37,60 @@ public class Logic {
 
 	public void deleteTask(int id) throws IOException {
 		int taskIndex= getTaskIndex(id);
-		_mainList.remove(taskIndex);
+		Task task = getTask(_viewList, taskIndex);
+		
+		_mainList.remove(task);
 		saveTask();
 	}
 
 	public void editTask(int id, String newDescription, Date newStartTime, Date newEndTime, String newTag) throws IOException {
 		int taskIndex = getTaskIndex(id);
-
-		if (newDescription.equals(getTaskDescription(_mainList, taskIndex))) {
-			setTaskDescription(_mainList, taskIndex);
+		Task oldTask = getTask(_viewList, taskIndex);
+		
+		if (newDescription.equals(getTaskDescription(_viewList, taskIndex))) {
+			setTaskDescription(_viewList, taskIndex, newDescription);
 		}
 
-		if (newStartTime.equals(getTaskStartTime(_mainList, taskIndex))) {
-			setTaskStartTime(_mainList, taskIndex);
+		if (newStartTime.equals(getTaskStartTime(_viewList, taskIndex))) {
+			setTaskStartTime(_viewList, taskIndex, newStartTime);
 		}
 
-		if (newEndTime.equals(getTaskEndTime(_mainList, taskIndex))) {
-			setTaskEndTime(_mainList, taskIndex);
+		if (newEndTime.equals(getTaskEndTime(_viewList, taskIndex))) {
+			setTaskEndTime(_viewList, taskIndex, newEndTime);
 		}
 
-		if (newTag.equals(getTaskTag(_mainList, taskIndex))) {
-			setTaskTag(_mainList, taskIndex);
+		if (newTag.equals(getTaskTag(_viewList, taskIndex))) {
+			setTaskTag(_viewList, taskIndex, newTag);
 		}
+		_mainList.remove(oldTask);
+		_mainList.add(getTask(_viewList, taskIndex));
 		saveTask();
 	}
 
 	public void done(int id) throws IOException {
 		int taskIndex = getTaskIndex(id);
-
-		setTaskIsDone(_mainList, taskIndex, true);
+		Task task = getTask(_viewList, taskIndex);
+		
+		setTaskIsDone(_viewList, taskIndex, true);
+		_mainList.remove(task);
+		_mainList.add(getTask(_viewList, taskIndex));
 		saveTask();
 	}
 
 	public void unDone(int id) throws IOException {
 		int taskIndex = getTaskIndex(id);
-
-		setTaskIsDone(_mainList, taskIndex, false);
+		Task task = getTask(_viewList, taskIndex);
+		
+		setTaskIsDone(_viewList, taskIndex, false);
+		_mainList.remove(task);
+		_mainList.add(getTask(_viewList, taskIndex));
 		saveTask();
 	}
 
 	public ArrayList<Task> viewAll() {
-		return getViewList();
+		ArrayList<Task> viewAllList= new ArrayList<Task>();
+		viewAllList= getSortedListWithDescription(_mainList);
+		return viewAllList;
 	}
 
 	public void undo(int number) {
@@ -150,6 +163,11 @@ public class Logic {
 		int taskIndex = id - 1;
 		return taskIndex;
 	}
+	
+	public Task getTask(ArrayList<Task> list, int taskIndex) {
+		Task task = list.get(taskIndex);
+		return task;
+	}
 
 	public String getTaskDescription(ArrayList<Task> list, int taskIndex) {
 		String taskDescription = list.get(taskIndex).getDescription();
@@ -194,24 +212,20 @@ public class Logic {
 		return list;
 	}
 
-	public void setTaskDescription(ArrayList<Task> list, int taskIndex) {
-		list.get(taskIndex).getDescription();
+	public void setTaskDescription(ArrayList<Task> list, int taskIndex, String description) {
+		list.get(taskIndex).setDescription(description);
 	}
 
-	public void setTaskStartTime(ArrayList<Task> list, int taskIndex) {
-		list.get(taskIndex).getStartTime();
+	public void setTaskStartTime(ArrayList<Task> list, int taskIndex, Date startTime) {
+		list.get(taskIndex).setStartTime(startTime);
 	}
 
-	public void setTaskEndTime(ArrayList<Task> list, int taskIndex) {
-		list.get(taskIndex).getEndTime();
+	public void setTaskEndTime(ArrayList<Task> list, int taskIndex, Date endTime) {
+		list.get(taskIndex).setEndTime(endTime);
 	}
 
-	public void setTaskTag(ArrayList<Task> list, int taskIndex) {
-		list.get(taskIndex).getTag();
-	}
-
-	public void setTaskIsDone(ArrayList<Task> list, int taskIndex) {
-		list.get(taskIndex).getIsDone();
+	public void setTaskTag(ArrayList<Task> list, int taskIndex, String tag) {
+		list.get(taskIndex).setTag(tag);
 	}
 
 	public void setTaskIsDone(ArrayList<Task> list, int taskIndex, boolean isDone) throws IOException {
