@@ -11,43 +11,32 @@ import java.util.Date;
  */
 public class Logic {
 	
-	public static ArrayList<Task> _mainList;
+	public ArrayList<Task> _mainList;
 	
-	public static Storage storage = new Storage();
+	public Storage storage = new Storage();
 	
-	public static void main(String[] args) throws ClassNotFoundException, IOException {
+	public Logic() throws ClassNotFoundException, IOException {
 		storage.loadStorageFile();
-		storage.readStorageFile();
 		_mainList = storage.getTasksList();
-		Date date = new Date();
-		addTask("task 1", date, date, "tag 1");
-		addTask("task 2", date, date, "tag 2");
-		for(int i = 0; i < _mainList.size(); i++) {
-			String output = _mainList.get(i).getStartTime().toString();
-			System.out.println(output);
-		}
-		storage.writeStorageFile();
 	}
 	
-	public static void addTask(String description, Date startTime, Date endTime, String tag) throws IOException {
+	public void addTask(String description, Date startTime, Date endTime, String tag) throws IOException {
 		Task task = new Task();
 		task.setDescription(description);
 		task.setStartTime(startTime);
 		task.setEndTime(endTime);
 		task.setTag(tag);
 		_mainList.add(task);
-		storage.setTasksList(_mainList);
-		storage.writeStorageFile();
+		saveTask();
 	}
 	
-	public static void deleteTask(int id) throws IOException {
+	public void deleteTask(int id) throws IOException {
 		int taskIndex= getTaskIndex(id);
 		_mainList.remove(taskIndex);
-		storage.setTasksList(_mainList);
-		storage.writeStorageFile();
+		saveTask();
 	}
 	
-	public static void editTask(int id, String description, Date startTime, Date endTime, String tag) throws IOException {
+	public void editTask(int id, String description, Date startTime, Date endTime, String tag) throws IOException {
 		int taskIndex = getTaskIndex(id);
 		
 		if(description !=_mainList.get(taskIndex).getDescription()) {
@@ -66,38 +55,40 @@ public class Logic {
 			_mainList.get(taskIndex).setTag(tag);
 		}
 		
-		storage.setTasksList(_mainList);
-		storage.writeStorageFile();
+		saveTask();
 	}
 	
-	public static void done(int id) throws IOException {
+	public void done(int id) throws IOException {
 		markCompletion(id, true);
 	}
 	
-	public static void unDone(int id) throws IOException {
+	public void unDone(int id) throws IOException {
 		markCompletion(id, false);
 	}
 	
-	public static void markCompletion(int id, boolean isDone) throws IOException {
+	public void markCompletion(int id, boolean isDone) throws IOException {
 		int taskIndex = getTaskIndex(id);
 		
 		_mainList.get(taskIndex).setIsDone(isDone);
-		storage.setTasksList(_mainList);
-		storage.writeStorageFile();
+		saveTask();
 	}
 	
-	public static ArrayList<Task> viewMainList() {
+	public ArrayList<Task> viewMainList() {
 		return _mainList;
 	}
 	
-	public static void undo(int number) {
+	public void undo(int number) {
 	}
 	
-	public static void redo(int number) {
+	public void redo(int number) {
 	}
 	
-	public static int getTaskIndex(int id) {
+	public int getTaskIndex(int id) {
 		int taskIndex = id - 1;
 		return taskIndex;
+	}
+	
+	public void saveTask() throws IOException {
+		storage.writeStorageFile(_mainList);
 	}
 }
