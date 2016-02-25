@@ -57,7 +57,8 @@ public class Storage {
 		}
 	}
 	
-	public void writeStorageFile() throws IOException {
+	public void writeStorageFile(ArrayList<Task> tasksList) throws IOException {
+		setTasksList(tasksList);
 		FileOutputStream fos = new FileOutputStream(_fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(_tasksList);
