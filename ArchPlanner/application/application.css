@@ -1,0 +1,65 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.list-cell {
+    -fx-background-color: -fx-control-inner-background;
+}
+.list-cell:odd {
+    -fx-background-color: derive(-fx-control-inner-background,-2%);
+}
+
+.label {
+	-fx-text-fill: black;
+}
+
+.toggle-button {
+    -fx-background-color: -fx-inner-border;
+}
+.toggle-button:selected {
+    -fx-background-color: -fx-outer-border;
+}
+
+.text-field {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#viewLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#tagLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#numLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#desLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#startLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#endLabel {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+
+#tagView {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
+
+#taskView {
+	-fx-border-width: 1;
+	-fx-border-color: grey;
+}
