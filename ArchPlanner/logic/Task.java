@@ -68,24 +68,44 @@ public class Task implements Serializable {
 	}
 	
 	public String getStartDate() {
+	    if (getStartDateTime() == null) {
+	        return "";
+	    }
+	    
 		String startDate = String.valueOf(getStartDateTime().getDate()) + "/"
 				+  String.valueOf(getStartDateTime().getMonth()) + "/" + String.valueOf(getStartDateTime().getYear());
+		
 		return startDate;
 	}
 	
 	public String getStartTime() {
-		String startTime = String.valueOf(getStartDateTime().getTime());
+	    if (getStartDateTime() == null) {
+            return "";
+        }
+	    
+	    String startTime = String.valueOf(getStartDateTime().getHours()) + ":" + String.valueOf(getStartDateTime().getMinutes());
+		
 		return startTime;
 	}
 	
 	public String getEndDate() {
+	    if (getEndDateTime() == null) {
+            return "";
+        }
+	    
 		String endDate = String.valueOf(getEndDateTime().getDate()) + "/"
 				+  String.valueOf(getEndDateTime().getMonth()) + "/" + String.valueOf(getEndDateTime().getYear());
-		return endDate;
+
+        return endDate;
 	}
 	
 	public String getEndTime() {
-		String endTime = String.valueOf(getStartDateTime().getTime());
+	    if (getEndDateTime() == null) {
+            return "";
+        }
+	    
+		String endTime = String.valueOf(getEndDateTime().getHours()) + ":" + String.valueOf(getEndDateTime().getMinutes());
+		
 		return endTime;
 	}
 	

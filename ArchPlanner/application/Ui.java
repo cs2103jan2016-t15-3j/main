@@ -5,7 +5,6 @@ import java.net.URL;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +20,7 @@ public class Ui extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 
-	    URL layoutURL = getClass().getResource("/application/Ui3.fxml");
+	    URL layoutURL = getClass().getResource("/application/Ui.fxml");
 	    URL cssURL = getClass().getResource("application.css");
 	    
 	    FXMLLoader fxmlLoader = new FXMLLoader();
@@ -32,7 +31,7 @@ public class Ui extends Application {
             e.printStackTrace();
         }
 
-	    uiInstance = fxmlLoader.getController();	   
+	    uiInstance = fxmlLoader.getController();	    
 	    
 	    Scene scene = new Scene(root, 780, 400);	    
 	    scene.getStylesheets().addAll(cssURL.toExternalForm());	

@@ -4,34 +4,42 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import application.Ui;
+
 /**
  * This class interact with the UI and process the operation, 
- * followed by updating the changes to Storage
+ * followed by updating the changes to storage
  * 
  * @author riyang
  *
  */
 public class Logic {
 
-	private ArrayList<Task> _mainList;
-	private ArrayList<Task> _viewList;
-	private ArrayList<String> _tagsList;
-
-	public Storage storage = new Storage();
-
-	public Logic() throws ClassNotFoundException, IOException {
-		storage.loadStorageFile();
-		_mainList = storage.getTasksList();
-		_tagsList = new ArrayList();
-		setViewList(_mainList);
+	private ArrayList<Task> _mainList = new ArrayList<Task>();
+	private ArrayList<Task> _viewList = new ArrayList<Task>();
+	private ArrayList<String> _tagsList = new ArrayList<String>();
+	
+	Storage storage = new Storage();
+	
+	public Logic() {
+	    storage.loadStorageFile();
+        _mainList = storage.getTasksList();
+        setViewList(_mainList);
 	}
 
-	public void addTask(String description, String tag, Date startDateTime, Date endDateTime) throws IOException {
+
+	public void addTask(String description, String tag, Date startDateTime, Date endDateTime) {
 		Task task = new Task(description, tag, startDateTime, endDateTime);
+		System.out.println(task.getDescription());
 		_mainList.add(task);
-		if (!_tagsList.contains(tag)) {
+		
+		if (tag != null && !_tagsList.contains(tag)) {
 			_tagsList.add(tag);
+			Ui.getInstance().updateTagDisplay(_tagsList);
 		}
+		setViewList(_mainList);
+		Ui.getInstance().updateTaskDisplay(_viewList);
+		
 		saveTask();
 	}
 
@@ -50,7 +58,7 @@ public class Logic {
 		saveTask();
 	}
 
-	public void editTask(int id, String newDescription, String newTag, Date newStartDateTime, Date newEndDateTime) throws IOException {
+	public void editTask(int id, String newDescription, String newTag, Date newStartDateTime, Date newEndDateTime) {
 		int taskIndex = getTaskIndex(id);
 		Task oldTask = getTask(_viewList, taskIndex);
 
@@ -74,7 +82,7 @@ public class Logic {
 		saveTask();
 	}
 
-	public void done(int id) throws IOException {
+	public void done(int id) {
 		int taskIndex = getTaskIndex(id);
 		Task task = getTask(_viewList, taskIndex);
 
@@ -104,7 +112,7 @@ public class Logic {
 	public void redo(int number) {
 	}
 
-	public ArrayList<Task> updateViewFloatingTasksList() {
+	private ArrayList<Task> updateViewFloatingTasksList() {
 		ArrayList<Task> floatingTasksList = new ArrayList<Task>();
 
 		for (int i = 0; i < _mainList.size(); i++) {
@@ -115,7 +123,7 @@ public class Logic {
 		return floatingTasksList;
 	}
 
-	public ArrayList<Task> updateViewDeadLineTasksList() {
+	private ArrayList<Task> updateViewDeadLineTasksList() {
 		ArrayList<Task> deadLineTasksList = new ArrayList<Task>();
 
 		for (int i = 0; i < _mainList.size(); i++) {
@@ -128,7 +136,7 @@ public class Logic {
 		return deadLineTasksList;
 	}
 
-	public ArrayList<Task> updateViewTagTasksList(String tag) {
+	private ArrayList<Task> updateViewTagTasksList(String tag) {
 		ArrayList<Task> tagTasksList = new ArrayList<Task>();
 
 		for (int i = 0; i < _mainList.size(); i++) {
@@ -139,7 +147,7 @@ public class Logic {
 		return tagTasksList;
 	}
 
-	public ArrayList<Task> updateViewTimeLineTasksList() {
+	private ArrayList<Task> updateViewTimeLineTasksList() {
 		ArrayList<Task> timeLineTasksList= new ArrayList<>();
 
 		for (int i = 0; i < _mainList.size(); i++) {
@@ -153,7 +161,7 @@ public class Logic {
 		return timeLineTasksList;
 	}
 
-	public void saveTask() throws IOException {
+	private void saveTask() {
 		storage.writeStorageFile(_mainList);
 	}
 
@@ -161,81 +169,81 @@ public class Logic {
 		System.exit(0);
 	}
 
-	public int getTaskIndex(int id) {
+	private int getTaskIndex(int id) {
 		int taskIndex = id - 1;
 		return taskIndex;
 	}
 
-	public Task getTask(ArrayList<Task> list, int taskIndex) {
+	private Task getTask(ArrayList<Task> list, int taskIndex) {
 		Task task = list.get(taskIndex);
 		return task;
 	}
 
-	public String getTaskDescription(ArrayList<Task> list, int taskIndex) {
+	private String getTaskDescription(ArrayList<Task> list, int taskIndex) {
 		String taskDescription = list.get(taskIndex).getDescription();
 		return taskDescription;
 	}
 
-	public Date getTaskStartDateTime(ArrayList<Task> list, int taskIndex) {
+	private Date getTaskStartDateTime(ArrayList<Task> list, int taskIndex) {
 		Date taskStartDateTime = list.get(taskIndex).getStartDateTime();
 		return taskStartDateTime;
 	}
 
-	public Date getTaskEndDateTime(ArrayList<Task> list, int taskIndex) {
+	private Date getTaskEndDateTime(ArrayList<Task> list, int taskIndex) {
 		Date taskEndTime = list.get(taskIndex).getEndDateTime();
 		return taskEndTime;
 	}
 
-	public String getTaskTag(ArrayList<Task> list, int taskIndex) {
+	private String getTaskTag(ArrayList<Task> list, int taskIndex) {
 		String taskTag = list.get(taskIndex).getTag();
 		return taskTag;
 	}
 
-	public boolean getTaskIsDone(ArrayList<Task> list, int taskIndex) {
+	private boolean getTaskIsDone(ArrayList<Task> list, int taskIndex) {
 		boolean taskIsDone = list.get(taskIndex).getIsDone();
 		return taskIsDone;
 	}
 
-	public ArrayList<Task> getSortedListWithDescription(ArrayList<Task> list) {
+	private ArrayList<Task> getSortedListWithDescription(ArrayList<Task> list) {
 		DescriptionComparator descriptionComp = new DescriptionComparator();
 		Collections.sort(list, descriptionComp);
 		return list;
 	}
 
-	public ArrayList<Task> getSortedListWithStartDateTime(ArrayList<Task> list) {
+	private ArrayList<Task> getSortedListWithStartDateTime(ArrayList<Task> list) {
 		StartDateTimeComparator startDateTimeComp = new StartDateTimeComparator();
 		Collections.sort(list, startDateTimeComp);
 		return list;
 	}
 
-	public ArrayList<Task> getSortedListWithEndDateTime(ArrayList<Task> list) {
+	private ArrayList<Task> getSortedListWithEndDateTime(ArrayList<Task> list) {
 		EndDateTimeComparator endTimeComp = new EndDateTimeComparator();
 		Collections.sort(list, endTimeComp);
 		return list;
 	}
 
-	public void setTaskDescription(ArrayList<Task> list, int taskIndex, String description) {
+	private void setTaskDescription(ArrayList<Task> list, int taskIndex, String description) {
 		list.get(taskIndex).setDescription(description);
 	}
 
-	public void setTaskStartDateTime(ArrayList<Task> list, int taskIndex, Date startDateTime) {
+	private void setTaskStartDateTime(ArrayList<Task> list, int taskIndex, Date startDateTime) {
 		list.get(taskIndex).setStartDateTime(startDateTime);
 	}
 
-	public void setTaskEndDateTime(ArrayList<Task> list, int taskIndex, Date endDateTime) {
+	private void setTaskEndDateTime(ArrayList<Task> list, int taskIndex, Date endDateTime) {
 		list.get(taskIndex).setEndDateTime(endDateTime);
 	}
 
-	public void setTaskTag(ArrayList<Task> list, int taskIndex, String tag) {
+	private void setTaskTag(ArrayList<Task> list, int taskIndex, String tag) {
 		list.get(taskIndex).setTag(tag);
 	}
 
-	public void setTaskIsDone(ArrayList<Task> list, int taskIndex, boolean isDone) throws IOException {
+	private void setTaskIsDone(ArrayList<Task> list, int taskIndex, boolean isDone) { //throws IOException {
 		list.get(taskIndex).setIsDone(isDone);
 		saveTask();
 	}
 
-	public void setViewList(ArrayList<Task> list) {
+	private void setViewList(ArrayList<Task> list) {
 		_viewList = _mainList;
 	}
 
