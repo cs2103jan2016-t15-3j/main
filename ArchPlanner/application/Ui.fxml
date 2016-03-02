@@ -89,11 +89,11 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ListView fx:id="tagView" accessibleRole="TOGGLE_BUTTON" fixedCellSize="40.0" GridPane.hgrow="SOMETIMES" />
-            <ListView fx:id="taskView" fixedCellSize="40.0" GridPane.columnIndex="1" />
+            <ListView fx:id="tagDisplay" accessibleRole="TOGGLE_BUTTON" fixedCellSize="40.0" GridPane.hgrow="SOMETIMES" />
+            <ListView fx:id="taskDisplay" fixedCellSize="40.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#sendCmd" GridPane.rowIndex="3">
+      <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" GridPane.rowIndex="3">
          <font>
             <Font size="18.0" />
          </font>

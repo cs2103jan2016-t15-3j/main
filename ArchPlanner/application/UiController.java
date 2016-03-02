@@ -2,13 +2,17 @@ package application;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
+
+import feedback.Feedback;
+import logic.Logic;
+import logic.Task;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -16,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
 public class UiController implements Initializable{
@@ -39,9 +42,9 @@ public class UiController implements Initializable{
     public TextField userInput;  
     
     @FXML
-    public ListView<ToggleButton> tagView;
+    public ListView<ToggleButton> tagDisplay;
     @FXML
-    public ListView<GridPane> taskView;
+    public ListView<GridPane> taskDisplay;
  
     private ArrayList<String> tags = new ArrayList<String>();
     private ArrayList<Task> tasks = new ArrayList<Task>();
@@ -49,27 +52,39 @@ public class UiController implements Initializable{
     private ObservableList<ToggleButton> tagList = FXCollections.observableArrayList();
     private ObservableList<GridPane> taskList = FXCollections.observableArrayList();
     
+    Logic logic = new Logic();
+    Feedback feedback = new Feedback();
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
         //------------------------------------------------------------------
-        tasks.add(new Task("Task 1", "16/03/16", "", "17/03/16", ""));
-        tasks.add(new Task("Task 2", "23/03/16", "09:00AM", "", ""));
-        tasks.add(new Task("Task 3", "", "", "30/03/16", "5:00PM"));
-        tasks.add(new Task("Task 4", "", "", "", ""));
+        tasks.add(new Task("Task 1", null, new Date(2016, 3, 3, 0, 0), new Date(2016, 3, 3, 0, 0)));
+        tasks.add(new Task("Task 2", null, new Date(2016, 3, 23, 9, 0), null));
+        tasks.add(new Task("Task 3", null, null, new Date(2016, 3, 23, 17, 0)));
+        tasks.add(new Task("Task 4", null, null, null));
 
         tags.add("#Events");
         tags.add("#Deadlines");
         tags.add("#Tasks");
-        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------/
         
         //-------------------------------------------------------------------
         
-        userInput.textProperty().addListener(new myChangeListener());
+        
         
         //--------------------------------------------------------------------
-        tagView.setItems(tagList);
-        taskView.setItems(taskList);
+        userInput.textProperty().addListener(new ChangeListener<String>() {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                onTextChanged(newValue);
+            }
+        });
+        
+        //tags = logic.getTagsList();
+        //tasks = logic.getViewList();
+                
+        tagDisplay.setItems(tagList);
+        taskDisplay.setItems(taskList);
         
         updateTaskDisplay();
         updateTagDisplay();
@@ -109,23 +124,21 @@ public class UiController implements Initializable{
         }
     }
     
-    public void sendChangeInText(String newValue) {
-        String prompt = Feedback.getPrompt(newValue);
-        promptLabel.setText(prompt);
+    public void onTextChanged(String newValue) {
+        ArrayList<String> prompt = feedback.onTextChanged(newValue);
+        if (!prompt.isEmpty()) {
+            promptLabel.setText(prompt.get(0));
+        }
     }
     
-    public void sendCmd(ActionEvent enter) {
-        System.out.println(userInput.getText());
-        userInput.clear();
-        Feedback.addTasks();
-    }
-}
-
-class myChangeListener implements ChangeListener<String> {
-
-    @Override
-    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        // TODO Auto-generated method stub
-        Ui.getInstance().sendChangeInText(newValue);
+    public void onEnterPressed() {
+        boolean success = feedback.onEnterPressed(userInput.getText());
+        
+        if (success) {
+            userInput.clear();
+            promptLabel.setText("");
+        } else {
+            //error
+        }
     }
 }

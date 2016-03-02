@@ -1,5 +1,6 @@
 package application;
 
+import logic.Task;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,21 +19,21 @@ public class TaskPane extends GridPane {
     
     private RowConstraints taskRow = new RowConstraints();
     
-    private Label num = new Label();
+    private Label number = new Label();
     private Label description = new Label();
-    private Label start = new Label();
-    private Label end = new Label();
+    private Label startDateTime = new Label();
+    private Label endStartTime = new Label();
     
     public TaskPane() {
         this.getColumnConstraints().addAll(numColumn, desColumn, startColumn, endColumn);
         taskRow.setVgrow(Priority.SOMETIMES);
         this.getRowConstraints().add(taskRow);
-        this.addRow(0, num, description, start, end);
+        this.addRow(0, number, description, startDateTime, endStartTime);
     }
     
     public TaskPane(ReadOnlyDoubleProperty numWidth, ReadOnlyDoubleProperty desWidth, 
                     ReadOnlyDoubleProperty startWidth, ReadOnlyDoubleProperty endWidth, 
-                    int number, Task task) {
+                    int taskNumber, Task task) {
         
         numColumn.prefWidthProperty().bind(numWidth);      
         desColumn.prefWidthProperty().bind(desWidth);     
@@ -43,23 +44,23 @@ public class TaskPane extends GridPane {
         taskRow.setVgrow(Priority.SOMETIMES);
         this.getRowConstraints().add(taskRow);
         
-        num.setText(Integer.toString(number));
-        num.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        num.setAlignment(Pos.CENTER);
+        number.setText(Integer.toString(taskNumber));
+        number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        number.setAlignment(Pos.CENTER);
         
         description.setText(task.getDescription());
         description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         description.setPadding(new Insets(0, 0, 0, 10));
         
-        start.setText(task.getStartDate() + " " + task.getStartTime());
-        start.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        start.setPadding(new Insets(0, 0, 0, 10));
+        startDateTime.setText(task.getStartDate() + " " + task.getStartTime());
+        startDateTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        startDateTime.setPadding(new Insets(0, 0, 0, 10));
         
-        end.setText(task.getEndDate() + " " + task.getEndTime());
-        end.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        end.setPadding(new Insets(0, 0, 0, 10));
+        endStartTime.setText(task.getEndDate() + " " + task.getEndTime());
+        endStartTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        endStartTime.setPadding(new Insets(0, 0, 0, 10));
         
-        this.addRow(0, num, description, start, end);
+        this.addRow(0, number, description, startDateTime, endStartTime);
     }
     
     public void setColumnConstraints(ReadOnlyDoubleProperty numWidth, ReadOnlyDoubleProperty desWidth, 
@@ -75,18 +76,18 @@ public class TaskPane extends GridPane {
         description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         description.setPadding(new Insets(0, 0, 0, 10));
         
-        start.setText(task.getStartDate() + " " + task.getStartTime());
-        start.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        start.setPadding(new Insets(0, 0, 0, 10));
+        startDateTime.setText(task.getStartDate() + " " + task.getStartTime());
+        startDateTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        startDateTime.setPadding(new Insets(0, 0, 0, 10));
         
-        end.setText(task.getEndDate() + " " + task.getEndTime());
-        end.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        end.setPadding(new Insets(0, 0, 0, 10));
+        endStartTime.setText(task.getEndDate() + " " + task.getEndTime());
+        endStartTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        endStartTime.setPadding(new Insets(0, 0, 0, 10));
     }
     
-    public void setNumber(int number) {
-        num.setText(Integer.toString(number));
-        num.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        num.setAlignment(Pos.CENTER);
+    public void setNumber(int taskNumber) {
+        number.setText(Integer.toString(taskNumber));
+        number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        number.setAlignment(Pos.CENTER);
     }
 }
