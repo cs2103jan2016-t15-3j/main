@@ -17,18 +17,21 @@ public class Feedback {
     private static final int COMMAND_TYPE_UNDONE = 5;
     private static final int COMMAND_TYPE_UNDO = 6;
     private static final int COMMAND_TYPE_REDO = 7;
-    private static final int COMMAND_TYPE_EXIT = 8;
+    private static final int COMMAND_TYPE_SORT = 8;
+    private static final int COMMAND_TYPE_SEARCH = 9;
+    private static final int COMMAND_TYPE_EXIT = 10;
 
     private static final String[] ALL_COMMANDS =
             {"add", "delete", "edit",
                     "view", "done", "undone",
-                    "undo", "redo", "exit"};
+                    "undo", "redo", "sort",
+                    "search", "exit"};
 
     private static final String ADD = "add";
     private static final String ADD_DESCRIPTION = "add <description>";
     private static final String ADD_DESCRIPTION_TIME = "add <description> <time>";
 
-    private static final String DELETE = "delete <index>";
+    private static final String DELETE_INDEX = "delete <index>";
 
     private static final String EDIT = "edit";
     private static final String EDIT_DESCRIPTION = "edit <index> <description>";
@@ -37,12 +40,18 @@ public class Feedback {
 
     private static final String VIEW = "view";
     private static final String VIEW_DESCRIPTION = "view <description>";
+    private static final String VIEW_CATEGORY = "view <category>";
+    private static final String VIEW_TIME = "view <time>";
     //more view things
 
     private static final String DONE = "done <index>";
     private static final String UNDONE = "undone <index>";
     private static final String UNDO = "undo";
     private static final String REDO = "redo";
+
+    private static final String SORT = "sort";
+    private static final String SEARCH_DESCRIPTION = "search <description>";
+
     private static final String EXIT = "exit";
 
     private static final String NO_MATCH = "No pattern matched";
@@ -68,13 +77,20 @@ public class Feedback {
                 handleUnknownCommand(input);
                 break;
             case COMMAND_TYPE_ADD:
+                feedbackList.add(ADD_DESCRIPTION);
+                feedbackList.add(ADD_DESCRIPTION_TIME);
                 break;
             case COMMAND_TYPE_DELETE:
-                feedbackList.add(DELETE);
+                feedbackList.add(DELETE_INDEX);
                 break;
             case COMMAND_TYPE_EDIT:
+                feedbackList.add(EDIT_DESCRIPTION);
+                feedbackList.add(EDIT_DESCRIPTION_TIME);
                 break;
             case COMMAND_TYPE_VIEW:
+                feedbackList.add(VIEW_DESCRIPTION);
+                feedbackList.add(VIEW_CATEGORY);
+                feedbackList.add(VIEW_TIME);
                 break;
             case COMMAND_TYPE_DONE:
                 feedbackList.add(DONE);
@@ -131,33 +147,28 @@ public class Feedback {
         if (input.isEmpty()) {
             return;
         }
-        if (ADD.startsWith(input)) {
-            feedbackList.add(ADD_DESCRIPTION);
-        }
-        if (DELETE.startsWith(input)) {
-            feedbackList.add(DELETE);
-        }
-        if (EDIT.startsWith(input)) {
-            feedbackList.add(EDIT_DESCRIPTION);
-        }
-        if (VIEW.startsWith(input)) {
-            feedbackList.add(VIEW_DESCRIPTION);
-        }
-        if (UNDO.startsWith(input)) {
-            feedbackList.add(UNDO);
-            feedbackList.add(UNDONE);
-        }
-        if (REDO.startsWith(input)) {
-            feedbackList.add(REDO);
-        }
-        if (DONE.startsWith(input)) {
-            feedbackList.add(DONE);
-        }
-        if (UNDONE.startsWith(input)) {
-            feedbackList.add(UNDONE);
-        }
-        if (EXIT.startsWith(input)) {
-            feedbackList.add(EXIT);
+        for (int i = 0; i < ALL_COMMANDS.length; i++) {
+            if (ALL_COMMANDS[i].startsWith(input)) {
+                feedbackList.add(ALL_COMMANDS[i]);
+                switch (i) {
+                    case COMMAND_TYPE_ADD:
+                        feedbackList.add(ADD_DESCRIPTION);
+                        break;
+                    case COMMAND_TYPE_DELETE:
+                        feedbackList.add(DELETE_INDEX);
+                        break;
+                    case COMMAND_TYPE_EDIT:
+                        feedbackList.add(EDIT_DESCRIPTION);
+                        break;
+                    case COMMAND_TYPE_VIEW:
+                        feedbackList.add(VIEW_DESCRIPTION);
+                        break;
+                    case COMMAND_TYPE_SEARCH:
+                        feedbackList.add(SEARCH_DESCRIPTION);
+                        break;
+                }
+
+            }
         }
         if (feedbackList.isEmpty()) {
             feedbackList.add(NO_MATCH);
