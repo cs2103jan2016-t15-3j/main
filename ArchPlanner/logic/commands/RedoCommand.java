@@ -1,6 +1,8 @@
-package logic;
+package logic.commands;
 
-public class UndoCommand implements Command {
+import logic.Logic;
+
+public class RedoCommand implements Command {
 
 	private int _times;
 
@@ -9,6 +11,11 @@ public class UndoCommand implements Command {
 	public void setTimes(int times) {
 		assert(times >= 1); //times can only be 1 or greater
 		_times = times;
+	}
+
+	@Override
+	public void execute(Logic logic) {
+
 	}
 
 	public void setTimes() {

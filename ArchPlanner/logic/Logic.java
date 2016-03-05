@@ -221,11 +221,11 @@ public class Logic {
 		return taskDescription;
 	}
 	
-	private ArrayList<Task> getSortedListWithTag(ArrayList<Task> list) {
-		TagComparator tagComp = new TagComparator();
-		Collections.sort(list, tagComp);
-		return list;
-	}
+//	private ArrayList<Task> getSortedListWithTag(ArrayList<Task> list) {
+//		TagComparator tagComp = new TagComparator();
+//		Collections.sort(list, tagComp);
+//		return list;
+//	}
 
 	private Calendar getTaskStartDateTime(ArrayList<Task> list, int taskIndex) {
 		Calendar taskStartDateTime = list.get(taskIndex).getStartDateTime();

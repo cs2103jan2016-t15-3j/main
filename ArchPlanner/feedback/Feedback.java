@@ -1,5 +1,9 @@
 package feedback;
 
+import feedback.paser.AddCommandParser;
+import feedback.paser.EditCommandParser;
+import logic.commands.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -50,6 +54,7 @@ public class Feedback {
     private static final String REDO = "redo";
 
     private static final String SORT = "sort";
+    private static final String SORT_BY_TYPE = "sort <DESCRIPTION | TAG | START_DATE_TIME | END_DATE_TIME | COMPLETION | OVERDUE>";
     private static final String SEARCH_DESCRIPTION = "search <description>";
 
     private static final String EXIT = "exit";
@@ -104,6 +109,12 @@ public class Feedback {
             case COMMAND_TYPE_REDO:
                 feedbackList.add(REDO);
                 break;
+            case COMMAND_TYPE_SORT:
+                feedbackList.add(SORT_BY_TYPE);
+                break;
+            case COMMAND_TYPE_SEARCH:
+                feedbackList.add(SEARCH_DESCRIPTION);
+                break;
             case COMMAND_TYPE_EXIT:
                 feedbackList.add(EXIT);
                 break;
@@ -111,36 +122,44 @@ public class Feedback {
         return feedbackList;
     }
 
-    public static boolean onEnterPressed(String input) {
+    public static Command onEnterPressed(String input) {
         int commandType = detectCommandType(input);
-        switch (commandType) {
-            case COMMAND_TYPE_UNKNOWN:
-                return false;
-            case COMMAND_TYPE_ADD:
-//                Logic.addTask(input.substring(ADD.length() + 1), null, null, null);
-                break;
-            case COMMAND_TYPE_DELETE:
-//                Logic.deleteTask(Integer.parseInt(input.substring(DELETE.length() + 1)));
-                break;
-            case COMMAND_TYPE_EDIT:
-//
-                break;
-            case COMMAND_TYPE_VIEW:
-//
-                break;
-            case COMMAND_TYPE_DONE:
-//
-                break;
-            case COMMAND_TYPE_UNDONE:
-                break;
-            case COMMAND_TYPE_UNDO:
-                break;
-            case COMMAND_TYPE_REDO:
-                break;
-            case COMMAND_TYPE_EXIT:
-                break;
+        //todo: Convert to Good Style
+        //todo: handle complex cases
+        //todo: much to do --after midterm
+        try {
+            switch (commandType) {
+                case COMMAND_TYPE_UNKNOWN:
+                    return new InvalidCommand("Invalid command");
+                case COMMAND_TYPE_ADD:
+                    return AddCommandParser.parser(input);
+                case COMMAND_TYPE_DELETE:
+                    return new DeleteCommand(Integer.parseInt(input.substring(7)));
+                case COMMAND_TYPE_EDIT:
+                    return EditCommandParser.parser(input);
+                case COMMAND_TYPE_VIEW:
+                    return new ViewCommand(input.substring(5), null, null, null);
+                case COMMAND_TYPE_DONE:
+                    return new DoneCommand(Integer.parseInt(input.substring(5)));
+                case COMMAND_TYPE_UNDONE:
+                    return new UndoneCommand(Integer.parseInt(input.substring(7)));
+                case COMMAND_TYPE_UNDO:
+                    return new UndoCommand();
+                case COMMAND_TYPE_REDO:
+                    return new RedoCommand();
+                case COMMAND_TYPE_SORT:
+                    return new SortCommand(input.substring(5));
+                case COMMAND_TYPE_SEARCH:
+                    return new SearchCommand(input.substring(7));
+                case COMMAND_TYPE_EXIT:
+                    return new ExitCommand();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        return true;
+
+        return new InvalidCommand("Feedback Error");
     }
 
     private static void handleUnknownCommand(String input) {
