@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import feedback.Feedback;
 import logic.Logic;
 import logic.Task;
-
+import logic.commands.Command;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -52,13 +52,13 @@ public class UiController implements Initializable{
     private ObservableList<ToggleButton> tagList = FXCollections.observableArrayList();
     private ObservableList<GridPane> taskList = FXCollections.observableArrayList();
     
-    Logic logic = new Logic();
-    Feedback feedback = new Feedback();
+    Logic logic;
+    Feedback feedback;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-        //------------------------------------------------------------------
+        /*------------------------------------------------------------------
         tasks.add(new Task("Task 1", null, new Date(2016, 3, 3, 0, 0), new Date(2016, 3, 3, 0, 0)));
         tasks.add(new Task("Task 2", null, new Date(2016, 3, 23, 9, 0), null));
         tasks.add(new Task("Task 3", null, null, new Date(2016, 3, 23, 17, 0)));
@@ -67,7 +67,7 @@ public class UiController implements Initializable{
         tags.add("#Events");
         tags.add("#Deadlines");
         tags.add("#Tasks");
-        //-------------------------------------------------------------------/
+        //-------------------------------------------------------------------*/
         
         //-------------------------------------------------------------------
         
@@ -80,8 +80,13 @@ public class UiController implements Initializable{
             }
         });
         
-        //tags = logic.getTagsList();
-        //tasks = logic.getViewList();
+        logic = new Logic();
+        feedback = new Feedback();
+        
+        logic.loadFile();
+        
+        tags = logic.getTagsList();
+        tasks = logic.getViewList();
                 
         tagDisplay.setItems(tagList);
         taskDisplay.setItems(taskList);
@@ -124,17 +129,24 @@ public class UiController implements Initializable{
         }
     }
     
-    public void onTextChanged(String newValue) {
-        ArrayList<String> prompt = feedback.onTextChanged(newValue);
+    public void onTextChanged(String newString) {
+        ArrayList<String> prompt = feedback.onTextChanged(newString);
         if (!prompt.isEmpty()) {
             promptLabel.setText(prompt.get(0));
         }
     }
     
     public void onEnterPressed() {
-        boolean success = feedback.onEnterPressed(userInput.getText());
+        Command userCmd = feedback.onEnterPressed(userInput.getText());
+        boolean isSuccessful = logic.executeCommand(userCmd);
         
-        if (success) {
+        if (isSuccessful) {            
+            tasks = logic.getViewList();
+            tags = logic.getTagsList();
+            
+            updateTaskDisplay();
+            updateTagDisplay();
+            
             userInput.clear();
             promptLabel.setText("");
         } else {
