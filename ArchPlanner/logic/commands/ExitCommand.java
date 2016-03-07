@@ -1,10 +1,13 @@
 package logic.commands;
 
-import logic.Logic;
+import java.util.ArrayList;
+
+import logic.Task;
 
 public class ExitCommand implements Command {
-    @Override
-    public void execute(Logic logic) {
 
-    }
+	@Override
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		return true;
+	}
 }

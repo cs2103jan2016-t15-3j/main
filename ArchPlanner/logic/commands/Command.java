@@ -1,7 +1,9 @@
 package logic.commands;
 
-import logic.Logic;
+import java.util.ArrayList;
+
+import logic.Task;
 
 public interface Command {
-	public void execute(Logic logic);
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList);
 }

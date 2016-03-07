@@ -2,7 +2,6 @@ package logic;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,24 +16,23 @@ import java.util.ArrayList;
 public class Storage {
 
 	//This is the name of the file to be manipulated
-	public String _fileName;
+	private final String _fileName = "Storage.srl";
 
 	//This the File to be manipulated by the program
-	public  File _file;
+	private File _file;
 
 	//This arraylist is used to store the strings of text in the file
-	public  ArrayList<Task> _tasksList = new ArrayList<Task>();
-	
-	public  void setTasksList(ArrayList<Task> tasksList) {
-		_tasksList = tasksList;
-	}
-	
-	public  ArrayList<Task> getTasksList() {
-		return _tasksList;
+	private  ArrayList<Task> _masterList = new ArrayList<Task>();
+
+	public  void setMasterList(ArrayList<Task> list) {
+		_masterList = list;
 	}
 
-	public  void loadStorageFile() { //throws IOException, ClassNotFoundException {
-		_fileName = "Storage.srl";
+	public  ArrayList<Task> getMasterList() {
+		return _masterList;
+	}
+
+	public  void loadStorageFile() {
 		_file = new File(_fileName);
 
 		if (!_file.exists() || !_file.isFile()) {
@@ -52,7 +50,7 @@ public class Storage {
 		}
 	}
 
-	public  void createStorageFile() { //throws IOException {
+	public  void createStorageFile() {
 		try {
             _file.createNewFile();
         } catch (IOException e) {
@@ -65,20 +63,20 @@ public class Storage {
 		try {
 			FileInputStream fis = new FileInputStream(_fileName);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			_tasksList = (ArrayList<Task>) ois.readObject();
+			_masterList = (ArrayList<Task>) ois.readObject();
 			ois.close();
 		} catch (EOFException e) {
 			System.out.println("End Of File!");
 		}
 	}
 	
-	public void writeStorageFile(ArrayList<Task> tasksList) { //throws IOException {
-		setTasksList(tasksList);
+	public void writeStorageFile(ArrayList<Task> list) {
+		setMasterList(list);
 		FileOutputStream fos;
         try {
             fos = new FileOutputStream(_fileName);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(_tasksList);
+            oos.writeObject(_masterList);
             oos.close();
         } catch (Exception e) {
             // TODO Auto-generated catch block

@@ -1,6 +1,8 @@
 package logic.commands;
 
-import logic.Logic;
+import java.util.ArrayList;
+
+import logic.Task;
 
 public class InvalidCommand implements Command {
 
@@ -21,8 +23,8 @@ public class InvalidCommand implements Command {
         this._error_message = _error_message;
     }
 
-    @Override
-    public void execute(Logic logic) {
-
-    }
+	@Override
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		return false;
+	}
 }
