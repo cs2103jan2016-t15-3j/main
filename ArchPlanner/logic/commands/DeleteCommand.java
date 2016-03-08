@@ -32,7 +32,6 @@ public class DeleteCommand implements Command {
 			viewList.remove(taskIndex);
 			mainList.remove(task);
 			updateTagsList(mainList, tagsList);
-			//Collections.sort(tagsList);
 			return true;
 		} else {
 			return false;

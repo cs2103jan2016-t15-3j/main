@@ -3,7 +3,6 @@ package logic.commands;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import logic.Storage;
 import logic.Task;
 
 public class AddCommand implements Command {
@@ -56,14 +55,12 @@ public class AddCommand implements Command {
 
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
-		boolean isSuccessful;
 
 		Task task = new Task(_description, _tag, _startDateTime, _endDateTime);
-		isSuccessful = mainList.add(task);
-		viewList.add(task);
+		mainList.add(0, task);
+		viewList.add(0, task);
 		updateTagsList(tagsList);
-
-		return isSuccessful;
+		return true;
 	}
 
 	private void updateTagsList(ArrayList<String> tagsList) {

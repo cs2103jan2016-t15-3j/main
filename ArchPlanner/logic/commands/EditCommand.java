@@ -111,12 +111,11 @@ public class EditCommand implements Command {
 		
 		Task newTask = getTask(viewList, taskIndex);
 		
-		isSuccessful = mainList.add(newTask);
+		mainList.add(0, newTask);
 
 		updateTagsList(mainList, tagsList);
-		Collections.sort(tagsList);
 
-		return isSuccessful;
+		return true;
 	}
 
 	private void setTaskDescription(ArrayList<Task> list, int taskIndex) {

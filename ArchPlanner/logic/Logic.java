@@ -1,20 +1,13 @@
 package logic;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Stack;
 
-import logic.commands.AddCommand;
 import logic.commands.Command;
-import logic.commands.DeleteCommand;
-import logic.commands.DoneCommand;
-import logic.commands.EditCommand;
-import logic.commands.ExitCommand;
-import logic.commands.SearchCommand;
-import logic.commands.UndoneCommand;
+import logic.commands.InvalidCommand;
 
 import java.util.Calendar;;
 
@@ -36,11 +29,9 @@ public class Logic {
 	private ArrayList<Task> _mainList = new ArrayList<Task>();
 	private ArrayList<Task> _viewList = new ArrayList<Task>();
 	private ArrayList<String> _tagsList = new ArrayList<String>();
-	private Stack<Command> undoStack = new Stack<Command>();
-	private Stack<Command> redoStack = new Stack<Command>();
-
+	
 	Storage storage = new Storage();
-
+/*
 	public static void main(String args[]) {
 		Logic logic = new Logic();
 
@@ -69,9 +60,6 @@ public class Logic {
 		logic.executeCommand(commandObj1);
 		logic.executeCommand(commandObj2);
 		logic.executeCommand(commandObj3);
-
-		Storage storage = new Storage();
-		storage.loadStorageFile();
 
 		assertEquals("task 1", logic.getViewList().get(0).getDescription().toString());
 		assertEquals("task 2",logic.getViewList().get(1).getDescription().toString());
@@ -132,78 +120,66 @@ public class Logic {
 
 		assertEquals("task two",logic.getViewList().get(0).getDescription());
 	}
-
+*/
 	public static Calendar configureDateTime(int year, int month, int day, int hour, int minute) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, day, hour, minute);
 		return cal;
 	}
 
-	private void loadFile() {
+	public void loadFile() {
+		Storage storage = new Storage();
 		storage.loadStorageFile();
 		_mainList = storage.getMasterList();
 		setViewList(_mainList);
-		updateTagsList();
+		setViewList(getSortedList(_viewList));
+		setTagsList();
 	}
 
-	private ArrayList<Task> updateViewFloatingTasksList() {
+	private ArrayList<Task> getSortedFloatingList(ArrayList<Task> list) {
 		ArrayList<Task> floatingTasksList = new ArrayList<Task>();
 
-		for (int i = 0; i < _mainList.size(); i++) {
-			if ((getTaskStartDateTime(_mainList, i) == null) && (getTaskEndDateTime(_mainList, i) == null)) {
-				floatingTasksList.add(_mainList.get(i));
+		for (int i = 0; i < list.size(); i++) {
+			if ((getTaskStartDateTime(list, i) == null) && (getTaskEndDateTime(list, i) == null)) {
+				floatingTasksList.add(list.get(i));
 			}
 		}
 		return floatingTasksList;
 	}
 
-	private ArrayList<Task> updateViewDeadlineTasksList() {
+	private ArrayList<Task> getSortedDeadlineList(ArrayList<Task> list) {
 		ArrayList<Task> deadlineTasksList = new ArrayList<Task>();
 
-		for (int i = 0; i < _mainList.size(); i++) {
-			if ((getTaskStartDateTime(_mainList, i) == null) && (getTaskEndDateTime(_mainList, i) != null)) {
-				deadlineTasksList.add(_mainList.get(i));
+		for (int i = 0; i < list.size(); i++) {
+			if ((getTaskStartDateTime(list, i) == null) && (getTaskEndDateTime(list, i) != null)) {
+				deadlineTasksList.add(list.get(i));
 			}
 		}
 		deadlineTasksList = getSortedListWithEndDateTime(deadlineTasksList);
-		deadlineTasksList = getSortedListWithDescription(deadlineTasksList);
 		return deadlineTasksList;
 	}
 
-	private ArrayList<Task> updateViewTagTasksList(String tag) {
-		ArrayList<Task> tagTasksList = new ArrayList<Task>();
-
-		for (int i = 0; i < _mainList.size(); i++) {
-			if (getTaskTag(_mainList, i).equals(tag)) {
-				tagTasksList.add(_mainList.get(i));
-			}
-		}
-		return tagTasksList;
-	}
-
-	private ArrayList<Task> updateViewTimeLineTasksList() {
+	private ArrayList<Task> getSortedEventList(ArrayList<Task> list) {
 		ArrayList<Task> timeLineTasksList= new ArrayList<>();
 
-		for (int i = 0; i < _mainList.size(); i++) {
-			if ((getTaskStartDateTime(_mainList, i) != null) && (getTaskEndDateTime(_mainList, i) != null)) {
-				timeLineTasksList.add(_mainList.get(i));
+		for (int i = 0; i < list.size(); i++) {
+			if ((getTaskStartDateTime(list, i) != null) && (getTaskEndDateTime(list, i) != null)) {
+				timeLineTasksList.add(list.get(i));
 			}
 		}
 		timeLineTasksList = getSortedListWithStartDateTime(timeLineTasksList);
 		timeLineTasksList = getSortedListWithEndDateTime(timeLineTasksList);
-		timeLineTasksList = getSortedListWithDescription(timeLineTasksList);
 		return timeLineTasksList;
 	}
 
-	private void updateTagsList() {
-		ArrayList<String> tagsList = new ArrayList<String>();
-		tagsList.removeAll(tagsList);
+	private void setTagsList() {
 		for (int i = 0; i < _mainList.size(); i++) {
 			String tag = getTaskTag(_mainList, i);
-			if (!tagsList.contains(tag)) {
-				tagsList.add(tag);
+			if ((tag != null) && (!_tagsList.contains(tag))) {
+				_tagsList.add(tag);
 			}
 		}
+		Collections.sort(_tagsList);
 	}
 
 	public void exitProgram() {
@@ -211,7 +187,16 @@ public class Logic {
 	}
 
 	public boolean executeCommand(Command commandObj) {
-
+		if (commandObj instanceof InvalidCommand) {
+			return false;
+		}
+		commandObj.execute(_mainList, _viewList, _tagsList);
+		save();
+		setViewList(getSortedList(_viewList));
+		Collections.sort(_tagsList);
+		return true;
+		
+/*
 		String strCommandType = commandObj.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
@@ -245,6 +230,7 @@ public class Logic {
 			throw new Error("Invalid command");
 		}
 		return false;
+		*/
 	}
 
 	private COMMAND_TYPE getCommandType(String strCommandType) {
@@ -273,84 +259,6 @@ public class Logic {
 		} else {
 			return COMMAND_TYPE.INVALID;
 		}
-	}
-
-
-	private boolean executeAddCommand(Command commandObj) {
-		AddCommand command = (AddCommand) commandObj;
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		save();
-		_viewList = getSortedList(_viewList);
-		return isSuccessful;
-	}
-
-	private boolean executeDeleteCommand(Command commandObj) {
-		DeleteCommand command = (DeleteCommand) commandObj;
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		save();
-		return isSuccessful;
-	}
-
-	private boolean executeEditCommand(Command commandObj) {
-		EditCommand command = (EditCommand) commandObj;
-		save();
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		_viewList = getSortedList(_viewList);
-		return isSuccessful;
-	}
-
-	private boolean executeExitCommand(Command commandObj) {
-		exit();
-		return false;
-	}
-
-	private boolean executeDoneCommand(Command commandObj) {
-		DoneCommand command = (DoneCommand) commandObj;
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		save();
-		return isSuccessful;
-	}
-
-	private boolean executeUndoneCommand(Command commandObj) {
-		UndoneCommand command = (UndoneCommand) commandObj;
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		save();
-		return isSuccessful;
-	}
-
-	private boolean executeSearchCommand(Command commandObj) {
-		SearchCommand command = (SearchCommand) commandObj;
-		boolean isSuccessful = command.execute(_mainList, _viewList, _tagsList);
-		save();
-		return isSuccessful;
-	}
-
-	private boolean executeInvalidCommand(Command commandObj) {
-		return false;
-	}
-
-	public void editTask(int id, String newDescription, String newTag, Calendar newStartDateTime, Calendar newEndDateTime) {
-		int taskIndex = getTaskIndex(id);
-		Task oldTask = getTask(_viewList, taskIndex);
-
-		if (newDescription.equals(getTaskDescription(_viewList, taskIndex))) {
-			setTaskDescription(_viewList, taskIndex, newDescription);
-		}
-
-		if (newStartDateTime.equals(getTaskStartDateTime(_viewList, taskIndex))) {
-			setTaskStartDateTime(_viewList, taskIndex, newStartDateTime);
-		}
-
-		if (newEndDateTime.equals(getTaskEndDateTime(_viewList, taskIndex))) {
-			setTaskEndDateTime(_viewList, taskIndex, newEndDateTime);
-		}
-
-		if (newTag.equals(getTaskTag(_viewList, taskIndex))) {
-			setTaskTag(_viewList, taskIndex, newTag);
-		}
-		_mainList.remove(oldTask);
-		_mainList.add(getTask(_viewList, taskIndex));
-		//saveTask();
 	}
 
 	public void done(int id) {
@@ -396,29 +304,13 @@ public class Logic {
 		return _tagsList;
 	}
 
-	private void setTaskDescription(ArrayList<Task> list, int taskIndex, String description) {
-		list.get(taskIndex).setDescription(description);
-	}
-
-	private void setTaskStartDateTime(ArrayList<Task> list, int taskIndex, Calendar startDateTime) {
-		list.get(taskIndex).setStartDateTime(startDateTime);
-	}
-
-	private void setTaskEndDateTime(ArrayList<Task> list, int taskIndex, Calendar endDateTime) {
-		list.get(taskIndex).setEndDateTime(endDateTime);
-	}
-
-	private void setTaskTag(ArrayList<Task> list, int taskIndex, String tag) {
-		list.get(taskIndex).setTag(tag);
-	}
-
 	private void setTaskIsDone(ArrayList<Task> list, int taskIndex, boolean isDone) { //throws IOException {
 		list.get(taskIndex).setIsDone(isDone);
 		//saveTask();
 	}
 
 	private void setViewList(ArrayList<Task> list) {
-		_viewList = _mainList;
+		_viewList = new ArrayList<Task>(list);
 	}
 
 	private int getTaskIndex(int id) {
@@ -455,37 +347,45 @@ public class Logic {
 		boolean taskIsDone = list.get(taskIndex).getIsDone();
 		return taskIsDone;
 	}
-	
+
 	private ArrayList<Task> getSortedList(ArrayList<Task> list) {
-		list = getSortedListWithStartDateTime(_viewList);
-		list = getSortedListWithEndDateTime(_viewList);
-		list = getSortedListWithTag(_viewList);
-		list = getSortedListWithDescription(_viewList);
-		return list;
+		ArrayList<Task> sortedList = new ArrayList<Task>();
+		sortedList.addAll(getSortedEventList(list));
+		sortedList.addAll(getSortedDeadlineList(list));
+		sortedList.addAll(getSortedFloatingList(list));
+		return sortedList;
 	}
 
 	private ArrayList<Task> getSortedListWithDescription(ArrayList<Task> list) {
+		ArrayList<Task> sortedList = new ArrayList<Task>();
+		sortedList.addAll(list);
 		DescriptionComparator descriptionComp = new DescriptionComparator();
-		Collections.sort(list, descriptionComp);
-		return list;
+		Collections.sort(sortedList, descriptionComp);
+		return sortedList;
 	}
 	
 	private ArrayList<Task> getSortedListWithTag(ArrayList<Task> list) {
+		ArrayList<Task> sortedList = new ArrayList<Task>();
+		sortedList.addAll(list);
 		TagComparator tagComp = new TagComparator();
-		Collections.sort(list, tagComp);
-		return list;
+		Collections.sort(sortedList, tagComp);
+		return sortedList;
 	}
 
 	private ArrayList<Task> getSortedListWithStartDateTime(ArrayList<Task> list) {
+		ArrayList<Task> sortedList = new ArrayList<Task>();
+		sortedList.addAll(list);
 		StartDateTimeComparator startDateTimeComp = new StartDateTimeComparator();
-		Collections.sort(list, startDateTimeComp);
-		return list;
+		Collections.sort(sortedList, startDateTimeComp);
+		return sortedList;
 	}
 
 	private ArrayList<Task> getSortedListWithEndDateTime(ArrayList<Task> list) {
+		ArrayList<Task> sortedList = new ArrayList<Task>();
+		sortedList.addAll(list);
 		EndDateTimeComparator endTimeComp = new EndDateTimeComparator();
-		Collections.sort(list, endTimeComp);
-		return list;
+		Collections.sort(sortedList, endTimeComp);
+		return sortedList;
 	}
 
 	private void save() {
