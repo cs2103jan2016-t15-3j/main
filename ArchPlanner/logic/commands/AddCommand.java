@@ -58,22 +58,17 @@ public class AddCommand implements Command {
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
 		boolean isSuccessful;
 
-		Storage storage = new Storage();
-
 		Task task = new Task(_description, _tag, _startDateTime, _endDateTime);
 		isSuccessful = mainList.add(task);
 		viewList.add(task);
-		tagsList = updateTagsList(tagsList);
+		updateTagsList(tagsList);
 
 		return isSuccessful;
 	}
 
-	private ArrayList<String> updateTagsList(ArrayList<String> tagsList) {
-		if (_tag != null && !tagsList.contains(_tag)) {
+	private void updateTagsList(ArrayList<String> tagsList) {
+		if ((_tag != null) && (!tagsList.contains(_tag))) {
 			tagsList.add(_tag);
-			return tagsList;
-		} else {
-			return tagsList;
 		}
 	}
 }

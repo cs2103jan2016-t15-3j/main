@@ -32,7 +32,7 @@ public class DeleteCommand implements Command {
 			viewList.remove(taskIndex);
 			mainList.remove(task);
 			updateTagsList(mainList, tagsList);
-			Collections.sort(tagsList);
+			//Collections.sort(tagsList);
 			return true;
 		} else {
 			return false;
@@ -41,7 +41,7 @@ public class DeleteCommand implements Command {
 
 	private boolean isValidDeleteCommand(ArrayList<Task> viewList, int _id) {
 		boolean isValidDeleteCommand;
-		isValidDeleteCommand = (_id <= viewList.size() && _id > 0);
+		isValidDeleteCommand = ((_id <= viewList.size()) && (_id > 0));
 		return isValidDeleteCommand;
 
 	}
@@ -62,10 +62,10 @@ public class DeleteCommand implements Command {
 	}
 
 	private void updateTagsList(ArrayList<Task> mainList, ArrayList<String> tagsList) {
-		tagsList.removeAll(tagsList);
+		tagsList.clear();
 		for (int i = 0; i < mainList.size(); i++) {
 			String tag = getTaskTag(mainList, i);
-			if (!tagsList.contains(tag)) {
+			if ((tag != null) && (!tagsList.contains(tag))) {
 				tagsList.add(tag);
 			}
 		}

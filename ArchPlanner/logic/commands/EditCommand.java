@@ -87,19 +87,19 @@ public class EditCommand implements Command {
 		int taskIndex = getTaskIndex(_id);
 		Task oldTask = getTask(viewList, taskIndex);
 		
-		if (!_description.equals(getTaskDescription(viewList, taskIndex))) {
+		if ((_description != null) && (!_description.equals(getTaskDescription(viewList, taskIndex)))) {
 			setTaskDescription(viewList, taskIndex);
 		}
 
-		if (!_tag.equals(getTaskTag(viewList, taskIndex))) {
+		if ((_tag != null) && (!_tag.equals(getTaskTag(viewList, taskIndex)))) {
 			setTaskTag(viewList, taskIndex);
 		}
 
-		if (!_startDateTime.equals(getTaskStartDateTime(viewList, taskIndex))) {
+		if ((_startDateTime != null) && (!_startDateTime.equals(getTaskStartDateTime(viewList, taskIndex)))) {
 			setTaskStartDateTime(viewList, taskIndex);
 		}
 
-		if (!_endDateTime.equals(getTaskEndDateTime(viewList, taskIndex))) {
+		if ((_endDateTime != null) && (!_endDateTime.equals(getTaskEndDateTime(viewList, taskIndex)))) {
 			setTaskEndDateTime(viewList, taskIndex);
 		}
 
@@ -181,10 +181,10 @@ public class EditCommand implements Command {
 	}
 
 	private void updateTagsList(ArrayList<Task> mainList, ArrayList<String> tagsList) {
-		tagsList.removeAll(tagsList);
+		tagsList.clear();
 		for (int i = 0; i < mainList.size(); i++) {
 			String tag = getTaskTag(mainList, i);
-			if (!tagsList.contains(tag)) {
+			if ((tag != null) && (!tagsList.contains(tag))) {
 				tagsList.add(tag);
 			}
 		}
