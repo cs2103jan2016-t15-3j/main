@@ -41,7 +41,7 @@ public class DeleteCommand implements Command {
 
 	private boolean isValidDeleteCommand(ArrayList<Task> viewList, int _id) {
 		boolean isValidDeleteCommand;
-		isValidDeleteCommand = (_id <= viewList.size() && _id > 0) ? true : false;
+		isValidDeleteCommand = (_id <= viewList.size() && _id > 0);
 		return isValidDeleteCommand;
 
 	}

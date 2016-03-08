@@ -1,6 +1,7 @@
 package logic.commands;
 
 import logic.Logic;
+import logic.Task;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,11 @@ public class SortCommand implements Command {
         return _sortType;
     }
 
+    @Override
+    public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+        return false;
+    }
+
     public void set_sortType(String _sortType) {
         this._sortType = _sortType;
     }
@@ -32,8 +38,4 @@ public class SortCommand implements Command {
         return _sortTypeList;
     }
 
-    @Override
-    public void execute(Logic logic) {
-
-    }
 }

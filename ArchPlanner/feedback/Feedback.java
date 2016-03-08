@@ -34,6 +34,13 @@ public class Feedback {
     private static final String ADD = "add";
     private static final String ADD_DESCRIPTION = "add <description>";
     private static final String ADD_DESCRIPTION_TIME = "add <description> <time>";
+    private static final String ADD_DESCRIPTION_FROM_TIME = "add <description> from <time>";
+    private static final String ADD_DESCRIPTION_START_AT_TIME = "add <description> from <time> to <time>";
+    private static final String ADD_DESCRIPTION_BY_TIME = "add <description> by <time>";
+    private static final String ADD_DESCRIPTION_UNTIL_TIME = "add <description> until <time>";
+    private static final String ADD_DESCRIPTION_DEADLINE_TIME = "add <description> deadline <time>";
+    private static final String ADD_DESCRIPTION_FROM_TIME_TO_TIME = "add <description> from <time> to <time>";
+
 
     private static final String DELETE_INDEX = "delete <index>";
 
@@ -60,21 +67,25 @@ public class Feedback {
     private static final String EXIT = "exit";
 
     private static final String NO_MATCH = "No pattern matched";
+    private static final String EMPTY_INPUT = "add | delete | edit | view | search | sort | done | undone | undo | redo | exit";
+
 
     private static ArrayList<String> feedbackList = new ArrayList<String>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Feedback feedback = new Feedback();
         while (true) {
             String input = scanner.nextLine();
-            ArrayList<String> list = onTextChanged(input);
+            ArrayList<String> list = feedback.onTextChanged(input);
             for (String s : list) {
                 System.out.println(s);
             }
+            feedback.onEnterPressed(input);
         }
     }
 
-    public static ArrayList<String> onTextChanged(String input) {
+    public ArrayList<String> onTextChanged(String input) {
         feedbackList = new ArrayList<String>();
         int commandType = detectCommandType(input);
         switch (commandType) {
@@ -82,8 +93,28 @@ public class Feedback {
                 handleUnknownCommand(input);
                 break;
             case COMMAND_TYPE_ADD:
+                //todo: good style
+                if (input.contains(" by ")) {
+                    feedbackList.add(ADD_DESCRIPTION_BY_TIME);
+                }
+                if (input.contains(" until ")) {
+                    feedbackList.add(ADD_DESCRIPTION_UNTIL_TIME);
+                }
+                if (input.contains(" deadline ")) {
+                    feedbackList.add(ADD_DESCRIPTION_DEADLINE_TIME);
+                }
+                if (input.contains(" start at ")) {
+                    feedbackList.add(ADD_DESCRIPTION_START_AT_TIME);
+                }
+                if (input.contains(" from ")) {
+                    if (input.contains(" to ")) {
+                        feedbackList.add(ADD_DESCRIPTION_FROM_TIME_TO_TIME);
+                    } else {
+                        feedbackList.add(ADD_DESCRIPTION_FROM_TIME);
+                    }
+                }
                 feedbackList.add(ADD_DESCRIPTION);
-                feedbackList.add(ADD_DESCRIPTION_TIME);
+
                 break;
             case COMMAND_TYPE_DELETE:
                 feedbackList.add(DELETE_INDEX);
@@ -122,7 +153,7 @@ public class Feedback {
         return feedbackList;
     }
 
-    public static Command onEnterPressed(String input) {
+    public Command onEnterPressed(String input) {
         int commandType = detectCommandType(input);
         //todo: Convert to Good Style
         //todo: handle complex cases
@@ -132,7 +163,7 @@ public class Feedback {
                 case COMMAND_TYPE_UNKNOWN:
                     return new InvalidCommand("Invalid command");
                 case COMMAND_TYPE_ADD:
-                    return AddCommandParser.parser(input);
+                    return new AddCommandParser().parse(input);
                 case COMMAND_TYPE_DELETE:
                     return new DeleteCommand(Integer.parseInt(input.substring(7)));
                 case COMMAND_TYPE_EDIT:
@@ -162,8 +193,9 @@ public class Feedback {
         return new InvalidCommand("Feedback Error");
     }
 
-    private static void handleUnknownCommand(String input) {
+    private void handleUnknownCommand(String input) {
         if (input.isEmpty()) {
+            feedbackList.add(EMPTY_INPUT);
             return;
         }
         for (int i = 0; i < ALL_COMMANDS.length; i++) {
@@ -194,7 +226,7 @@ public class Feedback {
         }
     }
 
-    private static int detectCommandType(String input) {
+    private int detectCommandType(String input) {
         for (int i = 0; i < ALL_COMMANDS.length; i++) {
             if (input.startsWith(ALL_COMMANDS[i])) {
                 if (i <= COMMAND_TYPE_UNDONE

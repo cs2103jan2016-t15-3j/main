@@ -8,6 +8,6 @@ import logic.commands.EditCommand;
 public class EditCommandParser {
     public static EditCommand parser(String input) {
         String[] s = input.split(" ");
-        return new EditCommand(Integer.parseInt(s[1]), "Not finished", null, null, null);
+        return new EditCommand(Integer.parseInt(s[1]), ParserUtils.merge(s, 2, s.length), null, null, null);
     }
 }

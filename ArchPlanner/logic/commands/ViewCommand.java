@@ -1,7 +1,9 @@
 package logic.commands;
 
 import logic.Logic;
+import logic.Task;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ViewCommand implements Command {
@@ -31,8 +33,8 @@ public class ViewCommand implements Command {
 	}
 
 	@Override
-	public void execute(Logic logic) {
-
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		return false;
 	}
 
 	public void setTag(String tag) {

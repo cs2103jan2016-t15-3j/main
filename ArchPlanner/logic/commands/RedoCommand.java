@@ -1,6 +1,9 @@
 package logic.commands;
 
 import logic.Logic;
+import logic.Task;
+
+import java.util.ArrayList;
 
 public class RedoCommand implements Command {
 
@@ -14,8 +17,8 @@ public class RedoCommand implements Command {
 	}
 
 	@Override
-	public void execute(Logic logic) {
-
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		return false;
 	}
 
 	public void setTimes() {

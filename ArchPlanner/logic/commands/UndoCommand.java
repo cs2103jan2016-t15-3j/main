@@ -1,6 +1,9 @@
 package logic.commands;
 
 import logic.Logic;
+import logic.Task;
+
+import java.util.ArrayList;
 
 public class UndoCommand implements Command {
 
@@ -8,13 +11,14 @@ public class UndoCommand implements Command {
 
 	private final int DEFAULT_NUMBER_OF_TIMES = 1;
 
-	@Override
-	public void execute(Logic logic) {
-
-	}
 
 	public UndoCommand() {
 		this._times = DEFAULT_NUMBER_OF_TIMES;
+	}
+
+	@Override
+	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		return false;
 	}
 
 	public UndoCommand(int _times) {
