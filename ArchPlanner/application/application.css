@@ -1,65 +1,90 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
-.list-cell {
-    -fx-background-color: -fx-control-inner-background;
-}
-.list-cell:odd {
-    -fx-background-color: derive(-fx-control-inner-background,-2%);
+#mainWindow {
+    -fx-background-color: transparent;
 }
 
-.label {
-	-fx-text-fill: black;
+
+#taskWindow {
+	/*-fx-background-image: url('/Images/bg.jpg');*/
+	/*-fx-background-size: 100% 100%;*/
+	-fx-background-color: white;
+	-fx-background-radius: 20;
+	
+	-fx-border-radius: 15;
+  	-fx-border-width: 8;
+	-fx-border-color: #651b1b;
 }
 
-.toggle-button {
-    -fx-background-color: -fx-inner-border;
-}
-.toggle-button:selected {
-    -fx-background-color: -fx-outer-border;
-}
-
-.text-field {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+#userInput {
+	-fx-background-radius: 20;
+	
+	-fx-border-radius: 15;
+  	-fx-border-width: 8;
+	-fx-border-color: #651b1b;
 }
 
 #viewLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+	-fx-font-size: 24pt;
+	-fx-text-fill: black;
+	-fx-padding: 20 0 0 0;
 }
 
-#tagLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.label {
+	-fx-font-size: 18pt;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: gray;
+    -fx-padding: 0 0 0 10;
 }
 
-#numLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.list-cell {
+    -fx-background-color: transparent;
 }
 
-#desLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.button {
+	-fx-background-color: lightgrey;
+	-fx-background-radius: 50%;
 }
 
-#startLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.button:pressed {
+	-fx-background-color: grey;
 }
 
-#endLabel {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.toggle-button {
+	-fx-font-size: 18pt;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: gray;
+    
+	-fx-background-radius: 15;	
+	-fx-background-color: lightgrey;
 }
 
-
-#tagView {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.toggle-button:selected {
+	-fx-text-fill: white;
+	-fx-background-color: grey;
 }
 
-#taskView {
-	-fx-border-width: 1;
-	-fx-border-color: grey;
+.list-view {
+	-fx-background-radius: 15;
+	-fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* The main scrollbar */
+.list-view .scroll-bar {
+	-fx-background-color: transparent;
+	-fx-padding:5 5 5 0;
+}
+
+/* The increment and decrement button in scrollbar */
+.list-view .scroll-bar .increment-button,
+.list-view .scroll-bar .decrement-button {
+    -fx-background-color:transparent;
+    -fx-padding: 2px;
+}
+
+/* The main scrollbar which user interact with*/
+.list-view .scroll-bar:horizontal .thumb,
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+	-fx-background-radius: 2em;
 }
