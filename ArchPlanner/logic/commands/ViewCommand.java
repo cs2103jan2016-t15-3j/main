@@ -1,12 +1,12 @@
 package logic.commands;
 
-import logic.Logic;
+import logic.SortListEngine;
 import logic.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ViewCommand implements Command {
+public class ViewCommand extends Command {
 	
 	private String _description;
 	private String _tag;
@@ -34,6 +34,25 @@ public class ViewCommand implements Command {
 
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+		if ((_description != null) && (_description.equals("all"))) {
+			viewList.clear();
+			viewList.addAll(mainList);
+			return true;
+		}
+		
+		if ((_description != null) && (_description.equals("done"))) {
+			viewList.clear();
+			SortListEngine sort = new SortListEngine();
+			viewList.addAll(sort.getSortedIsDoneList(mainList));
+			return true;
+		}
+		
+		if ((_description != null) && (_description.equals("undone"))) {
+			viewList.clear();
+			SortListEngine sort = new SortListEngine();
+			viewList.addAll(sort.getSortedIsUndoneList(mainList));
+			return true;
+		}
 		return false;
 	}
 

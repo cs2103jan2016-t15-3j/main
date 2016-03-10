@@ -1,11 +1,10 @@
 package logic.commands;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import logic.Task;
 
-public class DeleteCommand implements Command {
+public class DeleteCommand extends Command {
 
 	private int _id;
 
@@ -26,8 +25,8 @@ public class DeleteCommand implements Command {
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
 
-		if (isValidDeleteCommand(viewList, _id)) {
-			int taskIndex= getTaskIndex(_id);
+		if (isValidDeleteCommand(viewList)) {
+			int taskIndex = getTaskIndex();
 			Task task = getTask(viewList, taskIndex);
 			viewList.remove(taskIndex);
 			mainList.remove(task);
@@ -38,15 +37,15 @@ public class DeleteCommand implements Command {
 		}
 	}
 
-	private boolean isValidDeleteCommand(ArrayList<Task> viewList, int _id) {
+	private boolean isValidDeleteCommand(ArrayList<Task> viewList) {
 		boolean isValidDeleteCommand;
 		isValidDeleteCommand = ((_id <= viewList.size()) && (_id > 0));
 		return isValidDeleteCommand;
 
 	}
 
-	private int getTaskIndex(int id) {
-		int taskIndex = id - 1;
+	private int getTaskIndex() {
+		int taskIndex = _id - 1;
 		return taskIndex;
 	}
 
@@ -68,5 +67,8 @@ public class DeleteCommand implements Command {
 				tagsList.add(tag);
 			}
 		}
+		tagsList.add(0, "TimeLine");
+		tagsList.add(1 ,"Event");
+		tagsList.add(2, "Tasks");
 	}
 }

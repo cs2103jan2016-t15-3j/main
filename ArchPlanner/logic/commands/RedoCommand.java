@@ -1,11 +1,10 @@
 package logic.commands;
 
-import logic.Logic;
 import logic.Task;
 
 import java.util.ArrayList;
 
-public class RedoCommand implements Command {
+public class RedoCommand extends Command {
 
 	private int _times;
 

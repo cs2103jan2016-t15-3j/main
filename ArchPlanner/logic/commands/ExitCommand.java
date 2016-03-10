@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import logic.Task;
 
-public class ExitCommand implements Command {
+public class ExitCommand extends Command {
 
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {

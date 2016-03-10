@@ -1,11 +1,10 @@
 package logic.commands;
 
-import logic.Logic;
 import logic.Task;
 
 import java.util.ArrayList;
 
-public class UndoCommand implements Command {
+public class UndoCommand extends Command {
 
 	private int _times;
 

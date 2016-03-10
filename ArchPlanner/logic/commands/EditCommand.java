@@ -4,9 +4,8 @@ import logic.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
-public class EditCommand implements Command {
+public class EditCommand extends Command {
 
 	private int _id;
 	private String _description;
@@ -82,9 +81,8 @@ public class EditCommand implements Command {
 
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
-		boolean isSuccessful;
 
-		int taskIndex = getTaskIndex(_id);
+		int taskIndex = getTaskIndex();
 		Task oldTask = getTask(viewList, taskIndex);
 		
 		if ((_description != null) && (!_description.equals(getTaskDescription(viewList, taskIndex)))) {
@@ -108,13 +106,9 @@ public class EditCommand implements Command {
 		}
 		
 		mainList.remove(oldTask);
-		
-		Task newTask = getTask(viewList, taskIndex);
-		
-		mainList.add(0, newTask);
-
+		Task newTask = getTask(viewList, taskIndex);	
+		mainList.add(newTask);
 		updateTagsList(mainList, tagsList);
-
 		return true;
 	}
 
@@ -138,8 +132,8 @@ public class EditCommand implements Command {
 		list.get(taskIndex).setIsDone(_isDone);
 	}
 
-	private int getTaskIndex(int id) {
-		int taskIndex = id - 1;
+	private int getTaskIndex() {
+		int taskIndex = _id - 1;
 		return taskIndex;
 	}
 
@@ -157,12 +151,6 @@ public class EditCommand implements Command {
 		String taskTag = list.get(taskIndex).getTag();
 		return taskTag;
 	}
-
-	//	private ArrayList<Task> getSortedListWithTag(ArrayList<Task> list) {
-	//		TagComparator tagComp = new TagComparator();
-	//		Collections.sort(list, tagComp);
-	//		return list;
-	//	}
 
 	private Calendar getTaskStartDateTime(ArrayList<Task> list, int taskIndex) {
 		Calendar taskStartDateTime = list.get(taskIndex).getStartDateTime();
@@ -187,5 +175,8 @@ public class EditCommand implements Command {
 				tagsList.add(tag);
 			}
 		}
+		tagsList.add(0, "TimeLine");
+		tagsList.add(1 ,"Event");
+		tagsList.add(2, "Tasks");
 	}
 }

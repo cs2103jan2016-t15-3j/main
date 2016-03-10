@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import logic.Task;
 
-public class AddCommand implements Command {
+public class AddCommand extends Command {
 
 	private String _description;
 	private String _tag;
@@ -55,10 +55,10 @@ public class AddCommand implements Command {
 
 	@Override
 	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
-
+		
 		Task task = new Task(_description, _tag, _startDateTime, _endDateTime);
-		mainList.add(0, task);
-		viewList.add(0, task);
+		mainList.add(task);
+		viewList.add(task);
 		updateTagsList(tagsList);
 		return true;
 	}

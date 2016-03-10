@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import logic.Task;
 
-public class InvalidCommand implements Command {
+public class InvalidCommand extends Command {
 
     private String _error_message;
 

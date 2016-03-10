@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import logic.Task;
 
-public class SearchCommand implements Command {
+public class SearchCommand extends Command {
 	
 	private String _partialDescription;
 

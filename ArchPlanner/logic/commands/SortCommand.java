@@ -1,11 +1,10 @@
 package logic.commands;
 
-import logic.Logic;
 import logic.Task;
 
 import java.util.ArrayList;
 
-public class SortCommand implements Command {
+public class SortCommand extends Command {
 
 //    public final String _VALID_SORT_TYPE[] = {"DESCRIPTION", "TAG", "START_DATE_TIME", "END_DATE_TIME", "COMPLETION", "OVERDUE"};
 
