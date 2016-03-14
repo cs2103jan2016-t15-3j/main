@@ -5,14 +5,14 @@ import java.util.Calendar;
 
 import logic.ListsManager;
 import logic.Task;
-import logic.UserTaskParameters;
+import logic.TaskParameters;
 
 public class AddCommand implements Command {
 	
-	UserTaskParameters userTaskParameters;
+	TaskParameters taskParameters;
 	
 	public AddCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		userTaskParameters = new UserTaskParameters(description, tag, startDateTime, endDateTime);
+		taskParameters = new taskParameters(description, tag, startDateTime, endDateTime);
 	}
 
 	@Override
@@ -22,8 +22,8 @@ public class AddCommand implements Command {
 
 	@Override
 	public boolean execute(ListsManager listsManager) {
-		Task task = new Task(userTaskParameters.getDescription(), userTaskParameters.getTag(), userTaskParameters.getStartDateTime(), 
-				userTaskParameters.getEndDateTime());
+		Task task = new Task(taskParameters.getDescription(), taskParameters.getTag(), taskParameters.getStartDateTime(), 
+				taskParameters.getEndDateTime());
 		ArrayList<Task> mainList = new ArrayList<Task>();
 		mainList.addAll(listsManager.getMainList());
 		mainList.add(task);
