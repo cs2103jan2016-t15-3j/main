@@ -5,14 +5,14 @@ import java.util.Calendar;
 
 import logic.ListsManager;
 import logic.Task;
-import logic.UserTaskParameters;
+import logic.TaskParameters;
 
 public class SearchCommand implements Command {
 	
-	UserTaskParameters userTaskParameters;
+	TaskParameters taskParameters;
 
 	public SearchCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		userTaskParameters = new UserTaskParameters(description, tag, startDateTime, endDateTime);
+		taskParameters = new TaskParameters(description, tag, startDateTime, endDateTime);
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class SearchCommand implements Command {
 		ArrayList<Task> searchResultList = new ArrayList<>();
 		for (int i = 0; i < viewList.size(); i++) {
 			String taskDescription = getTaskDescription(viewList, i);
-			if (taskDescription.contains(userTaskParameters.getDescription())) {
+			if (taskDescription.contains(taskParameters.getDescription())) {
 				searchResultList.add(viewList.get(i));
 			}
 		}
