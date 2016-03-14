@@ -2,73 +2,55 @@ package logic.commands;
 
 import java.util.ArrayList;
 
+import logic.ListsManager;
 import logic.Task;
 
-public class DeleteCommand extends Command {
+public class DeleteCommand implements Command {
 
-	private int _id;
+	private int _index;
 
-	public DeleteCommand(int _id) {
-		this._id = _id;
+	public DeleteCommand(int index) {
+		_index = index - 1;
 	}
 
-	public void setId(int id) {
-		assert(id >= 1); //id can only be 1 or greater
-		_id = id;
-	}
-
-
-	public int getId() {
-		return _id;
+	public int getIndex() {
+		return _index;
 	}
 
 	@Override
-	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+	public boolean execute() {
+		return false;
+	}
 
-		if (isValidDeleteCommand(viewList)) {
-			int taskIndex = getTaskIndex();
-			Task task = getTask(viewList, taskIndex);
-			viewList.remove(taskIndex);
-			mainList.remove(task);
-			updateTagsList(mainList, tagsList);
-			return true;
-		} else {
+	@Override
+	public boolean execute(ListsManager listsManager) {
+
+		ArrayList<Task> viewList = new ArrayList<Task>();
+		viewList.addAll(listsManager.getViewList());
+
+		if (!isWithinList(viewList, _index)) {
 			return false;
 		}
-	}
 
-	private boolean isValidDeleteCommand(ArrayList<Task> viewList) {
-		boolean isValidDeleteCommand;
-		isValidDeleteCommand = ((_id <= viewList.size()) && (_id > 0));
-		return isValidDeleteCommand;
+		ArrayList<Task> mainList = new ArrayList<Task>();
+		mainList.addAll(listsManager.getMainList());
+		System.out.println(_index);
+		Task task = viewList.get(_index);
+		mainList.remove(task);
 
-	}
-
-	private int getTaskIndex() {
-		int taskIndex = _id - 1;
-		return taskIndex;
-	}
-
-	private Task getTask(ArrayList<Task> list, int taskIndex) {
-		Task task = list.get(taskIndex);
-		return task;
-	}
-
-	private String getTaskTag(ArrayList<Task> list, int taskIndex) {
-		String taskTag = list.get(taskIndex).getTag();
-		return taskTag;
-	}
-
-	private void updateTagsList(ArrayList<Task> mainList, ArrayList<String> tagsList) {
-		tagsList.clear();
-		for (int i = 0; i < mainList.size(); i++) {
-			String tag = getTaskTag(mainList, i);
-			if ((tag != null) && (!tagsList.contains(tag))) {
-				tagsList.add(tag);
-			}
+		if (listsManager.getViewType().equals("VIEW_SEARCH_RESULT")) {
+			ArrayList<Task> searchResultList = new ArrayList<Task>();
+			searchResultList.addAll(listsManager.getSearchResultList());
+			searchResultList.remove(task);
+			listsManager.setSearchList(searchResultList);
 		}
-		tagsList.add(0, "TimeLine");
-		tagsList.add(1 ,"Event");
-		tagsList.add(2, "Tasks");
+		listsManager.updateLists(mainList);
+		return true;
+	}
+
+	private boolean isWithinList(ArrayList<Task> list, int index) {
+		boolean isWithinList = false;
+		isWithinList = ((index < list.size()) && (index >= 0));
+		return isWithinList;
 	}
 }
