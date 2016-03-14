@@ -10,17 +10,14 @@ import logic.UserTaskParameters;
 public class AddCommand implements Command {
 	
 	UserTaskParameters userTaskParameters;
+	
+	public AddCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
+		userTaskParameters = new UserTaskParameters(description, tag, startDateTime, endDateTime);
+	}
 
 	@Override
 	public boolean execute() {
 		return false;
-	}
-	
-	public AddCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		userTaskParameters.setDescription(description);
-		userTaskParameters.setTag(tag);
-		userTaskParameters.setStartDateTime(startDateTime);
-		userTaskParameters.setEndDateTime(endDateTime);
 	}
 
 	@Override

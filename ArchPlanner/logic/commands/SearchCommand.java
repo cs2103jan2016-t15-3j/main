@@ -12,14 +12,7 @@ public class SearchCommand implements Command {
 	UserTaskParameters userTaskParameters;
 
 	public SearchCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		userTaskParameters.setDescription(description);
-		userTaskParameters.setTag(tag);
-		userTaskParameters.setStartDateTime(startDateTime);
-		userTaskParameters.setEndDateTime(endDateTime);
-	}
-
-	public String getUserTaskParameters() {
-		return getUserTaskParameters();
+		userTaskParameters = new UserTaskParameters(description, tag, startDateTime, endDateTime);
 	}
 	
 	@Override
