@@ -3,6 +3,7 @@ package logic.commands;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import logic.HistoryManager;
 import logic.ListsManager;
 import logic.Task;
 import logic.TaskParameters;
@@ -11,8 +12,8 @@ public class SearchCommand implements Command {
 	
 	TaskParameters taskParameters;
 
-	public SearchCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		taskParameters = new TaskParameters(description, tag, startDateTime, endDateTime);
+	public SearchCommand(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
+		taskParameters = new TaskParameters(description, tagsList, startDateTime, endDateTime);
 	}
 	
 	@Override
@@ -21,7 +22,7 @@ public class SearchCommand implements Command {
 	}
 
 	@Override
-	public boolean execute(ListsManager listsManager) {
+	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		ArrayList<Task> searchResultList = new ArrayList<Task>();
 		ArrayList<Task> viewList = new ArrayList<Task>();
 		viewList.addAll(listsManager.getUndoneList());
