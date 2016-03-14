@@ -11,10 +11,12 @@ import logic.TaskParameters;
 
 public class AddCommand implements Command {
 	
-	TaskParameters taskParameters;
+	Task _task = new Task(null, null, null, null);
 	
-	public AddCommand(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
-		taskParameters = new TaskParameters(description, tagsList, startDateTime, endDateTime);
+	public AddCommand(TaskParameters taskParameters) {
+		Task task = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
+				taskParameters.getEndDateTime());
+		_task = task;
 	}
 
 	@Override
@@ -24,8 +26,8 @@ public class AddCommand implements Command {
 
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		Task newTask = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
-				taskParameters.getEndDateTime());
+		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDateTime(), 
+				_task.getEndDateTime());
 		ArrayList<Task> mainList = new ArrayList<Task>();
 		mainList.addAll(listsManager.getMainList());
 		mainList.add(newTask);

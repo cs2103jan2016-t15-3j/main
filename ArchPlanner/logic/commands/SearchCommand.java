@@ -10,10 +10,12 @@ import logic.TaskParameters;
 
 public class SearchCommand implements Command {
 	
-	TaskParameters taskParameters;
+	Task _task = new Task(null, null, null, null);
 
-	public SearchCommand(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
-		taskParameters = new TaskParameters(description, tagsList, startDateTime, endDateTime);
+	public SearchCommand(TaskParameters taskParameters) {
+		Task task = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
+				taskParameters.getEndDateTime());
+		_task = task;
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class SearchCommand implements Command {
 		ArrayList<Task> searchResultList = new ArrayList<>();
 		for (int i = 0; i < viewList.size(); i++) {
 			String taskDescription = getTaskDescription(viewList, i);
-			if (taskDescription.contains(taskParameters.getDescription())) {
+			if (taskDescription.contains(_task.getDescription())) {
 				searchResultList.add(viewList.get(i));
 			}
 		}

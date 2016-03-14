@@ -11,18 +11,15 @@ import java.util.Calendar;
 
 public class EditCommand implements Command {
 
-	TaskParameters taskParameters;
+	Task _task = new Task(null, null, null, null);
 	private int _index;
 
-	public EditCommand(int index, String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
+	public EditCommand(int index, TaskParameters taskParameters) {
 		assert(index >= 1);
-		taskParameters = new TaskParameters(description, tagsList, startDateTime, endDateTime);
+		Task task = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
+				taskParameters.getEndDateTime());
+		_task = task;
 		_index = index - 1;
-	}
-
-	public EditCommand(int id, String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime, boolean isDone) {
-		this(id, description, tagsList, startDateTime, endDateTime);
-		taskParameters.setIsDone(isDone);
 	}
 
 	@Override
@@ -49,24 +46,24 @@ public class EditCommand implements Command {
 		Task newTask = new Task(null, null, null, null);
 		newTask = oldTask;
 		
-		if ((taskParameters.getDescription() != null) && (!taskParameters.getDescription().equals(oldTask.getDescription()))) {
-			newTask.setDescription(taskParameters.getDescription());
+		if ((_task.getDescription() != null) && (!_task.getDescription().equals(oldTask.getDescription()))) {
+			newTask.setDescription(_task.getDescription());
 		}
 
-		if ((taskParameters.getTagsList() != null) && (!taskParameters.getTagsList().equals(oldTask.getTagsList()))) {
-			newTask.setTag(taskParameters.getTagsList());
+		if ((_task.getTagsList() != null) && (!_task.getTagsList().equals(oldTask.getTagsList()))) {
+			newTask.setTag(_task.getTagsList());
 		}
 
-		if ((taskParameters.getStartDateTime() != null) && (!taskParameters.getStartDateTime().equals(oldTask.getStartDateTime()))) {
-			newTask.setStartDateTime(taskParameters.getStartDateTime());
+		if ((_task.getStartDateTime() != null) && (!_task.getStartDateTime().equals(oldTask.getStartDateTime()))) {
+			newTask.setStartDateTime(_task.getStartDateTime());
 		}
 
-		if ((taskParameters.getEndDateTime() != null) && (!taskParameters.getEndDateTime().equals(oldTask.getEndDateTime()))) {
-			newTask.setEndDateTime(taskParameters.getEndDateTime());
+		if ((_task.getEndDateTime() != null) && (!_task.getEndDateTime().equals(oldTask.getEndDateTime()))) {
+			newTask.setEndDateTime(_task.getEndDateTime());
 		}
 
-		if (!taskParameters.getIsDone() == oldTask.getIsDone()) {
-			newTask.setIsDone(taskParameters.getIsDone());
+		if (!_task.getIsDone() == oldTask.getIsDone()) {
+			newTask.setIsDone(_task.getIsDone());
 		}
 
 		mainList.add(newTask);
