@@ -17,7 +17,17 @@ import static org.junit.Assert.*;
  * Created by lifengshuang on 3/8/16.
  */
 public class ParserTest {
-
+    @Test
+    public void testAddCommandParser() throws Exception {
+        //add sth from 1pm to 3pm
+        //add lalala from tomorrow to this Friday #a
+        //add miao by Mar 7 #a #b
+        //add assignments this Thursday 3pm #assign #oh-my-god #help-me!
+        new AddCommandParser().parse("add sth from 1pm to 3pm");
+        new AddCommandParser().parse("add lalala from tomorrow to this Friday #a");
+        new AddCommandParser().parse("add miao by Mar 7 #a #b");
+        new AddCommandParser().parse("add assignments this Thursday 3pm #assign #oh-my-god #help-me!");
+    }
 
     @Test
     public void testCalendar() throws Exception {

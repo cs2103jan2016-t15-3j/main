@@ -1,6 +1,7 @@
 package feedback;
 
 import feedback.paser.AddCommandParser;
+import feedback.paser.DeleteCommandParser;
 import feedback.paser.EditCommandParser;
 import logic.commands.*;
 
@@ -165,7 +166,7 @@ public class Feedback {
                 case COMMAND_TYPE_ADD:
                     return new AddCommandParser().parse(input);
                 case COMMAND_TYPE_DELETE:
-                    return new DeleteCommand(Integer.parseInt(input.substring(7)));
+                    return new DeleteCommandParser().parse(input);
                 case COMMAND_TYPE_EDIT:
                     return new EditCommandParser().parse(input);
                 case COMMAND_TYPE_VIEW:

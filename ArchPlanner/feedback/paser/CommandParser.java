@@ -1,5 +1,6 @@
 package feedback.paser;
 
+import com.joestelmach.natty.Parser;
 import logic.commands.Command;
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ import java.util.ArrayList;
 public abstract class CommandParser {
 
     protected String input;
-    protected ArrayList<String> tagList;
+    protected ArrayList<String> tagList = new ArrayList<String>();
+    protected static Parser timeParser = new Parser();
 
     public String detectTagAndRemoveTagString(String input) {
         String[] words = split(input);
