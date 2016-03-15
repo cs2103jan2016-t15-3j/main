@@ -1,8 +1,6 @@
 package feedback;
 
-import feedback.paser.AddCommandParser;
-import feedback.paser.DeleteCommandParser;
-import feedback.paser.EditCommandParser;
+import feedback.paser.*;
 import logic.commands.*;
 
 import java.util.ArrayList;
@@ -22,15 +20,14 @@ public class Feedback {
     private static final int COMMAND_TYPE_UNDONE = 5;
     private static final int COMMAND_TYPE_UNDO = 6;
     private static final int COMMAND_TYPE_REDO = 7;
-    private static final int COMMAND_TYPE_SORT = 8;
-    private static final int COMMAND_TYPE_SEARCH = 9;
-    private static final int COMMAND_TYPE_EXIT = 10;
+    //    private static final int COMMAND_TYPE_SORT = 8;
+    private static final int COMMAND_TYPE_SEARCH = 8;
+    private static final int COMMAND_TYPE_EXIT = 9;
 
     private static final String[] ALL_COMMANDS =
             {"add", "delete", "edit",
                     "view", "done", "undone",
-                    "undo", "redo", "sort",
-                    "search", "exit"};
+                    "undo", "redo", "search", "exit"};
 
     private static final String ADD = "add";
     private static final String ADD_DESCRIPTION = "add <description>";
@@ -61,14 +58,14 @@ public class Feedback {
     private static final String UNDO = "undo";
     private static final String REDO = "redo";
 
-    private static final String SORT = "sort";
-    private static final String SORT_BY_TYPE = "sort <DESCRIPTION | TAG | START_DATE_TIME | END_DATE_TIME | COMPLETION | OVERDUE>";
+    //    private static final String SORT = "sort";
+//    private static final String SORT_BY_TYPE = "sort <DESCRIPTION | TAG | START_DATE_TIME | END_DATE_TIME | COMPLETION | OVERDUE>";
     private static final String SEARCH_DESCRIPTION = "search <description>";
 
     private static final String EXIT = "exit";
 
     private static final String NO_MATCH = "No pattern matched";
-    private static final String EMPTY_INPUT = "add | delete | edit | view | search | sort | done | undone | undo | redo | exit";
+    private static final String EMPTY_INPUT = "add | delete | edit | view | search | done | undone | undo | redo | exit";
 
 
     private static ArrayList<String> feedbackList = new ArrayList<String>();
@@ -141,9 +138,9 @@ public class Feedback {
             case COMMAND_TYPE_REDO:
                 feedbackList.add(REDO);
                 break;
-            case COMMAND_TYPE_SORT:
-                feedbackList.add(SORT_BY_TYPE);
-                break;
+//            case COMMAND_TYPE_SORT:
+//                feedbackList.add(SORT_BY_TYPE);
+//                break;
             case COMMAND_TYPE_SEARCH:
                 feedbackList.add(SEARCH_DESCRIPTION);
                 break;
@@ -170,18 +167,20 @@ public class Feedback {
                 case COMMAND_TYPE_EDIT:
                     return new EditCommandParser().parse(input);
                 case COMMAND_TYPE_VIEW:
+                    //todo: view command parser
                     return new ViewCommand(input.substring(5), null, null, null);
                 case COMMAND_TYPE_DONE:
-                    return new DoneCommand(Integer.parseInt(input.substring(5)));
+                    return new DoneCommandParser().parse(input);
                 case COMMAND_TYPE_UNDONE:
-                    return new UndoneCommand(Integer.parseInt(input.substring(7)));
+                    return new UndoneCommandParser().parse(input);
                 case COMMAND_TYPE_UNDO:
                     return new UndoCommand();
                 case COMMAND_TYPE_REDO:
                     return new RedoCommand();
-                case COMMAND_TYPE_SORT:
-                    return new SortCommand(input.substring(5));
+//                case COMMAND_TYPE_SORT:
+//                    return new SortCommand(input.substring(5));
                 case COMMAND_TYPE_SEARCH:
+                    //todo: search command parser
                     return new SearchCommand(input.substring(7));
                 case COMMAND_TYPE_EXIT:
                     return new ExitCommand();
