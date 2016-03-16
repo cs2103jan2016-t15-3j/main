@@ -153,9 +153,6 @@ public class Feedback {
 
     public Command onEnterPressed(String input) {
         int commandType = detectCommandType(input);
-        //todo: Convert to Good Style
-        //todo: handle complex cases
-        //todo: much to do --after midterm
         try {
             switch (commandType) {
                 case COMMAND_TYPE_UNKNOWN:
@@ -168,7 +165,7 @@ public class Feedback {
                     return new EditCommandParser().parse(input);
                 case COMMAND_TYPE_VIEW:
                     //todo: view command parser
-                    return new ViewCommand(input.substring(5), null, null, null);
+                    return new ViewCommandParser().parse(input);
                 case COMMAND_TYPE_DONE:
                     return new DoneCommandParser().parse(input);
                 case COMMAND_TYPE_UNDONE:
@@ -181,7 +178,7 @@ public class Feedback {
 //                    return new SortCommand(input.substring(5));
                 case COMMAND_TYPE_SEARCH:
                     //todo: search command parser
-                    return new SearchCommand(input.substring(7));
+                    return new SearchCommandParser().parse(input);
                 case COMMAND_TYPE_EXIT:
                     return new ExitCommand();
             }

@@ -70,7 +70,7 @@ public class ParserTest {
     @Test
     public void testNetty() throws Exception {
         Parser parser = new Parser();
-        List<DateGroup> groups = parser.parse("add sth today");
+        List<DateGroup> groups = parser.parse("add sth this thursday");
         for (DateGroup group : groups) {
             List<Date> dates = group.getDates();
             int line = group.getLine();

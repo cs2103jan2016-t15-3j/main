@@ -27,6 +27,7 @@ public class AddCommandParser extends CommandParser {
     private int timeType;
     private final int TYPE_HAS_START_DATE = 0;
     private final int TYPE_ONLY_END_DATE = 1;
+    private final int ADD_PARAMETER_INDEX = 4;
     private final String KEYWORD_FROM = "from";
     private final String KEYWORD_STARTS_FROM = "starts from";
     private final String KEYWORD_BY = "by";
@@ -51,12 +52,12 @@ public class AddCommandParser extends CommandParser {
                 endDate.setTime(date);
             }
         }
-        description = input.substring(4, timeStartIndex) + "h";
+        description = input.substring(ADD_PARAMETER_INDEX, timeStartIndex);
         return new AddCommand(description, "tag", startDate, endDate);
     }
 
     private void detectTimeType(int matchPosition) {
-        timeStartIndex = input.length();
+        timeStartIndex = matchPosition;
         if (hasPrefixWithKeyword(KEYWORD_BY, matchPosition)
                 || hasPrefixWithKeyword(KEYWORD_UNTIL, matchPosition)
                 || hasPrefixWithKeyword(KEYWORD_DEADLINE, matchPosition)) {
