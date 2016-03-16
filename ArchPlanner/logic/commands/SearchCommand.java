@@ -7,17 +7,12 @@ import logic.ListsManager;
 import logic.Task;
 import logic.TaskParameters;
 
-public class SearchCommand implements Command {
+public class SearchCommand extends Command {
 	
 	TaskParameters _task = new TaskParameters(null, null, null, null);
 
 	public SearchCommand(TaskParameters newTaskParameters) {
 		_task = newTaskParameters;
-	}
-	
-	@Override
-	public boolean execute() {
-		return false;
 	}
 
 	@Override

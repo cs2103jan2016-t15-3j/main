@@ -5,7 +5,7 @@ import logic.ListsManager;
 
 import java.util.Calendar;
 
-public class ViewCommand implements Command {
+public class ViewCommand extends Command {
 	
 	private String _description;
 	private String _tag;
@@ -26,11 +26,6 @@ public class ViewCommand implements Command {
 		_isDone = isDone;
 	}
 
-	@Override
-	public boolean execute() {
-		return false;
-	}
-	
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		if ((_description != null) && (_description.equals("all"))) {

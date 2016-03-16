@@ -8,7 +8,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class UndoneCommand implements Command {
+public class UndoneCommand extends Command {
 
 	private int _index;
 
@@ -18,11 +18,6 @@ public class UndoneCommand implements Command {
 
 	public int getIndex() {
 		return _index;
-	}
-
-	@Override
-	public boolean execute() {
-		return false;
 	}
 
 	@Override

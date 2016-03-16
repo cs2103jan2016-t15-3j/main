@@ -8,7 +8,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class DoneCommand implements Command {
+public class DoneCommand extends Command {
 
 	private int _index;
 
@@ -20,11 +20,6 @@ public class DoneCommand implements Command {
 		return _index;
 	}
 
-	@Override
-	public boolean execute() {
-		return false;
-	}
-	
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		

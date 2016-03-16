@@ -3,15 +3,10 @@ package logic.commands;
 import logic.HistoryManager;
 import logic.ListsManager;
 
-public class InvalidCommand implements Command {
+public class InvalidCommand extends Command {
 
     private String _error_message;
 
-    @Override
-	public boolean execute() {
-		return false;
-	}
-    
     @Override
 	public boolean execute(ListsManager listsmanager, HistoryManager historyManager) {
 		return false;

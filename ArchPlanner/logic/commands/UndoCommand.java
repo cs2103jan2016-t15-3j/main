@@ -7,7 +7,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class UndoCommand implements Command {
+public class UndoCommand extends Command {
 
 	private int _times;
 
@@ -21,11 +21,6 @@ public class UndoCommand implements Command {
 
 	public int getTimes() {
 		return _times;
-	}
-
-	@Override
-	public boolean execute() {
-		return false;
 	}
 
 	@Override

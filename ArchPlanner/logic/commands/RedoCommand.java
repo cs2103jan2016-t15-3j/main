@@ -7,7 +7,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class RedoCommand implements Command {
+public class RedoCommand extends Command {
 
 	private int _times;
 
@@ -22,12 +22,7 @@ public class RedoCommand implements Command {
 	public int getTimes() {
 		return _times;
 	}
-	
-	@Override
-	public boolean execute() {
-		return false;
-	}
-	
+
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		ArrayList<Task> mainList = new ArrayList<Task>();

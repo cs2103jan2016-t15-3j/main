@@ -2,6 +2,7 @@ package feedback.paser;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
+import logic.TaskParameters;
 import logic.commands.AddCommand;
 
 import java.util.Calendar;
@@ -53,7 +54,8 @@ public class AddCommandParser extends CommandParser {
             }
         }
         description = input.substring(ADD_PARAMETER_INDEX, timeStartIndex);
-        return new AddCommand(description, "tag", startDate, endDate);
+//        return new AddCommand(description, "tag", startDate, endDate);
+        return new AddCommand(new TaskParameters(description, tagList, startDate, endDate));
     }
 
     private void detectTimeType(int matchPosition) {

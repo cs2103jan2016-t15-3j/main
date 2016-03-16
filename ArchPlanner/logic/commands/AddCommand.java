@@ -8,22 +8,18 @@ import logic.RollbackItem;
 import logic.Task;
 import logic.TaskParameters;
 
-public class AddCommand implements Command {
-	
+public class AddCommand extends Command {
+
 	TaskParameters _task = new TaskParameters(null, null, null, null);
-	
+
 	public AddCommand(TaskParameters newTaskParameters) {
 		_task = newTaskParameters;
 	}
 
-	@Override
-	public boolean execute() {
-		return false;
-	}
 
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDateTime(), 
+		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDateTime(),
 				_task.getEndDateTime());
 		ArrayList<Task> mainList = new ArrayList<Task>();
 		mainList.addAll(listsManager.getMainList());
@@ -34,7 +30,7 @@ public class AddCommand implements Command {
 		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
 
 			undoList.addAll(historyManager.getUndoList());
-		
+
 		undoList.add(rollbackItem);
 		historyManager.setUndoList(undoList);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());

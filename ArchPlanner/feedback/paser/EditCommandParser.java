@@ -1,11 +1,13 @@
 package feedback.paser;
 
 import com.joestelmach.natty.DateGroup;
+import logic.TaskParameters;
 import logic.commands.Command;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +39,11 @@ public class EditCommandParser extends CommandParser {
         }
         arguments = arguments.substring(firstSpace + 1, arguments.length());
         if (arguments.startsWith(KEYWORD_TAG)) {
-            return new EditCommand(index, null, arguments.substring(KEYWORD_TAG.length()), null, null);
+//            return new EditCommand(index, null, arguments.substring(KEYWORD_TAG.length()), null, null);
+            // todo: multiple tags
+            String[] tags = split(arguments.substring(KEYWORD_TAG.length()));
+            Collections.addAll(tagList, tags);
+            return new EditCommand(index, new TaskParameters(null, tagList, null, null));
         } else if (arguments.startsWith(KEYWORD_START_TIME)) {
             String timeString = arguments.substring(KEYWORD_START_TIME.length());
             List<DateGroup> groups = timeParser.parse(input);
@@ -53,7 +59,8 @@ public class EditCommandParser extends CommandParser {
             if (matchingValue.equals(timeString)) {
                 Calendar startDate = Calendar.getInstance();
                 startDate.setTime(dates.get(0));
-                return new EditCommand(index, null, null, startDate, null);
+//                return new EditCommand(index, null, null, startDate, null);
+                return new EditCommand(index, new TaskParameters(null, null, startDate, null));
             } else {
                 return new InvalidCommand("Only " + matchingValue + " is recognized");
             }
@@ -72,12 +79,14 @@ public class EditCommandParser extends CommandParser {
             if (matchingValue.equals(timeString)) {
                 Calendar endDate = Calendar.getInstance();
                 endDate.setTime(dates.get(0));
-                return new EditCommand(index, null, null, null, endDate);
+//                return new EditCommand(index, null, null, null, endDate);
+                return new EditCommand(index, new TaskParameters(null, null, null, endDate));
             } else {
                 return new InvalidCommand("Only \"" + matchingValue + "\" is recognized");
             }
         } else {
-            return new EditCommand(index, arguments, null, null, null);
+//            return new EditCommand(index, arguments, null, null, null);
+            return new EditCommand(index, new TaskParameters(arguments, null, null, null));
         }
     }
 }

@@ -8,7 +8,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class DeleteCommand implements Command {
+public class DeleteCommand extends Command {
 
 	private int _index;
 
@@ -20,10 +20,6 @@ public class DeleteCommand implements Command {
 		return _index;
 	}
 
-	@Override
-	public boolean execute() {
-		return false;
-	}
 
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
@@ -52,7 +48,7 @@ public class DeleteCommand implements Command {
 		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);
 		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
 		undoList.addAll(historyManager.getUndoList());
-		
+
 		undoList.add(rollbackItem);
 		historyManager.setUndoList(undoList);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());

@@ -9,7 +9,7 @@ import logic.TaskParameters;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class EditCommand implements Command {
+public class EditCommand extends Command {
 
 	TaskParameters _task = new TaskParameters(null, null, null, null);
 	private int _index;
@@ -18,11 +18,6 @@ public class EditCommand implements Command {
 		assert(index >= 1);
 		_task = newTaskParameters;
 		_index = index - 1;
-	}
-
-	@Override
-	public boolean execute() {
-		return false;
 	}
 
 	@Override
