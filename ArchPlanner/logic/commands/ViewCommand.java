@@ -1,12 +1,11 @@
 package logic.commands;
 
-import logic.SortListEngine;
-import logic.Task;
+import logic.HistoryManager;
+import logic.ListsManager;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ViewCommand extends Command {
+public class ViewCommand implements Command {
 	
 	private String _description;
 	private String _tag;
@@ -27,30 +26,18 @@ public class ViewCommand extends Command {
 		_isDone = isDone;
 	}
 
-	public void setDescription(String description) {
-		assert(description != null); //description cannot be null
-		_description = description;
-	}
-
 	@Override
-	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+	public boolean execute() {
+		return false;
+	}
+	
+	@Override
+	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		if ((_description != null) && (_description.equals("all"))) {
-			viewList.clear();
-			viewList.addAll(mainList);
+			listsManager.setViewList("VIEW_ALL");
 			return true;
-		}
-		
-		if ((_description != null) && (_description.equals("done"))) {
-			viewList.clear();
-			SortListEngine sort = new SortListEngine();
-			viewList.addAll(sort.getSortedIsDoneList(mainList));
-			return true;
-		}
-		
-		if ((_description != null) && (_description.equals("undone"))) {
-			viewList.clear();
-			SortListEngine sort = new SortListEngine();
-			viewList.addAll(sort.getSortedIsUndoneList(mainList));
+		} else if ((_description != null) && (_description.equals("done"))) {
+			listsManager.setViewList("VIEW_DONE");
 			return true;
 		}
 		return false;

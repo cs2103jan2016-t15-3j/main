@@ -3,6 +3,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import comparator.DescriptionComparator;
+
 
 public class SortMechanism {
 

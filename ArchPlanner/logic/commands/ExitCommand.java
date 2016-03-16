@@ -1,13 +1,18 @@
 package logic.commands;
 
-import java.util.ArrayList;
 
-import logic.Task;
+import logic.HistoryManager;
+import logic.ListsManager;
 
-public class ExitCommand extends Command {
+public class ExitCommand implements Command {
 
 	@Override
-	public boolean execute(ArrayList<Task> mainList, ArrayList<Task> viewList, ArrayList<String> tagsList) {
+	public boolean execute() {
+		return false;
+	}
+	
+	@Override
+	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		exit();
 		return true;
 	}

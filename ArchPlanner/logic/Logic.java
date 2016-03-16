@@ -1,10 +1,10 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
+import storage.Storage;
 
 /**
  * This class interact with the UI and process the operation, 
@@ -14,51 +14,32 @@ import logic.commands.InvalidCommand;
  *
  */
 public class Logic {
-	
+/*
 	enum COMMAND_TYPE {
 		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, SEARCH, SORT, INVALID
 	};
-
-	private ArrayList<Task> _mainList = new ArrayList<Task>();
-	private ArrayList<Task> _viewList = new ArrayList<Task>();
-	private ArrayList<String> _tagsList = new ArrayList<String>();
+*/
+	//private ArrayList<Task> _mainList = new ArrayList<Task>();
+	//private ArrayList<Task> _viewList = new ArrayList<Task>();
+	//private ArrayList<String> _tagsList = new ArrayList<String>();
 	
 	Storage storage = new Storage();
+	ListsManager listsManager = new ListsManager();
+	HistoryManager historyManager = new HistoryManager();
 
 	public void loadFile() {
 		storage.loadStorageFile();
-		_mainList = storage.getMasterList();
-		SortListEngine sort = new SortListEngine();
-		setViewList(sort.getSortedList(_mainList));
-		setTagsList();
-	}
-
-	private void setTagsList() {
-		for (int i = 0; i < _mainList.size(); i++) {
-			String tag = getTaskTag(_mainList, i);
-			if ((tag != null) && (!_tagsList.contains(tag))) {
-				_tagsList.add(tag);
-			}
-		}
-		Collections.sort(_tagsList);
-		_tagsList.add(0, "TimeLine");
-		_tagsList.add(1 ,"Event");
-		_tagsList.add(2, "Tasks");
+		ArrayList<Task> mainList = new ArrayList<Task>();
+		mainList = storage.getMasterList();
+		listsManager.updateLists(mainList);
 	}
 
 	public boolean executeCommand(Command commandObj) {
 		if (commandObj instanceof InvalidCommand) {
 			return false;
 		}
-		commandObj.execute(_mainList, _viewList, _tagsList);
+		commandObj.execute(listsManager, historyManager);
 		save();
-		SortListEngine sort = new SortListEngine();
-		setViewList(sort.getSortedList(_viewList));
-		Collections.sort(_tagsList);
-		_mainList = sort.getSortedList(_mainList);
-		for (int i = 0; i < _mainList.size(); i++)
-			System.out.println(_mainList.get(i).getDescription());
-		System.out.println();
 		return true;
 	}
 	
@@ -128,27 +109,20 @@ private COMMAND_TYPE getCommandType(String strCommandType) {
 */
 
 	public ArrayList<Task> getViewList() {
-		return _viewList;
+		return listsManager.getViewList();
 	}
 
 	public ArrayList<Task> getMainList() {
-		return _mainList;
+		return listsManager.getMainList();
 	}
 
 	public ArrayList<String> getTagsList() {
-		return _tagsList;
+		return listsManager.getTagsList();
 	}
-
-	private void setViewList(ArrayList<Task> list) {
-		_viewList = new ArrayList<Task>(list);
-	}
-
-	private String getTaskTag(ArrayList<Task> list, int taskIndex) {
-		String taskTag = list.get(taskIndex).getTag();
-		return taskTag;
-	}
-
+	
 	private void save() {
-		storage.writeStorageFile(_mainList);
+		ArrayList<Task> mainList = new ArrayList<Task>();
+		mainList.addAll(listsManager.getMainList());
+		storage.writeStorageFile(mainList);
 	}
 }

@@ -1,12 +1,16 @@
-package logic;
-import java.io.EOFException;
+package storage;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import logic.Task;
 
 /**
  * This class specifies the process of accessing, updating and saving of data to a file.
@@ -16,7 +20,7 @@ import java.util.ArrayList;
 public class Storage {
 
 	//This is the name of the file to be manipulated
-	private final String _fileName = "Storage.srl";
+	private String _fileName = "Storage.txt";
 
 	//This the File to be manipulated by the program
 	private File _file;
@@ -39,49 +43,42 @@ public class Storage {
 			createStorageFile();
 		} else {
 			try {
-                readStorageFile();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+				readStorageFile();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public  void createStorageFile() {
 		try {
-            _file.createNewFile();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-	}
-	
-	public void readStorageFile() throws IOException, ClassNotFoundException {
-		try {
-			FileInputStream fis = new FileInputStream(_fileName);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			_masterList = (ArrayList<Task>) ois.readObject();
-			ois.close();
-		} catch (EOFException e) {
-			System.out.println("End Of File!");
+			_file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	
-	public void writeStorageFile(ArrayList<Task> list) {
-		setMasterList(list);
-		FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(_fileName);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(_masterList);
-            oos.close();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+	public void readStorageFile() throws IOException, ClassNotFoundException {
+		Gson gson = new Gson();
 		
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(_fileName));
+		_masterList = gson.fromJson(bufferedReader, new TypeToken<ArrayList<Task>>(){}.getType());
+	}
+
+	public void writeStorageFile(ArrayList<Task> list) {
+		Gson gson = new Gson();
+	    Type type = new TypeToken<ArrayList<Task>>() {}.getType();
+	    String json = gson.toJson(list, type);
+	    
+	    try {
+	    	FileWriter fileWriter = new FileWriter(_fileName);
+	    	fileWriter.write(json);
+	    	fileWriter.close();
+	    } catch(IOException e) {
+	    	
+	    }
 	}
 }

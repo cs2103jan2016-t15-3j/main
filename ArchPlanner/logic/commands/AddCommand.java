@@ -1,7 +1,6 @@
 package logic.commands;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import logic.HistoryManager;
 import logic.ListsManager;
@@ -11,12 +10,10 @@ import logic.TaskParameters;
 
 public class AddCommand implements Command {
 	
-	Task _task = new Task(null, null, null, null);
+	TaskParameters _task = new TaskParameters(null, null, null, null);
 	
-	public AddCommand(TaskParameters taskParameters) {
-		Task task = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
-				taskParameters.getEndDateTime());
-		_task = task;
+	public AddCommand(TaskParameters newTaskParameters) {
+		_task = newTaskParameters;
 	}
 
 	@Override

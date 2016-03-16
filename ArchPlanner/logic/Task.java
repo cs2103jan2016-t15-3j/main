@@ -14,6 +14,4 @@ public class Task extends TaskParameters implements Serializable {
 	public Task(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
 		super(description, tagsList, startDateTime, endDateTime);
 	}
-
-	
 }

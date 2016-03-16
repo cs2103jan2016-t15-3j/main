@@ -11,14 +11,12 @@ import java.util.Calendar;
 
 public class EditCommand implements Command {
 
-	Task _task = new Task(null, null, null, null);
+	TaskParameters _task = new TaskParameters(null, null, null, null);
 	private int _index;
 
-	public EditCommand(int index, TaskParameters taskParameters) {
+	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
-		Task task = new Task(taskParameters.getDescription(), taskParameters.getTagsList(), taskParameters.getStartDateTime(), 
-				taskParameters.getEndDateTime());
-		_task = task;
+		_task = newTaskParameters;
 		_index = index - 1;
 	}
 
