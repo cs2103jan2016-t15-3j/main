@@ -11,6 +11,10 @@ public class UndoCommand implements Command {
 
 	private int _times;
 
+	public UndoCommand() {
+		_times = 1;
+	}
+
 	public UndoCommand(int times) {
 		_times = times;
 	}

@@ -10,7 +10,11 @@ import logic.Task;
 public class RedoCommand implements Command {
 
 	private int _times;
-	
+
+	public RedoCommand() {
+		_times = 1;
+	}
+
 	public RedoCommand(int times) {
 		_times = times;
 	}
