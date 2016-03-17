@@ -1,23 +1,15 @@
 package application;
 	
-import java.awt.AWTException;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
-
-import javax.imageio.ImageIO;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -25,6 +17,8 @@ import javafx.scene.paint.Color;
 
 public class MainWindow extends Application {
  
+    static Logger log = Logger.getLogger(MainWindow.class.getName());
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -40,16 +34,17 @@ public class MainWindow extends Application {
         Parent root = null;
         try {
             root = (Parent) fxmlLoader.load(layoutURL.openStream());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.severe("fxml load failed: " + e.getMessage());
         }       
-
-        Scene scene = new Scene(root);        
+        
+        Scene scene = new Scene(root);       
         scene.getStylesheets().addAll(cssURL.toExternalForm()); 
         
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.TRANSPARENT); 
         scene.setFill(Color.TRANSPARENT);
         primaryStage.show();
+        log.info("Window Display Success");
 	}
 }

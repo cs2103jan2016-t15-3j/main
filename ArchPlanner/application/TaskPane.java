@@ -1,19 +1,14 @@
 package application;
 
 import logic.Task;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class TaskPane extends GridPane {
        
@@ -33,45 +28,71 @@ public class TaskPane extends GridPane {
     private Label endTime = new Label();
     private Label tag = new Label();
     
-    public TaskPane(int taskNumber, Task task, ReadOnlyDoubleProperty maxWidth) {        
+    public TaskPane(int displayNumber, Task task, ReadOnlyDoubleProperty maxWidth) {        
         initialize();
         
         setWidthProperty(maxWidth);
-        setNumber(taskNumber);
+        setNumber(displayNumber);
         setTaskInfo(task);
     }
     
     private void initialize() {
-        this.setStyle("-fx-background-radius: 15;" + "-fx-padding: 10;");
-        
-        numColumn.setMinWidth(50);     
-        desColumn.setHgrow(Priority.SOMETIMES);
-        dateColumn.setMinWidth(Region.USE_PREF_SIZE);
-        timeColumn.setMinWidth(Region.USE_PREF_SIZE);
-        this.getColumnConstraints().addAll(numColumn, desColumn, dateColumn, timeColumn);
-          
-        taskRow1.setVgrow(Priority.SOMETIMES);
-        taskRow2.setVgrow(Priority.SOMETIMES);
-        this.getRowConstraints().add(taskRow1);
-        this.getRowConstraints().add(taskRow2);
-        
-        this.addRow(0, number, description, startDate, startTime);
-        this.addRow(1, new Label(), tag, endDate, endTime);
-        
+        setPaneProperties();       
+        setColunmProperties();                
+        setRowProperties();        
+        setLabelProperties();  
+        //startTime.setStyle(startTime.getStyle() + ("-fx-background-color: lightgreen;"));
+        //endTime.setStyle(endTime.getStyle() + ("-fx-background-color: lightgreen;"));
+        //startDate.setStyle(startDate.getStyle() + ("-fx-background-color: lightblue;"));
+        //endDate.setStyle(endDate.getStyle() + ("-fx-background-color: lightblue;"));
+    }
+
+    private void setLabelProperties() {
+        setLabelAlignment();     
+        setLabelSize();
+    }
+
+    private void setLabelSize() {
+        number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        startDate.setMinWidth(180);
+        startTime.setMinWidth(100);
+        endDate.setMinWidth(180);
+        endTime.setMinWidth(100);
+        tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    }
+
+    private void setLabelAlignment() {
         number.setAlignment(Pos.CENTER_LEFT);
         description.setAlignment(Pos.CENTER_LEFT);
         startDate.setAlignment(Pos.CENTER_LEFT);
         startTime.setAlignment(Pos.CENTER_LEFT);
         endDate.setAlignment(Pos.CENTER_LEFT);
         endTime.setAlignment(Pos.CENTER_LEFT);
+    }
+
+    private void setRowProperties() {
+        taskRow1.setVgrow(Priority.SOMETIMES);
+        taskRow2.setVgrow(Priority.SOMETIMES);
+    }
+
+    private void setColunmProperties() {
+        numColumn.setMinWidth(50);     
+        desColumn.setHgrow(Priority.SOMETIMES);
+        dateColumn.setMinWidth(Region.USE_PREF_SIZE);
+        timeColumn.setMinWidth(Region.USE_PREF_SIZE);
+    }
+
+    private void setPaneProperties() {
+        this.setStyle("-fx-background-radius: 15;" + "-fx-padding: 10;");
         
-        number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        startDate.setMinWidth(160);
-        startTime.setMinWidth(90);
-        endDate.setMinWidth(160);
-        endTime.setMinWidth(90);
-        tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.getColumnConstraints().addAll(numColumn, desColumn, dateColumn, timeColumn);
+        
+        this.getRowConstraints().add(taskRow1);
+        this.getRowConstraints().add(taskRow2);
+        
+        this.addRow(0, number, description, startDate, startTime);
+        this.addRow(1, new Label(), tag, endDate, endTime);
     }
     
     public void setWidthProperty(ReadOnlyDoubleProperty maxWidth) {
@@ -79,6 +100,12 @@ public class TaskPane extends GridPane {
     }
     
     public void setTaskInfo(Task task) {
+        assert(task.getDescription() != null);
+        assert(task.getStartDate() != null);
+        assert(task.getStartTime() != null);
+        assert(task.getEndDate() != null);
+        assert(task.getEndTime() != null);
+        
         description.setText(task.getDescription());       
         startDate.setText(task.getStartDate());
         startTime.setText(task.getStartTime());       
@@ -98,7 +125,8 @@ public class TaskPane extends GridPane {
         }
     }
     
-    public void setNumber(int taskNumber) {
-        number.setText(Integer.toString(taskNumber));        
+    public void setNumber(int displayNumber) {
+        assert(displayNumber > 0);
+        number.setText(Integer.toString(displayNumber));        
     }
 }

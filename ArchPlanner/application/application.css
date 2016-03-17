@@ -27,10 +27,12 @@
 	-fx-border-radius: 15;
   	-fx-border-width: 8;
 	-fx-border-color: #651b1b;
+	
+	-fx-font-size: 2em;
 }
 
 #viewLabel {
-	-fx-font-size: 24pt;
+	-fx-font-size: 2.5em;
 	-fx-text-fill: black;
 	-fx-padding: 20 0 0 0;
 }
@@ -40,14 +42,28 @@
 	-fx-background-radius: 20; 
     -fx-text-fill: white;
 	-fx-padding: 10 25 10 25;
-	-fx-font: 18px System;
+	-fx-font: 1.2em System;
 }
 
 .label {
-	-fx-font-size: 18pt;
+	-fx-font-size: 1.8em;
     -fx-font-family: "Tempus Sans ITC";
     -fx-text-fill: gray;
     -fx-padding: 0 10 0 10;
+}
+
+.toggle-button {
+	-fx-font-size: 1.8em;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: gray;
+    
+	-fx-background-radius: 15;	
+	-fx-background-color: lightgrey;
+}
+
+.toggle-button:selected {
+	-fx-text-fill: white;
+	-fx-background-color: grey;
 }
 
 .list-cell {
@@ -60,20 +76,6 @@
 }
 
 .button:pressed {
-	-fx-background-color: grey;
-}
-
-.toggle-button {
-	-fx-font-size: 18pt;
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-text-fill: gray;
-    
-	-fx-background-radius: 15;	
-	-fx-background-color: lightgrey;
-}
-
-.toggle-button:selected {
-	-fx-text-fill: white;
 	-fx-background-color: grey;
 }
 

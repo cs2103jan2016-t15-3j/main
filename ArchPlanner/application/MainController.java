@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import application.TaskPane;
 import feedback.Feedback;
@@ -34,6 +35,8 @@ import logic.commands.Command;
 
 public class MainController implements Initializable{
     
+    static Logger log = Logger.getLogger(MainController.class.getName());
+    
     @FXML private Label viewLabel;
     @FXML private Label topPrompt;
     @FXML private Label bottomPrompt;
@@ -62,8 +65,47 @@ public class MainController implements Initializable{
     Feedback feedback;
     
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        /*
+    public void initialize(URL arg0, ResourceBundle arg1) {        
+        testMethod();      
+        //--------------------------------------------------------------------          
+        feedback = new Feedback();
+        logic = new Logic();
+        
+        logic.loadFile();
+        
+        assert(logic.getTagsList() != null);
+        assert(logic.getTagsList() != null);
+        assert(logic.getCurrentView() != null);
+        
+        //tags = logic.getTagsList();
+        //tasks = logic.getViewList();
+        //viewLabel.setText(logic.getCurrentView());
+        updateTaskDisplay();
+        updateTagDisplay();
+ 
+        //-------------------------------------------------------------------         
+        userInput.textProperty().addListener(new ChangeListener<String>() {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                onTextChanged(newValue);
+            }
+        });
+        
+        topPrompt.setVisible(false);
+        bottomPrompt.setVisible(false);
+        
+        screenBound = Screen.getPrimary().getVisualBounds();
+        int width = (int) screenBound.getMaxX() * 3 / 5;
+        int height = (int) screenBound.getMaxY() * 4 / 5;
+        mainWindow.setPrefSize(width, height);
+        
+        tagDisplay.setItems(tagList);
+        taskDisplay.setItems(taskList);
+        
+        log.info("MainController initialzed");
+    }
+    
+    //------------------------------------------------------------------------------------------------------------
+    private void testMethod() {
         ArrayList<String> tag = new ArrayList<String>();
         tag.add("#tag1");
         tag.add("#tag2");
@@ -101,35 +143,8 @@ public class MainController implements Initializable{
         tags.add("#tag5");
         tags.add("#tag6");
         tags.add("#tag7");
-        */
-        //--------------------------------------------------------------------        
-        userInput.textProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                onTextChanged(newValue);
-            }
-        });
-        
-        topPrompt.setVisible(false);
-        bottomPrompt.setVisible(false);
-        
-        screenBound = Screen.getPrimary().getVisualBounds();
-        
-        //-------------------------------------------------------------------     
-        feedback = new Feedback();
-        logic = new Logic();
-        
-        logic.loadFile();
-        
-        tags = logic.getTagsList();
-        tasks = logic.getViewList();
-                
-        tagDisplay.setItems(tagList);
-        taskDisplay.setItems(taskList);
-       
-        updateTaskDisplay();
-        updateTagDisplay();
-        //viewLabel.setText(logic.getCurrentView());
     }
+    //------------------------------------------------------------------------------------------------------------
     
     @FXML
     private void onWindowPressed(MouseEvent event) {
@@ -145,11 +160,13 @@ public class MainController implements Initializable{
     
     @FXML
     private void minimize(ActionEvent event) {
+        log.info("minimise button clicked");
         ((Stage) miniButton.getScene().getWindow()).setIconified(true);
     }
     
     @FXML
     private void close(ActionEvent event) {
+        log.info("closed button clicked");
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
@@ -158,29 +175,38 @@ public class MainController implements Initializable{
     
     @FXML
     private void onEnterPressed() {
+        log.info("command entered");
         Command userCmd = feedback.onEnterPressed(userInput.getText());
+        assert(userCmd != null);
         boolean isSuccessful = logic.executeCommand(userCmd);
         
-        if (isSuccessful) {            
+        if (isSuccessful) {
+            assert(logic.getTagsList() != null);
+            assert(logic.getTagsList() != null);
+            assert(logic.getCurrentView() != null);
+            
             tasks = logic.getViewList();
             tags = logic.getTagsList();
-
+            //viewLabel.setText(logic.getCurrentView());
             updateTaskDisplay();
             updateTagDisplay();
-            //viewLabel.setText(logic.getCurrentView());
             
             userInput.clear();
+            log.info("cmd executed");
         } else {
-            //error
+            log.info("incorrect command entered");
         }
     }
     
     public void onTextChanged(String newString) {
-        if (newString.isEmpty()) {
+        if (newString.isEmpty()) {          
             topPrompt.setVisible(false);
             bottomPrompt.setVisible(false);
-        } else {     
+            log.info("hide prompt");
+        } else {            
             ArrayList<String> prompt = feedback.onTextChanged(newString);
+            assert(prompt != null);
+            assert(prompt.size() > 0 && prompt.size() <= 4);
             if (!prompt.isEmpty()) {
                 topPrompt.setText(prompt.get(0));
                 bottomPrompt.setText(prompt.get(0));
@@ -188,14 +214,19 @@ public class MainController implements Initializable{
                     topPrompt.setText(prompt.get(i) + "\n" + topPrompt.getText());
                     bottomPrompt.setText(bottomPrompt.getText() + "\n" + prompt.get(i));
                 }
-            }      
-            if (mainWindow.localToScreen(mainWindow.getBoundsInLocal()).getMaxY() > screenBound.getMaxY()) {
+            } else {
+                log.warning("empty prompt");
+            }
+            
+            if (mainWindow.localToScreen(mainWindow.getBoundsInLocal()).getMaxY() - 27.5 * (4 - prompt.size())
+                > screenBound.getMaxY()) {
                 topPrompt.setVisible(true);
                 bottomPrompt.setVisible(false);
             } else {
                 topPrompt.setVisible(false);
                 bottomPrompt.setVisible(true);
             }
+            log.info("display prompt");
         }
     }
     
@@ -207,7 +238,8 @@ public class MainController implements Initializable{
         for (int i = 0; i < tasks.size(); i++) {        
             TaskPane displayTask = new TaskPane(i + 1, tasks.get(i), taskDisplay.widthProperty());
             taskList.add(displayTask);
-        }
+        }  
+        log.info("Tasks Refreshed");
     }
     
     private void updateTagDisplay() {
@@ -219,6 +251,7 @@ public class MainController implements Initializable{
             tagButton.prefWidthProperty().bind(tagDisplay.widthProperty().subtract(40));
             tagButton.setAlignment(Pos.CENTER_LEFT);
             tagList.add(tagButton);
-        }
+        }     
+        log.info("Tags Refreshed");
     }
 }
