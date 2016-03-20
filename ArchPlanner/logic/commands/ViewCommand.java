@@ -3,75 +3,75 @@ package logic.commands;
 import logic.HistoryManager;
 import logic.ListsManager;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 
 public class ViewCommand extends Command {
-	
-	private String _description;
-	private String _tag;
-	private Calendar _startDateTime;
-	private Calendar _endDateTime;
-	private boolean _isDone;
 
-	public ViewCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime) {
-		_description = description;
-		_tag = tag;
-		_startDateTime = startDateTime;
-		_endDateTime = endDateTime;
-		_isDone = false;
+	private ArrayList<String> _tagList;
+	private boolean _viewAll;
+	private boolean _viewDone;
+	private boolean _viewUndone;
+	private boolean _viewOverdue;
+
+
+	public ViewCommand(ArrayList<String> tagList, boolean viewAll, boolean viewDone, boolean viewUndone, boolean viewOverdue) {
+		this._tagList = tagList;
+		this._viewAll = viewAll;
+		this._viewDone = viewDone;
+		this._viewUndone = viewUndone;
+		this._viewOverdue = viewOverdue;
 	}
 
-	public ViewCommand(String description, String tag, Calendar startDateTime, Calendar endDateTime, boolean isDone) {
-		this(description, tag, startDateTime, endDateTime);
-		_isDone = isDone;
-	}
-
+	//view show the result of CURRENT list. Except for view all.
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		if ((_description != null) && (_description.equals("all"))) {
-			listsManager.setViewList("VIEW_ALL");
-			return true;
-		} else if ((_description != null) && (_description.equals("done"))) {
-			listsManager.setViewList("VIEW_DONE");
-			return true;
-		}
+//		if ((_description != null) && (_description.equals("all"))) {
+//			listsManager.setViewList("VIEW_ALL");
+//			return true;
+//		} else if ((_description != null) && (_description.equals("done"))) {
+//			listsManager.setViewList("VIEW_DONE");
+//			return true;
+//		}
 		return false;
 	}
 
-	public void setTag(String tag) {
-		_tag = tag;
+	public ArrayList<String> getTagList() {
+		return _tagList;
 	}
 
-	public void setStartDateTime(Calendar startDateTime) {
-		_startDateTime = startDateTime;
+	public void setTagList(ArrayList<String> tagList) {
+		this._tagList = tagList;
 	}
 
-	public void setEndDateTime(Calendar endDateTime) {
-		_endDateTime = endDateTime;
+	public boolean isViewAll() {
+		return _viewAll;
 	}
 
-	public void setIsDone(boolean isDone) {
-		_isDone = isDone;
+	public void setViewAll(boolean viewAll) {
+		this._viewAll = viewAll;
 	}
 
-	public String getDescription() {
-		return _description;
+	public boolean isViewDone() {
+		return _viewDone;
 	}
 
-	public String getTag() {
-		return _tag;
+	public void setViewDone(boolean viewDone) {
+		this._viewDone = viewDone;
 	}
 
-	public Calendar getStartDateTime() {
-		return _startDateTime;
+	public boolean isViewUndone() {
+		return _viewUndone;
 	}
 
-	public Calendar getEndDateTime() {
-		return _endDateTime;
+	public void setViewUndone(boolean viewUndone) {
+		this._viewUndone = viewUndone;
 	}
 
-	public boolean getIsDone() {
-		return _isDone;
+	public boolean isViewOverdue() {
+		return _viewOverdue;
 	}
 
+	public void setViewOverdue(boolean viewOverdue) {
+		this._viewOverdue = viewOverdue;
+	}
 }
