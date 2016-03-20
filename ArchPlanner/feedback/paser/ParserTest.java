@@ -28,6 +28,10 @@ public class ParserTest {
         Command command2 = new AddCommandParser().parse("add lalala from tomorrow to this Friday #a");
         Command command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
         Command command4 = new AddCommandParser().parse("add assignments this Thursday 3pm #assign #oh-my-god #help-me!");
+        Command command5 = new AddCommandParser().parse("add assignments 2");
+        Command command6 = new AddCommandParser().parse("add assignments 2");
+        Command command7 = new AddCommandParser().parse("add assignments 3");
+        Command command8 = new AddCommandParser().parse("add assignments 233 #3");
         System.out.println();
     }
 
@@ -44,7 +48,7 @@ public class ParserTest {
     public void testEditCommandParser() throws Exception {
         Command command1 = new EditCommandParser().parse("edit 3 lalala");
         Command command2 = new EditCommandParser().parse("edit start time ...");//invalid
-        Command command3 = new EditCommandParser().parse("edit 2 tag new");
+        Command command3 = new EditCommandParser().parse("edit 2 tag new 1 2 3");
         Command command4 = new EditCommandParser().parse("edit 3 start time this friday 3pm");
         Command command5 = new EditCommandParser().parse("edit 233 end time this friday 3pm to 5pm");//invalid
         Command command6 = new EditCommandParser().parse("edit 233 sth");

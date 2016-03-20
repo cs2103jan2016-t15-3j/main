@@ -70,21 +70,11 @@ public class Feedback {
 
     private static ArrayList<String> feedbackList = new ArrayList<String>();
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Feedback feedback = new Feedback();
-        while (true) {
-            String input = scanner.nextLine();
-            ArrayList<String> list = feedback.onTextChanged(input);
-            for (String s : list) {
-                System.out.println(s);
-            }
-            feedback.onEnterPressed(input);
-        }
-    }
-
     public ArrayList<String> onTextChanged(String input) {
-        feedbackList = new ArrayList<String>();
+        feedbackList = new ArrayList<>();
+        if (input == null) {
+            return feedbackList;
+        }
         int commandType = detectCommandType(input);
         switch (commandType) {
             case COMMAND_TYPE_UNKNOWN:
@@ -152,6 +142,9 @@ public class Feedback {
     }
 
     public Command onEnterPressed(String input) {
+        if (input == null) {
+            return new InvalidCommand("Null input");
+        }
         int commandType = detectCommandType(input);
         try {
             switch (commandType) {

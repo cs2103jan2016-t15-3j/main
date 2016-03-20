@@ -11,10 +11,11 @@ import java.util.ArrayList;
 public abstract class CommandParser {
 
     protected String input;
-    protected ArrayList<String> tagList = new ArrayList<String>();
+    protected ArrayList<String> tagList = new ArrayList<>();
     protected static Parser timeParser = new Parser();
 
-    public String detectTagAndRemoveTagString(String input) {
+
+    protected String parseTag(String input) {
         String[] words = split(input);
         String result = "";
         for (String word : words) {
@@ -29,37 +30,9 @@ public abstract class CommandParser {
 
     public abstract Command parse(String input);
 
-    public String[] split(String input) {
+    protected String[] split(String input) {
         return input.split("\\s+");
     }
-
-//    public String merge(String[] words) {
-//        String result = "";
-//        for (int i = 0; i < words.length; i++) {
-//            result += words[i];
-//            if (i != words.length - 1) {
-//                result += " ";
-//            }
-//        }
-//        return result;
-//    }
-//
-//    public String merge(String[] words, int startIndex, int endIndex) {
-//        String result = "";
-//        if (startIndex < 0 || endIndex > words.length || startIndex > endIndex) {
-//            return result;
-//        }
-//        for (int i = startIndex; i < endIndex; i++) {
-//            result += words[i];
-//            if (i != endIndex - 1) {
-//                result += " ";
-//            }
-//        }
-//        return result;
-//    }
-
-
-
 
 
 }
