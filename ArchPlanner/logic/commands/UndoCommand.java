@@ -7,7 +7,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class UndoCommand extends Command {
+public class UndoCommand implements Command {
 
 	private int _times;
 
@@ -62,7 +62,7 @@ public class UndoCommand extends Command {
 				mainList.remove(rollbackItem.getNewTask());
 				mainList.add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("edit");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
@@ -70,7 +70,7 @@ public class UndoCommand extends Command {
 				mainList.remove(rollbackItem.getNewTask());
 				mainList.add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("undone");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
@@ -78,7 +78,7 @@ public class UndoCommand extends Command {
 				mainList.remove(rollbackItem.getNewTask());
 				mainList.add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("done");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
@@ -88,7 +88,7 @@ public class UndoCommand extends Command {
 		historyManager.setUndoList(undoList);
 		historyManager.setRedoList(redoList);
 		listsManager.getUndoneList();
-		listsManager.updateLists(mainList);
+		listsManager.updateLists();
 		return true;
 	}
 

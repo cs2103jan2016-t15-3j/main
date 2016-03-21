@@ -7,7 +7,7 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class RedoCommand extends Command {
+public class RedoCommand implements Command {
 
 	private int _times;
 
@@ -25,18 +25,11 @@ public class RedoCommand extends Command {
 
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
-		ArrayList<RollbackItem> redoList = new ArrayList<RollbackItem>();
 		
-		undoList.addAll(historyManager.getUndoList());
-		redoList.addAll(historyManager.getRedoList());
-		
-		System.out.println("undostack size 2 2 2 2: " + undoList.size());
-		System.out.println("redostack size 2 2 2 2: " + redoList.size());
+		System.out.println("undostack size 2 2 2 2: " + historyManager.getUndoList().size());
+		System.out.println("redostack size 2 2 2 2: " + historyManager.getRedoList().size());
 
-		if (!isWithinList(redoList, _times)) {
+		if (!isWithinList(historyManager.getRedoList(), _times)) {
 			return false;
 		}
 
@@ -45,10 +38,10 @@ public class RedoCommand extends Command {
 		for (int i = 0; i < _times; i++) {
 			System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 			RollbackItem rollbackItem = new RollbackItem(null, null, null);
-			rollbackItem = redoList.remove(redoList.size() - 1);
+			rollbackItem = historyManager.getRedoList().remove(historyManager.getRedoList().size() - 1);
 			System.out.println("helo:" + rollbackItem.getCommandType());
 			if (rollbackItem.getCommandType().equals("add")) {
-				mainList.remove(rollbackItem.getNewTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
 				rollbackItem.setCommandType("delete");
 				rollbackItem.setOldTask(rollbackItem.getNewTask());
 				rollbackItem.setNewTask(null);
@@ -59,40 +52,38 @@ public class RedoCommand extends Command {
 					j++;
 				}
 			} else if (rollbackItem.getCommandType().equals("delete")) {
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("add");
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(null);
 			} else if (rollbackItem.getCommandType().equals("edit")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("edit");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			} else if (rollbackItem.getCommandType().equals("done")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("undone");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			} else if (rollbackItem.getCommandType().equals("undone")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("done");
-				Task tempTask = new Task(null, null, null, null);
+				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			}
-			undoList.add(rollbackItem);
+			historyManager.getUndoList().add(rollbackItem);
 		}
-		historyManager.setUndoList(undoList);
-		historyManager.setRedoList(redoList);
-		listsManager.updateLists(mainList);
+		listsManager.updateLists();
 		return true;
 	}
 	

@@ -4,7 +4,7 @@ package logic.commands;
 import logic.HistoryManager;
 import logic.ListsManager;
 
-public class ExitCommand extends Command {
+public class ExitCommand implements Command {
 
 
 	@Override

@@ -7,15 +7,15 @@ import logic.Task;
 import logic.TaskParameters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-public class EditCommand extends Command {
+public class EditCommand implements Command {
 
-	TaskParameters _task = new TaskParameters(null, null, null, null);
+	TaskParameters _task;
 	private int _index;
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
+		_task = new TaskParameters();
 		_task = newTaskParameters;
 		_index = index - 1;
 	}
@@ -23,52 +23,59 @@ public class EditCommand extends Command {
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		
-		ArrayList<Task> viewList = new ArrayList<Task>();
-		viewList.addAll(listsManager.getViewList());
-		
-		if (!isWithinList(viewList, _index)) {
+		if (!isWithinList(listsManager.getViewList(), _index)) {
 			return false;
 		}
 		
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
+		Task oldTask = listsManager.getViewList().get(_index);
+		listsManager.getMainList().remove(oldTask);
 		
-		Task oldTask = viewList.get(_index);
-		mainList.remove(oldTask);
-		
-		Task newTask = new Task(null, null, null, null);
-		newTask = oldTask;
+		Task newTask = new Task();
+		newTask.setDescription(oldTask.getDescription());
+		newTask.setTagsList(oldTask.getTagsList());
+		newTask.setStartDate(oldTask.getStartDate());
+		newTask.setStartTime(oldTask.getStartTime());
+		newTask.setEndDate(oldTask.getEndDate());
+		newTask.setEndTime(oldTask.getEndTime());
+		newTask.setIsDone(oldTask.getIsDone());
+		newTask.setIsOverdue(oldTask.getIsOverdue());
 		
 		if ((_task.getDescription() != null) && (!_task.getDescription().equals(oldTask.getDescription()))) {
 			newTask.setDescription(_task.getDescription());
 		}
 
 		if ((_task.getTagsList() != null) && (!_task.getTagsList().equals(oldTask.getTagsList()))) {
-			newTask.setTag(_task.getTagsList());
+			newTask.setTagsList(_task.getTagsList());
 		}
 
-		if ((_task.getStartDateTime() != null) && (!_task.getStartDateTime().equals(oldTask.getStartDateTime()))) {
-			newTask.setStartDateTime(_task.getStartDateTime());
+		if ((_task.getStartDate() != null) && (!_task.getStartDate().equals(oldTask.getStartDate()))) {
+			newTask.setStartDate(_task.getStartDate());
 		}
-
-		if ((_task.getEndDateTime() != null) && (!_task.getEndDateTime().equals(oldTask.getEndDateTime()))) {
-			newTask.setEndDateTime(_task.getEndDateTime());
+		
+		if ((_task.getStartTime() != null) && (!_task.getStartTime().equals(oldTask.getStartTime()))) {
+			newTask.setStartTime(_task.getStartTime());
 		}
-
+		
+		if ((_task.getEndDate() != null) && (!_task.getEndDate().equals(oldTask.getEndDate()))) {
+			newTask.setEndDate(_task.getEndDate());
+		}
+		
+		if ((_task.getEndTime() != null) && (!_task.getEndTime().equals(oldTask.getEndTime()))) {
+			newTask.setEndTime(_task.getEndTime());
+		}
+		
 		if (!_task.getIsDone() == oldTask.getIsDone()) {
 			newTask.setIsDone(_task.getIsDone());
 		}
-
-		mainList.add(newTask);
-		listsManager.updateLists(mainList);
+		
+		listsManager.getMainList().add(newTask);
+		
+		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("edit", oldTask, newTask);
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
-		undoList.addAll(historyManager.getUndoList());
-		undoList.add(rollbackItem);
-		historyManager.setUndoList(undoList);
+		historyManager.getUndoList().add(rollbackItem);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());
-		System.out.println("undolist size: " + undoList.size());
+		System.out.println("undolist size: " + historyManager.getUndoList().size());
 		return true;
 	}
 	

@@ -3,7 +3,7 @@ package logic.commands;
 import logic.HistoryManager;
 import logic.ListsManager;
 
-public class InvalidCommand extends Command {
+public class InvalidCommand implements Command {
 
     private String _error_message;
 

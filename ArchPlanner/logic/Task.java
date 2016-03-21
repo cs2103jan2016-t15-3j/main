@@ -1,7 +1,8 @@
 package logic;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * This class contains the attributes of each task in ArchPlanner
@@ -10,8 +11,13 @@ import java.util.Calendar;
  */
 
 public class Task extends TaskParameters implements Serializable {
-	
-	public Task(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
-		super(description, tagsList, startDateTime, endDateTime);
+
+	public Task() {
+		super();
+	}
+
+	public Task(String description, ArrayList<String> tagsList, LocalDate startDate, LocalTime startTime, 
+			LocalDate endDate, LocalTime endTime) {
+		super(description, tagsList, startDate, startTime, endDate, endTime);
 	}
 }
