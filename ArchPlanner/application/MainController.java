@@ -66,7 +66,7 @@ public class MainController implements Initializable{
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {        
-        testMethod();      
+        //testMethod();
         //--------------------------------------------------------------------          
         feedback = new Feedback();
         logic = new Logic();
@@ -75,8 +75,8 @@ public class MainController implements Initializable{
         
         assert(logic.getTagsList() != null);
         assert(logic.getTagsList() != null);
-        assert(logic.getCurrentView() != null);
-        
+//        assert(logic.getCurrentView() != null);
+
         //tags = logic.getTagsList();
         //tasks = logic.getViewList();
         //viewLabel.setText(logic.getCurrentView());
@@ -183,7 +183,7 @@ public class MainController implements Initializable{
         if (isSuccessful) {
             assert(logic.getTagsList() != null);
             assert(logic.getTagsList() != null);
-            assert(logic.getCurrentView() != null);
+//            assert(logic.getCurrentView() != null);
             
             tasks = logic.getViewList();
             tags = logic.getTagsList();

@@ -24,7 +24,7 @@ public class ParserTest {
         //add lalala from tomorrow to this Friday #a
         //add miao by Mar 7 #a #b
         //add assignments this Thursday 3pm #assign #oh-my-god #help-me!
-        Command command1 = new AddCommandParser().parse("add sth from 1pm to 3pm");
+        Command command1 = new AddCommandParser().parse("add sth tomorrow");
         Command command2 = new AddCommandParser().parse("add lalala from tomorrow to this Friday #a");
         Command command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
         Command command4 = new AddCommandParser().parse("add assignments this Thursday 3pm #assign #oh-my-god #help-me!");

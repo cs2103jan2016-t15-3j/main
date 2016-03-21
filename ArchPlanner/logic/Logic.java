@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
 import storage.Storage;
-
 /**
  * This class interact with the UI and process the operation, 
  * followed by updating the changes to storage

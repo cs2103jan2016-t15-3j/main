@@ -6,6 +6,8 @@ import logic.commands.Command;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -93,6 +95,7 @@ public class EditCommandParser extends CommandParser {
         if (dates.size() > 1) {
             return new InvalidCommand("You should input only one time");
         }
+//        LocalTime time = new LocalTime()
         if (matchingValue.equals(timeString)) {
             Calendar endDate = Calendar.getInstance();
             endDate.setTime(dates.get(0));
