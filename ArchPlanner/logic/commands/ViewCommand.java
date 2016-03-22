@@ -13,12 +13,10 @@ public class ViewCommand implements Command {
 	CATEGORY_TYPE _categoryType;
 	TaskParameters _task;
 
-	public ViewCommand(VIEW_TYPE viewType, CATEGORY_TYPE categoryType, TaskParameters newTaskParameters) {
+	public ViewCommand(VIEW_TYPE viewType, CATEGORY_TYPE categoryType, TaskParameters taskParameters) {
 		_viewType = viewType;
-
 		_categoryType = categoryType;
-		_task = new TaskParameters();
-		_task = newTaskParameters;
+		_task = taskParameters;
 	}
 
 	public ViewCommand(ListsManager listsManager, HistoryManager historyManager) {
