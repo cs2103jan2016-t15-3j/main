@@ -2,6 +2,7 @@ package feedback.paser.time;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -32,7 +33,7 @@ public class TimeParserResult {
     }
 
     public void setDate(Date date) {
-        LocalDate localDate = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay());
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (firstDate == null) {
             firstDate = localDate;
         } else if (secondDate == null) {
@@ -41,7 +42,7 @@ public class TimeParserResult {
     }
 
     public void setTime(Date date) {
-        LocalTime localTime = LocalTime.of(date.getHours(), date.getMinutes(), date.getSeconds());
+        LocalTime localTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         if (firstTime == null) {
             firstTime = localTime;
         } else if (secondTime == null) {

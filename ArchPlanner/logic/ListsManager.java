@@ -17,6 +17,8 @@ public class ListsManager {
 
 	private String _viewType = "VIEW_ALL";
 
+	public void updateLists(){};
+
 	public void updateLists(ArrayList<Task> list) {
 
 		clearAllLists();
@@ -29,14 +31,14 @@ public class ListsManager {
 		for (int i = 0; i < _mainList.size(); i++) {
 			Task task = _mainList.get(i);
 			//System.out.println("update: " + task.getDescription());
-			if ((task.getStartDateTime() == null) && (task.getEndDateTime() == null)) {
-				_tasksList.add(task);
-			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() == null) || 
-					(task.getStartDateTime() == null) && (task.getEndDateTime() != null)) {
-				_eventList.add(task);
-			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() != null)) {
-				_deadlineList.add(task);
-			}
+//			if ((task.getStartDateTime() == null) && (task.getEndDateTime() == null)) {
+//				_tasksList.add(task);
+//			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() == null) ||
+//					(task.getStartDateTime() == null) && (task.getEndDateTime() != null)) {
+//				_eventList.add(task);
+//			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() != null)) {
+//				_deadlineList.add(task);
+//			}
 
 			if (task.getIsDone() == true) {
 				_doneList.add(task);

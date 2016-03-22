@@ -127,14 +127,14 @@ public class MainController implements Initializable{
         date2.set(Calendar.HOUR, 00);
         date2.set(Calendar.MINUTE, 00);
   
-        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date, date));
-        tasks.add(new Task("Task 2", tag, date, null));
-        tasks.add(new Task("Task 3", tag, null, date));
-        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date2, date2));
-        tasks.add(new Task("Task 2", tag, date2, null));
-        tasks.add(new Task("Task 3", tag, null, date2));
-        tasks.add(new Task("Task 4", tag, null, null));
-        tasks.add(new Task("Task 4", tag, null, null));
+//        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date, date));
+//        tasks.add(new Task("Task 2", tag, date, null));
+//        tasks.add(new Task("Task 3", tag, null, date));
+//        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date2, date2));
+//        tasks.add(new Task("Task 2", tag, date2, null));
+//        tasks.add(new Task("Task 3", tag, null, date2));
+//        tasks.add(new Task("Task 4", tag, null, null));
+//        tasks.add(new Task("Task 4", tag, null, null));
 
         tags.add("#tag111111111111111111111111111");
         tags.add("#tag2");

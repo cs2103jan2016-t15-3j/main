@@ -12,14 +12,16 @@ import java.util.List;
  */
 public class TimeParser {
 
+    private static Parser timeParser = new Parser();
     private int dateCount, timeCount;
 
     public TimeParserResult parseTime(String input) {
         TimeParserResult timeParserResult = new TimeParserResult();
-        Parser timeParser = new Parser();
         List<DateGroup> groups = timeParser.parse(input);
-        if (groups.size() > 0) {
-            DateGroup group = groups.get(0);
+        for (DateGroup group : groups){
+            if (group.getText().length() < 3){
+                continue;
+            }
             List<Date> dates = group.getDates();
             Tree tree = group.getSyntaxTree();
             postTraverseSyntaxTree(tree);
@@ -34,14 +36,15 @@ public class TimeParser {
             for (int i = 0; i < timeCount; i++) {
                 timeParserResult.setTime(dates.get(i));
             }
+            break;
         }
         return timeParserResult;
     }
 
     private void postTraverseSyntaxTree(Tree tree) {
-        if (tree.getText().equals("date")) {
+        if (tree.getText().equals("RELATIVE_DATE") || tree.getText().equals("EXPLICIT_DATE")) {
             dateCount++;
-        } else if (tree.getText().equals("hours")) {
+        } else if (tree.getText().equals("RELATIVE_TIME") || tree.getText().equals("EXPLICIT_TIME")) {
             timeCount++;
         }
         for (int i = 0; i < tree.getChildCount(); i++) {

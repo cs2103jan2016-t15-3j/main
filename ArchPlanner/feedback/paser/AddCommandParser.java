@@ -68,6 +68,10 @@ public class AddCommandParser extends CommandParser {
                 break;
             case KEYWORD_FROM:
                 if (timeResult.getFirstDate() != null) {
+                    if (timeResult.getSecondDate() == null && timeResult.getSecondTime() == null) {
+                        keyword = "";
+                        break;
+                    }
                     result.setStartDate(timeResult.getFirstDate());
                     if (timeResult.getSecondDate() == null) {
                         result.setEndDate(timeResult.getFirstDate());
@@ -75,20 +79,26 @@ public class AddCommandParser extends CommandParser {
                         result.setEndDate(timeResult.getSecondDate());
                     }
                 }
+                else if (timeResult.getSecondTime() == null) {
+                    keyword = "";
+                    break;
+                }
+                result.setStartDate(LocalDate.now());
+                result.setEndDate(LocalDate.now());
                 result.setStartTime(timeResult.getFirstTime());
                 result.setEndTime(timeResult.getSecondTime());
                 break;
             default:
                 break;
         }
-        this.input = removeTimeString(input, timeResult.getMatchPosition(), keyword);
+        input = removeTimeString(input, timeResult.getMatchPosition(), keyword);
         return input;
     }
 
 
     private String removeTimeString(String input, int matchingPosition, String keyword) {
         if (keyword.isEmpty()) {
-            return input.substring(0, matchingPosition - 2);
+            return input;
         }
         return input.substring(0, matchingPosition - keyword.length() - 3);
     }
@@ -96,7 +106,7 @@ public class AddCommandParser extends CommandParser {
     private String detectTimeKeyword(int matchPosition) {
         int lastKeywordOccurrence = Math.max(
                 Math.max(input.lastIndexOf(KEYWORD_BY), input.lastIndexOf(KEYWORD_FROM)),
-                input.lastIndexOf(KEYWORD_ON));
+                input.lastIndexOf(KEYWORD_ON))+2;
         if (hasPrefixWithKeyword(KEYWORD_BY, matchPosition)
                 && lastKeywordOccurrence + KEYWORD_BY.length() == matchPosition) {
             return KEYWORD_BY;

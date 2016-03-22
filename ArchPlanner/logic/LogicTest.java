@@ -50,7 +50,7 @@ public class LogicTest {
 		logic.executeCommand(commandObj2);
 		logic.executeCommand(commandObj3);
 
-		Storage storage = new Storage();
+		storage storage = new storage();
 		storage.loadStorageFile();
 		
 		assertEquals("task 1", logic.getViewList().get(0).getDescription().toString());

@@ -90,27 +90,27 @@ public class TaskPane extends GridPane {
         
         this.getRowConstraints().add(taskRow1);
         this.getRowConstraints().add(taskRow2);
-        
+
         this.addRow(0, number, description, startDate, startTime);
         this.addRow(1, new Label(), tag, endDate, endTime);
     }
-    
+
     public void setWidthProperty(ReadOnlyDoubleProperty maxWidth) {
         this.prefWidthProperty().bind(maxWidth.subtract(40));
     }
-    
+
     public void setTaskInfo(Task task) {
         assert(task.getDescription() != null);
         assert(task.getStartDate() != null);
         assert(task.getStartTime() != null);
         assert(task.getEndDate() != null);
         assert(task.getEndTime() != null);
-        
-        description.setText(task.getDescription());       
-        startDate.setText(task.getStartDate());
-        startTime.setText(task.getStartTime());       
-        endDate.setText(task.getEndDate());
-        endTime.setText(task.getEndTime());
+
+        description.setText(task.getDescription());
+//        startDate.setText(task.getStartDate());
+//        startTime.setText(task.getStartTime());
+//        endDate.setText(task.getEndDate());
+//        endTime.setText(task.getEndTime());
         
         String allTag = "";
         for(int i = 0; i < task.getTagsList().size(); i++) {

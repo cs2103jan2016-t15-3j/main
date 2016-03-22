@@ -20,18 +20,56 @@ import static org.junit.Assert.*;
 public class ParserTest {
     @Test
     public void testAddCommandParser() throws Exception {
-        //add sth from 1pm to 3pm
-        //add lalala from tomorrow to this Friday #a
-        //add miao by Mar 7 #a #b
-        //add assignments this Thursday 3pm #assign #oh-my-god #help-me!
-        Command command1 = new AddCommandParser().parse("add sth tomorrow");
+
+        /* Only date */
+        //add ... on <date>
+        Command command1 = new AddCommandParser().parse("add sth on tomorrow");
+
+        //add ... from <date> to <date>
         Command command2 = new AddCommandParser().parse("add lalala from tomorrow to this Friday #a");
+
+        //add ... by <date>
         Command command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
-        Command command4 = new AddCommandParser().parse("add assignments this Thursday 3pm #assign #oh-my-god #help-me!");
-        Command command5 = new AddCommandParser().parse("add assignments 2");
-        Command command6 = new AddCommandParser().parse("add assignments 2");
-        Command command7 = new AddCommandParser().parse("add assignments 3");
-        Command command8 = new AddCommandParser().parse("add assignments 233 #3");
+
+        /* Date and time */
+        //add ... on <date> <time>
+        Command command4 = new AddCommandParser().parse("add assignments on this Thursday 3pm #assign #oh-my-god #help-me!");
+
+        //add ... from <date><time> to <date><time>
+        Command command5 = new AddCommandParser().parse("add a lot of things from March 22 0:00:00 to May 3 8:00");
+
+        //add ... from <date><time> to <time>
+        Command command6 = new AddCommandParser().parse("add movie from Friday 13:00 to 15:00");
+
+        //add ... by <date><time>
+        Command command7 = new AddCommandParser().parse("add manual V2.0 by next Sunday 23:59:59");
+
+        /* Only time */
+        //add ... on <time>
+        Command command8 = new AddCommandParser().parse("add sth on 3pm");
+
+        //add ... from <time> to <time>
+        Command command9 = new AddCommandParser().parse("add movie from 13:00 to 3pm");
+
+        //add ... by <time>
+        Command command10 = new AddCommandParser().parse("add sth by 11pm");
+
+        /* No date or time */
+        //add ...
+        Command command11 = new AddCommandParser().parse("add assignments 2");
+
+        //add ... <without keyword> <date>/<time>
+        Command command12 = new AddCommandParser().parse("add assignments today #3");
+        Command command13 = new AddCommandParser().parse("add on from by assignments 13:00 #3");
+
+        /* INVALID */
+        Command command14 = new AddCommandParser().parse("add movie from Friday from 13:00 to 15:00");
+        Command command15 = new AddCommandParser().parse("add movie at Friday 13:00 to 15:00");
+        Command command16 = new AddCommandParser().parse("add movie from Friday 13:00");
+        Command command17 = new AddCommandParser().parse("add movie from Friday 23:61");
+        //try more
+
+
         System.out.println();
     }
 
