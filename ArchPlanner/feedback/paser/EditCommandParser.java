@@ -1,15 +1,14 @@
 package feedback.paser;
 
 import com.joestelmach.natty.DateGroup;
+import feedback.paser.time.TimeParser;
+import feedback.paser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.Command;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +20,12 @@ public class EditCommandParser extends CommandParser {
     private int index;
 
     private final int EDIT_ARGUMENT_INDEX = 5;
-    private final String KEYWORD_TAG = "tag ";
+    private final String KEYWORD_START_DATE = "start date ";
     private final String KEYWORD_START_TIME = "start time ";
+    private final String KEYWORD_END_DATE = "end date ";
     private final String KEYWORD_END_TIME = "end time ";
+    private final String KEYWORD_DESCRIPTION = "description ";
+    private TaskParameters result = new TaskParameters();
 
     @Override
     public Command parse(String input) {
@@ -43,66 +45,98 @@ public class EditCommandParser extends CommandParser {
         }
         arguments = arguments.substring(firstSpace + 1, arguments.length());
 
-        if (arguments.startsWith(KEYWORD_TAG)) {
-            return parseEditTag(arguments);
+        if (arguments.startsWith(KEYWORD_DESCRIPTION)) {
+            result.setDescription(arguments.substring(KEYWORD_DESCRIPTION.length()));
+            return new EditCommand(index, result);
+        } else if (arguments.startsWith(KEYWORD_START_DATE)) {
+            return parseEditStartDate(arguments);
+        } else if (arguments.startsWith(KEYWORD_END_DATE)) {
+            return parseEditEndDate(arguments);
         } else if (arguments.startsWith(KEYWORD_START_TIME)) {
             return parseEditStartTime(arguments);
         } else if (arguments.startsWith(KEYWORD_END_TIME)) {
             return parseEditEndTime(arguments);
         } else {
-//            return new EditCommand(index, arguments, null, null, null);
-            return new EditCommand(index, new TaskParameters(arguments, null, null, null));
+            return parseEditTag(arguments);
         }
     }
 
     private Command parseEditTag(String arguments) {
-        String[] tags = split(arguments.substring(KEYWORD_TAG.length()));
-        Collections.addAll(tagList, tags);
-        return new EditCommand(index, new TaskParameters(null, tagList, null, null));
+        String[] tags = split(arguments);
+        for (String tag : tags) {
+            if (!tag.isEmpty() && tag.charAt(0) == '#') {
+                tagList.add(tag);
+            } else {
+                return new InvalidCommand(tag + " is not a tag!");
+            }
+        }
+        result.setTagsList(tagList);
+        return new EditCommand(index, result);
     }
 
-    private Command parseEditStartTime(String arguments){
+    private Command parseEditStartDate(String arguments) {
+        String timeString = arguments.substring(KEYWORD_START_DATE.length());
+        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
+        if (timeParserResult.getMatchString().equals(timeString)) {
+            if (timeParserResult.getFirstDate() != null
+                    && timeParserResult.getFirstTime() == null
+                    && timeParserResult.getSecondDate() == null) {
+                result.setStartDate(timeParserResult.getFirstDate());
+                return new EditCommand(index, result);
+            } else {
+                return new InvalidCommand("The date is not valid");
+            }
+        } else {
+            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
+        }
+    }
+
+    private Command parseEditEndDate(String arguments) {
+        String timeString = arguments.substring(KEYWORD_END_DATE.length());
+        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
+        if (timeParserResult.getMatchString().equals(timeString)) {
+            if (timeParserResult.getFirstDate() != null
+                    && timeParserResult.getFirstTime() == null
+                    && timeParserResult.getSecondDate() == null) {
+                result.setEndDate(timeParserResult.getFirstDate());
+                return new EditCommand(index, result);
+            } else {
+                return new InvalidCommand("The date is not valid");
+            }
+        } else {
+            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
+        }
+    }
+
+    private Command parseEditStartTime(String arguments) {
         String timeString = arguments.substring(KEYWORD_START_TIME.length());
-        List<DateGroup> groups = timeParser.parse(input);
-        if (groups.size() == 0) {
-            return new InvalidCommand("Start time is not recognized");
-        }
-        DateGroup group = groups.get(0);
-        List<Date> dates = group.getDates();
-        String matchingValue = group.getText();
-        if (dates.size() > 1) {
-            return new InvalidCommand("You should input only one time");
-        }
-        if (matchingValue.equals(timeString)) {
-            Calendar startDate = Calendar.getInstance();
-            startDate.setTime(dates.get(0));
-//                return new EditCommand(index, null, null, startDate, null);
-            return new EditCommand(index, new TaskParameters(null, null, startDate, null));
+        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
+        if (timeParserResult.getMatchString().equals(timeString)) {
+            if (timeParserResult.getFirstTime() != null
+                    && timeParserResult.getFirstDate() == null) {
+                result.setStartTime(timeParserResult.getFirstTime());
+                return new EditCommand(index, result);
+            } else {
+                return new InvalidCommand("The time is not valid");
+            }
         } else {
-            return new InvalidCommand("Only " + matchingValue + " is recognized");
+            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
         }
     }
 
-    private Command parseEditEndTime(String arguments){
+    private Command parseEditEndTime(String arguments) {
         String timeString = arguments.substring(KEYWORD_END_TIME.length());
-        List<DateGroup> groups = timeParser.parse(input);
-        if (groups.size() == 0) {
-            return new InvalidCommand("End time is not recognized");
-        }
-        DateGroup group = groups.get(0);
-        List<Date> dates = group.getDates();
-        String matchingValue = group.getText();
-        if (dates.size() > 1) {
-            return new InvalidCommand("You should input only one time");
-        }
-//        LocalTime time = new LocalTime()
-        if (matchingValue.equals(timeString)) {
-            Calendar endDate = Calendar.getInstance();
-            endDate.setTime(dates.get(0));
-//                return new EditCommand(index, null, null, null, endDate);
-            return new EditCommand(index, new TaskParameters(null, null, null, endDate));
+        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
+        if (timeParserResult.getMatchString().equals(timeString)) {
+            if (timeParserResult.getFirstTime() != null
+                    && timeParserResult.getFirstDate() == null) {
+                result.setEndTime(timeParserResult.getFirstTime());
+                return new EditCommand(index, result);
+            } else {
+                return new InvalidCommand("The time is not valid");
+            }
         } else {
-            return new InvalidCommand("Only \"" + matchingValue + "\" is recognized");
+            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
         }
     }
 }

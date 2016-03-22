@@ -20,7 +20,7 @@ public abstract class CommandParser {
         String result = "";
         for (String word : words) {
             if (word.charAt(0) == '#') {
-                tagList.add(word.substring(1, word.length()));
+                tagList.add(word);
             } else {
                 result += word + " ";
             }
