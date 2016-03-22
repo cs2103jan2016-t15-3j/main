@@ -1,22 +1,40 @@
 package logic;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class TaskParameters {
 	
 	private String _description;
 	private ArrayList<String> _tagsList;
-	private Calendar _startDateTime;
-	private Calendar _endDateTime;
+	private LocalDate _startDate;
+	private LocalDate _endDate;
+	private LocalTime _startTime;
+	private LocalTime _endTime;
 	private boolean _isDone;
 	private boolean _isOverdue;
 
-	public TaskParameters(String description, ArrayList<String> tagsList, Calendar startDateTime, Calendar endDateTime) {
+	public TaskParameters() {
+		_description = "";
+		_tagsList = null;
+		_startDate = null;
+		_startTime = null;
+		_endDate = null;
+		_endTime = null;
+		_isDone = false;
+		_isOverdue = false;
+	}
+	
+	public TaskParameters(String description, ArrayList<String> tagsList, LocalDate startDate, LocalTime startTime, 
+			LocalDate endDate, LocalTime endTime) {
 		_description = description;
 		_tagsList = tagsList;
-		_startDateTime = startDateTime;
-		_endDateTime = endDateTime;
+		_startDate = startDate;
+		_startTime = startTime;
+		_endDate = endDate;
+		_endTime = endTime;
 		_isDone = false;
 		_isOverdue = false;
 	}
@@ -25,16 +43,24 @@ public class TaskParameters {
 		_description = description;
 	}
 
-	public void setTag(ArrayList<String> tagsList) {
+	public void setTagsList(ArrayList<String> tagsList) {
 		_tagsList = tagsList;
 	}
 
-	public void setStartDateTime(Calendar startDateTime) {
-		_startDateTime = startDateTime;
+	public void setStartDate(LocalDate startDate) {
+		_startDate = startDate;
 	}
-
-	public void setEndDateTime(Calendar endDateTime) {
-		_endDateTime = endDateTime;
+	
+	public void setStartTime(LocalTime startTime) {
+		_startTime = startTime;
+	}
+	
+	public void setEndDate(LocalDate endDate) {
+		_endDate = endDate;
+	}
+	
+	public void setEndTime(LocalTime endTime) {
+		_endTime = endTime;
 	}
 
 	public void setIsDone(boolean isDone) {
@@ -53,31 +79,39 @@ public class TaskParameters {
 		return _tagsList;
 	}
 
-	public Calendar getStartDateTime() {
-		return _startDateTime;
+	public LocalDate getStartDate() {
+		return _startDate;
+	}
+	
+	public LocalTime getStartTime() {
+		return _startTime;
+	}
+	
+	public LocalDate getEndDate() {
+		return _endDate;
+	}
+	
+	public LocalTime getEndTime() {
+		return _endTime;
 	}
 
-	public Calendar getEndDateTime() {
-		return _endDateTime;
+	public String getStartDateString() {
+		String startDateString = getDateString(_startDate);
+		return startDateString;
 	}
 
-	public String getStartDate() {
-		String startDate = getDate(getStartDateTime());
-		return startDate;
-	}
-
-	public String getStartTime() {
-		String startTime = getTime(getStartDateTime());
+	public String getStartTimeString() {
+		String startTime = getTimeString(_startTime);
 		return startTime;
 	}
 
-	public String getEndDate() {
-		String endDate = getDate(getEndDateTime());
-		return endDate;
+	public String getEndDateString() {
+		String endDateString = getDateString(_endDate);
+		return endDateString;
 	}
 
-	public String getEndTime() {
-		String endTime = getTime(getEndDateTime());
+	public String getEndTimeString() {
+		String endTime = getTimeString(_endTime);
 		return endTime;
 	}
 
@@ -89,30 +123,21 @@ public class TaskParameters {
 		return _isOverdue;
 	}
 
-	private String getDate(Calendar date) {
+	private String getDateString(LocalDate date) {
 		if (date == null) {
 			return "";
 		}
 
-		String day = String.format("%02d", date.get(Calendar.DATE));
-		String month = String.format("%02d", date.get(Calendar.MONTH));
-		String year = String.format("%02d", date.get(Calendar.YEAR));
-
-		String strDate  = day + "/" +  month + "/" + year;
-
-		return strDate;
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
+		return dateTimeFormatter.format(date);
 	}
 
-	private String getTime(Calendar date) {
-		if (date == null) {
+	private String getTimeString(LocalTime time) {
+		if (time == null) {
 			return "";
 		}
 
-		String minute = String.format("%02d", date.get(Calendar.MINUTE));
-		String hour = String.format("%02d", date.get(Calendar.HOUR));
-
-		String strTime = hour + ":" + minute;
-
-		return strTime;
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mma");
+		return dateTimeFormatter.format(time);
 	}
 }

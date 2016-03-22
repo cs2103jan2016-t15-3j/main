@@ -8,33 +8,27 @@ import logic.RollbackItem;
 import logic.Task;
 import logic.TaskParameters;
 
-public class AddCommand extends Command {
+public class AddCommand implements Command {
 
-	TaskParameters _task = new TaskParameters(null, null, null, null);
+	TaskParameters _task;
 
 	public AddCommand(TaskParameters newTaskParameters) {
+		_task = new TaskParameters();
 		_task = newTaskParameters;
 	}
 
-
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDateTime(),
-				_task.getEndDateTime());
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
-		mainList.add(newTask);
-		listsManager.updateLists(mainList);
+		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDate(), _task.getStartTime(), 
+				_task.getEndDate(), _task.getEndTime());
+		listsManager.getMainList().add(newTask);
+		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("add", null, newTask);
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
 
-			undoList.addAll(historyManager.getUndoList());
-
-		undoList.add(rollbackItem);
-		historyManager.setUndoList(undoList);
+		historyManager.getUndoList().add(rollbackItem);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());
-		System.out.println("undolist size: " + undoList.size());
+		System.out.println("undolist size: " + historyManager.getUndoList().size());
 		return true;
 	}
 }

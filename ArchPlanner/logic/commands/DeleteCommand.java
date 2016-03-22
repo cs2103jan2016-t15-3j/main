@@ -1,14 +1,13 @@
 package logic.commands;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class DeleteCommand extends Command {
+public class DeleteCommand implements Command {
 
 	private int _index;
 
@@ -24,35 +23,24 @@ public class DeleteCommand extends Command {
 	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 
-		ArrayList<Task> viewList = new ArrayList<Task>();
-		viewList.addAll(listsManager.getViewList());
-
-		if (!isWithinList(viewList, _index)) {
+		if (!isWithinList(listsManager.getViewList(), _index)) {
 			return false;
 		}
 
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
-		System.out.println(_index);
-		Task oldTask = viewList.get(_index);
-		mainList.remove(oldTask);
+		//System.out.println(_index);
+		Task oldTask = listsManager.getViewList().get(_index);
+		listsManager.getMainList().remove(oldTask);
 
 		if (listsManager.getViewType().equals("VIEW_SEARCH_RESULT")) {
-			ArrayList<Task> searchResultList = new ArrayList<Task>();
-			searchResultList.addAll(listsManager.getSearchResultList());
-			searchResultList.remove(oldTask);
-			listsManager.setSearchList(searchResultList);
+			listsManager.getSearchResultList().remove(oldTask);
 		}
-		listsManager.updateLists(mainList);
+		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
-		undoList.addAll(historyManager.getUndoList());
 
-		undoList.add(rollbackItem);
-		historyManager.setUndoList(undoList);
+		historyManager.getUndoList().add(rollbackItem);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());
-		System.out.println("undoList size: " + undoList.size());
+		System.out.println("undoList size: " + historyManager.getUndoList().size());
 		return true;
 	}
 

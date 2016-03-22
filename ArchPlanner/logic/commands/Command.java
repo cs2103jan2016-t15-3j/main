@@ -3,7 +3,7 @@ package logic.commands;
 import logic.HistoryManager;
 import logic.ListsManager;
 
-public abstract class Command {
+public interface Command {
 
-	public abstract boolean execute(ListsManager listsManager, HistoryManager historyManager);
+	public boolean execute(ListsManager listsManager, HistoryManager historyManager);
 }

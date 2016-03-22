@@ -1,14 +1,13 @@
 package logic.commands;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 
-public class UndoneCommand extends Command {
+public class UndoneCommand implements Command {
 
 	private int _index;
 
@@ -35,11 +34,11 @@ public class UndoneCommand extends Command {
 		
 		Task oldTask = viewList.get(_index);
 		mainList.remove(oldTask);
-		Task newTask = new Task(null, null, null, null);
+		Task newTask = new Task();
 		newTask = oldTask;
 		newTask.setIsDone(false);
 		mainList.add(newTask);
-		listsManager.updateLists(mainList);
+		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask);
 		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
