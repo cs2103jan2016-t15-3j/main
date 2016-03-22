@@ -67,7 +67,7 @@ public class EditCommandParser extends CommandParser {
             if (!tag.isEmpty() && tag.charAt(0) == '#') {
                 tagList.add(tag);
             } else {
-                return new InvalidCommand(tag + " is not a tag!");
+                return new InvalidCommand("Command Invalid!");
             }
         }
         result.setTagsList(tagList);

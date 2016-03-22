@@ -1,17 +1,14 @@
 package feedback.paser;
 
-import com.joestelmach.natty.DateGroup;
 import feedback.paser.time.TimeParser;
 import feedback.paser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.AddCommand;
-import org.antlr.runtime.tree.Tree;
+import logic.commands.Command;
+import logic.commands.InvalidCommand;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by lifengshuang on 3/5/16.
@@ -36,8 +33,18 @@ public class AddCommandParser extends CommandParser {
     TaskParameters result = new TaskParameters();
 
     @Override
-    public AddCommand parse(String input) {
-        this.input = parseTag(input);
+    public Command parse(String input) {
+        this.input = input;
+        int lastKeywordOccurrence = getLastOccurrenceOfKeyword(input);
+        if (lastKeywordOccurrence > 0) {
+            String beforeKeyword = input.substring(0, lastKeywordOccurrence);
+            String afterKeyword = input.substring(lastKeywordOccurrence);
+            String tagRemoved = parseTag(afterKeyword);
+            if (tagRemoved == null) {
+                return new InvalidCommand("Empty tag is not allowed");
+            }
+            this.input = beforeKeyword + tagRemoved;
+        }
         this.input = parseTime(this.input);
         String description = this.input.substring(ADD_PARAMETER_INDEX);
         result.setDescription(description);
@@ -46,7 +53,6 @@ public class AddCommandParser extends CommandParser {
     }
 
     private String parseTime(String input) {
-
         TimeParserResult timeResult = new TimeParser().parseTime(input);
         String keyword = detectTimeKeyword(timeResult.getMatchPosition());
         switch (keyword) {
@@ -78,8 +84,7 @@ public class AddCommandParser extends CommandParser {
                     } else {
                         result.setEndDate(timeResult.getSecondDate());
                     }
-                }
-                else if (timeResult.getSecondTime() == null) {
+                } else if (timeResult.getSecondTime() == null) {
                     keyword = "";
                     break;
                 }
@@ -104,9 +109,7 @@ public class AddCommandParser extends CommandParser {
     }
 
     private String detectTimeKeyword(int matchPosition) {
-        int lastKeywordOccurrence = Math.max(
-                Math.max(input.lastIndexOf(KEYWORD_BY), input.lastIndexOf(KEYWORD_FROM)),
-                input.lastIndexOf(KEYWORD_ON))+2;
+        int lastKeywordOccurrence = getLastOccurrenceOfKeyword(input) + 2;
         if (hasPrefixWithKeyword(KEYWORD_BY, matchPosition)
                 && lastKeywordOccurrence + KEYWORD_BY.length() == matchPosition) {
             return KEYWORD_BY;
@@ -130,6 +133,12 @@ public class AddCommandParser extends CommandParser {
             }
         }
         return false;
+    }
+
+    private int getLastOccurrenceOfKeyword(String input) {
+        return Math.max(
+                Math.max(input.lastIndexOf(KEYWORD_BY), input.lastIndexOf(KEYWORD_FROM)),
+                input.lastIndexOf(KEYWORD_ON));
     }
 
 }

@@ -20,6 +20,7 @@ public class ViewCommandParser extends CommandParser {
     private final String KEYWORD_START_TIME = "start time ";
     private final String KEYWORD_END_DATE = "end date ";
     private final String KEYWORD_END_TIME = "end time ";
+    private final String KEYWORD_FROM = "from ";
     private final String KEYWORD_DESCRIPTION = "description ";
     private final int VIEW_INDEX = 5;
 
@@ -53,7 +54,11 @@ public class ViewCommandParser extends CommandParser {
 
         TimeParserResult timeParserResult = new TimeParser().parseTime(input);
         if (input.startsWith(KEYWORD_DESCRIPTION)) {
-            result.setDescription(input.substring(KEYWORD_DESCRIPTION.length()));
+            String description = input.substring(KEYWORD_DESCRIPTION.length());
+            if (description.isEmpty()) {
+                return new InvalidCommand("Description missing");
+            }
+            result.setDescription(description);
         } else if (input.startsWith(KEYWORD_START_DATE)) {
             String timeString = input.substring(KEYWORD_START_DATE.length());
             if (timeParserResult.getMatchString().equals(timeString)) {
@@ -104,11 +109,23 @@ public class ViewCommandParser extends CommandParser {
             } else {
                 return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
             }
+        } else if (input.startsWith(KEYWORD_FROM)) {
+            String timeString = input.substring(KEYWORD_FROM.length());
+            if (timeParserResult.getMatchString().equals(timeString)) {
+                if (timeParserResult.getFirstDate() != null && timeParserResult.getSecondDate() != null) {
+                    result.setStartDate(timeParserResult.getFirstDate());
+                    result.setEndDate(timeParserResult.getSecondDate());
+                } else {
+                    return new InvalidCommand("The time is not valid");
+                }
+            } else {
+                return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
+            }
         } else {
 
             String[] tags = split(input);
             if (tags.length <= 1) {
-                return new InvalidCommand("Argument missing");
+                return new InvalidCommand("Command Invalid");
             } else {
                 for (String tag : tags) {
                     if (tag.charAt(0) == '#') {
