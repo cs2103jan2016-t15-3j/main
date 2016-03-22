@@ -3,6 +3,7 @@ package feedback.paser;
 import com.joestelmach.natty.DateGroup;
 import logic.TaskParameters;
 import logic.commands.AddCommand;
+import org.antlr.runtime.tree.Tree;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +37,6 @@ public class AddCommandParser extends CommandParser {
     public AddCommand parse(String input) {
         this.input = parseTag(input);
         this.input = parseTime(this.input);
-
         description = this.input.substring(ADD_PARAMETER_INDEX);
 //        return new AddCommand(description, "tag", startDate, endDate);
         return new AddCommand(new TaskParameters(description, tagList, startDate, endDate));
@@ -48,6 +48,7 @@ public class AddCommandParser extends CommandParser {
             DateGroup group = groups.get(0);
             List<Date> dates = group.getDates();
             String matchingValue = group.getText();
+            Tree tree = group.getSyntaxTree();
             if (matchingValue.length() >= 3) {
                 int matchPosition = group.getPosition();
                 String keyword = detectTimeKeyword(matchPosition);

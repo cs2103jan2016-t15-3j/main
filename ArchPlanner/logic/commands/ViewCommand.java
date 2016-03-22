@@ -8,11 +8,14 @@ import logic.TaskParameters;
 public class ViewCommand implements Command {
 	
 	String _viewType;
+	public enum VIEW_TYPE {VIEW_ALL, VIEW_DONE, VIEW_UNDONE, VIEW_OVERDUE}
+	public enum CATEGORY_TYPE {CATEGORY_FLOATING, CATEGORY_EVENT, CATEGORY_DEADLINE, CATEGORY_TASKS}
 	String _categoryType;
 	TaskParameters _task;
 
 	public ViewCommand(String viewType, String categoryType, TaskParameters newTaskParameters) {
 		_viewType = viewType;
+
 		_categoryType = categoryType;
 		_task = new TaskParameters();
 		_task = newTaskParameters;
