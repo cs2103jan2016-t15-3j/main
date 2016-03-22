@@ -7,9 +7,13 @@ import logic.TaskParameters;
 
 public class ViewCommand implements Command {
 	
+	String _viewType;
+	String _categoryType;
 	TaskParameters _task;
 
-	public ViewCommand(TaskParameters newTaskParameters) {
+	public ViewCommand(String viewType, String categoryType, TaskParameters newTaskParameters) {
+		_viewType = viewType;
+		_categoryType = categoryType;
 		_task = new TaskParameters();
 		_task = newTaskParameters;
 	}
