@@ -1,10 +1,8 @@
-package feedback.paser;
+package paser;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
-import logic.commands.AddCommand;
 import logic.commands.Command;
-import logic.commands.ViewCommand;
 import org.junit.Test;
 
 import java.text.ParseException;

@@ -1,4 +1,4 @@
-package feedback.paser.time;
+package paser.time;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;

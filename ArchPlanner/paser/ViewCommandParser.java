@@ -1,14 +1,11 @@
-package feedback.paser;
+package paser;
 
-import feedback.paser.time.TimeParser;
-import feedback.paser.time.TimeParserResult;
+import paser.time.TimeParser;
+import paser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.Command;
-import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
-
-import java.util.Arrays;
 
 /**
  * Created by lifengshuang on 3/16/16.

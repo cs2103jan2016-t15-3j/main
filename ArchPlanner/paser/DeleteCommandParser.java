@@ -1,4 +1,4 @@
-package feedback.paser;
+package paser;
 
 import logic.commands.Command;
 import logic.commands.DeleteCommand;

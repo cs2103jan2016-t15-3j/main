@@ -1,10 +1,9 @@
 package feedback;
 
-import feedback.paser.*;
+import paser.*;
 import logic.commands.*;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Created by lifengshuang on 2/29/16.
@@ -20,7 +19,6 @@ public class Feedback {
     private static final int COMMAND_TYPE_UNDONE = 5;
     private static final int COMMAND_TYPE_UNDO = 6;
     private static final int COMMAND_TYPE_REDO = 7;
-    //    private static final int COMMAND_TYPE_SORT = 8;
     private static final int COMMAND_TYPE_SEARCH = 8;
     private static final int COMMAND_TYPE_EXIT = 9;
 
@@ -128,9 +126,6 @@ public class Feedback {
             case COMMAND_TYPE_REDO:
                 feedbackList.add(REDO);
                 break;
-//            case COMMAND_TYPE_SORT:
-//                feedbackList.add(SORT_BY_TYPE);
-//                break;
             case COMMAND_TYPE_SEARCH:
                 feedbackList.add(SEARCH_DESCRIPTION);
                 break;
@@ -141,47 +136,6 @@ public class Feedback {
         return feedbackList;
     }
 
-    public Command onEnterPressed(String input) {
-        if (input == null) {
-            return new InvalidCommand("Null input");
-        }
-        int commandType = detectCommandType(input);
-        try {
-            switch (commandType) {
-                case COMMAND_TYPE_UNKNOWN:
-                    return new InvalidCommand("Invalid command");
-                case COMMAND_TYPE_ADD:
-                    return new AddCommandParser().parse(input);
-                case COMMAND_TYPE_DELETE:
-                    return new DeleteCommandParser().parse(input);
-                case COMMAND_TYPE_EDIT:
-                    return new EditCommandParser().parse(input);
-                case COMMAND_TYPE_VIEW:
-                    //todo: view command parser
-                    return new ViewCommandParser().parse(input);
-                case COMMAND_TYPE_DONE:
-                    return new DoneCommandParser().parse(input);
-                case COMMAND_TYPE_UNDONE:
-                    return new UndoneCommandParser().parse(input);
-                case COMMAND_TYPE_UNDO:
-                    return new UndoCommand();
-                case COMMAND_TYPE_REDO:
-                    return new RedoCommand();
-//                case COMMAND_TYPE_SORT:
-//                    return new SortCommand(input.substring(5));
-                case COMMAND_TYPE_SEARCH:
-                    //todo: search command parser
-                    return new SearchCommandParser().parse(input);
-                case COMMAND_TYPE_EXIT:
-                    return new ExitCommand();
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
-        return new InvalidCommand("Feedback Error");
-    }
 
     private void handleUnknownCommand(String input) {
         if (input.isEmpty()) {

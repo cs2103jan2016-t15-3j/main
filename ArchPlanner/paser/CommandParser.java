@@ -1,4 +1,4 @@
-package feedback.paser;
+package paser;
 
 import com.joestelmach.natty.Parser;
 import logic.commands.Command;
@@ -18,14 +18,18 @@ public abstract class CommandParser {
     protected String parseTag(String input) {
         String[] words = split(input);
         String result = "";
-        for (String word : words) {
-            if (word.charAt(0) == '#') {
-                if (word.length() == 1) {
+
+        for (int i = words.length - 1; i >= 0; i--) {
+            if (words[i].charAt(0) == '#') {
+                if (words[i].length() == 1) {
                     return null;
                 }
-                tagList.add(word);
+                tagList.add(words[i]);
             } else {
-                result += word + " ";
+                for (int j = 0; j <= i; j++) {
+                    result += words[j] + " ";
+                }
+                break;
             }
         }
         return result.trim();

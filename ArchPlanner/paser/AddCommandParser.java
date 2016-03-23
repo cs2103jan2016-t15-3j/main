@@ -1,7 +1,7 @@
-package feedback.paser;
+package paser;
 
-import feedback.paser.time.TimeParser;
-import feedback.paser.time.TimeParserResult;
+import paser.time.TimeParser;
+import paser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.AddCommand;
 import logic.commands.Command;
@@ -34,16 +34,20 @@ public class AddCommandParser extends CommandParser {
 
     @Override
     public Command parse(String input) {
-        this.input = input;
-        int lastKeywordOccurrence = getLastOccurrenceOfKeyword(input);
-        if (lastKeywordOccurrence > 0) {
-            String beforeKeyword = input.substring(0, lastKeywordOccurrence);
-            String afterKeyword = input.substring(lastKeywordOccurrence);
-            String tagRemoved = parseTag(afterKeyword);
-            if (tagRemoved == null) {
-                return new InvalidCommand("Empty tag is not allowed");
-            }
-            this.input = beforeKeyword + tagRemoved;
+//        this.input = input;
+//        int lastKeywordOccurrence = getLastOccurrenceOfKeyword(input);
+//        if (lastKeywordOccurrence > 0) {
+//            String beforeKeyword = input.substring(0, lastKeywordOccurrence);
+//            String afterKeyword = input.substring(lastKeywordOccurrence);
+//            String tagRemoved = parseTag(afterKeyword);
+//            if (tagRemoved == null) {
+//                return new InvalidCommand("Empty tag is not allowed");
+//            }
+//            this.input = beforeKeyword + tagRemoved;
+//        }
+        this.input = parseTag(input);
+        if (this.input == null) {
+            return new InvalidCommand("Empty tag is not allowed");
         }
         this.input = parseTime(this.input);
         String description = this.input.substring(ADD_PARAMETER_INDEX);

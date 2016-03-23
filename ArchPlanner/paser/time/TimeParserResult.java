@@ -1,4 +1,4 @@
-package feedback.paser.time;
+package paser.time;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
