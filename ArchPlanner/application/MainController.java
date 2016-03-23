@@ -32,6 +32,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.Logic;
+import logic.Tag;
 import logic.Task;
 import logic.commands.Command;
 
@@ -45,6 +46,10 @@ public class MainController implements Initializable{
 
     @FXML private Button miniButton;
     @FXML private Button closeButton;
+
+    @FXML private ToggleButton event;
+    @FXML private ToggleButton deadline;
+    @FXML private ToggleButton task;
     
     @FXML private GridPane taskWindow;
     @FXML private StackPane mainWindow;
@@ -54,8 +59,10 @@ public class MainController implements Initializable{
     @FXML public ListView<ToggleButton> tagDisplay;
     @FXML public ListView<GridPane> taskDisplay;
  
-    private ArrayList<String> tags = new ArrayList<String>();;
+    private ArrayList<Tag> tags = new ArrayList<Tag>();;
     private ArrayList<Task> tasks = new ArrayList<Task>();
+    
+    private String categorySelected;
     
     private ObservableList<ToggleButton> tagList = FXCollections.observableArrayList();
     private ObservableList<GridPane> taskList = FXCollections.observableArrayList();
@@ -79,11 +86,7 @@ public class MainController implements Initializable{
         assert(logic.getTagsList() != null);
         assert(logic.getCurrentViewType() != null);
         
-        tags = logic.getTagsList();
-        tasks = logic.getViewList();
-        viewLabel.setText(logic.getCurrentViewType());
-        updateTaskDisplay();
-        updateTagDisplay();
+        updateUi();
  
         //-------------------------------------------------------------------         
         userInput.textProperty().addListener(new ChangeListener<String>() {
@@ -140,21 +143,6 @@ public class MainController implements Initializable{
         date2.set(Calendar.DAY_OF_MONTH, 8);
         date2.set(Calendar.HOUR, 00);
         date2.set(Calendar.MINUTE, 00);
-  
-        tasks.add(new Task("Task 1", tag1, date, date));
-        tasks.add(new Task("Task 2", tag2, date, null));
-        tasks.add(new Task("Task 3", new ArrayList<String>(), null, date));
-        tasks.add(new Task("Task 4", tag4, date2, date2));
-        tasks.add(new Task("Task 5", tag2, date2, null));
-        tasks.add(new Task("Task 6", tag3, null, date2));
-        tasks.add(new Task("Task 7", tag1, null, null));
-        tasks.add(new Task("Task 8", tag4, null, null));
-        
-        tags.add("#tag1");
-        tags.add("#tag2");
-        tags.add("#tag3");
-        tags.add("#tag4");
-        tags.add("#tag5");
     }
     //------------------------------------------------------------------------------------------------------------
     
@@ -192,6 +180,8 @@ public class MainController implements Initializable{
         } else {
             logic.setSelectedCategory("All");
         }
+        
+        updateUi();
     }
     
     
@@ -205,11 +195,7 @@ public class MainController implements Initializable{
             assert(logic.getTagsList() != null);
             assert(logic.getCurrentViewType() != null);
             
-            tasks = logic.getViewList();
-            tags = logic.getTagsList();
-            viewLabel.setText(logic.getCurrentViewType());
-            updateTaskDisplay();
-            updateTagDisplay();
+            updateUi();
             
             userInput.clear();
             log.info("cmd executed");
@@ -280,12 +266,43 @@ public class MainController implements Initializable{
         tagList.clear();
         
         for (int i = 0; i < tags.size(); i++) {
-            ToggleButton tagButton = new ToggleButton(tags.get(i));
+            ToggleButton tagButton = new ToggleButton(tags.get(i).getName());
+            tagButton.setSelected(tags.get(i).getIsSelected());
             tagButton.setMaxWidth(Double.MAX_VALUE);
             tagButton.prefWidthProperty().bind(tagDisplay.widthProperty().subtract(40));
             tagButton.setAlignment(Pos.CENTER_LEFT);
             tagList.add(tagButton);
         }     
         log.info("Tags Refreshed");
+    }
+    
+    private void updateCategoryDisplay() {
+    	switch (categorySelected) {
+    		case "All" :
+    			event.setSelected(false);
+    			deadline.setSelected(false);
+    			task.setSelected(false);
+    			break;
+    		case "Events" :
+    			event.setSelected(true);
+    			break;
+    		case "Deadlines" :
+    			deadline.setSelected(true);
+    			break;
+    		case "Tasks" :
+    			task.setSelected(true);
+    			break;
+    	}
+    }
+    
+    private void updateUi() {
+    	tasks = logic.getViewList();
+        tags = logic.getTagsList();
+        categorySelected = logic.getSelectedCategory();
+        viewLabel.setText(logic.getCurrentViewType());
+        
+        updateTaskDisplay();
+        updateTagDisplay();
+        updateCategoryDisplay();
     }
 }

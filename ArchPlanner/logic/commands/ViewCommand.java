@@ -6,26 +6,115 @@ import logic.Task;
 import logic.TaskParameters;
 
 public class ViewCommand implements Command {
-	
-	VIEW_TYPE _viewType;
-	public enum VIEW_TYPE {VIEW_ALL, VIEW_DONE, VIEW_UNDONE, VIEW_OVERDUE}
-	public enum CATEGORY_TYPE {CATEGORY_FLOATING, CATEGORY_EVENT, CATEGORY_DEADLINE, CATEGORY_TASKS}
-	CATEGORY_TYPE _categoryType;
-	TaskParameters _task;
+	public enum VIEW_TYPE {VIEW_ALL, VIEW_DONE, VIEW_UNDONE, VIEW_OVERDUE};
+	public enum CATEGORY_TYPE {CATEGORY_ALL, CATEGORY_EVENT, CATEGORY_DEADLINE, CATEGORY_TASK};
+
+	public VIEW_TYPE _viewType;
+	public CATEGORY_TYPE _categoryType;
+	private TaskParameters _task;
 
 	public ViewCommand(VIEW_TYPE viewType, CATEGORY_TYPE categoryType, TaskParameters taskParameters) {
 		_viewType = viewType;
 		_categoryType = categoryType;
 		_task = taskParameters;
 	}
-
-	public ViewCommand(ListsManager listsManager, HistoryManager historyManager) {
-		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDate(), _task.getStartTime(), 
-				_task.getEndDate(), _task.getEndTime());
+	public boolean execute() {
+		return false;
 	}
 
-	@Override
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		return false;
+		if (_viewType != null) {
+			if (_viewType.equals(VIEW_TYPE.VIEW_ALL)) {
+				listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
+			}
+			listsManager.setViewType(_viewType);
+		}
+		
+		if (_categoryType != null) {
+			listsManager.setCategoryType(_categoryType);
+		}
+		
+		listsManager.updateLists();
+		String currentViewType = listsManager.getViewType().toString();
+
+		if (_task.getDescription() != null && !_task.getDescription().isEmpty()) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (listsManager.getViewList().get(i).getDescription() != null && 
+						!task.getDescription().contains(_task.getDescription())) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+			currentViewType += " - description: " + _task.getDescription();
+		}
+
+		if (_task.getTagsList() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				boolean hasSameTag = true;
+				Task task = listsManager.getViewList().get(i);
+				for (int j = 0; j < _task.getTagsList().size() && hasSameTag; j++) {
+					if (!task.getTagsList().contains(_task.getTagsList().get(j))) {
+						listsManager.getViewList().remove(i);
+						hasSameTag = false;
+						i--;
+					}
+				}
+			}
+			currentViewType += " - tags: ";
+			for (int i = 0; i < _task.getTagsList().size(); i++) {
+				currentViewType += _task.getStartTimeString() + "/";
+			}
+		}
+
+		if (_task.getStartDate() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (!((listsManager.getViewList().get(i).getStartDate() != null) && 
+						(task.getStartDate().equals(_task.getStartDate())))) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+			currentViewType += " - start date: " + _task.getStartDateString();
+		}
+
+		if (_task.getStartTime() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (!((listsManager.getViewList().get(i).getStartTime() != null) && 
+						(task.getStartTime().equals(_task.getStartTime())))) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+		}
+
+		if (_task.getEndDate() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (!((listsManager.getViewList().get(i).getEndDate() != null) && 
+						(task.getEndDate().equals(_task.getEndDate())))) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+			currentViewType += " - end date: " + _task.getEndDateString();
+		}
+
+		if (_task.getEndTime() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (!((listsManager.getViewList().get(i).getEndTime() != null) && 
+						(task.getEndTime().equals(_task.getEndTime())))) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+			currentViewType += " - end time: " + _task.getEndTimeString();
+		}
+		
+		listsManager.setCurrentViewType(currentViewType);
+		return true;
 	}
 }

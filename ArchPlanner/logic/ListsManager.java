@@ -1,125 +1,280 @@
 package logic;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+
+import logic.commands.ViewCommand.CATEGORY_TYPE;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class ListsManager {
 
 	private ArrayList<Task> _mainList = new ArrayList<Task>();
-	private ArrayList<Task> _viewList = new ArrayList<Task>();
-	private ArrayList<Task> _searchResultList = new ArrayList<Task>();
-	private ArrayList<String> _tagsList = new ArrayList<String>();
+	private ArrayList<Task> _viewList;
+	private ArrayList<Tag> _tagsList;
 
-	private ArrayList<Task> _deadlineList = new ArrayList<Task>();
-	private ArrayList<Task> _eventList = new ArrayList<Task>();
-	private ArrayList<Task> _tasksList = new ArrayList<Task>();
-	private ArrayList<Task> _doneList = new ArrayList<Task>();
-	private ArrayList<Task> _undoneList = new ArrayList<Task>();
+	private ArrayList<Task> _deadlineList;
+	private ArrayList<Task> _eventList;
+	private ArrayList<Task> _floatingList;
+	private ArrayList<Task> _doneList;
+	private ArrayList<Task> _undoneList;
+	private ArrayList<Task> _overdueList;
 
-	private String _viewType = "VIEW_ALL";
+	private VIEW_TYPE _viewType;
+	private CATEGORY_TYPE _categoryType;
 
-	public void updateLists(){};
+	private String _currentViewType;
 
-	public void updateLists(ArrayList<Task> list) {
+	public ListsManager() {
+		_mainList = new ArrayList<Task>();
+		_viewList = new ArrayList<Task>();
+		_tagsList = new ArrayList<Tag>();
 
-		clearAllLists();
+		_deadlineList = new ArrayList<Task>();
+		_eventList = new ArrayList<Task>();
+		_floatingList = new ArrayList<Task>();
+		_doneList = new ArrayList<Task>();
+		_undoneList = new ArrayList<Task>();
+		_overdueList = new ArrayList<Task>();
+		_viewType = VIEW_TYPE.VIEW_ALL;
+		_categoryType = CATEGORY_TYPE.CATEGORY_ALL;
+		_currentViewType = _viewType.toString();
+	}
+
+	public void setUpLists(ArrayList<Task> list) {
+		if (_mainList == null) {
+			return;
+		}
 		_mainList.addAll(list);
+		updateLists();
+	}
 
+	public void updateLists() {
+		clearAllLists();
+		updateTaskOverdueStatus();
 		SortMechanism sort = new SortMechanism();
 		sort.sortListByDescription(_mainList);
-		_mainList = sort.sortListByDateTime(_mainList);
-
+		//sort.sortListByDateTime(_mainList);
+		sort.sortListByOverdue(_mainList);
+		sort.sortListByDone(_mainList);
 		for (int i = 0; i < _mainList.size(); i++) {
 			Task task = _mainList.get(i);
-			//System.out.println("update: " + task.getDescription());
-//			if ((task.getStartDateTime() == null) && (task.getEndDateTime() == null)) {
-//				_tasksList.add(task);
-//			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() == null) ||
-//					(task.getStartDateTime() == null) && (task.getEndDateTime() != null)) {
-//				_eventList.add(task);
-//			} else if ((task.getStartDateTime() != null) && (task.getEndDateTime() != null)) {
-//				_deadlineList.add(task);
-//			}
-
+			if ((task.getStartDate() == null) && (task.getEndDate() == null)) {
+				_floatingList.add(task);
+			} else if ((task.getStartDate() != null) && (task.getEndDate() == null) || 
+					(task.getStartDate() != null) && (task.getEndDate() != null)) {
+				_eventList.add(task);
+			} else if ((task.getStartDate() == null) && (task.getEndDate() != null)) {
+				_deadlineList.add(task);
+			}
 			if (task.getIsDone() == true) {
 				_doneList.add(task);
 			} else {
 				_undoneList.add(task);
 			}
+			if (task.getIsOverdue() == true) {
+				_overdueList.add(task);
+			}
 
-			for (int j = 0; j < task.getTagsList().size() ; j++) {
-				String tag = task.getTagsList().get(j);
-				if ((tag != null) && (!_tagsList.contains(tag))) {
+			for (int j = 0; j < task.getTagsList().size(); j++) {
+				String taskTagName = task.getTagsList().get(j);
+				Tag tag = new Tag(taskTagName, false);
+				boolean hasSameTag = false;
+				for (int k = 0; k < _tagsList.size() && !hasSameTag; k++) {
+					if (taskTagName.equals(_tagsList.get(k).getName())) {
+						hasSameTag = true;
+						System.out.println(tag.getName() + "\t" + tag.getIsSelected());
+					}
+				}
+				if (!hasSameTag) {
 					_tagsList.add(tag);
 				}
 			}
+			//System.out.println("test");
 		}
-		/*
-		for(int i = 0; i < _undoneList.size(); i++)
-			System.out.println("main" + i + "\t" + _mainList.get(i).getDescription());
-
-		for(int i = 0; i < _undoneList.size(); i++)
-			System.out.println("undone" + i + "\t" + _undoneList.get(i).getDescription());
-		 */
+		//System.out.println("testpassed");
 		sort.sortTagsList(_tagsList);
-		setViewList(_viewType);
+		updateViewList();
+		System.out.println(_categoryType);
+		_currentViewType = _viewType.toString();
+	}
 
-		_tagsList.add(0, "Deadlines");
-		_tagsList.add(1 ,"Events");
-		_tagsList.add(2, "Tasks");
+	public void updateTaskOverdueStatus() {
+
+		LocalDate currentDate = LocalDate.now();
+		LocalTime currentTime = LocalTime.now();
+
+		for (int i = 0; i < _mainList.size(); i++) {
+			Task task = _mainList.get(i);
+			if ((task.getStartDate() != null) && (task.getEndDate() == null)) {
+				if (task.getStartTime() != null) {
+					if (task.getStartDate().equals(currentDate) && task.getStartTime().isBefore(currentTime)) {
+						task.setIsOverdue(true);
+					} else if (task.getStartDate().isBefore(currentDate)) {
+						task.setIsOverdue(true);
+					}
+				}
+			} else if ((task.getStartDate() == null) && (task.getEndDate() != null)) {
+				if (task.getEndTime() != null) {
+					if (task.getEndDate().equals(currentDate) && task.getEndTime().isBefore(currentTime)) {
+						task.setIsOverdue(true);
+					} else if (task.getEndDate().isBefore(currentDate)) {
+						task.setIsOverdue(true);
+					}
+				}
+			} else if ((task.getStartDate() != null) && (task.getEndDate() != null)) {
+				if (task.getEndTime() != null) {
+					if (task.getEndDate().isBefore(currentDate) && task.getEndTime().isBefore(currentTime)) {
+						task.setIsOverdue(true);
+					} else if (task.getEndDate().isBefore(currentDate)) {
+						task.setIsOverdue(true);
+					}
+				}
+			} else {
+				task.setIsOverdue(false);
+			}
+		}
 	}
 
 	private void clearAllLists() {
-		_mainList.clear();
 		_viewList.clear();
 		_tagsList.clear();
 		_deadlineList.clear();
 		_eventList.clear();
-		_tasksList.clear();
+		_floatingList.clear();
 		_doneList.clear();
 		_undoneList.clear();
+		_overdueList.clear();
 	}
 
-	public void setViewList(String viewType) {
+	public void setViewType(VIEW_TYPE viewType) {
 		_viewType = viewType;
-		_viewList.clear();
-
-		System.out.println(_viewType);
-
-		if (_viewType.equalsIgnoreCase("VIEW_ALL")) {
-			_viewList.addAll(_undoneList);
-		} else if (_viewType.equals("VIEW_DONE")) {
-			_viewList.addAll(_doneList);
-		} else if (_viewType.equals("VIEW_SEARCH_RESULT")) {
-			_viewList.addAll(_searchResultList);
-		}
 	}
 
-	public void setSearchList(ArrayList<Task> searchResultList) {
-		_searchResultList.clear();
-		_searchResultList.addAll(searchResultList);
+	public void setCategoryType(CATEGORY_TYPE categoryType) {
+		_categoryType = categoryType;
 	}
 
-	public String getViewType() {
+	public VIEW_TYPE getViewType() {
 		return _viewType;
+	}
+
+	public CATEGORY_TYPE getCategoryType() {
+		return _categoryType;
+	}
+
+	public void updateViewList() {
+
+		ArrayList<Task> list = new ArrayList<Task>();
+		_viewList.clear();
+		if (_viewType.equals(VIEW_TYPE.VIEW_ALL)) {
+			list.addAll(_mainList);
+		} else if (_viewType.equals(VIEW_TYPE.VIEW_DONE)) {
+			list.addAll(_doneList);
+		} else if (_viewType.equals(VIEW_TYPE.VIEW_UNDONE)) {
+			list.addAll(_undoneList);
+		} else if (_viewType.equals(VIEW_TYPE.VIEW_OVERDUE)) {
+			list.addAll(_overdueList);
+		}
+
+		if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_TASK)) {
+			for (int i = 0; i < list.size(); i++) {
+				Task task = list.get(i);
+				if (!((task.getStartDate() == null) && (task.getEndDate() == null))) {
+					list.remove(i);
+					i--;
+				}
+			}
+		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_EVENT)) {
+			for (int i = 0; i < list.size(); i++) {
+				Task task = list.get(i);
+				if (!((task.getStartDate() != null) && (task.getEndDate() == null)) && 
+						!((task.getStartDate() != null) && (task.getEndDate() != null))) {
+					list.remove(i);
+					i--;
+				}
+			}
+		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_DEADLINE)) {
+			for (int i = 0; i < list.size(); i++) {
+				Task task = list.get(i);
+				if (!((task.getStartDate() == null) && (task.getEndDate() != null))) {
+					list.remove(i);
+					i--;
+				}
+			}
+		}
+		System.out.println("start");
+
+		boolean isShowAll = true;
+
+		for (int i = 0; i < _tagsList.size() && isShowAll; i++) {
+			if (_tagsList.get(i).getIsSelected()) {
+				isShowAll = false;
+			}
+		}
+
+		if (!isShowAll) {
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println("test21");
+				boolean hasSameTag = true;
+				Task task = list.get(i);
+				System.out.println("test22");
+				for (int j = 0; j < _tagsList.size() && hasSameTag; j++) {
+					String tagName = _tagsList.get(j).getName();
+					System.out.println("test24");
+					if (!(task.getTagsList().contains(tagName) && _tagsList.get(j).getIsSelected())) {
+						list.remove(i);
+						System.out.println(task.getDescription());
+						hasSameTag = false;
+						i--;
+					}
+					System.out.println("test2");
+				}
+				System.out.println("test2passed");
+			}
+		}
+		setViewList(list);
 	}
 
 	public ArrayList<Task> getMainList() {
 		return _mainList;
 	}
 
-	public ArrayList<Task> getUndoneList() {
-		return _undoneList;
-	}
-
 	public ArrayList<Task> getViewList() {
 		return _viewList;
 	}
 
-	public ArrayList<String> getTagsList() {
+	public String getCurrentViewType() {
+		return _currentViewType;
+	}
+
+	public void setCurrentViewType(String currentViewType) {
+		_currentViewType = currentViewType;
+	}
+
+	public void setViewList(ArrayList<Task> list) {
+		_viewList.clear();
+		_viewList.addAll(list);
+	}
+
+	public void setTagsList(ArrayList<Tag> list) {
+		_tagsList.clear();
+		_tagsList.addAll(list);
+	}
+
+	public ArrayList<Tag> getTagsList() {
 		return _tagsList;
 	}
 
-	public ArrayList<Task> getSearchResultList() {
-		return _searchResultList;
+	public ArrayList<Task> getDeadlineList() {
+		return _deadlineList;
+	}
+
+	public ArrayList<Task> getEventList() {
+		return _eventList;
+	}
+
+	public ArrayList<Task> getFloatingList() {
+		return _floatingList;
 	}
 }

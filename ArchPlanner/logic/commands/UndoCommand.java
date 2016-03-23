@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class UndoCommand implements Command {
 
@@ -23,20 +24,16 @@ public class UndoCommand implements Command {
 		return _times;
 	}
 
-	@Override
+	public boolean execute() {
+		return false;
+	}
+
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
-		ArrayList<RollbackItem> redoList = new ArrayList<RollbackItem>();
 
-		undoList.addAll(historyManager.getUndoList());
-		redoList.addAll(historyManager.getRedoList());
+		System.out.println("undostack size 1 1 1 1: " + historyManager.getUndoList().size());
+		System.out.println("redostack size 1 1 1 1: " + historyManager.getRedoList().size());
 
-		System.out.println("undostack size 1 1 1 1: " + undoList.size());
-		System.out.println("redostack size 1 1 1 1: " + redoList.size());
-
-		if (!isWithinList(undoList, _times)) {
+		if (!isWithinList(historyManager.getUndoList(), _times)) {
 			return false;
 		}
 
@@ -45,49 +42,47 @@ public class UndoCommand implements Command {
 		for (int i = 0; i < _times; i++) {
 			System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 			RollbackItem rollbackItem = new RollbackItem(null, null, null);
-			rollbackItem = undoList.remove(undoList.size() - 1);
+			rollbackItem = historyManager.getUndoList().remove(historyManager.getUndoList().size() - 1);
 			System.out.println("helo:" + rollbackItem.getCommandType());
 
 			if (rollbackItem.getCommandType().equals("add")) {
-				mainList.remove(rollbackItem.getNewTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
 				rollbackItem.setCommandType("delete");
 				rollbackItem.setOldTask(rollbackItem.getNewTask());
 				rollbackItem.setNewTask(null);
 			} else if (rollbackItem.getCommandType().equals("delete")) {
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("add");
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(null);
 			} else if (rollbackItem.getCommandType().equals("edit")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("edit");
 				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			} else if (rollbackItem.getCommandType().equals("done")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("undone");
 				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			} else if (rollbackItem.getCommandType().equals("undone")) {
-				mainList.remove(rollbackItem.getNewTask());
-				mainList.add(rollbackItem.getOldTask());
+				listsManager.getMainList().remove(rollbackItem.getNewTask());
+				listsManager.getMainList().add(rollbackItem.getOldTask());
 				rollbackItem.setCommandType("done");
 				Task tempTask = new Task();
 				tempTask = rollbackItem.getNewTask();
 				rollbackItem.setNewTask(rollbackItem.getOldTask());
 				rollbackItem.setOldTask(tempTask);
 			}
-			redoList.add(rollbackItem);
+			historyManager.getRedoList().add(rollbackItem);
 		}
-		historyManager.setUndoList(undoList);
-		historyManager.setRedoList(redoList);
-		listsManager.getUndoneList();
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		return true;
 	}

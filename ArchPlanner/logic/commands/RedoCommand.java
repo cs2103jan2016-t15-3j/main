@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class RedoCommand implements Command {
 
@@ -23,7 +24,10 @@ public class RedoCommand implements Command {
 		return _times;
 	}
 
-	@Override
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		
 		System.out.println("undostack size 2 2 2 2: " + historyManager.getUndoList().size());
@@ -83,6 +87,7 @@ public class RedoCommand implements Command {
 			}
 			historyManager.getUndoList().add(rollbackItem);
 		}
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		return true;
 	}

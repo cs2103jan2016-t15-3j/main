@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class DeleteCommand implements Command {
 
@@ -19,8 +20,10 @@ public class DeleteCommand implements Command {
 		return _index;
 	}
 
-
-	@Override
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 
 		if (!isWithinList(listsManager.getViewList(), _index)) {
@@ -30,10 +33,9 @@ public class DeleteCommand implements Command {
 		//System.out.println(_index);
 		Task oldTask = listsManager.getViewList().get(_index);
 		listsManager.getMainList().remove(oldTask);
-
-		if (listsManager.getViewType().equals("VIEW_SEARCH_RESULT")) {
-			listsManager.getSearchResultList().remove(oldTask);
-		}
+		
+		listsManager.getViewList().remove(oldTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);

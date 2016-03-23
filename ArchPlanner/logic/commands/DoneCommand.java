@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class DoneCommand implements Command {
 
@@ -19,7 +20,10 @@ public class DoneCommand implements Command {
 		return _index;
 	}
 
-	@Override
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		
 		if (!isWithinList(listsManager.getViewList(), _index)) {
@@ -38,6 +42,7 @@ public class DoneCommand implements Command {
 		newTask.setIsOverdue(oldTask.getIsOverdue());
 		newTask.setIsDone(true);
 		listsManager.getMainList().add(newTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask);

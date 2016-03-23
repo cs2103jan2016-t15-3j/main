@@ -5,12 +5,13 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 import logic.TaskParameters;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 import java.util.ArrayList;
 
 public class EditCommand implements Command {
 
-	TaskParameters _task;
+	private TaskParameters _task;
 	private int _index;
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
@@ -19,8 +20,11 @@ public class EditCommand implements Command {
 		_task = newTaskParameters;
 		_index = index - 1;
 	}
-
-	@Override
+	
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		
 		if (!isWithinList(listsManager.getViewList(), _index)) {
@@ -69,7 +73,7 @@ public class EditCommand implements Command {
 		}
 		
 		listsManager.getMainList().add(newTask);
-		
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("edit", oldTask, newTask);

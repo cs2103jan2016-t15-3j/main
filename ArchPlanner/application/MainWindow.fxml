@@ -100,13 +100,13 @@
                            <children>
                               <VBox fx:id="catBox" spacing="8.0">
                                  <children>
-                                    <ToggleButton fx:id="Events" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Events">
+                                    <ToggleButton fx:id="event" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" onAction="#onCategoryPressed" mnemonicParsing="false" text="Events">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="categories" />
                                        </toggleGroup>
                                     </ToggleButton>
-                                    <ToggleButton fx:id="Deadlines" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Deadlines" toggleGroup="$categories" />
-                                    <ToggleButton fx:id="Tasks" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Tasks" toggleGroup="$categories" />
+                                    <ToggleButton fx:id="deadline" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" onAction="#onCategoryPressed" mnemonicParsing="false" text="Deadlines" toggleGroup="$categories" />
+                                    <ToggleButton fx:id="task" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" onAction="#onCategoryPressed" mnemonicParsing="false" text="Tasks" toggleGroup="$categories" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

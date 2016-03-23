@@ -17,7 +17,7 @@ public class TaskParameters {
 	private boolean _isOverdue;
 
 	public TaskParameters() {
-		_description = "";
+		_description = null;
 		_tagsList = null;
 		_startDate = null;
 		_startTime = null;
@@ -137,7 +137,7 @@ public class TaskParameters {
 			return "";
 		}
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mma");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("h:mma");
 		return dateTimeFormatter.format(time);
 	}
 }

@@ -36,17 +36,17 @@ public class ViewCommandParser extends CommandParser {
         if (input.equals("overdue")) {
             return new ViewCommand(ViewCommand.VIEW_TYPE.VIEW_OVERDUE, null, result);
         }
-        if (input.equals("floating")) {
-            return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_FLOATING, result);
+        if (input.equals("all")) {
+            return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_ALL, result);
         }
         if (input.equals("deadline")) {
             return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_DEADLINE, result);
         }
-        if (input.equals("task")) {
-            return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_TASKS, result);
-        }
         if (input.equals("event")) {
             return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_EVENT, result);
+        }
+        if (input.equals("task")) {
+            return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_TASK, result);
         }
 
         TimeParserResult timeParserResult = new TimeParser().parseTime(input);

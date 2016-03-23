@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import comparator.DescriptionComparator;
+import comparator.DoneComparator;
+import comparator.OverdueComparator;
+import comparator.TagComparator;
 
 
 public class SortMechanism {
-
-	public void sortTagsList(ArrayList<String> tagsList) {
-		Collections.sort(tagsList);
-	}
 
 	public ArrayList<Task> sortListByDateTime(ArrayList<Task> list) {
 		ArrayList<Task> top = new ArrayList<Task>();
@@ -37,7 +36,7 @@ public class SortMechanism {
 		// Merge the results back together.
 		merge(list, top, bottom);
 		//for (int i = 0; i < list.size(); i++)
-			//System.out.println("merge" + i + "\t" + list.get(i).getDescription());
+		//System.out.println("merge" + i + "\t" + list.get(i).getDescription());
 		return list;
 	}
 
@@ -46,7 +45,7 @@ public class SortMechanism {
 		int listIndex = 0;
 		int topIndex = 0;
 		int bottomIndex = 0;
-		
+
 		while ((topIndex < top.size()) && (bottomIndex < bottom.size())) {
 			Task topTask = top.get(topIndex);
 			Task bottomTask = bottom.get(bottomIndex);
@@ -122,10 +121,24 @@ public class SortMechanism {
 			listIndex++;
 		}
 	}
+	
 	public void sortListByDescription(ArrayList<Task> list) {
 		DescriptionComparator descriptionComp = new DescriptionComparator();
 		Collections.sort(list, descriptionComp);
-		//for(int i = 0; i < list.size(); i++)
-			//System.out.println("sort" + i + "\t" + list.get(i).getDescription());
+	}
+	
+	public void sortListByOverdue(ArrayList<Task> list) {
+		OverdueComparator overdueComp = new OverdueComparator();
+		Collections.sort(list, overdueComp);
+	}
+	
+	public void sortListByDone(ArrayList<Task> list) {
+		DoneComparator doneComp = new DoneComparator();
+		Collections.sort(list, doneComp);
+	}
+	
+	public void sortTagsList(ArrayList<Tag> list) {
+		TagComparator tagComp = new TagComparator();
+		Collections.sort(list, tagComp);
 	}
 }

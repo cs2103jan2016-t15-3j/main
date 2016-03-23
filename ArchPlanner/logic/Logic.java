@@ -4,7 +4,12 @@ import java.util.ArrayList;
 
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
+import logic.commands.ViewCommand.CATEGORY_TYPE;
+import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
+
+import paser.Parser;
+
 /**
  * This class interact with the UI and process the operation, 
  * followed by updating the changes to storage
@@ -13,99 +18,123 @@ import storage.Storage;
  *
  */
 public class Logic {
-/*
 	enum COMMAND_TYPE {
-		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, SEARCH, SORT, INVALID
+		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, INVALID
 	};
-*/
 	//private ArrayList<Task> _mainList = new ArrayList<Task>();
 	//private ArrayList<Task> _viewList = new ArrayList<Task>();
 	//private ArrayList<String> _tagsList = new ArrayList<String>();
-	
-	Storage storage = new Storage();
-	ListsManager listsManager = new ListsManager();
-	HistoryManager historyManager = new HistoryManager();
+
+	private Storage storage;
+	private ListsManager listsManager;
+	private HistoryManager historyManager;
+
+	public Logic() {
+		storage = new Storage();
+		listsManager = new ListsManager();
+		historyManager = new HistoryManager();
+	}
 
 	public void loadFile() {
 		storage.loadStorageFile();
 		ArrayList<Task> mainList = new ArrayList<Task>();
 		mainList = storage.getMasterList();
-		listsManager.updateLists(mainList);
+		listsManager.setUpLists(mainList);
 	}
 
-	public boolean executeCommand(Command commandObj) {
+	public boolean executeCommand(String userInput) {
+		Parser parser = new Parser();
+		Command commandObj = parser.parseCommand(userInput);
+		boolean isSuccessful;
 		if (commandObj instanceof InvalidCommand) {
 			return false;
 		}
-		commandObj.execute(listsManager, historyManager);
-		save();
-		return true;
+		isSuccessful = runCommand(commandObj);
+		save(commandObj);
+		return isSuccessful;
 	}
-	
-	/*
-	String strCommandType = commandObj.getClass().getSimpleName();
 
-	COMMAND_TYPE commandType = getCommandType(strCommandType);
+	private boolean runCommand(Command commandObj) {
+		String strCommandType = commandObj.getClass().getSimpleName();
 
-	switch (commandType) {
-	case ADD :
-		return executeAddCommand(commandObj);
-	case DELETE :
-		return executeDeleteCommand(commandObj);
-	case EDIT :
-		return executeEditCommand(commandObj);
-	case EXIT :
-		return executeExitCommand(commandObj);
-	case UNDO :
-		break;
-	case REDO :
-		break;
-	case DONE :
-		return executeDoneCommand(commandObj);
-	case UNDONE :
-		return executeUndoneCommand(commandObj);
-	case VIEW :
-		break;
-	case SEARCH :
-		return executeSearchCommand(commandObj);
-	case SORT :
-		break;
-	case INVALID :
-		return executeInvalidCommand(commandObj);
-	default:
-		throw new Error("Invalid command");
+		COMMAND_TYPE commandType = getCommandType(strCommandType);
+		if (commandType.equals(COMMAND_TYPE.EXIT)) {
+			return commandObj.execute();
+		} else {
+			return commandObj.execute(listsManager, historyManager);
+		}
 	}
-	return false;
-	*/
-/*
-private COMMAND_TYPE getCommandType(String strCommandType) {
-	if (strCommandType.equals("AddCommand")) {
-		return COMMAND_TYPE.ADD;
-	} else if (strCommandType.equals("DeleteCommand")) {
-		return COMMAND_TYPE.DELETE;
-	} else if (strCommandType.equals("EditCommand")) {
-		return COMMAND_TYPE.EDIT;
-	} else if (strCommandType.equals("ExitCommand")) {
-		return COMMAND_TYPE.EXIT;
-	} else if (strCommandType.equals("UndoCommand")) {
-		return COMMAND_TYPE.UNDO;
-	} else if (strCommandType.equals("RedoCommand")) {
-		return COMMAND_TYPE.REDO;
-	} else if (strCommandType.equals("DoneCommand")) {
-		return COMMAND_TYPE.DONE;
-	} else if (strCommandType.equals("UndoneCommand")) {
-		return COMMAND_TYPE.UNDONE;
-	} else if (strCommandType.equals("ViewCommand")) {
-		return COMMAND_TYPE.VIEW;
-	} else if (strCommandType.equals("SearchCommand")) {
-		return COMMAND_TYPE.SEARCH;
-	} else if (strCommandType.equals("SortCommand")) {
-		return COMMAND_TYPE.SORT;
-	} else {
-		return COMMAND_TYPE.INVALID;
+
+	private COMMAND_TYPE getCommandType(String strCommandType) {
+		if (strCommandType.equals("AddCommand")) {
+			return COMMAND_TYPE.ADD;
+		} else if (strCommandType.equals("DeleteCommand")) {
+			return COMMAND_TYPE.DELETE;
+		} else if (strCommandType.equals("EditCommand")) {
+			return COMMAND_TYPE.EDIT;
+		} else if (strCommandType.equals("ExitCommand")) {
+			return COMMAND_TYPE.EXIT;
+		} else if (strCommandType.equals("UndoCommand")) {
+			return COMMAND_TYPE.UNDO;
+		} else if (strCommandType.equals("RedoCommand")) {
+			return COMMAND_TYPE.REDO;
+		} else if (strCommandType.equals("DoneCommand")) {
+			return COMMAND_TYPE.DONE;
+		} else if (strCommandType.equals("UndoneCommand")) {
+			return COMMAND_TYPE.UNDONE;
+		} else if (strCommandType.equals("ViewCommand")) {
+			return COMMAND_TYPE.VIEW;
+		}else {
+			return COMMAND_TYPE.INVALID;
+		}
 	}
-}
-*/
+
+	private void save(Command commandObj) {
+		String strCommandType = commandObj.getClass().getSimpleName();
+
+		COMMAND_TYPE commandType = getCommandType(strCommandType);
+		if (commandObj.equals(COMMAND_TYPE.VIEW) || commandType.equals(COMMAND_TYPE.EXIT)) {
+			return;
+		}
+		storage.writeStorageFile(listsManager.getMainList());
+	}
+
+	public void setSelectedCategory(String selectedCategory) {
+		System.out.print(selectedCategory);
+		CATEGORY_TYPE categoryType = getCategoryType(selectedCategory);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setCategoryType(categoryType);
+		System.out.println(categoryType.toString());
+		listsManager.updateLists();
+	}
+
+	public String getSelectedCategory() {
+		CATEGORY_TYPE categoryType = listsManager.getCategoryType();
+		switch (categoryType) {
+
+		case CATEGORY_DEADLINE : 
+			return "Deadlines";
+		case CATEGORY_EVENT: 
+			return "Events";
+		case CATEGORY_TASK : 
+			return "Tasks";
+		default : 
+			return "All";
+		}
+	}
+
+	private CATEGORY_TYPE getCategoryType(String selectedCategory) {
+		switch (selectedCategory) {
+		case "Deadlines" : 
+			return CATEGORY_TYPE.CATEGORY_DEADLINE;
+		case "Events" : 
+			return CATEGORY_TYPE.CATEGORY_EVENT;
+		case "Tasks" : 
+			return CATEGORY_TYPE.CATEGORY_TASK;
+		default : 
+			return CATEGORY_TYPE.CATEGORY_ALL;
+		}
+	}
 
 	public ArrayList<Task> getViewList() {
 		return listsManager.getViewList();
@@ -115,13 +144,16 @@ private COMMAND_TYPE getCommandType(String strCommandType) {
 		return listsManager.getMainList();
 	}
 
-	public ArrayList<String> getTagsList() {
+	public ArrayList<Tag> getTagsList() {
 		return listsManager.getTagsList();
 	}
 	
-	private void save() {
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
-		storage.writeStorageFile(mainList);
+	public void setTagsList(ArrayList<Tag> list) {
+		listsManager.setTagsList(list);
+		listsManager.updateLists();
+	}
+
+	public String getCurrentViewType() {
+		return listsManager.getCurrentViewType();
 	}
 }

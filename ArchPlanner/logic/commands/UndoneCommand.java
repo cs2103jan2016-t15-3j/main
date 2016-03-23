@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class UndoneCommand implements Command {
 
@@ -19,35 +20,37 @@ public class UndoneCommand implements Command {
 		return _index;
 	}
 
-	@Override
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 
-		ArrayList<Task> viewList = new ArrayList<Task>();
-		viewList.addAll(listsManager.getViewList());
-
-		if (!isWithinList(viewList, _index)) {
+		if (!isWithinList(listsManager.getViewList(), _index)) {
 			return false;
 		}
-
-		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList.addAll(listsManager.getMainList());
 		
-		Task oldTask = viewList.get(_index);
-		mainList.remove(oldTask);
+
+		Task oldTask = listsManager.getViewList().get(_index);
+		listsManager.getMainList().remove(oldTask);
 		Task newTask = new Task();
-		newTask = oldTask;
+		newTask.setDescription(oldTask.getDescription());
+		newTask.setTagsList(oldTask.getTagsList());
+		newTask.setStartDate(oldTask.getStartDate());
+		newTask.setStartTime(oldTask.getStartTime());
+		newTask.setEndDate(oldTask.getEndDate());
+		newTask.setEndTime(oldTask.getEndTime());
+		newTask.setIsOverdue(oldTask.getIsOverdue());
 		newTask.setIsDone(false);
-		mainList.add(newTask);
+		listsManager.getMainList().add(newTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask);
-		ArrayList<RollbackItem> undoList = new ArrayList<RollbackItem>();
-		undoList.addAll(historyManager.getUndoList());
 			
-		undoList.add(rollbackItem);
-		historyManager.setUndoList(undoList);
+		historyManager.getUndoList().add(rollbackItem);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());
-		System.out.println("undolist size: " + undoList.size());
+		System.out.println("undolist size: " + historyManager.getUndoList().size());
 		return true;
 	}
 

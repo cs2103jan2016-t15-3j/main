@@ -3,8 +3,13 @@ package logic;
 import java.util.ArrayList;
 
 public class HistoryManager {
-	private ArrayList<RollbackItem> _undoList = new ArrayList<RollbackItem>();
-	private ArrayList<RollbackItem> _redoList = new ArrayList<RollbackItem>();
+	private ArrayList<RollbackItem> _undoList;
+	private ArrayList<RollbackItem> _redoList;
+	
+	public HistoryManager() {
+		_undoList = new ArrayList<RollbackItem>();
+		_redoList = new ArrayList<RollbackItem>();
+	}
 
 	public void setUndoList(ArrayList<RollbackItem> undoList) {
 		_undoList = new ArrayList<RollbackItem>();

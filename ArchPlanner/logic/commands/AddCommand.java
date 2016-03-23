@@ -7,21 +7,26 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 import logic.TaskParameters;
+import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class AddCommand implements Command {
 
-	TaskParameters _task;
+	private TaskParameters _task;
 
 	public AddCommand(TaskParameters newTaskParameters) {
 		_task = new TaskParameters();
 		_task = newTaskParameters;
 	}
 
-	@Override
+	public boolean execute() {
+		return false;
+	}
+	
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDate(), _task.getStartTime(), 
 				_task.getEndDate(), _task.getEndTime());
 		listsManager.getMainList().add(newTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("add", null, newTask);
@@ -31,4 +36,5 @@ public class AddCommand implements Command {
 		System.out.println("undolist size: " + historyManager.getUndoList().size());
 		return true;
 	}
+
 }

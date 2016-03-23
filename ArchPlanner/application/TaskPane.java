@@ -56,9 +56,9 @@ public class TaskPane extends GridPane {
         number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         startDate.setMinWidth(180);
-        startTime.setMinWidth(100);
+        startTime.setMinWidth(150);
         endDate.setMinWidth(180);
-        endTime.setMinWidth(100);
+        endTime.setMinWidth(150);
         tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
@@ -107,10 +107,10 @@ public class TaskPane extends GridPane {
         assert(task.getEndTime() != null);
         
         description.setText(task.getDescription());       
-        startDate.setText(task.getStartDate());
-        startTime.setText(task.getStartTime());       
-        endDate.setText(task.getEndDate());
-        endTime.setText(task.getEndTime());
+        startDate.setText(task.getStartDateString());
+        startTime.setText(task.getStartTimeString());       
+        endDate.setText(task.getEndDateString());
+        endTime.setText(task.getEndTimeString());
         
         String allTag = "";
         for(int i = 0; i < task.getTagsList().size(); i++) {

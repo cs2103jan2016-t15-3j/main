@@ -7,7 +7,10 @@ public class InvalidCommand implements Command {
 
     private String _error_message;
 
-    @Override
+    public boolean execute() {
+		return false;
+	}
+    
 	public boolean execute(ListsManager listsmanager, HistoryManager historyManager) {
 		return false;
 	}
