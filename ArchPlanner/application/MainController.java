@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import application.TaskPane;
 import feedback.Feedback;
-
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -52,7 +54,7 @@ public class MainController implements Initializable{
     @FXML public ListView<ToggleButton> tagDisplay;
     @FXML public ListView<GridPane> taskDisplay;
  
-    private ArrayList<String> tags = new ArrayList<String>();
+    private ArrayList<String> tags = new ArrayList<String>();;
     private ArrayList<Task> tasks = new ArrayList<Task>();
     
     private ObservableList<ToggleButton> tagList = FXCollections.observableArrayList();
@@ -66,7 +68,7 @@ public class MainController implements Initializable{
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {        
-        //testMethod();
+        //testMethod();      
         //--------------------------------------------------------------------          
         feedback = new Feedback();
         logic = new Logic();
@@ -75,11 +77,11 @@ public class MainController implements Initializable{
         
         assert(logic.getTagsList() != null);
         assert(logic.getTagsList() != null);
-//        assert(logic.getCurrentView() != null);
-
-        //tags = logic.getTagsList();
-        //tasks = logic.getViewList();
-        //viewLabel.setText(logic.getCurrentView());
+        assert(logic.getCurrentViewType() != null);
+        
+        tags = logic.getTagsList();
+        tasks = logic.getViewList();
+        viewLabel.setText(logic.getCurrentViewType());
         updateTaskDisplay();
         updateTagDisplay();
  
@@ -87,6 +89,13 @@ public class MainController implements Initializable{
         userInput.textProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 onTextChanged(newValue);
+            }
+        });
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                userInput.requestFocus();
             }
         });
         
@@ -106,14 +115,19 @@ public class MainController implements Initializable{
     
     //------------------------------------------------------------------------------------------------------------
     private void testMethod() {
-        ArrayList<String> tag = new ArrayList<String>();
-        tag.add("#tag1");
-        tag.add("#tag2");
-        tag.add("#tag3");
-        tag.add("#tag4");
-        tag.add("#tag5");
-        tag.add("#tag6");
-        tag.add("#tag7");
+        ArrayList<String> tag1 = new ArrayList<String>();
+        tag1.add("#tag1");
+        tag1.add("#tag2");
+        
+        ArrayList<String> tag2 = new ArrayList<String>();
+        tag2.add("#tag3");
+        
+        ArrayList<String> tag3 = new ArrayList<String>();
+        tag3.add("#tag2");
+        
+        ArrayList<String> tag4 = new ArrayList<String>();
+        tag4.add("#tag4");
+        tag4.add("#tag5");
         
         Calendar date = Calendar.getInstance();
         date.set(Calendar.YEAR, 1999);
@@ -127,22 +141,20 @@ public class MainController implements Initializable{
         date2.set(Calendar.HOUR, 00);
         date2.set(Calendar.MINUTE, 00);
   
-//        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date, date));
-//        tasks.add(new Task("Task 2", tag, date, null));
-//        tasks.add(new Task("Task 3", tag, null, date));
-//        tasks.add(new Task("Task 1 ggregegegregregregrgregregregregregregreg", tag, date2, date2));
-//        tasks.add(new Task("Task 2", tag, date2, null));
-//        tasks.add(new Task("Task 3", tag, null, date2));
-//        tasks.add(new Task("Task 4", tag, null, null));
-//        tasks.add(new Task("Task 4", tag, null, null));
-
-        tags.add("#tag111111111111111111111111111");
+        tasks.add(new Task("Task 1", tag1, date, date));
+        tasks.add(new Task("Task 2", tag2, date, null));
+        tasks.add(new Task("Task 3", new ArrayList<String>(), null, date));
+        tasks.add(new Task("Task 4", tag4, date2, date2));
+        tasks.add(new Task("Task 5", tag2, date2, null));
+        tasks.add(new Task("Task 6", tag3, null, date2));
+        tasks.add(new Task("Task 7", tag1, null, null));
+        tasks.add(new Task("Task 8", tag4, null, null));
+        
+        tags.add("#tag1");
         tags.add("#tag2");
         tags.add("#tag3");
         tags.add("#tag4");
         tags.add("#tag5");
-        tags.add("#tag6");
-        tags.add("#tag7");
     }
     //------------------------------------------------------------------------------------------------------------
     
@@ -172,22 +184,30 @@ public class MainController implements Initializable{
     }
     
     //------------------------------------------------------------------------------------------------------------
+    @FXML
+    private void onCategoryPressed(ActionEvent event) {
+        ToggleButton clicked = (ToggleButton)event.getSource();
+        if (clicked.isSelected()) {
+            logic.setSelectedCategory(clicked.getText());
+        } else {
+            logic.setSelectedCategory("All");
+        }
+    }
+    
     
     @FXML
     private void onEnterPressed() {
         log.info("command entered");
-        Command userCmd = null;//feedback.onEnterPressed(userInput.getText());
-        assert(userCmd != null);
-        boolean isSuccessful = logic.executeCommand(userCmd);
+        boolean isSuccessful = logic.executeCommand(userInput.getText());
         
         if (isSuccessful) {
             assert(logic.getTagsList() != null);
             assert(logic.getTagsList() != null);
-//            assert(logic.getCurrentView() != null);
+            assert(logic.getCurrentViewType() != null);
             
             tasks = logic.getViewList();
             tags = logic.getTagsList();
-            //viewLabel.setText(logic.getCurrentView());
+            viewLabel.setText(logic.getCurrentViewType());
             updateTaskDisplay();
             updateTagDisplay();
             
@@ -203,8 +223,12 @@ public class MainController implements Initializable{
             topPrompt.setVisible(false);
             bottomPrompt.setVisible(false);
             log.info("hide prompt");
-        } else {            
-            ArrayList<String> prompt = feedback.onTextChanged(newString);
+        } else {
+            String autoComplete = feedback.getAutoComplete(userInput.getText());
+            userInput.setText(autoComplete);
+            userInput.positionCaret(userInput.getText().length() + 1);;
+            
+            ArrayList<String> prompt = feedback.getPrompts(newString);
             assert(prompt != null);
             assert(prompt.size() > 0 && prompt.size() <= 4);
             if (!prompt.isEmpty()) {
@@ -228,6 +252,16 @@ public class MainController implements Initializable{
             }
             log.info("display prompt");
         }
+    }
+    
+    public void onSpacePressed(KeyEvent event) {
+        /*
+        if (event.getCode() == KeyCode.SPACE) {
+            String autoComplete = feedback.getAutoComplete(userInput.getText());
+            userInput.setText(autoComplete);
+            userInput.positionCaret(userInput.getText().length() + 1);;
+        }
+        */
     }
     
     //------------------------------------------------------------------------------------------------------------

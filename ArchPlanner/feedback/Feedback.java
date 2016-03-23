@@ -1,188 +1,150 @@
 package feedback;
 
-import paser.*;
-import logic.commands.*;
-
 import java.util.ArrayList;
 
-/**
- * Created by lifengshuang on 2/29/16.
- */
+import logic.commands.Command;
+
 public class Feedback {
 
-    private static final int COMMAND_TYPE_UNKNOWN = -1;
-    private static final int COMMAND_TYPE_ADD = 0;
-    private static final int COMMAND_TYPE_DELETE = 1;
-    private static final int COMMAND_TYPE_EDIT = 2;
-    private static final int COMMAND_TYPE_VIEW = 3;
-    private static final int COMMAND_TYPE_DONE = 4;
-    private static final int COMMAND_TYPE_UNDONE = 5;
-    private static final int COMMAND_TYPE_UNDO = 6;
-    private static final int COMMAND_TYPE_REDO = 7;
-    private static final int COMMAND_TYPE_SEARCH = 8;
-    private static final int COMMAND_TYPE_EXIT = 9;
-
-    private static final String[] ALL_COMMANDS =
-            {"add", "delete", "edit",
-                    "view", "done", "undone",
-                    "undo", "redo", "search", "exit"};
-
-    private static final String ADD = "add";
-    private static final String ADD_DESCRIPTION = "add <description>";
-    private static final String ADD_DESCRIPTION_TIME = "add <description> <time>";
-    private static final String ADD_DESCRIPTION_FROM_TIME = "add <description> from <time>";
-    private static final String ADD_DESCRIPTION_START_AT_TIME = "add <description> from <time> to <time>";
-    private static final String ADD_DESCRIPTION_BY_TIME = "add <description> by <time>";
-    private static final String ADD_DESCRIPTION_UNTIL_TIME = "add <description> until <time>";
-    private static final String ADD_DESCRIPTION_DEADLINE_TIME = "add <description> deadline <time>";
-    private static final String ADD_DESCRIPTION_FROM_TIME_TO_TIME = "add <description> from <time> to <time>";
-
-
-    private static final String DELETE_INDEX = "delete <index>";
-
-    private static final String EDIT = "edit";
-    private static final String EDIT_DESCRIPTION = "edit <index> <description>";
-    private static final String EDIT_TIME = "edit <index> <time>";
-    private static final String EDIT_DESCRIPTION_TIME = "edit <index> <description> <time>";
-
-    private static final String VIEW = "view";
-    private static final String VIEW_DESCRIPTION = "view <description>";
-    private static final String VIEW_CATEGORY = "view <category>";
-    private static final String VIEW_TIME = "view <time>";
-    //more view things
-
-    private static final String DONE = "done <index>";
-    private static final String UNDONE = "undone <index>";
-    private static final String UNDO = "undo";
-    private static final String REDO = "redo";
-
-    //    private static final String SORT = "sort";
-//    private static final String SORT_BY_TYPE = "sort <DESCRIPTION | TAG | START_DATE_TIME | END_DATE_TIME | COMPLETION | OVERDUE>";
-    private static final String SEARCH_DESCRIPTION = "search <description>";
-
-    private static final String EXIT = "exit";
-
-    private static final String NO_MATCH = "No pattern matched";
-    private static final String EMPTY_INPUT = "add | delete | edit | view | search | done | undone | undo | redo | exit";
-
-
-    private static ArrayList<String> feedbackList = new ArrayList<String>();
-
-    public ArrayList<String> onTextChanged(String input) {
-        feedbackList = new ArrayList<>();
-        if (input == null) {
-            return feedbackList;
-        }
-        int commandType = detectCommandType(input);
-        switch (commandType) {
-            case COMMAND_TYPE_UNKNOWN:
-                handleUnknownCommand(input);
-                break;
-            case COMMAND_TYPE_ADD:
-                //todo: good style
-                if (input.contains(" by ")) {
-                    feedbackList.add(ADD_DESCRIPTION_BY_TIME);
-                }
-                if (input.contains(" until ")) {
-                    feedbackList.add(ADD_DESCRIPTION_UNTIL_TIME);
-                }
-                if (input.contains(" deadline ")) {
-                    feedbackList.add(ADD_DESCRIPTION_DEADLINE_TIME);
-                }
-                if (input.contains(" start at ")) {
-                    feedbackList.add(ADD_DESCRIPTION_START_AT_TIME);
-                }
-                if (input.contains(" from ")) {
-                    if (input.contains(" to ")) {
-                        feedbackList.add(ADD_DESCRIPTION_FROM_TIME_TO_TIME);
+    enum CommandType {
+        ADD, DELETE, EDIT, SEARCH, VIEW, DONE, UNDONE, UNDO, REDO, EXIT, UNKNOWN
+    };
+    
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+    private final String[] ALL_COMMANDS = {"add", "delete", "edit", "search", 
+                                           "view", "done", "undone", "undo",
+                                           "redo", "exit"};
+    
+    private CommandType holdCmd;
+    private ArrayList<String> prompts;
+    private int prevStringLength;
+    private boolean isSpace;
+    
+    public Feedback() {
+        prompts = new ArrayList<String>();
+        holdCmd = CommandType.UNKNOWN;
+        prevStringLength = 0;
+        isSpace = false;
+    }
+    
+    public ArrayList<String> getPrompts(String userInput) {
+        prompts.clear();
+        
+        if (userInput.trim().isEmpty()) {
+            prompts.add("Invalid command");
+        } else {
+            String commandInString = getFirstWord(userInput);
+            CommandType commandType = determineCommandType(commandInString);
+            System.out.println(commandType);
+            
+            switch (commandType) {
+                case ADD :
+                    prompts = new AddPrompt().getPrompts(userInput, isSpace);
+                    break;
+                case UNKNOWN :
+                    if (getNumOfWords(userInput) == 1 && !isSpace) {
+                        for (int i = 0; i < ALL_COMMANDS.length; i++) {
+                            if (ALL_COMMANDS[i].startsWith(commandInString)) {
+                            }
+                        }
                     } else {
-                        feedbackList.add(ADD_DESCRIPTION_FROM_TIME);
+                        prompts.add("Invalid command");
+                    }
+                    break;
+                default:
+                    System.out.println("Not supoose to happen");
+            }
+        }
+        
+        /*
+        if (userInput.trim().isEmpty()) {
+            prompts.add("Invalid command");
+        } else {
+            String[] partialCmd = userInput.trim().split(STRING_MULTIPLE_WHITESPACE);
+            System.out.println("Partial: " + partialCmd.length);
+            System.out.println(partialCmd[0]);
+            if (partialCmd.length == 1) {
+                for (int i = 0; i < ALL_COMMANDS.length; i++) {
+                    if (ALL_COMMANDS[i].startsWith(partialCmd[0])) {
+                        prompts.add(ALL_COMMANDS[i]);
                     }
                 }
-                feedbackList.add(ADD_DESCRIPTION);
-
-                break;
-            case COMMAND_TYPE_DELETE:
-                feedbackList.add(DELETE_INDEX);
-                break;
-            case COMMAND_TYPE_EDIT:
-                feedbackList.add(EDIT_DESCRIPTION);
-                feedbackList.add(EDIT_DESCRIPTION_TIME);
-                break;
-            case COMMAND_TYPE_VIEW:
-                feedbackList.add(VIEW_DESCRIPTION);
-                feedbackList.add(VIEW_CATEGORY);
-                feedbackList.add(VIEW_TIME);
-                break;
-            case COMMAND_TYPE_DONE:
-                feedbackList.add(DONE);
-                break;
-            case COMMAND_TYPE_UNDONE:
-                feedbackList.add(UNDONE);
-                break;
-            case COMMAND_TYPE_UNDO:
-                feedbackList.add(UNDO);
-                break;
-            case COMMAND_TYPE_REDO:
-                feedbackList.add(REDO);
-                break;
-            case COMMAND_TYPE_SEARCH:
-                feedbackList.add(SEARCH_DESCRIPTION);
-                break;
-            case COMMAND_TYPE_EXIT:
-                feedbackList.add(EXIT);
-                break;
-        }
-        return feedbackList;
-    }
-
-
-    private void handleUnknownCommand(String input) {
-        if (input.isEmpty()) {
-            feedbackList.add(EMPTY_INPUT);
-            return;
-        }
-        for (int i = 0; i < ALL_COMMANDS.length; i++) {
-            if (ALL_COMMANDS[i].startsWith(input)) {
-                feedbackList.add(ALL_COMMANDS[i]);
-                switch (i) {
-                    case COMMAND_TYPE_ADD:
-                        feedbackList.add(ADD_DESCRIPTION);
-                        break;
-                    case COMMAND_TYPE_DELETE:
-                        feedbackList.add(DELETE_INDEX);
-                        break;
-                    case COMMAND_TYPE_EDIT:
-                        feedbackList.add(EDIT_DESCRIPTION);
-                        break;
-                    case COMMAND_TYPE_VIEW:
-                        feedbackList.add(VIEW_DESCRIPTION);
-                        break;
-                    case COMMAND_TYPE_SEARCH:
-                        feedbackList.add(SEARCH_DESCRIPTION);
-                        break;
+                System.out.println("Prompt: " + prompts.size());
+                if(prompts.size() == 1) {
+                    holdCmd = determineCommandType(partialCmd[0]);
+                } else if (prompts.size() <= 0) {
+                    prompts.add("Invalid command");
                 }
-
-            }
-        }
-        if (feedbackList.isEmpty()) {
-            feedbackList.add(NO_MATCH);
-        }
-    }
-
-    private int detectCommandType(String input) {
-        for (int i = 0; i < ALL_COMMANDS.length; i++) {
-            if (input.startsWith(ALL_COMMANDS[i])) {
-                if (i <= COMMAND_TYPE_UNDONE
-                        && input.length() > ALL_COMMANDS[i].length()
-                        && input.charAt(ALL_COMMANDS[i].length()) != ' ') {
-                    return COMMAND_TYPE_UNKNOWN;
+            } else {
+                if (holdCmd == CommandType.UNKNOWN) {
+                    prompts.add("Invalid command");
                 } else {
-                    return i;
+                    switch (holdCmd) {
+                        case ADD: prompts = new AddPrompt().getPrompts(userInput.substring(3));
+                    }
                 }
             }
+            System.out.println(holdCmd);
         }
-        return COMMAND_TYPE_UNKNOWN;
+        */
+        System.out.println(prompts.size());
+        if(prompts.size() <= 0) {
+            prompts.add("Invalid command");
+        }
+        return prompts;
     }
+    
+    public String getAutoComplete(String userInput) {
+        if (userInput.charAt(userInput.length() - 1) == ' ') {
+            isSpace = true;
+        } else {
+            isSpace = false;
+        }
+        return userInput;  
+            /*
+            if (prompts.size() == 1) {
+                return prompts.get(0) + " ";
+            } else {
+                return userInput;
+            }*/
+    }
+    
+    private CommandType determineCommandType(String commandTypeString) {
+        if (commandTypeString.isEmpty()) {
+            return CommandType.UNKNOWN;
+        }
 
+        if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[0])) {
+            return CommandType.ADD;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[1])) {
+            return CommandType.DELETE;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[2])) {
+            return CommandType.EDIT;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[3])) {
+            return CommandType.SEARCH;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[4])) {
+            return CommandType.VIEW;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[5])) {
+            return CommandType.DONE;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[6])) {
+            return CommandType.UNDONE;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[7])) {
+            return CommandType.UNDO;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[8])) {
+            return CommandType.REDO;
+        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[9])) {
+            return CommandType.EXIT;
+        } else {
+            return CommandType.UNKNOWN;
+        }
+    }
+    
+    private String getFirstWord(String userInput) {
+        String commandTypeString = userInput.trim().split(STRING_MULTIPLE_WHITESPACE)[0];
+        return commandTypeString;
+    }
+    
+    private int getNumOfWords(String userInput) {
+        return userInput.trim().split(STRING_MULTIPLE_WHITESPACE).length;
+    }
 }

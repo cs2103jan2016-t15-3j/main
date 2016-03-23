@@ -131,7 +131,7 @@
                   </GridPane>
                </children>
             </GridPane>
-            <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" GridPane.rowIndex="2">
+            <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" onKeyReleased="#onSpacePressed" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>

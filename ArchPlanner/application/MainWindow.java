@@ -1,19 +1,15 @@
 package application;
 	
-import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-
 
 public class MainWindow extends Application {
  
