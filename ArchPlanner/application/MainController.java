@@ -176,7 +176,7 @@ public class MainController implements Initializable{
     @FXML
     private void onEnterPressed() {
         log.info("command entered");
-        Command userCmd = feedback.onEnterPressed(userInput.getText());
+        Command userCmd = null;//feedback.onEnterPressed(userInput.getText());
         assert(userCmd != null);
         boolean isSuccessful = logic.executeCommand(userCmd);
         

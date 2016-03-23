@@ -87,7 +87,7 @@ public class ParserTest {
         Command command6 = new ViewCommandParser().parse("view all done");//invalid
         Command command7 = new ViewCommandParser().parse("view #a #b");
         Command command8 = new ViewCommandParser().parse("view #ahhh boom");//invalid
-        Command command9 = new ViewCommandParser().parse("view #");
+        Command command9 = new ViewCommandParser().parse("view #a");
         Command command10 = new ViewCommandParser().parse("view description task 1");
         Command command11 = new ViewCommandParser().parse("view task");
         Command command12 = new ViewCommandParser().parse("view tasks");//invalid

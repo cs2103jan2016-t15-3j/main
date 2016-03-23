@@ -121,18 +121,14 @@ public class ViewCommandParser extends CommandParser {
         } else {
 
             String[] tags = split(input);
-            if (tags.length <= 1) {
-                return new InvalidCommand("Command Invalid");
-            } else {
-                for (String tag : tags) {
-                    if (tag.charAt(0) == '#') {
-                        tagList.add(tag);
-                    } else {
-                        return new InvalidCommand("Command Invalid");
-                    }
+            for (String tag : tags) {
+                if (tag.charAt(0) == '#') {
+                    tagList.add(tag);
+                } else {
+                    return new InvalidCommand("Command Invalid");
                 }
-                result.setTagsList(tagList);
             }
+            result.setTagsList(tagList);
         }
         return new ViewCommand(null, null, result);
     }
