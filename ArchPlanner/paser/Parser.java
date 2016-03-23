@@ -23,6 +23,11 @@ public class Parser {
                     "view", "done", "undone",
                     "undo", "redo", "search", "exit"};
 
+    /**
+     * This method is used to parse user input into Command object.
+     * @param input The user's input.
+     * @return parsed command. If input is invalid, will return InvalidCommand
+     */
     public Command parseCommand(String input) {
         if (input == null) {
             return new InvalidCommand("Null input");
@@ -55,6 +60,11 @@ public class Parser {
         return new InvalidCommand("Failed to parse");
     }
 
+    /**
+     * Detect the command type of user input.
+     * @param input The user's input
+     * @return detected type code
+     */
     private int detectCommandType(String input) {
         for (int i = 0; i < ALL_COMMANDS.length; i++) {
             if (input.startsWith(ALL_COMMANDS[i])) {

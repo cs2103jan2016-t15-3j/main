@@ -23,10 +23,10 @@ public class ParserTest {
 
         /* Only date */
         //add ... on <date>
-        Command command1 = new AddCommandParser().parse("add sth on tomorrow");
+        Command command1 = new AddCommandParser().parse("add sth123 on tomorrow");
 
         //add ... from <date> to <date>
-        Command command2 = new AddCommandParser().parse("add lalala from tomorrow to this Friday #a");
+        Command command2 = new AddCommandParser().parse("add lalala from today to tomorrow #a");
 
         //add ... by <date>
         Command command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
@@ -79,21 +79,26 @@ public class ParserTest {
 
     @Test
     public void testViewCommandParser() throws Exception {
+        //view <view_type>
         Command command1 = new ViewCommandParser().parse("view all");
         Command command2 = new ViewCommandParser().parse("view all things");//invalid
         Command command3 = new ViewCommandParser().parse("view done");
         Command command4 = new ViewCommandParser().parse("view undone");
         Command command5 = new ViewCommandParser().parse("view overdue");
         Command command6 = new ViewCommandParser().parse("view all done");//invalid
+        //view #tags
         Command command7 = new ViewCommandParser().parse("view #a #b");
         Command command8 = new ViewCommandParser().parse("view #ahhh boom");//invalid
         Command command9 = new ViewCommandParser().parse("view #a");
+        //view description
         Command command10 = new ViewCommandParser().parse("view description task 1");
+        //view <category_type>
         Command command11 = new ViewCommandParser().parse("view task");
         Command command12 = new ViewCommandParser().parse("view tasks");//invalid
         Command command13 = new ViewCommandParser().parse("view floating");
         Command command14 = new ViewCommandParser().parse("view deadline");
         Command command15 = new ViewCommandParser().parse("view event");
+        //view date/time
         Command command16 = new ViewCommandParser().parse("view start time 1pm");
         Command command17 = new ViewCommandParser().parse("view start time 13:00 1pm");//invalid
         Command command18 = new ViewCommandParser().parse("view end time 2:33");
