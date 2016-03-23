@@ -42,7 +42,7 @@ public class ListsManager {
 	}
 
 	public void setUpLists(ArrayList<Task> list) {
-		if (_mainList.isEmpty()) {
+		if (list == null) {
 			return;
 		}
 		_mainList.addAll(list);
