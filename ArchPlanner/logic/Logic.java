@@ -107,6 +107,21 @@ public class Logic {
 		System.out.println(categoryType.toString());
 		listsManager.updateLists();
 	}
+	
+	public String getSelectedView() {
+		VIEW_TYPE viewType = listsManager.getViewType();
+		switch (viewType) {
+
+		case VIEW_ALL : 
+			return "";
+		case VIEW_DONE: 
+			return "Done";
+		case VIEW_UNDONE : 
+			return "Undone";
+		default : 
+			return "Overdue";
+		}
+	}
 
 	public String getSelectedCategory() {
 		CATEGORY_TYPE categoryType = listsManager.getCategoryType();
@@ -154,6 +169,16 @@ public class Logic {
 	}
 
 	public String getCurrentViewType() {
-		return listsManager.getCurrentViewType();
+		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " + listsManager.getCurrentViewType();
+		return currentViewType;
+	}
+	
+	public boolean testLogicFramework(Command commandObj) {
+		boolean isSuccessful;
+		if (commandObj instanceof InvalidCommand) {
+			return false;
+		}
+		isSuccessful = runCommand(commandObj);
+		return isSuccessful;
 	}
 }

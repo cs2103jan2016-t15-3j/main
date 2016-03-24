@@ -23,19 +23,23 @@ public class ViewCommand implements Command {
 	}
 
 	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		if (_viewType != null) {
 			if (_viewType.equals(VIEW_TYPE.VIEW_ALL)) {
 				listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 			}
 			listsManager.setViewType(_viewType);
 		}
-		
+
 		if (_categoryType != null) {
+			if (_viewType == null) {
+				listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+			}
 			listsManager.setCategoryType(_categoryType);
 		}
-		
+
 		listsManager.updateLists();
-		String currentViewType = listsManager.getViewType().toString();
+		String currentViewType = "";
 
 		if (_task.getDescription() != null && !_task.getDescription().isEmpty()) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
@@ -46,7 +50,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += " - description: " + _task.getDescription();
+			currentViewType += "\"" + _task.getDescription() + "\" ";
 		}
 
 		if (_task.getTagsList() != null) {
@@ -61,9 +65,8 @@ public class ViewCommand implements Command {
 					}
 				}
 			}
-			currentViewType += " - tags: ";
 			for (int i = 0; i < _task.getTagsList().size(); i++) {
-				currentViewType += _task.getStartTimeString() + "/";
+				currentViewType +=  "\"" + _task.getTagsList().get(i) + "\" ";
 			}
 		}
 
@@ -76,7 +79,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += " - start date: " + _task.getStartDateString();
+			currentViewType += "\"" + _task.getStartDateString() + "\" ";
 		}
 
 		if (_task.getStartTime() != null) {
@@ -88,6 +91,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
+			currentViewType += "\"" + _task.getStartTimeString() + "\" ";
 		}
 
 		if (_task.getEndDate() != null) {
@@ -99,7 +103,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += " - end date: " + _task.getEndDateString();
+			currentViewType += "\"" + _task.getEndDateString() + "\" ";
 		}
 
 		if (_task.getEndTime() != null) {
@@ -111,9 +115,9 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += " - end time: " + _task.getEndTimeString();
+			currentViewType += "\"" + _task.getEndTimeString() + "\" ";
 		}
-		
+
 		listsManager.setCurrentViewType(currentViewType);
 		return true;
 	}

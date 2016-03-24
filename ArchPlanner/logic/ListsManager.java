@@ -9,7 +9,7 @@ import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class ListsManager {
 
-	private ArrayList<Task> _mainList = new ArrayList<Task>();
+	private ArrayList<Task> _mainList;
 	private ArrayList<Task> _viewList;
 	private ArrayList<Tag> _tagsList;
 
@@ -38,7 +38,7 @@ public class ListsManager {
 		_overdueList = new ArrayList<Task>();
 		_viewType = VIEW_TYPE.VIEW_ALL;
 		_categoryType = CATEGORY_TYPE.CATEGORY_ALL;
-		_currentViewType = _viewType.toString();
+		_currentViewType = "";
 	}
 
 	public void setUpLists(ArrayList<Task> list) {
@@ -96,7 +96,6 @@ public class ListsManager {
 		sort.sortTagsList(_tagsList);
 		updateViewList();
 		System.out.println(_categoryType);
-		_currentViewType = _viewType.toString();
 	}
 
 	public void updateTaskOverdueStatus() {
@@ -106,32 +105,26 @@ public class ListsManager {
 
 		for (int i = 0; i < _mainList.size(); i++) {
 			Task task = _mainList.get(i);
-			if ((task.getStartDate() != null) && (task.getEndDate() == null)) {
+			task.setIsOverdue(false);
+			if (((task.getStartDate() != null) && (task.getEndDate() != null)) || 
+					((task.getStartDate() != null) && (task.getEndDate() == null))) {
 				if (task.getStartTime() != null) {
-					if (task.getStartDate().equals(currentDate) && task.getStartTime().isBefore(currentTime)) {
-						task.setIsOverdue(true);
-					} else if (task.getStartDate().isBefore(currentDate)) {
+					if (task.getStartDate().isBefore(currentDate) || 
+							(task.getStartDate().equals(currentDate) && task.getStartTime().isBefore(currentTime))) {
 						task.setIsOverdue(true);
 					}
+				} else if (task.getStartDate().isBefore(currentDate)) {
+					task.setIsOverdue(true);
 				}
 			} else if ((task.getStartDate() == null) && (task.getEndDate() != null)) {
 				if (task.getEndTime() != null) {
-					if (task.getEndDate().equals(currentDate) && task.getEndTime().isBefore(currentTime)) {
-						task.setIsOverdue(true);
-					} else if (task.getEndDate().isBefore(currentDate)) {
-						task.setIsOverdue(true);
-					}
-				}
-			} else if ((task.getStartDate() != null) && (task.getEndDate() != null)) {
-				if (task.getEndTime() != null) {
-					if (task.getEndDate().isBefore(currentDate) && task.getEndTime().isBefore(currentTime)) {
-						task.setIsOverdue(true);
-					} else if (task.getEndDate().isBefore(currentDate)) {
+					if (task.getEndDate().isBefore(currentDate) || 
+							(task.getEndDate().equals(currentDate) && task.getEndTime().isBefore(currentTime))) {
 						task.setIsOverdue(true);
 					}
+				} else if (task.getEndDate().isBefore(currentDate)) {
+					task.setIsOverdue(true);
 				}
-			} else {
-				task.setIsOverdue(false);
 			}
 		}
 	}
