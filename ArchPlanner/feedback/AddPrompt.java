@@ -1,21 +1,11 @@
 package feedback;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-import com.joestelmach.natty.DateGroup;
-import com.joestelmach.natty.Parser;
+import feedback.InputParameters.KeyWordType;
 
 public class AddPrompt {
-    
-    enum KeyWordType {
-        ON, BY, FROM, UNKNOWN
-    };
-    
-    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
     
     private final String ADD = "add";
     private final String ADD_DESCRIPTION = "add <Description>";
@@ -82,376 +72,167 @@ public class AddPrompt {
     private final String[] promptSet7fts = {ADD_DESCRIPTION_FROM_DATE_TIME_TO_DATE_TIME_TAG};
     
     private ArrayList<String> addPrompts;
-    private KeyWordType foundKey;
-    private boolean hasTag;
     
     public AddPrompt() {
         addPrompts = new ArrayList<String>();
-        foundKey = KeyWordType.UNKNOWN;
-        hasTag = false;
     }
     
-    public ArrayList<String> getPrompts(String userInput, boolean hasSpace) {
-        String[] splitInput = userInput.trim().split(STRING_MULTIPLE_WHITESPACE);
-        String[] tags;
+    public ArrayList<String> getPrompts(String userInput) {
         
-        if (findKeyWord(userInput).isEmpty()) {
-            if (splitInput.length <= 1) {
-                if (hasSpace) {
-                    setPrompts(promptSet1s2, addPrompts);
-                } else {
-                    setPrompts(promptSet1, addPrompts);
-                }
-            } else {
-                if (userInput.contains(" #")) {
-                    int position = userInput.indexOf(" #");
-                    tags = userInput.substring(position).trim().split(STRING_MULTIPLE_WHITESPACE);
-                    boolean isValid = true;
-                    for (int i = 0; i < tags.length; i++) {
-                        System.out.println(tags[i]);
-                        if(!tags[i].startsWith("#")) {
-                            isValid = false;
-                        }
-                    }
-                    if (userInput.contains(" # ")) {
-                        isValid = false;
-                    }
-                    if (isValid) {
-                        setPrompts(promptSet2tag, addPrompts);
-                    } else {
-                        setPrompts(promptInvalidTag, addPrompts);
-                    }
-                } else {
-                    if (hasSpace) {
-                        setPrompts(promptSet2s, addPrompts);
-                    } else {
-                        searchPartialKeyWord(splitInput);
-                        promptPartialKeyWord();
-                    }
-                }
-            }
-        } else {
-            String keyWord = findKeyWord(userInput);
-            int position = userInput.lastIndexOf(keyWord) + keyWord.length();
-            String dateTime = userInput.substring(position);
-            position = findTag(dateTime);
-            if (position < 0) {
-                position = dateTime.length();
-            }
-            dateTime = dateTime.substring(0, position);
-            System.out.println("DateTIme = " + dateTime);
-            
-            
-            if (userInput.contains(" #")) {
-                hasTag = true;
-                position = userInput.indexOf(" #");
-                tags = userInput.substring(position).trim().split(" ");
-                boolean isValid = true;
-                for (int i = 0; i < tags.length; i++) {
-                    System.out.println(tags[i]);
-                    if(!tags[i].startsWith("#")) {
-                        isValid = false;
-                    }
-                }
-                if (!isValid) {
-                    setPrompts(promptInvalidTag, addPrompts);
-                }
-            }
-            if (hasSpace) {
-                foundKey = determineKeyWordType(findKeyWord(userInput));
-                    
-                if (dateTime.trim().isEmpty()) {                   
-                    promptPartialKeyWord();
-                } else {
-                    catchDateAfterKeyWord(dateTime);
-                }
-            } else {      
-                searchPartialKeyWord(splitInput);         
-                if (foundKey == KeyWordType.UNKNOWN) {
-                    foundKey = determineKeyWordType(findKeyWord(userInput));
-                    catchDateAfterKeyWord(dateTime);
-                } else {
-                    promptPartialKeyWord();
-                }
-            }
+        InputParameters parameter = new InputParameters(userInput);
+        boolean[] parameterSet = {parameter.hasDescription(), parameter.hasKeyWord(), parameter.hasPartialKeyWord(),
+                                  parameter.hasStartDate(), parameter.hasStartTime(), parameter.hasEndDate(), 
+                                  parameter.hasEndTime(), parameter.hasTag(), parameter.hasValidTag(), parameter.hasSpace()};
+        int intParameterSet = convertToInt(parameterSet);
+        System.out.println(Arrays.toString(parameterSet));
+        
+        switch (intParameterSet) {
+            case 0 :
+                setPrompts(promptSet1, addPrompts);
+                break;
+            case 518 :
+                // Fallthrough
+            case 519 : 
+                setPrompts(promptSet2tag, addPrompts);
+                break;
+            case 516 :
+                // Fallthrough
+            case 517 :
+                // Fallthrough
+            case 644 :
+                setPrompts(promptInvalidTag, addPrompts);
+                break;
+            case 640 :
+                // Fallthrough
+            case 768 :
+                // Fallthrough
+            case 896 :
+                setPrompts(getKeyWordPrompts(parameter.getPartialKeyWord()), addPrompts);
+                break;
+            case 513 :
+                // Fallthrough
+            case 641 :
+                setPrompts(promptSet2s, addPrompts);
+                break;
+            case 769 :
+                setPrompts(getKeyWordPrompts(parameter.getKeyWord()), addPrompts);
+                break;
+            case 832 :
+                setPrompts(getKeyWordPromptsWithDate(parameter.getKeyWord()), addPrompts);
+                break;
+            case 833 :
+                setPrompts(getKeyWordPromptsWithDateSpaced(parameter.getKeyWord()), addPrompts);
+                break;
+            case 848 :
+                setPrompts(promptSet5fnt, addPrompts);
+                break;
+            case 849 :
+                setPrompts(promptSet5fnts, addPrompts);
+                break;
+            case 864 :
+                setPrompts(getKeyWordPromptsWithTime(parameter.getKeyWord()), addPrompts);
+                break;
+            case 865 :
+                setPrompts(getKeyWordPromptsWithTimeSpaced(parameter.getKeyWord()), addPrompts);
+                break;
+            case 880 :
+                setPrompts(promptSet6ft, addPrompts);
+                break;
+            case 881 :
+                setPrompts(promptSet6fts, addPrompts);
+                break;
+            case 888 :
+                setPrompts(promptSet7ft, addPrompts);
+                break;
+            case 889 :
+                setPrompts(promptSet7fts, addPrompts);
+                break;
+            default :
+                setPrompts(promptSet1s2, addPrompts);
+                break;
+                
         }
         return addPrompts;
     }
     
-    private void promptCompleteKeyWordWithDate(boolean hasSpace) {
-        if (hasSpace) {
-            switch (foundKey) {
-            case ON :
-                setPrompts(promptSet4os, addPrompts);
-                break;
-            case BY :
-                setPrompts(promptSet4bs, addPrompts);
-                break;
-            case FROM :
-                setPrompts(promptSet4fs, addPrompts);
-                break;
-            case UNKNOWN :
-                String[] test = {"???"};
-                setPrompts(test, addPrompts);
-                break;
-            }
-        } else {
-            switch (foundKey) {
-            case ON :
-                setPrompts(promptSet4o, addPrompts);
-                break;
-            case BY :
-                setPrompts(promptSet4b, addPrompts);
-                break;
-            case FROM :
-                setPrompts(promptSet4f, addPrompts);
-                break;
-            case UNKNOWN :
-                String[] test = {"???"};
-                setPrompts(test, addPrompts);
-                break;
-            }
-        }
-    }
-    
-    private void promptCompleteKeyWordWithTime(boolean hasSpace) {
-        if (hasSpace) {
-            switch (foundKey) {
-            case ON :
-                setPrompts(promptSet5os, addPrompts);
-                break;
-            case BY :
-                setPrompts(promptSet5bs, addPrompts);
-                break;
-            case FROM :
-                setPrompts(promptSet5fs, addPrompts);
-                break;
-            case UNKNOWN :
-                String[] test = {"???"};
-                setPrompts(test, addPrompts);
-                break;
-            }
-        } else {
-            switch (foundKey) {
-            case ON :
-                setPrompts(promptSet5o, addPrompts);
-                break;
-            case BY :
-                setPrompts(promptSet5b, addPrompts);
-                break;
-            case FROM :
-                setPrompts(promptSet5f, addPrompts);
-                break;
-            case UNKNOWN :
-                String[] test = {"???"};
-                setPrompts(test, addPrompts);
-                break;
-            }
-        }
-    }
-
-    private void promptPartialKeyWord() {
-        switch (foundKey) {
+    private String[] getKeyWordPrompts(KeyWordType keyWord) {
+        switch (keyWord) {
         case ON :
-            setPrompts(promptSet3o, addPrompts);
-            break;
+            return promptSet3o;
         case BY :
-            setPrompts(promptSet3b, addPrompts);
-            break;
+            return promptSet3b;
         case FROM :
-            setPrompts(promptSet3f, addPrompts);
-            break;
-        case UNKNOWN :
-            System.out.println("partialKeyWord UKNOWN");
-            setPrompts(promptSet1s2, addPrompts);
-        }
-    }
-
-    private void catchDateAfterKeyWord(String dateTime) {
-        boolean hasSpace = false;
-        if (dateTime.charAt(dateTime.length() - 1) == ' ') {
-            hasSpace = true;
-        }
-        dateTime = dateTime.trim();
-        String startDate;
-        String endDate;
-        
-        try {
-            Parser parser = new Parser();
-            List<DateGroup> groups = parser.parse(dateTime);
-            System.out.println("num of date: " + groups.get(0).getDates().size());
-            System.out.println("position of date: " + groups.get(0).getPosition());
-            System.out.println("Date: " + groups.get(0).getDates().get(0));
-            
-            if (groups.get(0).getDates().size() == 1) {
-                if (groups.get(0).getText().equals(dateTime)) {
-                    if (!groups.get(0).isDateInferred()) {
-                        if (!groups.get(0).isTimeInferred()) {
-                            promptCompleteKeyWordWithTime(hasSpace);
-                        } else {
-                            promptCompleteKeyWordWithDate(hasSpace);
-                        }
-                    } else {
-                        promptPartialKeyWord();
-                    }
-                } else {
-                    if (foundKey == KeyWordType.FROM) {
-                        startDate = dateTime.substring(groups.get(0).getText().length()).trim();
-                        if ("to".startsWith(startDate)) {
-                            if (!groups.get(0).isTimeInferred()) {
-                                if (hasSpace) {
-                                    setPrompts(promptSet5fs, addPrompts);
-                                } else {
-                                    setPrompts(promptSet5f, addPrompts);
-                                }
-                            } else {
-                                setPrompts(promptSet4ft, addPrompts);
-                            }
-                        } else {
-                            throw new Exception();
-                        }
-                    } else {
-                        throw new Exception();
-                    }
-                }
-            } else {
-                if (foundKey == KeyWordType.FROM) {
-                    int position = dateTime.lastIndexOf(" to ");
-                    if (position > 0) {
-                        startDate = dateTime.substring(0, position).trim();
-                        endDate = dateTime.substring(position + 4).trim();
-                        
-                        groups = parser.parse(startDate);                      
-                        if (groups.get(0).getText().equals(startDate)) {
-                            if (!groups.get(0).isTimeInferred()) {
-                                //Got Start Date got TIme
-                                groups = parser.parse(endDate); 
-                                if (groups.get(0).getText().equals(endDate)) {
-                                  //got start date time and end date/time
-                                    if (!groups.get(0).isDateInferred()) {
-                                        //got start date time and end date
-                                        if (!groups.get(0).isTimeInferred()) {
-                                            //got start date time and end date time
-                                            if (hasSpace) {
-                                                setPrompts(promptSet7fts, addPrompts);
-                                            } else {
-                                                setPrompts(promptSet7ft, addPrompts);
-                                            }
-                                        } else {
-                                            //got start date time and end date
-                                            if (hasSpace) {
-                                                setPrompts(promptSet6ft, addPrompts);
-                                            } else {
-                                                setPrompts(promptSet6fts, addPrompts);
-                                            }
-                                        }
-                                    } else {
-                                        //got start date time and no end date but got time
-                                        if (hasSpace) {
-                                            setPrompts(promptSet6ft, addPrompts);
-                                        } else {
-                                            setPrompts(promptSet6fts, addPrompts);
-                                        }
-                                    }
-                                } else {
-                                    throw new Exception();
-                                }
-                            } else {
-                                //Got Start Date no TIme
-                                groups = parser.parse(endDate); 
-                                if (groups.get(0).getText().equals(endDate)) {
-                                    //got start date time and end date/time
-                                    if (!groups.get(0).isDateInferred()) {
-                                        //got start date and end date
-                                        if (!groups.get(0).isTimeInferred()) {
-                                            //got start date and end date time
-                                            throw new Exception();
-                                        } else {
-                                            //got start date and end date
-                                            if (hasSpace) {
-                                                setPrompts(promptSet5fnts, addPrompts);
-                                            } else {
-                                                setPrompts(promptSet5fnt, addPrompts);
-                                            }
-                                        }
-                                    } else {
-                                        //got start date and no end date but got time
-                                        throw new Exception();
-                                    }
-                                } else {
-                                    throw new Exception();
-                                }
-                            }
-                        } else {
-                            throw new Exception();
-                        }
-                    } else {
-                        throw new Exception();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
-            if (hasSpace) {
-                setPrompts(promptSet2s, addPrompts);
-            } else {
-                setPrompts(promptSet1s2, addPrompts);
-            }
+            return promptSet3f;
+        default :
+            return promptSet1s2;
         }
     }
     
-    private void searchPartialKeyWord(String[] splitInput) {
-        if (splitInput.length > 2) {
-            for (int i = 0; i < KEY_WORDS.length; i++) {
-                if (KEY_WORDS[i].startsWith(splitInput[splitInput.length - 1])) {
-                    foundKey = determineKeyWordType(KEY_WORDS[i]);
-                }
-            }
+    private String[] getKeyWordPromptsWithDate(KeyWordType keyWord) {
+        switch (keyWord) {
+        case ON :
+            return promptSet4o;
+        case BY :
+            return promptSet4b;
+        case FROM :
+            return promptSet4f;
+        default :
+            return promptSet1s2;
         }
+    }
+    
+    private String[] getKeyWordPromptsWithDateSpaced(KeyWordType keyWord) {
+        switch (keyWord) {
+        case ON :
+            return promptSet4os;
+        case BY :
+            return promptSet4bs;
+        case FROM :
+            return promptSet4fs;
+        default :
+            return promptSet1s2;
+        }
+    }
+    
+    private String[] getKeyWordPromptsWithTime(KeyWordType keyWord) {
+        switch (keyWord) {
+        case ON :
+            return promptSet5o;
+        case BY :
+            return promptSet5b;
+        case FROM :
+            return promptSet5f;
+        default :
+            return promptSet1s2;
+        }
+    }
+    
+    private String[] getKeyWordPromptsWithTimeSpaced(KeyWordType keyWord) {
+        switch (keyWord) {
+        case ON :
+            return promptSet5os;
+        case BY :
+            return promptSet5bs;
+        case FROM :
+            return promptSet5fs;
+        default :
+            return promptSet1s2;
+        }
+    }
+    
+    private int convertToInt(boolean[] booleanSet) {
+        int bin = 0;
+        for (int i = 0; i < booleanSet.length; i++) {
+            int value = (booleanSet[i] ? 1 : 0) << booleanSet.length - 1 - i;
+            bin = bin | value;
+        }
+        System.out.println("Bin: " + bin);
+        return bin;
     }
     
     private void setPrompts(String[] sourceSet, ArrayList<String> destList) {
         for (int i = 0; i < sourceSet.length; i++) {
             destList.add(sourceSet[i]);
-        }
-    }
-    
-    private String findKeyWord(String userInput) {
-        int position = 0;
-        String keyWord = "";
-        if (userInput.contains(new String(" " + KEY_WORDS[0] + " ")) && userInput.lastIndexOf(KEY_WORDS[0]) > position) {
-            position = userInput.lastIndexOf(KEY_WORDS[0]);
-            keyWord = KEY_WORDS[0];
-        }
-        if (userInput.contains(new String(" " + KEY_WORDS[1] + " ")) && userInput.lastIndexOf(KEY_WORDS[1]) > position) {
-            position = userInput.lastIndexOf(KEY_WORDS[1]);
-            keyWord = KEY_WORDS[1];
-        }
-        if (userInput.contains(new String(" " + KEY_WORDS[2] + " ")) && userInput.lastIndexOf(KEY_WORDS[2]) > position) {
-            position = userInput.lastIndexOf(KEY_WORDS[2]);
-            keyWord = KEY_WORDS[2];
-        }
-        System.out.println("Keyword = " + keyWord);
-        return keyWord;
-    }
-    
-    private int findTag(String userInput) {
-        return userInput.indexOf('#');
-    }
-    
-    private KeyWordType determineKeyWordType(String commandTypeString) {
-        if (commandTypeString.isEmpty()) {
-            return KeyWordType.UNKNOWN;
-        }
-
-        if (commandTypeString.equalsIgnoreCase(KEY_WORDS[0])) {
-            return KeyWordType.ON;
-        } else if (commandTypeString.equalsIgnoreCase(KEY_WORDS[1])) {
-            return KeyWordType.BY;
-        } else if (commandTypeString.equalsIgnoreCase(KEY_WORDS[2])) {
-            return KeyWordType.FROM;
-        } else {
-            return KeyWordType.UNKNOWN;
         }
     }
 }

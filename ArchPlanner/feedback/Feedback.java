@@ -2,8 +2,6 @@ package feedback;
 
 import java.util.ArrayList;
 
-import logic.commands.Command;
-
 public class Feedback {
 
     enum CommandType {
@@ -11,9 +9,9 @@ public class Feedback {
     };
     
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
-    private final String[] ALL_COMMANDS = {"add", "delete", "edit", "search", 
-                                           "view", "done", "undone", "undo",
-                                           "redo", "exit"};
+    private final String[] ALL_COMMANDS = {"add", "delete ", "edit ", "search ", 
+                                           "view ", "done ", "undone ", "undo ",
+                                           "redo ", "exit "};
     
     private CommandType holdCmd;
     private ArrayList<String> prompts;
@@ -39,12 +37,13 @@ public class Feedback {
             
             switch (commandType) {
                 case ADD :
-                    prompts = new AddPrompt().getPrompts(userInput, isSpace);
+                    prompts = new AddPrompt().getPrompts(userInput.substring(3));
                     break;
                 case UNKNOWN :
                     if (getNumOfWords(userInput) == 1 && !isSpace) {
                         for (int i = 0; i < ALL_COMMANDS.length; i++) {
                             if (ALL_COMMANDS[i].startsWith(commandInString)) {
+                                prompts.add(ALL_COMMANDS[i]);
                             }
                         }
                     } else {
@@ -55,38 +54,7 @@ public class Feedback {
                     System.out.println("Not supoose to happen");
             }
         }
-        
-        /*
-        if (userInput.trim().isEmpty()) {
-            prompts.add("Invalid command");
-        } else {
-            String[] partialCmd = userInput.trim().split(STRING_MULTIPLE_WHITESPACE);
-            System.out.println("Partial: " + partialCmd.length);
-            System.out.println(partialCmd[0]);
-            if (partialCmd.length == 1) {
-                for (int i = 0; i < ALL_COMMANDS.length; i++) {
-                    if (ALL_COMMANDS[i].startsWith(partialCmd[0])) {
-                        prompts.add(ALL_COMMANDS[i]);
-                    }
-                }
-                System.out.println("Prompt: " + prompts.size());
-                if(prompts.size() == 1) {
-                    holdCmd = determineCommandType(partialCmd[0]);
-                } else if (prompts.size() <= 0) {
-                    prompts.add("Invalid command");
-                }
-            } else {
-                if (holdCmd == CommandType.UNKNOWN) {
-                    prompts.add("Invalid command");
-                } else {
-                    switch (holdCmd) {
-                        case ADD: prompts = new AddPrompt().getPrompts(userInput.substring(3));
-                    }
-                }
-            }
-            System.out.println(holdCmd);
-        }
-        */
+
         System.out.println(prompts.size());
         if(prompts.size() <= 0) {
             prompts.add("Invalid command");
@@ -101,12 +69,6 @@ public class Feedback {
             isSpace = false;
         }
         return userInput;  
-            /*
-            if (prompts.size() == 1) {
-                return prompts.get(0) + " ";
-            } else {
-                return userInput;
-            }*/
     }
     
     private CommandType determineCommandType(String commandTypeString) {
