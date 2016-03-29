@@ -46,6 +46,7 @@ public class TaskPane extends GridPane {
     private void setLabelProperties() {
         setLabelAlignment();     
         setLabelSize();
+        setLabelTextColor();
     }
 
     private void setLabelSize() {
@@ -65,6 +66,13 @@ public class TaskPane extends GridPane {
         startTime.setAlignment(Pos.CENTER_LEFT);
         endDate.setAlignment(Pos.CENTER_LEFT);
         endTime.setAlignment(Pos.CENTER_LEFT);
+    }
+    
+    private void setLabelTextColor() {
+        startDate.setStyle(startDate.getStyle() + ("-fx-text-fill: green;"));
+        startTime.setStyle(startTime.getStyle() + ("-fx-text-fill: green;"));
+        endDate.setStyle(endDate.getStyle() + ("-fx-text-fill: red;"));
+        endTime.setStyle(endTime.getStyle() + ("-fx-text-fill: red;"));
     }
 
     private void setRowProperties() {

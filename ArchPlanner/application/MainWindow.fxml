@@ -155,7 +155,7 @@
       </GridPane>
       <GridPane fx:id="feedbackWindow" alignment="CENTER" maxHeight="100.0" maxWidth="-Infinity" minHeight="100.0" prefHeight="100.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
         </columnConstraints>
         <rowConstraints>
@@ -166,7 +166,7 @@
          </StackPane.margin>
          <children>
             <Label fx:id="feedbackLabel" GridPane.columnIndex="1" />
-            <ImageView fx:id="feedbackIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="feedbackIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

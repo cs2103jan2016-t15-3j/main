@@ -8,17 +8,24 @@ import java.util.logging.Logger;
 
 import application.TaskPane;
 import feedback.Feedback;
-import feedback.Feedback;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -28,14 +35,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
+import logic.commands.Command;
+import logic.commands.InvalidCommand;
+import logic.commands.ViewCommand;
 
 public class MainController implements Initializable{
     
@@ -77,13 +90,15 @@ public class MainController implements Initializable{
     
     private Image successIcon;
     private Image failIcon;
+
+    private SequentialTransition seqT = new SequentialTransition ();
     
     Logic logic;
     Feedback feedback;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {        
-        //testMethod();      
+        //testMethod();
         //--------------------------------------------------------------------          
         feedback = new Feedback();
         logic = new Logic();
@@ -200,20 +215,23 @@ public class MainController implements Initializable{
     @FXML
     private void onEnterPressed() {
         log.info("command entered");
-        boolean isSuccessful = logic.executeCommand(userInput.getText());
+        Command command = logic.executeCommand(userInput.getText());
         
-        if (isSuccessful) {
+        if (command instanceof InvalidCommand) {
+            setFeedbackWindow(false, ((InvalidCommand)command).get_error_message());
+            log.info("incorrect command entered");
+        } else {
             assert(logic.getTagsList() != null);
             assert(logic.getTagsList() != null);
             assert(logic.getCurrentViewType() != null);
             
             updateUi();
             
-            setFeedbackWindow(true, userInput.getText());
+            if (!(command instanceof ViewCommand)) {
+                setFeedbackWindow(true, userInput.getText());
+            }
             userInput.clear();
             log.info("cmd executed");
-        } else {
-            log.info("incorrect command entered");
         }
     }
     
@@ -279,6 +297,24 @@ public class MainController implements Initializable{
             feedbackLabel.setText("Failed to execute command" + "\n" + message);
         }
         feedbackWindow.setVisible(true);
+        createFader(feedbackWindow);
+    }
+    
+    private void createFader(Node node) {
+        seqT.stop();
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        FadeTransition fade = new FadeTransition(Duration.millis(500), node);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        
+        seqT.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                node.setVisible(false);
+            }
+        });
+        seqT.getChildren().remove(0, seqT.getChildren().size());
+        seqT.getChildren().addAll(pause, fade);
+        seqT.play();
     }
     
     private void updateTaskDisplay() {       
@@ -287,7 +323,7 @@ public class MainController implements Initializable{
         for (int i = 0; i < tasks.size(); i++) {        
             TaskPane displayTask = new TaskPane(i + 1, tasks.get(i), taskDisplay.widthProperty());
             taskList.add(displayTask);
-        }  
+        }
         log.info("Tasks Refreshed");
     }
     
@@ -303,6 +339,7 @@ public class MainController implements Initializable{
             tagButton.setOnAction(tagObj -> {
                 onTagPressed(tagObj);
             });
+            tagButton.setSelected(tags.get(i).getIsSelected());
             tagList.add(tagButton);
         }     
         log.info("Tags Refreshed");
@@ -337,4 +374,47 @@ public class MainController implements Initializable{
         updateTagDisplay();
         updateCategoryDisplay();
     }
+    
+    
+    
+    /*
+    private void setFeedback(boolean isSuccessful, String message) {
+        GridPane feedbackPane = new GridPane();
+        feedbackPane.setMaxHeight(100);
+        feedbackPane.setMaxWidth(Region.USE_PREF_SIZE);
+        feedbackPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);" + "-fx-background-radius: 20;"
+                            + "-fx-padding: 10, 10, 10, 10;");
+        
+        ColumnConstraints iconColumn = new ColumnConstraints();
+        ColumnConstraints mesageColumn = new ColumnConstraints();
+        iconColumn.setMaxWidth(100);
+        
+        feedbackPane.getColumnConstraints().addAll(iconColumn, mesageColumn);
+        
+        ImageView iconImg = new ImageView();
+        iconImg.setFitHeight(70);
+        iconImg.setFitWidth(70);
+        Label messageLabel = new Label();
+        if (isSuccessful) {
+            iconImg.setImage(new Image("/images/SuccessIcon.png"));
+            messageLabel.setText("Successfully executed command" + "\n" + message);
+        } else { 
+            iconImg.setImage(new Image("/images/FailIcon.png"));
+            messageLabel.setText("Failed to execute command" + "\n" + message);
+        }       
+        feedbackPane.addRow(0, iconImg, messageLabel);
+        
+        mainWindow.setMargin(feedbackPane, new Insets(0, 100, 0, 100));
+        mainWindow.getChildren().add(feedbackPane);
+        
+        FadeTransition fade = new FadeTransition(Duration.seconds(2), feedbackPane);
+        fade.setOnFinished((ActionEvent event) -> {
+                mainWindow.getChildren().remove(feedbackPane);
+        });
+        fade.setFromValue(1);
+        fade.setToValue(0);
+
+        fade.play();
+    }
+    */
 }
