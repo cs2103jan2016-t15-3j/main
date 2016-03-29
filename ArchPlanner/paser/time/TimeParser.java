@@ -10,13 +10,18 @@ import java.util.List;
 /**
  * Created by lifengshuang on 3/22/16.
  */
+//getCase(1,0,1,1,1,0,0,0,1,1,0)
 public class TimeParser {
 
     private static Parser timeParser = new Parser();
     private int dateCount, timeCount;
 
     public TimeParserResult parseTime(String input) {
+
         TimeParserResult timeParserResult = new TimeParserResult();
+        if (input == null) {
+            return timeParserResult;
+        }
         List<DateGroup> groups = timeParser.parse(input);
         for (DateGroup group : groups){
             if (group.getText().length() < 3){

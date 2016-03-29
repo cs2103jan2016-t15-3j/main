@@ -132,7 +132,7 @@ public class ParserTest {
         Command command6 = new EditCommandParser().parse("edit 555 end date tomorrow");
         //edit <id> start time ...
         Command command7 = new EditCommandParser().parse("edit 3 start time 3pm");
-        Command command8 = new EditCommandParser().parse("edit -3 start time 23:23:23");
+        Command command8 = new EditCommandParser().parse("edit -3 start time 23:23:23");//invalid
         Command command9 = new EditCommandParser().parse("edit 3 start time tomorrow 23:23:23");//invalid
         //edit <id> end time ...
         Command command10 = new EditCommandParser().parse("edit 3 end time 3pm");
