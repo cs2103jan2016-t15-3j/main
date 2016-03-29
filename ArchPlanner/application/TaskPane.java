@@ -41,10 +41,6 @@ public class TaskPane extends GridPane {
         setColunmProperties();                
         setRowProperties();        
         setLabelProperties();  
-        //startTime.setStyle(startTime.getStyle() + ("-fx-background-color: lightgreen;"));
-        //endTime.setStyle(endTime.getStyle() + ("-fx-background-color: lightgreen;"));
-        //startDate.setStyle(startDate.getStyle() + ("-fx-background-color: lightblue;"));
-        //endDate.setStyle(endDate.getStyle() + ("-fx-background-color: lightblue;"));
     }
 
     private void setLabelProperties() {
@@ -101,10 +97,10 @@ public class TaskPane extends GridPane {
     
     public void setTaskInfo(Task task) {
         assert(task.getDescription() != null);
-        assert(task.getStartDate() != null);
-        assert(task.getStartTime() != null);
-        assert(task.getEndDate() != null);
-        assert(task.getEndTime() != null);
+        assert(task.getStartDateString() != null);
+        assert(task.getStartTimeString() != null);
+        assert(task.getEndDateString() != null);
+        assert(task.getEndTimeString() != null);
         
         description.setText(task.getDescription());       
         startDate.setText(task.getStartDateString());

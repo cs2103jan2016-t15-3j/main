@@ -16,7 +16,12 @@
 	-fx-border-color: #651b1b;
 }
 
-#catBox {
+#feedbackWindow {
+	-fx-background-color: rgba(0, 0, 0, 0.8);
+	-fx-background-radius: 20;
+}
+
+#categoryPane {
 	-fx-background-radius: 15;
 	-fx-background-color: rgba(0, 0, 0, 0.05);
 }

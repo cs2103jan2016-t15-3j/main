@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import application.TaskPane;
 import feedback.Feedback;
+import feedback.Feedback;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +24,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -34,7 +36,6 @@ import javafx.stage.WindowEvent;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
-import logic.commands.Command;
 
 public class MainController implements Initializable{
     
@@ -43,6 +44,9 @@ public class MainController implements Initializable{
     @FXML private Label viewLabel;
     @FXML private Label topPrompt;
     @FXML private Label bottomPrompt;
+    @FXML private Label feedbackLabel;
+    
+    @FXML private ImageView feedbackIcon;
 
     @FXML private Button miniButton;
     @FXML private Button closeButton;
@@ -51,10 +55,11 @@ public class MainController implements Initializable{
     @FXML private ToggleButton deadline;
     @FXML private ToggleButton task;
     
-    @FXML private GridPane taskWindow;
     @FXML private StackPane mainWindow;
+    @FXML private GridPane taskWindow;
+    @FXML private GridPane feedbackWindow;   
     
-    @FXML private TextField userInput; 
+    @FXML private TextField userInput;
     
     @FXML public ListView<ToggleButton> tagDisplay;
     @FXML public ListView<GridPane> taskDisplay;
@@ -69,6 +74,9 @@ public class MainController implements Initializable{
     
     private double xPos, yPos;
     private Rectangle2D screenBound;
+    
+    private Image successIcon;
+    private Image failIcon;
     
     Logic logic;
     Feedback feedback;
@@ -102,8 +110,12 @@ public class MainController implements Initializable{
             }
         });
         
+        successIcon = new Image("/images/SuccessIcon.png");
+        failIcon = new Image("/images/FailIcon.png");
+        
         topPrompt.setVisible(false);
         bottomPrompt.setVisible(false);
+        feedbackWindow.setVisible(false);
         
         screenBound = Screen.getPrimary().getVisualBounds();
         int width = (int) screenBound.getMaxX() * 3 / 5;
@@ -197,6 +209,7 @@ public class MainController implements Initializable{
             
             updateUi();
             
+            setFeedbackWindow(true, userInput.getText());
             userInput.clear();
             log.info("cmd executed");
         } else {
@@ -250,7 +263,23 @@ public class MainController implements Initializable{
         */
     }
     
+    private void onTagPressed(ActionEvent event) {
+        ToggleButton clicked = (ToggleButton)event.getSource();
+        logic.setSelectedTag(clicked.getText());
+        updateUi();
+    }
+    
     //------------------------------------------------------------------------------------------------------------
+    private void setFeedbackWindow(boolean isSuccessful, String message) {
+        if (isSuccessful) {
+            feedbackIcon.setImage(successIcon);
+            feedbackLabel.setText("Successfully executed command" + "\n" + message);
+        } else {
+            feedbackIcon.setImage(failIcon);
+            feedbackLabel.setText("Failed to execute command" + "\n" + message);
+        }
+        feedbackWindow.setVisible(true);
+    }
     
     private void updateTaskDisplay() {       
         taskList.clear();
@@ -271,6 +300,9 @@ public class MainController implements Initializable{
             tagButton.setMaxWidth(Double.MAX_VALUE);
             tagButton.prefWidthProperty().bind(tagDisplay.widthProperty().subtract(40));
             tagButton.setAlignment(Pos.CENTER_LEFT);
+            tagButton.setOnAction(tagObj -> {
+                onTagPressed(tagObj);
+            });
             tagList.add(tagButton);
         }     
         log.info("Tags Refreshed");
