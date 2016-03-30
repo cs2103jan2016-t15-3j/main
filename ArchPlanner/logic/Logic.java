@@ -41,13 +41,13 @@ public class Logic {
 
 	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
-		
+		/*
 		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
 				historyManager.getUndoList().size(), historyManager.getRedoList().size(), listsManager.getTagsList().clone());
-				
-		
-		//Command commandObj = parser.parseCommand(userInput);
-		
+		 */
+
+		Command commandObj = parser.parseCommand(userInput);
+
 		boolean isSuccessful;
 		//if (commandObj instanceof InvalidCommand) {
 		//	return false;
@@ -57,6 +57,7 @@ public class Logic {
 
 		if (isSuccessful) {
 			historyManager.getPreviousUserInputList().add(userInput);
+			historyManager.setPreviousUserInputCounter(-1);
 		}
 		save(commandObj);
 		return commandObj;
@@ -195,22 +196,28 @@ public class Logic {
 	}
 
 	public String getPreviousUserInput() {
-		if (historyManager.getPreviousUserInputList().size() > 0) {
-			int previousUserInputListLastIndex = historyManager.getPreviousUserInputList().size() - 1;
-			String previousUserInput = historyManager.getPreviousUserInputList().remove(previousUserInputListLastIndex);
-			historyManager.getNextUserInputList().add(previousUserInput);
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() + 1);
+		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
+		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
+			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			System.out.println("previous: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
 			return previousUserInput;
 		}
-			return "";
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputList().size() - 1);
+		System.out.println("previous: " + "\t" + "counter: " + historyManager.getPreviousUserInputCounter());
+		return "";
 	}
 
 	public String getNextUserInput() {
-		if (historyManager.getNextUserInputList().size() > 0) {
-			int nextUserInputListLastIndex = historyManager.getNextUserInputList().size() - 1;
-			String nextUserInput = historyManager.getNextUserInputList().remove(nextUserInputListLastIndex);
-			historyManager.getNextUserInputList().add(nextUserInput);
-			return nextUserInput;
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() - 1);
+		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
+		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
+			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			System.out.println("next: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
+			return previousUserInput;
 		}
+		historyManager.setPreviousUserInputCounter(-1);
+		System.out.println("next: " + "counter: " + historyManager.getPreviousUserInputCounter());
 		return "";
 	}
 

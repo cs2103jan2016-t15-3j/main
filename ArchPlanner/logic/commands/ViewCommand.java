@@ -63,7 +63,7 @@ public class ViewCommand implements Command {
 			}
 			currentViewType += "\"" + _task.getDescription() + "\" ";
 		}
-		
+
 		if (_task.getTagsList() != null && !_task.getTagsList().isEmpty()) {
 			for (int i = 0; i < _task.getTagsList().size(); i++) {
 				currentViewType += "\"" + _task.getTagsList().get(i) + "\" ";
@@ -89,7 +89,7 @@ public class ViewCommand implements Command {
 		}
 		 */
 
-		if (_task.getStartDate() != null) {
+		if (_task.getStartDate() != null && _task.getEndDate() == null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				Task task = listsManager.getViewList().get(i);
 				if (!((listsManager.getViewList().get(i).getStartDate() != null) && 
@@ -101,7 +101,7 @@ public class ViewCommand implements Command {
 			currentViewType += "\"" + _task.getStartDateString() + "\" ";
 		}
 
-		if (_task.getStartTime() != null) {
+		if (_task.getStartTime() != null && _task.getEndTime() == null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				Task task = listsManager.getViewList().get(i);
 				if (!((listsManager.getViewList().get(i).getStartTime() != null) && 
@@ -113,7 +113,7 @@ public class ViewCommand implements Command {
 			currentViewType += "\"" + _task.getStartTimeString() + "\" ";
 		}
 
-		if (_task.getEndDate() != null) {
+		if (_task.getStartDate() == null && _task.getEndDate() != null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				Task task = listsManager.getViewList().get(i);
 				if (!((listsManager.getViewList().get(i).getEndDate() != null) && 
@@ -125,7 +125,7 @@ public class ViewCommand implements Command {
 			currentViewType += "\"" + _task.getEndDateString() + "\" ";
 		}
 
-		if (_task.getEndTime() != null) {
+		if (_task.getStartTime() == null && _task.getEndTime() != null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				Task task = listsManager.getViewList().get(i);
 				if (!((listsManager.getViewList().get(i).getEndTime() != null) && 
@@ -135,6 +135,27 @@ public class ViewCommand implements Command {
 				}
 			}
 			currentViewType += "\"" + _task.getEndTimeString() + "\" ";
+		}
+
+		if (_task.getStartDate() != null && _task.getEndDate() != null) {
+			for (int i = 0; i < listsManager.getViewList().size(); i++) {
+				Task task = listsManager.getViewList().get(i);
+				if (!(((task.getStartDate() != null) && (task.getEndDate() == null) 
+						&& ((task.getStartDate().isAfter(_task.getStartDate()) && task.getStartDate().isBefore(_task.getEndDate())) 
+								|| task.getStartDate().isEqual(_task.getStartDate()) || task.getStartDate().isEqual(_task.getEndDate()))) 
+						|| ((task.getStartDate() == null) && (task.getEndDate() != null)
+								&& ((task.getEndDate().isAfter(_task.getStartDate()) && task.getEndDate().isBefore(_task.getEndDate())) 
+										|| task.getEndDate().isEqual(_task.getStartDate()) || task.getEndDate().isEqual(_task.getEndDate()))) 
+						|| ((task.getStartDate() != null) && (task.getEndDate() != null) 
+								&& (((task.getStartDate().isAfter(_task.getStartDate()) && task.getStartDate().isBefore(_task.getEndDate())) 
+										|| (task.getEndDate().isAfter(_task.getStartDate()) && task.getEndDate().isBefore(_task.getEndDate()))) 
+										|| task.getStartDate().isEqual(_task.getStartDate()) || task.getStartDate().isEqual(_task.getEndDate()) 
+										|| task.getEndDate().isEqual(_task.getStartDate()) || task.getEndDate().isEqual(_task.getEndDate()))))) {
+					listsManager.getViewList().remove(i);
+					i--;
+				}
+			}
+			currentViewType += "\"" + _task.getStartDateString() + "\" " + "\"" + _task.getEndDateString() + "\" ";
 		}
 
 		listsManager.setCurrentViewType(currentViewType);

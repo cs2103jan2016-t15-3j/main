@@ -68,10 +68,6 @@ public class EditCommand implements Command {
 			newTask.setEndTime(_task.getEndTime());
 		}
 		
-		if (!_task.getIsDone() == oldTask.getIsDone()) {
-			newTask.setIsDone(_task.getIsDone());
-		}
-		
 		listsManager.getMainList().add(newTask);
 		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
