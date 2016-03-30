@@ -20,6 +20,7 @@ public class AddPrompt {
     private final String etPrompt = "<End Time>";
     private final String tagPrompt = "#<Tag>";
     private final String invalidTagPrompt = "Invalid Tag:";
+    private final String invalidDateRangePrompt = "Invalid Date Range:";
     
     private ArrayList<String> addPrompts;
     private String prompt;
@@ -134,12 +135,20 @@ public class AddPrompt {
                         break;
                         
                     case ENDDATE :
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
+                        if (parameter.hasValidDateRange()) {
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
+                        } else {
+                            addPrompts.add(invalidDateRangePrompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                        }
                         break;
                         
                     case ENDTIME :
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                        if (parameter.hasValidDateRange()) {
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                        } else {
+                            addPrompts.add(invalidDateRangePrompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                        }
                         break;
                         
                     default :
@@ -188,14 +197,22 @@ public class AddPrompt {
                         break;
                         
                     case ENDDATE :
-                        addPrompts.add(prompt);
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
+                        if (parameter.hasValidDateRange()) {
+                            addPrompts.add(prompt);
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
+                        } else {
+                            addPrompts.add(invalidDateRangePrompt + STRING_SINGLE_WHITESPACE + prompt);
+                        }
                         break;
                         
-                    case ENDTIME :
-                        addPrompts.add(prompt);
-                        addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                    case ENDTIME : 
+                        if (parameter.hasValidDateRange()) {
+                            addPrompts.add(prompt);
+                            addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
+                        } else {
+                            addPrompts.add(invalidDateRangePrompt + STRING_SINGLE_WHITESPACE + prompt);
+                        }
                         break;
                         
                     default :

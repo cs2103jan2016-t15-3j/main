@@ -99,6 +99,11 @@ public class AddInputSeparator {
                 _hasStartTime = false;
             }
         }
+    
+        if (_startDateTime != null && _endDateTime != null) {
+            _hasValidDateRange = _startDateTime.before(_endDateTime);
+        }
+        
         _tags = getTags(breakUserInput.getTagRegion());
         _hasKeyWord = _keyWord != KeyWordType.UNKNOWN;
         
@@ -249,6 +254,10 @@ public class AddInputSeparator {
         return _hasValidTag;
     }
     
+    public boolean hasValidDateRange() {
+        return _hasValidDateRange;
+    }
+    
     public String getDescription() {
         return _description;
     }
@@ -293,7 +302,7 @@ public class AddInputSeparator {
         }
     }
  
-    public LocalTime getEnTime() {
+    public LocalTime getEndTime() {
         if (_hasEndTime) {
             return _endTime;
         } else {
