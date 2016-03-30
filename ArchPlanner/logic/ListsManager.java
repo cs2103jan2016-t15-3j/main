@@ -187,7 +187,7 @@ public class ListsManager {
 	public CATEGORY_TYPE getCategoryType() {
 		return _categoryType;
 	}
-	
+
 	public ArrayList<String> getSelectedTagsList() {
 		return _selectedTagsList;
 	}
@@ -243,12 +243,12 @@ public class ListsManager {
 
 		if (!isShowAll) {
 			for (int i = 0; i < list.size(); i++) {
-				boolean hasSameTag = true;
+				boolean hasSameTag = false;
 				Task task = list.get(i);
-				for (int j = 0; j < _tagsList.size() && hasSameTag; j++) {
+				for (int j = 0; j < _tagsList.size() && !hasSameTag; j++) {
 					String tagName = _tagsList.get(j).getName();
-					if ((!task.getTagsList().contains(tagName) && _tagsList.get(j).getIsSelected())) {
-						hasSameTag = false;
+					if (task.getTagsList().contains(tagName) && _tagsList.get(j).getIsSelected()) {
+						hasSameTag = true;
 					}
 				}
 				if (hasSameTag == false) {

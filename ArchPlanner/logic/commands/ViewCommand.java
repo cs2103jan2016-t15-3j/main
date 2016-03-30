@@ -155,7 +155,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += "\"" + _task.getStartDateString() + "\" " + "\"" + _task.getEndDateString() + "\" ";
+			currentViewType += "\"" + _task.getStartDateString() + "\" to " + "\"" + _task.getEndDateString() + "\" ";
 		}
 
 		listsManager.setCurrentViewType(currentViewType);
