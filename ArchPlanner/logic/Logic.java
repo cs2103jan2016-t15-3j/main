@@ -41,7 +41,13 @@ public class Logic {
 
 	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
-		Command commandObj = parser.parseCommand(userInput);
+		
+		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
+				historyManager.getUndoList().size(), historyManager.getRedoList().size(), listsManager.getTagsList().clone());
+				
+		
+		//Command commandObj = parser.parseCommand(userInput);
+		
 		boolean isSuccessful;
 		//if (commandObj instanceof InvalidCommand) {
 		//	return false;
@@ -167,7 +173,7 @@ public class Logic {
 
 	public void setSelectedTag(String tagName, boolean isSelected) {
 		System.out.println("running setselected");
-		
+
 		if (isSelected) {
 			listsManager.updateSelectedTagsList(tagName, true);
 		} else {
@@ -187,19 +193,25 @@ public class Logic {
 		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " + listsManager.getCurrentViewType();
 		return currentViewType;
 	}
-	
+
 	public String getPreviousUserInput() {
-		int previousUserInputListLastIndex = historyManager.getPreviousUserInputList().size() - 1;
-		String previousUserInput = historyManager.getPreviousUserInputList().remove(previousUserInputListLastIndex);
-		historyManager.getNextUserInputList().add(previousUserInput);
-		return previousUserInput;
+		if (historyManager.getPreviousUserInputList().size() > 0) {
+			int previousUserInputListLastIndex = historyManager.getPreviousUserInputList().size() - 1;
+			String previousUserInput = historyManager.getPreviousUserInputList().remove(previousUserInputListLastIndex);
+			historyManager.getNextUserInputList().add(previousUserInput);
+			return previousUserInput;
+		}
+			return "";
 	}
-	
+
 	public String getNextUserInput() {
-		int nextUserInputListLastIndex = historyManager.getNextUserInputList().size() - 1;
-		String nextUserInput = historyManager.getNextUserInputList().remove(nextUserInputListLastIndex);
-		historyManager.getNextUserInputList().add(nextUserInput);
-		return nextUserInput;
+		if (historyManager.getNextUserInputList().size() > 0) {
+			int nextUserInputListLastIndex = historyManager.getNextUserInputList().size() - 1;
+			String nextUserInput = historyManager.getNextUserInputList().remove(nextUserInputListLastIndex);
+			historyManager.getNextUserInputList().add(nextUserInput);
+			return nextUserInput;
+		}
+		return "";
 	}
 
 	public boolean testLogicFramework(Command commandObj) {
