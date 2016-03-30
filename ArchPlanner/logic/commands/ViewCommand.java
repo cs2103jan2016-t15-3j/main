@@ -8,7 +8,7 @@ import logic.TaskParameters;
 
 public class ViewCommand implements Command {
 	public enum VIEW_TYPE {VIEW_ALL, VIEW_DONE, VIEW_UNDONE, VIEW_OVERDUE};
-	public enum CATEGORY_TYPE {CATEGORY_ALL, CATEGORY_EVENT, CATEGORY_DEADLINE, CATEGORY_TASK};
+	public enum CATEGORY_TYPE {CATEGORY_ALL, CATEGORY_EVENTS, CATEGORY_DEADLINES, CATEGORY_TASKS};
 
 	public VIEW_TYPE _viewType;
 	public CATEGORY_TYPE _categoryType;

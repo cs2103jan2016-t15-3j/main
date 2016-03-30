@@ -206,7 +206,7 @@ public class ListsManager {
 			list.addAll(_overdueList);
 		}
 
-		if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_TASK)) {
+		if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_TASKS)) {
 			for (int i = 0; i < list.size(); i++) {
 				Task task = list.get(i);
 				if (!((task.getStartDate() == null) && (task.getEndDate() == null))) {
@@ -214,7 +214,7 @@ public class ListsManager {
 					i--;
 				}
 			}
-		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_EVENT)) {
+		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_EVENTS)) {
 			for (int i = 0; i < list.size(); i++) {
 				Task task = list.get(i);
 				if (!((task.getStartDate() != null) && (task.getEndDate() == null)) && 
@@ -223,7 +223,7 @@ public class ListsManager {
 					i--;
 				}
 			}
-		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_DEADLINE)) {
+		} else if (_categoryType.equals(CATEGORY_TYPE.CATEGORY_DEADLINES)) {
 			for (int i = 0; i < list.size(); i++) {
 				Task task = list.get(i);
 				if (!((task.getStartDate() == null) && (task.getEndDate() != null))) {

@@ -136,11 +136,11 @@ public class Logic {
 		CATEGORY_TYPE categoryType = listsManager.getCategoryType();
 		switch (categoryType) {
 
-		case CATEGORY_DEADLINE : 
+		case CATEGORY_DEADLINES:
 			return "Deadlines";
-		case CATEGORY_EVENT: 
+		case CATEGORY_EVENTS:
 			return "Events";
-		case CATEGORY_TASK : 
+		case CATEGORY_TASKS:
 			return "Tasks";
 		default : 
 			return "All";
@@ -150,11 +150,11 @@ public class Logic {
 	private CATEGORY_TYPE getCategoryType(String selectedCategory) {
 		switch (selectedCategory) {
 		case "Deadlines" : 
-			return CATEGORY_TYPE.CATEGORY_DEADLINE;
+			return CATEGORY_TYPE.CATEGORY_DEADLINES;
 		case "Events" : 
-			return CATEGORY_TYPE.CATEGORY_EVENT;
+			return CATEGORY_TYPE.CATEGORY_EVENTS;
 		case "Tasks" : 
-			return CATEGORY_TYPE.CATEGORY_TASK;
+			return CATEGORY_TYPE.CATEGORY_TASKS;
 		default : 
 			return CATEGORY_TYPE.CATEGORY_ALL;
 		}
