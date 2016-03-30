@@ -33,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -91,7 +92,7 @@ public class MainController implements Initializable{
     private Image successIcon;
     private Image failIcon;
 
-    private SequentialTransition seqT = new SequentialTransition ();
+    private SequentialTransition fadeTransition = new SequentialTransition ();
     
     Logic logic;
     Feedback feedback;
@@ -105,10 +106,6 @@ public class MainController implements Initializable{
         
         logic.loadFile();
         
-        assert(logic.getTagsList() != null);
-        assert(logic.getTagsList() != null);
-        assert(logic.getCurrentViewType() != null);
-        
         updateUi();
  
         //-------------------------------------------------------------------         
@@ -118,19 +115,8 @@ public class MainController implements Initializable{
             }
         });
         
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userInput.requestFocus();
-            }
-        });
-        
         successIcon = new Image("/images/SuccessIcon.png");
         failIcon = new Image("/images/FailIcon.png");
-        
-        topPrompt.setVisible(false);
-        bottomPrompt.setVisible(false);
-        feedbackWindow.setVisible(false);
         
         screenBound = Screen.getPrimary().getVisualBounds();
         int width = (int) screenBound.getMaxX() * 3 / 5;
@@ -139,6 +125,13 @@ public class MainController implements Initializable{
         
         tagDisplay.setItems(tagList);
         taskDisplay.setItems(taskList);
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                userInput.requestFocus();
+            }
+        });
         
         log.info("MainController initialzed");
     }
@@ -206,8 +199,7 @@ public class MainController implements Initializable{
             logic.setSelectedCategory(clicked.getText());
         } else {
             logic.setSelectedCategory("All");
-        }
-        
+        }   
         updateUi();
     }
     
@@ -220,11 +212,7 @@ public class MainController implements Initializable{
         if (command instanceof InvalidCommand) {
             setFeedbackWindow(false, ((InvalidCommand)command).get_error_message());
             log.info("incorrect command entered");
-        } else {
-            assert(logic.getTagsList() != null);
-            assert(logic.getTagsList() != null);
-            assert(logic.getCurrentViewType() != null);
-            
+        } else {            
             updateUi();
             
             if (!(command instanceof ViewCommand)) {
@@ -271,22 +259,36 @@ public class MainController implements Initializable{
         }
     }
     
-    public void onSpacePressed(KeyEvent event) {
-        /*
-        if (event.getCode() == KeyCode.SPACE) {
-            String autoComplete = feedback.getAutoComplete(userInput.getText());
-            userInput.setText(autoComplete);
-            userInput.positionCaret(userInput.getText().length() + 1);;
-        }
-        */
+    @FXML
+    private void onKeyPressed(KeyEvent event) {
+        String autoInput = "";
+        switch (event.getCode()) {
+            case UP : 
+                autoInput = logic.getPreviousUserInput();
+                if (autoInput.isEmpty()) {
+                    autoInput = userInput.getText();
+                }
+                userInput.setText(autoInput);
+                userInput.positionCaret(userInput.getText().length() + 1);
+                break;
+            case DOWN :
+                autoInput = logic.getNextUserInput();
+                if (autoInput.isEmpty()) {
+                    autoInput = userInput.getText();
+                }
+                userInput.setText(autoInput);
+                userInput.positionCaret(userInput.getText().length() + 1);
+                break;
+            default:
+                break;
+        }  
     }
     
     private void onTagPressed(ActionEvent event) {
         ToggleButton clicked = (ToggleButton)event.getSource();
-        logic.setSelectedTag(clicked.getText());
+        logic.setSelectedTag(clicked.getText(), clicked.isSelected());
         updateUi();
     }
-    
     //------------------------------------------------------------------------------------------------------------
     private void setFeedbackWindow(boolean isSuccessful, String message) {
         if (isSuccessful) {
@@ -296,25 +298,26 @@ public class MainController implements Initializable{
             feedbackIcon.setImage(failIcon);
             feedbackLabel.setText("Failed to execute command" + "\n" + message);
         }
-        feedbackWindow.setVisible(true);
         createFader(feedbackWindow);
     }
     
     private void createFader(Node node) {
-        seqT.stop();
+        fadeTransition.stop();
+        node.setVisible(true);
+        
         PauseTransition pause = new PauseTransition(Duration.millis(1000));
         FadeTransition fade = new FadeTransition(Duration.millis(500), node);
         fade.setFromValue(1);
         fade.setToValue(0);
         
-        seqT.setOnFinished(new EventHandler<ActionEvent>() {
+        fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 node.setVisible(false);
             }
         });
-        seqT.getChildren().remove(0, seqT.getChildren().size());
-        seqT.getChildren().addAll(pause, fade);
-        seqT.play();
+        fadeTransition.getChildren().remove(0, fadeTransition.getChildren().size());
+        fadeTransition.getChildren().addAll(pause, fade);
+        fadeTransition.play();
     }
     
     private void updateTaskDisplay() {       
@@ -365,6 +368,10 @@ public class MainController implements Initializable{
     }
     
     private void updateUi() {
+        assert(logic.getTagsList() != null);
+        assert(logic.getTagsList() != null);
+        assert(logic.getCurrentViewType() != null);
+        
     	tasks = logic.getViewList();
         tags = logic.getTagsList();
         categorySelected = logic.getSelectedCategory();

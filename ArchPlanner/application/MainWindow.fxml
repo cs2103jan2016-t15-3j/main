@@ -132,7 +132,7 @@
                   </GridPane>
                </children>
             </GridPane>
-            <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" onKeyReleased="#onSpacePressed" GridPane.rowIndex="2">
+            <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" onKeyReleased="#onKeyPressed" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
@@ -149,11 +149,11 @@
           <RowConstraints maxHeight="130.0" minHeight="130.0" prefHeight="130.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="bottomPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-            <Label fx:id="topPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" GridPane.valignment="BOTTOM" />
+            <Label fx:id="topPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.valignment="BOTTOM" />
+            <Label fx:id="bottomPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.rowIndex="2" GridPane.valignment="TOP" />
          </children>
       </GridPane>
-      <GridPane fx:id="feedbackWindow" alignment="CENTER" maxHeight="100.0" maxWidth="-Infinity" minHeight="100.0" prefHeight="100.0">
+      <GridPane fx:id="feedbackWindow" alignment="CENTER" maxHeight="100.0" maxWidth="-Infinity" minHeight="100.0" prefHeight="100.0" visible="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
