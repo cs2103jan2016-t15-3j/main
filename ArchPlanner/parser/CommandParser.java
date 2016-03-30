@@ -1,6 +1,5 @@
-package paser;
+package parser;
 
-import com.joestelmach.natty.Parser;
 import logic.commands.Command;
 
 import java.util.ArrayList;

@@ -1,14 +1,13 @@
-package paser;
+package parser;
 
-import paser.time.TimeParser;
-import paser.time.TimeParserResult;
+import parser.time.TimeParser;
+import parser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.AddCommand;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
 /**
  * Created by lifengshuang on 3/5/16.

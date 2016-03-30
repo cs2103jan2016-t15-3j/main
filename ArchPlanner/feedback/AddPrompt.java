@@ -85,7 +85,7 @@ public class AddPrompt {
                                   parameter.hasEndTime(), parameter.hasTag(), parameter.hasValidTag(), parameter.hasSpace()};
         int intParameterSet = convertToInt(parameterSet);
         System.out.println(Arrays.toString(parameterSet));
-        
+
         switch (intParameterSet) {
             case 0 :
                 setPrompts(promptSet1, addPrompts);

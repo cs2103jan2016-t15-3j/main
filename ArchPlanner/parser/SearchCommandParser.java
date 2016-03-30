@@ -1,4 +1,4 @@
-package paser;
+package parser;
 
 import logic.commands.Command;
 
