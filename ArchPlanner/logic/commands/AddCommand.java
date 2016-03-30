@@ -26,7 +26,7 @@ public class AddCommand implements Command {
 		Task newTask = new Task(_task.getDescription(), _task.getTagsList(), _task.getStartDate(), _task.getStartTime(), 
 				_task.getEndDate(), _task.getEndTime());
 		listsManager.getMainList().add(newTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("add", null, newTask);

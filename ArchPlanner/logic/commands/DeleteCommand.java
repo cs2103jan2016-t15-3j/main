@@ -35,7 +35,7 @@ public class DeleteCommand implements Command {
 		listsManager.getMainList().remove(oldTask);
 		
 		listsManager.getViewList().remove(oldTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 
 		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);

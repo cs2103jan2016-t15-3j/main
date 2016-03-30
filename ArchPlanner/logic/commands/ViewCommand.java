@@ -2,6 +2,7 @@ package logic.commands;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Tag;
 import logic.Task;
 import logic.TaskParameters;
 
@@ -27,6 +28,11 @@ public class ViewCommand implements Command {
 		if (_viewType != null) {
 			if (_viewType.equals(VIEW_TYPE.VIEW_ALL)) {
 				listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
+				for (int i = 0; i < listsManager.getTagsList().size(); i++) {
+					Tag tag = listsManager.getTagsList().get(i);
+					tag.setIsSelected(false);
+				}
+				listsManager.getSelectedTagsList().clear();
 			}
 			listsManager.setViewType(_viewType);
 		}
@@ -36,6 +42,11 @@ public class ViewCommand implements Command {
 				listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 			}
 			listsManager.setCategoryType(_categoryType);
+		}
+
+		listsManager.getSelectedTagsList().clear();
+		if (_task.getTagsList() != null && !_task.getTagsList().isEmpty()) {
+			listsManager.getSelectedTagsList().addAll(_task.getTagsList());
 		}
 
 		listsManager.updateLists();
@@ -52,7 +63,14 @@ public class ViewCommand implements Command {
 			}
 			currentViewType += "\"" + _task.getDescription() + "\" ";
 		}
+		
+		if (_task.getTagsList() != null && !_task.getTagsList().isEmpty()) {
+			for (int i = 0; i < _task.getTagsList().size(); i++) {
+				currentViewType += "\"" + _task.getTagsList().get(i) + "\" ";
+			}
+		}
 
+		/*
 		if (_task.getTagsList() != null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				boolean hasSameTag = true;
@@ -69,6 +87,7 @@ public class ViewCommand implements Command {
 				currentViewType +=  "\"" + _task.getTagsList().get(i) + "\" ";
 			}
 		}
+		 */
 
 		if (_task.getStartDate() != null) {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {

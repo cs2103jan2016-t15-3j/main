@@ -73,7 +73,7 @@ public class EditCommand implements Command {
 		}
 		
 		listsManager.getMainList().add(newTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("edit", oldTask, newTask);

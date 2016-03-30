@@ -82,7 +82,7 @@ public class UndoCommand implements Command {
 			}
 			historyManager.getRedoList().add(rollbackItem);
 		}
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		return true;
 	}

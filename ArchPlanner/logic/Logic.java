@@ -21,9 +21,6 @@ public class Logic {
 	enum COMMAND_TYPE {
 		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, INVALID
 	};
-	//private ArrayList<Task> _mainList = new ArrayList<Task>();
-	//private ArrayList<Task> _viewList = new ArrayList<Task>();
-	//private ArrayList<String> _tagsList = new ArrayList<String>();
 
 	private Storage storage;
 	private ListsManager listsManager;
@@ -42,16 +39,21 @@ public class Logic {
 		listsManager.setUpLists(mainList);
 	}
 
-	public boolean executeCommand(String userInput) {
+	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
 		Command commandObj = parser.parseCommand(userInput);
 		boolean isSuccessful;
-		if (commandObj instanceof InvalidCommand) {
-			return false;
-		}
+		//if (commandObj instanceof InvalidCommand) {
+		//	return false;
+		//}
+
 		isSuccessful = runCommand(commandObj);
+
+		if (isSuccessful) {
+			historyManager.getPreviousUserInputList().add(userInput);
+		}
 		save(commandObj);
-		return isSuccessful;
+		return commandObj;
 	}
 
 	private boolean runCommand(Command commandObj) {
@@ -107,7 +109,7 @@ public class Logic {
 		System.out.println(categoryType.toString());
 		listsManager.updateLists();
 	}
-	
+
 	public String getSelectedView() {
 		VIEW_TYPE viewType = listsManager.getViewType();
 		switch (viewType) {
@@ -162,9 +164,22 @@ public class Logic {
 	public ArrayList<Tag> getTagsList() {
 		return listsManager.getTagsList();
 	}
-	
-	public void setTagsList(ArrayList<Tag> list) {
-		listsManager.setTagsList(list);
+
+	public void setSelectedTag(String tagName, boolean isSelected) {
+		System.out.println("running setselected");
+		
+		if (isSelected) {
+			listsManager.updateSelectedTagsList(tagName, true);
+		} else {
+			listsManager.updateSelectedTagsList(tagName, false);
+			for (int i = 0; i < listsManager.getTagsList().size(); i++) {
+				Tag tag = listsManager.getTagsList().get(i);
+				if (tag.getName().equals(tagName)) {
+					tag.setIsSelected(false);
+				}
+			}
+		}
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 	}
 
@@ -173,6 +188,20 @@ public class Logic {
 		return currentViewType;
 	}
 	
+	public String getPreviousUserInput() {
+		int previousUserInputListLastIndex = historyManager.getPreviousUserInputList().size() - 1;
+		String previousUserInput = historyManager.getPreviousUserInputList().remove(previousUserInputListLastIndex);
+		historyManager.getNextUserInputList().add(previousUserInput);
+		return previousUserInput;
+	}
+	
+	public String getNextUserInput() {
+		int nextUserInputListLastIndex = historyManager.getNextUserInputList().size() - 1;
+		String nextUserInput = historyManager.getNextUserInputList().remove(nextUserInputListLastIndex);
+		historyManager.getNextUserInputList().add(nextUserInput);
+		return nextUserInput;
+	}
+
 	public boolean testLogicFramework(Command commandObj) {
 		boolean isSuccessful;
 		if (commandObj instanceof InvalidCommand) {

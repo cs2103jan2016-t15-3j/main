@@ -20,6 +20,9 @@ public class ListsManager {
 	private ArrayList<Task> _undoneList;
 	private ArrayList<Task> _overdueList;
 
+	private ArrayList<String> _selectedTagsList;
+
+
 	private VIEW_TYPE _viewType;
 	private CATEGORY_TYPE _categoryType;
 
@@ -28,7 +31,6 @@ public class ListsManager {
 	public ListsManager() {
 		_mainList = new ArrayList<Task>();
 		_viewList = new ArrayList<Task>();
-		_tagsList = new ArrayList<Tag>();
 
 		_deadlineList = new ArrayList<Task>();
 		_eventList = new ArrayList<Task>();
@@ -36,6 +38,11 @@ public class ListsManager {
 		_doneList = new ArrayList<Task>();
 		_undoneList = new ArrayList<Task>();
 		_overdueList = new ArrayList<Task>();
+
+		_tagsList = new ArrayList<Tag>();
+
+		_selectedTagsList = new ArrayList<String>();
+
 		_viewType = VIEW_TYPE.VIEW_ALL;
 		_categoryType = CATEGORY_TYPE.CATEGORY_ALL;
 		_currentViewType = "";
@@ -54,11 +61,12 @@ public class ListsManager {
 		updateTaskOverdueStatus();
 		SortMechanism sort = new SortMechanism();
 		sort.sortListByDescription(_mainList);
-		//sort.sortListByDateTime(_mainList);
+		sort.sortListByDateTime(_mainList);
 		sort.sortListByOverdue(_mainList);
 		sort.sortListByDone(_mainList);
 		for (int i = 0; i < _mainList.size(); i++) {
 			Task task = _mainList.get(i);
+
 			if ((task.getStartDate() == null) && (task.getEndDate() == null)) {
 				_floatingList.add(task);
 			} else if ((task.getStartDate() != null) && (task.getEndDate() == null) || 
@@ -67,6 +75,7 @@ public class ListsManager {
 			} else if ((task.getStartDate() == null) && (task.getEndDate() != null)) {
 				_deadlineList.add(task);
 			}
+
 			if (task.getIsDone() == true) {
 				_doneList.add(task);
 			} else {
@@ -76,26 +85,40 @@ public class ListsManager {
 				_overdueList.add(task);
 			}
 
-			for (int j = 0; j < task.getTagsList().size(); j++) {
-				String taskTagName = task.getTagsList().get(j);
-				Tag tag = new Tag(taskTagName, false);
-				boolean hasSameTag = false;
-				for (int k = 0; k < _tagsList.size() && !hasSameTag; k++) {
-					if (taskTagName.equals(_tagsList.get(k).getName())) {
-						hasSameTag = true;
-						System.out.println(tag.getName() + "\t" + tag.getIsSelected());
-					}
-				}
-				if (!hasSameTag) {
-					_tagsList.add(tag);
+			updateTagsList(task);
+		}
+		for (int j = 0; j < _selectedTagsList.size(); j++) {
+			_currentViewType += "\"" + _selectedTagsList.get(j) + "\" ";
+			boolean hasSameTag = false;
+			for (int k = 0; k < _tagsList.size() && !hasSameTag; k++) {
+				if (_selectedTagsList.get(j).equals(_tagsList.get(k).getName())) {
+					_tagsList.get(k).setIsSelected(true);
+					hasSameTag = true;
 				}
 			}
-			//System.out.println("test");
 		}
-		//System.out.println("testpassed");
 		sort.sortTagsList(_tagsList);
 		updateViewList();
 		System.out.println(_categoryType);
+	}
+
+	private void updateTagsList(Task task) {
+		for (int i = 0; i < task.getTagsList().size(); i++) {
+			String taskTagName = task.getTagsList().get(i);
+			Tag tag = new Tag(taskTagName, false);
+			boolean hasSameTag = false;
+			for (int j = 0; j < _tagsList.size() && !hasSameTag; j++) {
+				if (taskTagName.equals(_tagsList.get(j).getName())) {
+					hasSameTag = true;
+					System.out.println(tag.getName() + "\t" + tag.getIsSelected());
+				}
+			}
+			if (!hasSameTag) {
+				System.out.println("new tag: " + tag.getName() + "\t size: " + _tagsList.size());
+				_tagsList.add(tag);
+			}
+		}
+		System.out.println("tagslistSize: " + _tagsList.size());
 	}
 
 	public void updateTaskOverdueStatus() {
@@ -129,15 +152,24 @@ public class ListsManager {
 		}
 	}
 
+	public void updateSelectedTagsList(String tagName, boolean isSelected) {
+		if (!_selectedTagsList.contains(tagName) && isSelected) {
+			_selectedTagsList.add(tagName);
+		} else if(_selectedTagsList.contains(tagName) && !isSelected) {
+			_selectedTagsList.remove(tagName);
+		}
+	}
+
 	private void clearAllLists() {
-		_viewList.clear();
 		_tagsList.clear();
+		_viewList.clear();
 		_deadlineList.clear();
 		_eventList.clear();
 		_floatingList.clear();
 		_doneList.clear();
 		_undoneList.clear();
 		_overdueList.clear();
+		_currentViewType = "";
 	}
 
 	public void setViewType(VIEW_TYPE viewType) {
@@ -154,6 +186,10 @@ public class ListsManager {
 
 	public CATEGORY_TYPE getCategoryType() {
 		return _categoryType;
+	}
+	
+	public ArrayList<String> getSelectedTagsList() {
+		return _selectedTagsList;
 	}
 
 	public void updateViewList() {
@@ -196,7 +232,6 @@ public class ListsManager {
 				}
 			}
 		}
-		System.out.println("start");
 
 		boolean isShowAll = true;
 
@@ -208,22 +243,19 @@ public class ListsManager {
 
 		if (!isShowAll) {
 			for (int i = 0; i < list.size(); i++) {
-				System.out.println("test21");
 				boolean hasSameTag = true;
 				Task task = list.get(i);
-				System.out.println("test22");
 				for (int j = 0; j < _tagsList.size() && hasSameTag; j++) {
 					String tagName = _tagsList.get(j).getName();
-					System.out.println("test24");
-					if (!(task.getTagsList().contains(tagName) && _tagsList.get(j).getIsSelected())) {
-						list.remove(i);
-						System.out.println(task.getDescription());
+					if ((!task.getTagsList().contains(tagName) && _tagsList.get(j).getIsSelected())) {
 						hasSameTag = false;
-						i--;
 					}
-					System.out.println("test2");
 				}
-				System.out.println("test2passed");
+				if (hasSameTag == false) {
+					list.remove(i);
+					i--;
+					System.out.println(task.getDescription());
+				}
 			}
 		}
 		setViewList(list);

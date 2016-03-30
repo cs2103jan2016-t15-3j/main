@@ -42,7 +42,7 @@ public class DoneCommand implements Command {
 		newTask.setIsOverdue(oldTask.getIsOverdue());
 		newTask.setIsDone(true);
 		listsManager.getMainList().add(newTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.updateLists();
 		
 		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask);
