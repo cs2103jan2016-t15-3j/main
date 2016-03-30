@@ -8,7 +8,7 @@ import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
 
-import paser.Parser;
+import parser.Parser;
 
 /**
  * This class interact with the UI and process the operation, 
@@ -41,7 +41,13 @@ public class Logic {
 
 	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
+		/*
+		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
+				historyManager.getUndoList().size(), historyManager.getRedoList().size(), listsManager.getTagsList().clone());
+		 */
+
 		Command commandObj = parser.parseCommand(userInput);
+
 		boolean isSuccessful;
 		//if (commandObj instanceof InvalidCommand) {
 		//	return false;
@@ -51,6 +57,7 @@ public class Logic {
 
 		if (isSuccessful) {
 			historyManager.getPreviousUserInputList().add(userInput);
+			historyManager.setPreviousUserInputCounter(-1);
 		}
 		save(commandObj);
 		return commandObj;
@@ -167,7 +174,7 @@ public class Logic {
 
 	public void setSelectedTag(String tagName, boolean isSelected) {
 		System.out.println("running setselected");
-		
+
 		if (isSelected) {
 			listsManager.updateSelectedTagsList(tagName, true);
 		} else {
@@ -187,19 +194,31 @@ public class Logic {
 		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " + listsManager.getCurrentViewType();
 		return currentViewType;
 	}
-	
+
 	public String getPreviousUserInput() {
-		int previousUserInputListLastIndex = historyManager.getPreviousUserInputList().size() - 1;
-		String previousUserInput = historyManager.getPreviousUserInputList().remove(previousUserInputListLastIndex);
-		historyManager.getNextUserInputList().add(previousUserInput);
-		return previousUserInput;
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() + 1);
+		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
+		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
+			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			System.out.println("previous: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
+			return previousUserInput;
+		}
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputList().size() - 1);
+		System.out.println("previous: " + "\t" + "counter: " + historyManager.getPreviousUserInputCounter());
+		return "";
 	}
-	
+
 	public String getNextUserInput() {
-		int nextUserInputListLastIndex = historyManager.getNextUserInputList().size() - 1;
-		String nextUserInput = historyManager.getNextUserInputList().remove(nextUserInputListLastIndex);
-		historyManager.getNextUserInputList().add(nextUserInput);
-		return nextUserInput;
+		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() - 1);
+		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
+		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
+			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			System.out.println("next: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
+			return previousUserInput;
+		}
+		historyManager.setPreviousUserInputCounter(-1);
+		System.out.println("next: " + "counter: " + historyManager.getPreviousUserInputCounter());
+		return "";
 	}
 
 	public boolean testLogicFramework(Command commandObj) {

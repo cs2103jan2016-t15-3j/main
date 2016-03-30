@@ -61,14 +61,14 @@ public class Feedback {
                 case EXIT:
                     //fallthrough
                 case UNKNOWN:
-                    if (getNumOfWords(userInput) == 1 && !isSpace) {
+                    if (getNumOfWords(userInput) == 1) {
                         for (CommandType type : CommandType.values()) {
                             if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
                                 prompts.add(type.name().toLowerCase());
                             }
                         }
                     } else {
-                        prompts.add("Invalid command");
+                        prompts.add("Invalid command: add | delete | edit | view | done | undone | undo | redo | exit");
                     }
                     break;
                 default:
@@ -78,18 +78,25 @@ public class Feedback {
 
 //        System.out.println(prompts.size());
         if (prompts.size() <= 0) {
-            prompts.add("Invalid command");
+            prompts.add("Invalid command: add | delete | edit | view | done | undone | undo | redo | exit");
         }
         return prompts;
     }
 
     public String getAutoComplete(String userInput) {
-        if (userInput.charAt(userInput.length() - 1) == ' ') {
-            isSpace = true;
-        } else {
-            isSpace = false;
+        ArrayList<String> cmdPrompts = new ArrayList<String>();
+        if (getNumOfWords(userInput) == 1) {
+            for (CommandType type : CommandType.values()) {
+                if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
+                    cmdPrompts.add(type.name().toLowerCase());
+                }
+            }
         }
-        return userInput;
+        if (cmdPrompts.size() == 1) {
+            return cmdPrompts.get(0) + " ";
+        } else {
+            return userInput;
+        }
     }
 
     private CommandType determineCommandType(String commandTypeString) {

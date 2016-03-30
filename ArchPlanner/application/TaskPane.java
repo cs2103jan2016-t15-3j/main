@@ -52,10 +52,10 @@ public class TaskPane extends GridPane {
     private void setLabelSize() {
         number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        startDate.setMinWidth(180);
-        startTime.setMinWidth(150);
-        endDate.setMinWidth(180);
-        endTime.setMinWidth(150);
+        startDate.setMinWidth(150);
+        startTime.setMinWidth(130);
+        endDate.setMinWidth(150);
+        endTime.setMinWidth(130);
         tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 

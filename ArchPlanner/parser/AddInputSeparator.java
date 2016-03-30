@@ -1,11 +1,11 @@
-package feedback;
+package parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class InputParameters {
+public class AddInputSeparator {
     
     public enum KeyWordType {
         ON, BY, FROM, UNKNOWN
@@ -31,35 +31,47 @@ public class InputParameters {
     private boolean _hasDescription;
     private boolean _hasKeyWord;
     private boolean _hasPartialKeyWord;
+    private boolean _hasPartialKeyWordTo;
     private boolean _hasStartDate;
     private boolean _hasStartTime;
     private boolean _hasEndDate;
     private boolean _hasEndTime;
     private boolean _hasTag;
     private boolean _hasValidTag;
+    private boolean _hasValidDateRange;
     
-    public InputParameters(String userInput) {
+    public AddInputSeparator(String userInput) {
         
-        BreakRegion breakUserInput = new BreakRegion(userInput);
-        BreakDateRegion breakDateRegion = new BreakDateRegion(breakUserInput.getDateRegion(), 
-                                          determineKeyWordType(breakUserInput.getKeyWord()));
+        AddBreakRegion breakUserInput = new AddBreakRegion(userInput);
+        _keyWord = determineKeyWordType(breakUserInput.getKeyWord());
+        String startDateRegion = breakUserInput.getStartDateRegion();
+        if (_keyWord == KeyWordType.FROM && isPartialToPresent(startDateRegion)) {
+            startDateRegion = startDateRegion.substring(0, getPartialToIndex(startDateRegion)).trim();
+            _hasPartialKeyWordTo = true;
+        } else {
+            _hasPartialKeyWordTo = false;
+        }
+        AddBreakDateRegion breakStartDateRegion = new AddBreakDateRegion(startDateRegion);
+        AddBreakDateRegion breakEndDateRegion = new AddBreakDateRegion(breakUserInput.getEndDateRegion());
         
-        _hasSpace = isSpacePresent(userInput);
+        _hasSpace = isSpacePresent(userInput) || !breakUserInput.getTagRegion().isEmpty();
         _hasDescription = !breakUserInput.getDescription().isEmpty();
-        _hasKeyWord = !breakUserInput.getKeyWord().isEmpty();
+        
         _hasPartialKeyWord = isPartialKeyWordPresent(userInput);
         _hasTag = !breakUserInput.getTagRegion().isEmpty();
         _hasValidTag = isValidTag(breakUserInput.getTagRegion());
-        _hasStartDate = breakDateRegion.hasStartDate();
-        _hasStartTime = breakDateRegion.hasStartTime();
-        _hasEndDate = breakDateRegion.hasEndDate();
-        _hasEndTime = breakDateRegion.hasEndTime();
+        _hasStartDate = breakStartDateRegion.hasDate();
+        _hasStartTime = breakStartDateRegion.hasTime();
+        _hasEndDate = breakEndDateRegion.hasDate();
+        _hasEndTime = breakEndDateRegion.hasTime();
         
         _description = breakUserInput.getDescription();
-        _keyWord = determineKeyWordType(breakUserInput.getKeyWord());
         _partialKeyWord = searchPartialKeyWord(userInput);
-        _startDateTime = breakDateRegion.getStartDateTime();
-        _endDateTime = breakDateRegion.getEndDateTime();
+        if (_partialKeyWord != KeyWordType.UNKNOWN) {
+            _keyWord = KeyWordType.UNKNOWN;
+        }
+        _startDateTime = breakStartDateRegion.getDateTime();
+        _endDateTime = breakEndDateRegion.getDateTime();
         if (_startDateTime != null) {
             _startDate = _startDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             _startTime = _startDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
@@ -68,19 +80,48 @@ public class InputParameters {
             _endDate = _endDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             _endTime = _endDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         }
+        if (_startDateTime == null && _endDateTime == null) {
+            _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
+            _hasPartialKeyWordTo = false;
+            if (!breakUserInput.getStartDateRegion().isEmpty() || _hasTag) {
+                _keyWord = KeyWordType.UNKNOWN;
+            }
+        }
+        if (_keyWord == KeyWordType.FROM && _endDateTime == null) {
+            _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
+            if (!breakUserInput.getEndDateRegion().isEmpty() || _hasTag) {
+                _keyWord = KeyWordType.UNKNOWN;
+                _hasPartialKeyWordTo = false;
+                _startDate = null;
+                _startTime = null;
+                _startDateTime = null;
+                _hasStartDate = false;
+                _hasStartTime = false;
+            }
+        }
+    
+        if (_startDateTime != null && _endDateTime != null) {
+            _hasValidDateRange = _startDateTime.before(_endDateTime);
+        }
+        
         _tags = getTags(breakUserInput.getTagRegion());
+        _hasKeyWord = _keyWord != KeyWordType.UNKNOWN;
         
         System.out.println("InputParameters------------------------------------------");
-        System.out.println("userInput: " + userInput + "|");
-        System.out.println("Description: " + _description + "|");
-        System.out.println("keyWord: " + _keyWord + "|");
-        System.out.println("partialKeyWord: " + _partialKeyWord + "|");
-        System.out.println("startDateTime: " + _startDateTime + "|");
-        System.out.println("endDateTime: " + _endDateTime + "|");
-        System.out.println("startDate: " + _startDate + "|");
-        System.out.println("startTime: " + _startTime + "|");
-        System.out.println("endDate: " + _endDate + "|");
-        System.out.println("endTime: " + _endTime + "|");
+        System.out.println("userInput: |" + userInput + "|");
+        System.out.println("Description: |" + _description + "|" + _hasDescription);
+        System.out.println("keyWord: |" + _keyWord + "|" + _hasKeyWord);
+        System.out.println("partialKeyWord: |" + _partialKeyWord + "|" + _hasPartialKeyWord); 
+        System.out.println("startDateTime: |" + _startDateTime + "|");
+        System.out.println("endDateTime: |" + _endDateTime + "|");
+        System.out.println("startDate: |" + _startDate + "|" + _hasStartDate);
+        System.out.println("startTime: |" + _startTime + "|" + _hasStartTime);
+        System.out.println("endDate: |" + _endDate + "|" + _hasEndDate);
+        System.out.println("endTime: |" + _endTime + "|" + _hasEndTime);
+        System.out.println("partialTo: |" + _hasPartialKeyWordTo + "|");
+        System.out.println("hasSpace |" + _hasSpace + "|");
+        System.out.println("hasTag |" + _hasTag + "|");
+        System.out.println("hasValidTag |" + _hasValidTag + "|");
         System.out.println("------------------------------------------InputParameters");
     }
     
@@ -95,35 +136,53 @@ public class InputParameters {
         System.out.println("Tag Region: " + tagRegion);
         if (tagRegion.startsWith("# ") || tagRegion.contains(" # ")) {
             return false;
-        }      
+        }
         String[] tags = tagRegion.split(STRING_MULTIPLE_WHITESPACE);
         for (int i = 0; i < tags.length; i++) {
             System.out.println("tag - " + tags[i]);
             if(!tags[i].startsWith("#")) {
                 return false;
             }
-        }        
+        }
         return true;
     }
     
     private String[] getTags(String tagRegion) {
-        if (isValidTag(tagRegion)) {
-            return tagRegion.split(STRING_MULTIPLE_WHITESPACE);
+        return tagRegion.split(STRING_MULTIPLE_WHITESPACE);
+    }
+    
+    private boolean isPartialToPresent(String input) {
+        return getPartialToIndex(input) != -1;
+    }
+    
+    private int getPartialToIndex(String input) {
+        if (input.trim().isEmpty()) {
+            return -1;
+        }
+        input = input.toLowerCase();
+        String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
+        if (splitInput.length < 2) {
+            return -1;
+        }
+        if ("to".startsWith(splitInput[splitInput.length - 1])) {
+            return input.lastIndexOf("t");
         } else {
-            return null;
+            return -1;
         }
     }
     
-    private boolean isPartialKeyWordPresent(String userInput) {
-        return searchPartialKeyWord(userInput) != KeyWordType.UNKNOWN;
+    private boolean isPartialKeyWordPresent(String input) {
+        return searchPartialKeyWord(input) != KeyWordType.UNKNOWN;
     }
     
-    private KeyWordType searchPartialKeyWord(String userInput) {
-        if (userInput.isEmpty() || isSpacePresent(userInput)) {
+    
+    private KeyWordType searchPartialKeyWord(String input) {
+        if (input.trim().isEmpty()) {
             return KeyWordType.UNKNOWN;
         }
-        String[] splitInput = userInput.split(STRING_MULTIPLE_WHITESPACE);
-        if (splitInput.length < 3) {
+        input = input.toLowerCase();
+        String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
+        if (splitInput.length < 2) {
             return KeyWordType.UNKNOWN;
         }
         KeyWordType foundKey = KeyWordType.UNKNOWN;
@@ -135,16 +194,16 @@ public class InputParameters {
         return foundKey;
     }
 
-    private KeyWordType determineKeyWordType(String commandTypeString) {
-        if (commandTypeString.isEmpty()) {
+    private KeyWordType determineKeyWordType(String KeyWordString) {
+        if (KeyWordString.isEmpty()) {
             return KeyWordType.UNKNOWN;
         }
 
-        if (commandTypeString.equalsIgnoreCase(KEY_WORDS[0])) {
+        if (KEY_WORDS[0].equalsIgnoreCase(KeyWordString)) {
             return KeyWordType.ON;
-        } else if (commandTypeString.equalsIgnoreCase(KEY_WORDS[1])) {
+        } else if (KEY_WORDS[1].equalsIgnoreCase(KeyWordString)) {
             return KeyWordType.BY;
-        } else if (commandTypeString.equalsIgnoreCase(KEY_WORDS[2])) {
+        } else if (KEY_WORDS[2].equalsIgnoreCase(KeyWordString)) {
             return KeyWordType.FROM;
         } else {
             return KeyWordType.UNKNOWN;
@@ -165,6 +224,10 @@ public class InputParameters {
     
     public boolean hasPartialKeyWord() {
         return _hasPartialKeyWord;
+    }
+    
+    public boolean hasPartialKeyWordTo() {
+        return _hasPartialKeyWordTo;
     }
     
     public boolean hasStartDate() {
@@ -189,6 +252,10 @@ public class InputParameters {
     
     public boolean hasValidTag() {
         return _hasValidTag;
+    }
+    
+    public boolean hasValidDateRange() {
+        return _hasValidDateRange;
     }
     
     public String getDescription() {
@@ -235,7 +302,7 @@ public class InputParameters {
         }
     }
  
-    public LocalTime getEnTime() {
+    public LocalTime getEndTime() {
         if (_hasEndTime) {
             return _endTime;
         } else {

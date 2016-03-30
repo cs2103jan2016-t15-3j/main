@@ -95,7 +95,7 @@ public class SortMechanism {
 	private boolean hasTopTaskStartDateEarlierThanBottomTaskStartDate(Task topTask, Task bottomTask) {
 
 		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() != null)) 
-				&& topTask.getStartDate().isBefore(bottomTask.getStartDate()));
+				&& topTask.getStartDate().isAfter(bottomTask.getStartDate()));
 	}
 
 	private boolean hasTopTaskStartTimeEarlierThanBottomTaskStartTime(Task topTask, Task bottomTask) {
@@ -103,13 +103,13 @@ public class SortMechanism {
 		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() != null))
 				&& ((topTask.getStartTime() != null) && (bottomTask.getStartTime() != null)) 
 				&& (topTask.getStartDate().equals(bottomTask.getStartDate()))
-				&& topTask.getStartTime().isBefore(bottomTask.getStartTime()));
+				&& topTask.getStartTime().isAfter(bottomTask.getStartTime()));
 	}
 	
 	private boolean hasTopTaskStartDateEarlierThanBottomTaskEndDate(Task topTask, Task bottomTask) {
 
 		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() == null) && (bottomTask.getEndDate() != null))
-				&& topTask.getStartDate().isBefore(bottomTask.getEndDate()));
+				&& topTask.getStartDate().isAfter(bottomTask.getEndDate()));
 	}
 	
 	private boolean hasTopTaskStartTimeEarlierThanBottomTaskEndTime(Task topTask, Task bottomTask) {
@@ -117,13 +117,13 @@ public class SortMechanism {
 		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() == null) && (bottomTask.getEndDate() != null))
 				&& ((topTask.getStartTime() != null) && (bottomTask.getEndTime() != null)) 
 				&& (topTask.getStartDate().equals(bottomTask.getEndDate()))
-				&& topTask.getStartTime().isBefore(bottomTask.getEndTime()));
+				&& topTask.getStartTime().isAfter(bottomTask.getEndTime()));
 	}
 	
 	private boolean hasTopTaskEndDateEarlierThanBottomTaskStartDate(Task topTask, Task bottomTask) {
 
 		return (((bottomTask.getStartDate() != null) && (topTask.getStartDate() == null) && (topTask.getEndDate() != null))
-				&& topTask.getEndDate().isBefore(bottomTask.getStartDate()));
+				&& topTask.getEndDate().isAfter(bottomTask.getStartDate()));
 	}
 	
 	private boolean hasTopTaskEndTimeEarlierThanBottomTaskstartTime(Task topTask, Task bottomTask) {
@@ -131,13 +131,13 @@ public class SortMechanism {
 		return (((bottomTask.getStartDate() != null) && (topTask.getStartDate() == null) && (topTask.getEndDate() != null))
 				&& ((topTask.getEndTime() != null) && (bottomTask.getStartTime() != null)) 
 				&& (topTask.getEndDate().equals(bottomTask.getStartDate()))
-				&& topTask.getEndTime().isBefore(bottomTask.getStartTime()));
+				&& topTask.getEndTime().isAfter(bottomTask.getStartTime()));
 	}
 	private boolean hasTopTaskEndDateEarlierThanBottomTaskEndDate(Task topTask, Task bottomTask) {
 
 		return (((topTask.getStartDate() == null) && (bottomTask.getStartDate() == null)) 
 				&& ((topTask.getEndDate() != null) && (bottomTask.getEndDate() != null)) 
-				&& topTask.getEndDate().isBefore(bottomTask.getEndDate()));
+				&& topTask.getEndDate().isAfter(bottomTask.getEndDate()));
 	}
 	
 	private boolean hasTopTaskEndTimeEarlierThanBottomTaskEndTime(Task topTask, Task bottomTask) {
@@ -146,7 +146,7 @@ public class SortMechanism {
 				&& ((topTask.getEndDate() != null) && (bottomTask.getEndDate() != null)) 
 				&& ((topTask.getEndTime() != null) && (bottomTask.getEndTime() != null)) 
 				&& (topTask.getEndDate().isEqual(bottomTask.getEndDate())) 
-				&& (topTask.getEndTime().isBefore(bottomTask.getEndTime())));
+				&& (topTask.getEndTime().isAfter(bottomTask.getEndTime())));
 	}
 
 	public void sortListByDescription(ArrayList<Task> list) {
