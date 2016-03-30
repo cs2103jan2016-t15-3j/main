@@ -1,8 +1,8 @@
 package feedback;
 
-import paser.InputSeparator;
-import paser.time.TimeParser;
-import paser.time.TimeParserResult;
+import parser.InputSeparator;
+import parser.time.TimeParser;
+import parser.time.TimeParserResult;
 
 import java.util.ArrayList;
 

@@ -55,14 +55,14 @@
 }
 
 .label {
-	-fx-font-size: 1.8em;
+	-fx-font-size: 1.5em;
     -fx-font-family: "Tempus Sans ITC";
     -fx-text-fill: gray;
     -fx-padding: 0 10 0 10;
 }
 
 .toggle-button {
-	-fx-font-size: 1.8em;
+	-fx-font-size: 1.5em;
     -fx-font-family: "Tempus Sans ITC";
     -fx-text-fill: gray;
     

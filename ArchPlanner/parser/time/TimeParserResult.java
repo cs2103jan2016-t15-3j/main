@@ -1,4 +1,4 @@
-package paser.time;
+package parser.time;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

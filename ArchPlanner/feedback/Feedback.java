@@ -61,7 +61,7 @@ public class Feedback {
                 case EXIT:
                     //fallthrough
                 case UNKNOWN:
-                    if (getNumOfWords(userInput) == 1 && !isSpace) {
+                    if (getNumOfWords(userInput) == 1) {
                         for (CommandType type : CommandType.values()) {
                             if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
                                 prompts.add(type.name().toLowerCase());
@@ -84,12 +84,19 @@ public class Feedback {
     }
 
     public String getAutoComplete(String userInput) {
-        if (userInput.charAt(userInput.length() - 1) == ' ') {
-            isSpace = true;
-        } else {
-            isSpace = false;
+        ArrayList<String> cmdPrompts = new ArrayList<String>();
+        if (getNumOfWords(userInput) == 1) {
+            for (CommandType type : CommandType.values()) {
+                if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
+                    cmdPrompts.add(type.name().toLowerCase());
+                }
+            }
         }
-        return userInput;
+        if (cmdPrompts.size() == 1) {
+            return cmdPrompts.get(0) + " ";
+        } else {
+            return userInput;
+        }
     }
 
     private CommandType determineCommandType(String commandTypeString) {

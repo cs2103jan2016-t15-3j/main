@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
+import com.sun.javafx.image.impl.ByteIndexed.Getter;
+
 import application.TaskPane;
 import feedback.Feedback;
 import javafx.animation.FadeTransition;
@@ -223,16 +225,48 @@ public class MainController implements Initializable{
         }
     }
     
+    @FXML
+    private void onKeyReleased(KeyEvent event) {    
+        String autoInput = "";
+        switch (event.getCode()) {
+            case UP : 
+                autoInput = logic.getPreviousUserInput();
+                if (autoInput.isEmpty()) {
+                    autoInput = userInput.getText();
+                }
+                userInput.setText(autoInput);
+                userInput.positionCaret(autoInput.length() + 1);
+                break;
+                
+            case DOWN :
+                autoInput = logic.getNextUserInput();
+                userInput.setText(autoInput);
+                userInput.positionCaret(autoInput.length() + 1);
+                break;
+                
+            case TAB :
+                userInput.setText(feedback.getAutoComplete(userInput.getText()));
+                userInput.positionCaret(userInput.getText().length() + 1);
+                break;
+                
+            default :
+                break;
+        } 
+    }
+    
+    @FXML
+    private void onKeyPressed(KeyEvent event) { 
+        if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
+            event.consume();
+        }
+    }
+    
     public void onTextChanged(String newString) {
         if (newString.isEmpty()) {          
             topPrompt.setVisible(false);
             bottomPrompt.setVisible(false);
             log.info("hide prompt");
         } else {
-            String autoComplete = feedback.getAutoComplete(userInput.getText());
-            userInput.setText(autoComplete);
-            userInput.positionCaret(userInput.getText().length() + 1);;
-            
             ArrayList<String> prompt = feedback.getPrompts(newString);
             assert(prompt != null);
             assert(prompt.size() > 0 && prompt.size() <= 4);
@@ -257,31 +291,6 @@ public class MainController implements Initializable{
             }
             log.info("display prompt");
         }
-    }
-    
-    @FXML
-    private void onKeyPressed(KeyEvent event) {
-        String autoInput = "";
-        switch (event.getCode()) {
-            case UP : 
-                autoInput = logic.getPreviousUserInput();
-                if (autoInput.isEmpty()) {
-                    autoInput = userInput.getText();
-                }
-                userInput.setText(autoInput);
-                userInput.positionCaret(userInput.getText().length() + 1);
-                break;
-            case DOWN :
-                autoInput = logic.getNextUserInput();
-                if (autoInput.isEmpty()) {
-                    autoInput = userInput.getText();
-                }
-                userInput.setText(autoInput);
-                userInput.positionCaret(userInput.getText().length() + 1);
-                break;
-            default:
-                break;
-        }  
     }
     
     private void onTagPressed(ActionEvent event) {

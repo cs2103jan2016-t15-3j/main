@@ -8,7 +8,7 @@ import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
 
-import paser.Parser;
+import parser.Parser;
 
 /**
  * This class interact with the UI and process the operation, 

@@ -1,7 +1,7 @@
-package paser;
+package parser;
 
-import paser.time.TimeParser;
-import paser.time.TimeParserResult;
+import parser.time.TimeParser;
+import parser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
