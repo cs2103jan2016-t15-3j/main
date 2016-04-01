@@ -5,8 +5,6 @@ import java.util.Date;
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
-import parser.AddInputSeparator.KeyWordType;
-
 public class AddBreakDateRegion {
     private Date dateTime;   
     private boolean hasDate;

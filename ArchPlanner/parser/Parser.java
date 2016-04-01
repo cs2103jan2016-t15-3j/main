@@ -1,6 +1,9 @@
 package parser;
 
+import logic.Tag;
 import logic.commands.*;
+
+import java.util.ArrayList;
 
 /**
  * Created by lifengshuang on 3/23/16.
@@ -17,11 +20,12 @@ public class Parser {
     private static final int COMMAND_TYPE_REDO = 7;
     private static final int COMMAND_TYPE_SEARCH = 8;
     private static final int COMMAND_TYPE_EXIT = 9;
+    private static final int COMMAND_TYPE_SET = 10;
 
     private static final String[] ALL_COMMANDS =
             {"add", "delete", "edit",
                     "view", "done", "undone",
-                    "undo", "redo", "search", "exit"};
+                    "undo", "redo", "search", "exit", "set"};
 
     public static void init() {
         new Thread(() -> {
@@ -64,6 +68,49 @@ public class Parser {
                 return new SearchCommandParser().parse(input);
             case COMMAND_TYPE_EXIT:
                 return new ExitCommand();
+        }
+        return new InvalidCommand("Failed to parse");
+    }
+
+    public Command parseCommand(String input, int viewListSize, int undoListSize, int redoListSize, ArrayList<Tag> tagList) {
+        if (input == null) {
+            return new InvalidCommand("Null input");
+        }
+//        ListInformation listInformation = new ListInformation(viewListSize, undoListSize, redoListSize, tagList);
+        int commandType = detectCommandType(input);
+        switch (commandType) {
+            case COMMAND_TYPE_UNKNOWN:
+                return new InvalidCommand("Invalid command");
+            case COMMAND_TYPE_ADD:
+                return new AddCommandParser().parse(input);
+            case COMMAND_TYPE_DELETE:
+                return new DeleteCommandParser().parse(input, viewListSize);
+            case COMMAND_TYPE_EDIT:
+                return new EditCommandParser().parse(input, viewListSize);
+            case COMMAND_TYPE_VIEW:
+                return new ViewCommandParser().parse(input);
+            case COMMAND_TYPE_DONE:
+                return new DoneCommandParser().parse(input, viewListSize);
+            case COMMAND_TYPE_UNDONE:
+                return new UndoneCommandParser().parse(input, viewListSize);
+            case COMMAND_TYPE_UNDO:
+                if (undoListSize > 0) {
+                    return new UndoCommand();
+                } else {
+                    return new InvalidCommand("Can't undo anymore");
+                }
+            case COMMAND_TYPE_REDO:
+                if (redoListSize > 0) {
+                    return new RedoCommand();
+                } else {
+                    return new InvalidCommand("Can't redo anymore");
+                }
+            case COMMAND_TYPE_SEARCH:
+                return new SearchCommandParser().parse(input);
+            case COMMAND_TYPE_EXIT:
+                return new ExitCommand();
+            case COMMAND_TYPE_SET:
+                return new SetCommandParser().parse(input);
         }
         return new InvalidCommand("Failed to parse");
     }

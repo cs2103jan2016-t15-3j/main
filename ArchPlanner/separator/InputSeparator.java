@@ -1,4 +1,4 @@
-package parser;
+package separator;
 
 /**
  * Created by lifengshuang on 3/28/16.
@@ -7,13 +7,14 @@ public class InputSeparator {
 
     public enum KeywordType {
         DESCRIPTION, START_TIME, END_TIME, START_DATE, END_DATE, FROM,
-        DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS
+        DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH
     }
 
 
-    private boolean isValid;
+    //    private boolean isValid;
     private int wordCount;
     private Integer id;
+    private Integer secondId;
     private KeywordType keywordType;
     private String parameter;
     private int idPosition = 1;
@@ -22,26 +23,42 @@ public class InputSeparator {
     private boolean endWithSpace;
 
     public InputSeparator(String command) {
-        this.isValid = isValid(command);
+//        this.isValid = isValid(command);
         String[] breakUserInput = command.split("\\s+");
         this.wordCount = breakUserInput.length;
         this.id = parseID(breakUserInput);
         this.keywordType = parseKeyword(breakUserInput);
+        this.secondId = parseSecondId(breakUserInput);
         this.parameter = parseParameter(breakUserInput);
         this.endWithSpace = command.endsWith(" ");
     }
 
-    private boolean isValid(String command) {
-//        //two space is not allowed
-//        if (command.contains("  ")) {
-//            return false;
-//        }
-//        //Can't start with space
-//        if (command.startsWith(" ")) {
-//            return false;
-//        }
-        return true;
+    private Integer parseSecondId(String[] input) {
+        try {
+            if (keywordType != null && keywordType == KeywordType.TO) {
+                Integer result = Integer.parseInt(input[parameterPosition]);
+                parameterPosition++;
+                return result;
+            }
+            return null;
+        } catch (NumberFormatException e) {
+            return null;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
+
+//    private boolean isValid(String command) {
+////        //two space is not allowed
+////        if (command.contains("  ")) {
+////            return false;
+////        }
+////        //Can't start with space
+////        if (command.startsWith(" ")) {
+////            return false;
+////        }
+//        return true;
+//    }
 
     private Integer parseID(String[] input) {
         try {
@@ -98,6 +115,10 @@ public class InputSeparator {
         return this.id;
     }
 
+    public Integer getSecondId() {
+        return secondId;
+    }
+
     public KeywordType getKeywordType() {
         return this.keywordType;
     }
@@ -106,8 +127,30 @@ public class InputSeparator {
         return this.parameter;
     }
 
-    public boolean isValid() {
-        return isValid;
+//    public boolean isValid() {
+//        return isValid;
+//    }
+
+    public boolean isIdOnly() {
+        return id != null && keywordType == null && parameter == null;
+    }
+
+    public boolean isIdRangeValid(Integer id, int viewListSize) {
+        return id != null && id > 0 && id <= viewListSize;
+    }
+
+    public boolean hasTwoValidId(int viewListSize) {
+        try {
+
+            return isIdRangeValid(id, viewListSize)
+                    && isIdRangeValid(secondId, viewListSize)
+                    && id < secondId
+                    && keywordType == KeywordType.TO
+                    && parameter == null;
+
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     public int getWordCount() {

@@ -11,13 +11,22 @@ import logic.commands.ViewCommand.VIEW_TYPE;
 public class UndoneCommand implements Command {
 
 	private int _index;
+	private int _toIndex;
 
 	public UndoneCommand(int index) {
 		_index = index - 1;
 	}
 
+	public UndoneCommand(int index, int toIndex) {
+		_index = index - 1;
+		_toIndex = toIndex - 1;
+	}
 	public int getIndex() {
 		return _index;
+	}
+
+	public int getToIndex() {
+		return _toIndex;
 	}
 
 	public boolean execute() {

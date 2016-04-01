@@ -3,6 +3,7 @@ package parser;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
 import logic.commands.UndoneCommand;
+import separator.InputSeparator;
 
 /**
  * Created by lifengshuang on 3/15/16.
@@ -21,6 +22,26 @@ public class UndoneCommandParser extends CommandParser {
             } catch (NumberFormatException e) {
                 return new InvalidCommand("Undone index should be a number");
             }
+        }
+    }
+
+    public Command parse(String input, int viewListSize) {
+        if (input.length() <= UNDONE_ARGUMENT_INDEX) {
+            return new InvalidCommand("Undone index not found");
+        }
+        else {
+            InputSeparator separator = new InputSeparator(input);
+            if (separator.isIdOnly()) {
+                if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
+                    return new UndoneCommand(separator.getID());
+                } else {
+                    return new InvalidCommand("Undone index out of range!");
+                }
+            }
+            if (separator.hasTwoValidId(viewListSize)) {
+                return new UndoneCommand(separator.getID(), separator.getSecondId());
+            }
+            return new InvalidCommand("Undone command is invalid!");
         }
     }
 }

@@ -1,9 +1,13 @@
-package parser;
+package test;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 import logic.commands.Command;
 import org.junit.Test;
+import parser.AddCommandParser;
+import parser.DeleteCommandParser;
+import parser.EditCommandParser;
+import parser.ViewCommandParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +46,7 @@ public class ParserTest {
         Command command6 = new AddCommandParser().parse("add movie from Friday 13:00 to 15:00");
 
         //add ... by <date><time>
-        Command command7 = new AddCommandParser().parse("add manual V2.0 by next Sunday 23:59:59");
+        Command command7 = new AddCommandParser().parse("add manual V0.2 by next Sunday 23:59:59");
 
         /* Only time */
         //add ... on <time>

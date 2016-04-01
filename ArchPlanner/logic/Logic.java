@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
@@ -41,12 +42,10 @@ public class Logic {
 
 	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
-		/*
-		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
-				historyManager.getUndoList().size(), historyManager.getRedoList().size(), listsManager.getTagsList().clone());
-		 */
+		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(),
+				historyManager.getUndoList().size(), historyManager.getRedoList().size(), (ArrayList<Tag>) listsManager.getTagsList().clone());
 
-		Command commandObj = parser.parseCommand(userInput);
+//		Command commandObj = parser.parseCommand(userInput);
 
 		boolean isSuccessful;
 		//if (commandObj instanceof InvalidCommand) {

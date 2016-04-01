@@ -6,6 +6,7 @@ import logic.TaskParameters;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
+import separator.InputSeparator;
 
 /**
  * Created by lifengshuang on 3/16/16.
@@ -26,7 +27,9 @@ public class ViewCommandParser extends CommandParser {
         InputSeparator separator = new InputSeparator(input);
         InputSeparator.KeywordType type = separator.getKeywordType();
         String parameter = separator.getParameter();
-
+        if (separator.getID() != null) {
+            return new InvalidCommand("View command shouldn't have id");
+        }
         if (type == null) {
             if (parameter == null) {
                 return new InvalidCommand("View command incomplete");
@@ -82,8 +85,7 @@ public class ViewCommandParser extends CommandParser {
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid Time");
                 }
-                if (timeParserResult.getFirstDate() != null && timeParserResult.getSecondDate() != null
-                        && timeParserResult.getFirstTime() == null && timeParserResult.getSecondTime() == null) {
+                if (timeParserResult.hasTwoDateAndNoTime()) {
                     result.setStartDate(timeParserResult.getFirstDate());
                     result.setEndDate(timeParserResult.getSecondDate());
                 } else {
@@ -94,8 +96,7 @@ public class ViewCommandParser extends CommandParser {
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid Start Date");
                 }
-                if (timeParserResult.getFirstDate() != null && timeParserResult.getSecondDate() == null
-                        && timeParserResult.getFirstTime() == null && timeParserResult.getSecondTime() == null) {
+                if (timeParserResult.hasOneDateAndNoTime()) {
                     result.setStartDate(timeParserResult.getFirstDate());
                 } else {
                     return new InvalidCommand("Invalid Start Date");
@@ -105,8 +106,7 @@ public class ViewCommandParser extends CommandParser {
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid Start Time");
                 }
-                if (timeParserResult.getFirstDate() == null && timeParserResult.getSecondDate() == null
-                        && timeParserResult.getFirstTime() != null && timeParserResult.getSecondTime() == null) {
+                if (timeParserResult.hasNoDateAndOneTime()) {
                     result.setStartTime(timeParserResult.getFirstTime());
                 } else {
                     return new InvalidCommand("Invalid Start Time");
@@ -116,8 +116,7 @@ public class ViewCommandParser extends CommandParser {
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid End Date");
                 }
-                if (timeParserResult.getFirstDate() != null && timeParserResult.getSecondDate() == null
-                        && timeParserResult.getFirstTime() == null && timeParserResult.getSecondTime() == null) {
+                if (timeParserResult.hasOneDateAndNoTime()) {
                     result.setEndDate(timeParserResult.getFirstDate());
                 } else {
                     return new InvalidCommand("Invalid End Date");
@@ -127,8 +126,7 @@ public class ViewCommandParser extends CommandParser {
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid End Time");
                 }
-                if (timeParserResult.getFirstDate() == null && timeParserResult.getSecondDate() == null
-                        && timeParserResult.getFirstTime() != null && timeParserResult.getSecondTime() == null) {
+                if (timeParserResult.hasNoDateAndOneTime()) {
                     result.setEndTime(timeParserResult.getFirstTime());
                 } else {
                     return new InvalidCommand("Invalid End Time");
@@ -136,7 +134,7 @@ public class ViewCommandParser extends CommandParser {
 
                 break;
         }
-        return new ViewCommand(null, null, result);
+        return new InvalidCommand("Invalid Command");
 
 //        input = input.substring(VIEW_INDEX);
 //        if (input.equals("all")) {

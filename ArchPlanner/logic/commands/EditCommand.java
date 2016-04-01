@@ -13,14 +13,26 @@ public class EditCommand implements Command {
 
 	private TaskParameters _task;
 	private int _index;
+	public enum RemoveType {START, START_TIME, START_DATE, END, END_TIME, END_DATE, TAG}
+	private RemoveType _removeType;
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
-		_task = new TaskParameters();
 		_task = newTaskParameters;
 		_index = index - 1;
 	}
-	
+
+	public EditCommand(int index, TaskParameters newTaskParameters, RemoveType removeType) {
+		assert(index >= 1);
+		_task = newTaskParameters;
+		_index = index - 1;
+		_removeType = removeType;
+	}
+
+	public void setRemoveType(RemoveType removeType) {
+		_removeType = removeType;
+	}
+
 	public boolean execute() {
 		return false;
 	}

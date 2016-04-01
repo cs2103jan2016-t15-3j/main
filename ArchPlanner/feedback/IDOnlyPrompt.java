@@ -1,6 +1,6 @@
 package feedback;
 
-import parser.InputSeparator;
+import separator.InputSeparator;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package feedback;
 
-import parser.InputSeparator;
+import separator.InputSeparator;
 import parser.time.TimeParser;
 import parser.time.TimeParserResult;
 
@@ -27,6 +27,14 @@ public class EditPrompt {
     private final String EDIT_TAG = "edit <Task ID> #<Tag>";
     private final String EDIT_TAG_APPENDIX = " #<Tag>";
 
+    private final String REMOVE_START = "edit <Task ID> start remove";
+    private final String REMOVE_START_TIME = "edit <Task ID> start time remove";
+    private final String REMOVE_START_DATE = "edit <Task ID> start date remove";
+    private final String REMOVE_END = "edit <Task ID> end remove";
+    private final String REMOVE_END_TIME = "edit <Task ID> end time remove";
+    private final String REMOVE_END_DATE = "edit <Task ID> end date remove";
+    private final String REMOVE_TAG = "edit <Task ID> # remove";
+
     private final String INVALID_ID = "Invalid ID: edit <Task ID>";
     private final String INVALID_START_TIME = "Invalid time: edit <Task ID> start time <Start Time>";
     private final String INVALID_START_DATE = "Invalid date: edit <Task ID> start date <Start Date>";
@@ -36,12 +44,13 @@ public class EditPrompt {
     private final String INVALID_KEYWORD = "Invalid keyword";
 
     private final String KEYWORD_DESCRIPTION = "description";
-    private final String KEYWORD_START = "start";
+    private final String KEYWORD_START_REMOVE = "start remove";
     private final String KEYWORD_START_TIME = "start time";
     private final String KEYWORD_START_DATE = "start date";
-    private final String KEYWORD_END = "end";
+    private final String KEYWORD_END_REMOVE = "end remove";
     private final String KEYWORD_END_TIME = "end time";
     private final String KEYWORD_END_DATE = "end date";
+    private final String KEYWORD_TAG_REMOVE = "# remove";
 
 
     ArrayList<String> promptList = new ArrayList<>();
@@ -77,7 +86,9 @@ public class EditPrompt {
                 promptList.add(EDIT_TAG);
             } else {
                 //check tags
+
                 boolean hasTags = checkTags(parameter, endWithSpace);
+
                 if (!hasTags) {
                     if (KEYWORD_DESCRIPTION.startsWith(parameter)) {
                         promptList.add(EDIT_DESCRIPTION);
@@ -94,6 +105,15 @@ public class EditPrompt {
                     if (KEYWORD_END_TIME.startsWith(parameter)) {
                         promptList.add(EDIT_END_TIME);
                     }
+                    if (KEYWORD_START_REMOVE.startsWith(parameter)) {
+                        promptList.add(REMOVE_START);
+                    }
+                    if (KEYWORD_END_REMOVE.startsWith(parameter)) {
+                        promptList.add(REMOVE_END);
+                    }
+                }
+                if (KEYWORD_TAG_REMOVE.startsWith(parameter)) {
+                    promptList.add(REMOVE_TAG);
                 }
             }
         } else {
@@ -105,6 +125,7 @@ public class EditPrompt {
                 case START_DATE:
                     if (isValidDate(result, parameter)) {
                         promptList.add(EDIT_START_DATE_FULL);
+                        promptList.add(REMOVE_START_DATE);
                     } else {
                         promptList.add(INVALID_START_DATE);
                     }
@@ -112,13 +133,16 @@ public class EditPrompt {
                 case START_TIME:
                     if (isValidTime(result, parameter)) {
                         promptList.add(EDIT_START_TIME_FULL);
+                        promptList.add(REMOVE_START_TIME);
                     } else {
                         promptList.add(INVALID_START_TIME);
                     }
+
                     break;
                 case END_DATE:
                     if (isValidDate(result, parameter)) {
                         promptList.add(EDIT_END_DATE_FULL);
+                        promptList.add(REMOVE_END_DATE);
                     } else {
                         promptList.add(INVALID_END_DATE);
                     }
@@ -126,6 +150,7 @@ public class EditPrompt {
                 case END_TIME:
                     if (isValidTime(result, parameter)) {
                         promptList.add(EDIT_END_TIME_FULL);
+                        promptList.add(REMOVE_END_TIME);
                     } else {
                         promptList.add(INVALID_END_TIME);
                     }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Feedback {
 
     enum CommandType {
-        ADD, DELETE, EDIT, VIEW, DONE, UNDONE, UNDO, REDO, EXIT, UNKNOWN
+        ADD, DELETE, EDIT, VIEW, DONE, UNDONE, UNDO, REDO, EXIT, UNKNOWN, SET
     }
 
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
@@ -41,11 +41,13 @@ public class Feedback {
                     prompts = new AddPrompt().getPrompts(userInput.substring(3));
                     break;
                 case EDIT:
-                    //todo: edit prompt
                     prompts = new EditPrompt().getPrompts(userInput);
                     break;
                 case VIEW:
                     prompts = new ViewPrompt().getPrompts(userInput);
+                    break;
+                case SET:
+                    prompts = new SetPrompt().getPrompts(userInput);
                     break;
                 case DELETE:
                     //fallthrough

@@ -2,8 +2,8 @@ package feedback;
 
 import java.util.ArrayList;
 
-import parser.AddInputSeparator;
-import parser.AddInputSeparator.KeyWordType;
+import separator.AddInputSeparator;
+import separator.AddInputSeparator.KeyWordType;
 
 public class AddPrompt {
     

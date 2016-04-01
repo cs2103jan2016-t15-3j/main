@@ -65,4 +65,16 @@ public class TimeParserResult {
     public LocalTime getSecondTime() {
         return secondTime;
     }
+
+    public boolean hasNoDateAndOneTime() {
+        return firstDate == null && secondDate == null && firstTime != null && secondTime == null;
+    }
+
+    public boolean hasOneDateAndNoTime() {
+        return firstDate != null && secondDate == null && firstTime == null && secondTime == null;
+    }
+
+    public boolean hasTwoDateAndNoTime() {
+        return firstDate != null && secondDate != null && firstTime == null && secondTime == null;
+    }
 }

@@ -1,4 +1,7 @@
-package parser;
+package separator;
+
+import parser.AddBreakDateRegion;
+import parser.AddBreakRegion;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
