@@ -57,14 +57,14 @@
 .label {
 	-fx-font-size: 1.5em;
     -fx-font-family: "Tempus Sans ITC";
-    -fx-text-fill: gray;
+    -fx-text-fill: black;
     -fx-padding: 0 10 0 10;
 }
 
 .toggle-button {
 	-fx-font-size: 1.5em;
     -fx-font-family: "Tempus Sans ITC";
-    -fx-text-fill: gray;
+    -fx-text-fill: black;
     
 	-fx-background-radius: 15;	
 	-fx-background-color: lightgrey;

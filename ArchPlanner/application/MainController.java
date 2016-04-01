@@ -52,6 +52,7 @@ import logic.Task;
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
+import parser.Parser;
 
 public class MainController implements Initializable{
     
@@ -107,6 +108,7 @@ public class MainController implements Initializable{
         logic = new Logic();
         
         logic.loadFile();
+        Parser.init();
         
         updateUi();
  
@@ -314,7 +316,7 @@ public class MainController implements Initializable{
         fadeTransition.stop();
         node.setVisible(true);
         
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        PauseTransition pause = new PauseTransition(Duration.millis(1500));
         FadeTransition fade = new FadeTransition(Duration.millis(500), node);
         fade.setFromValue(1);
         fade.setToValue(0);

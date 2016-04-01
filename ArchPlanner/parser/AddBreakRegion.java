@@ -5,15 +5,15 @@ public class AddBreakRegion {
     private final String[] KEY_WORDS = {"on", "by", "from"};
     
     private String description;
-    private String startDateRegion;
-    private String endDateRegion;
+    private String firstDateRegion;
+    private String secondDateRegion;
     private String tagRegion;
     private String keyWord;
     
     public AddBreakRegion(String userInput) {
         description = "";
-        startDateRegion = "";
-        endDateRegion = "";
+        firstDateRegion = "";
+        secondDateRegion = "";
         tagRegion = "";
         keyWord = "";
         
@@ -38,13 +38,13 @@ public class AddBreakRegion {
             if (keyWord.equals(KEY_WORDS[2])) {
                 keyWordToPosition = dateRegion.indexOf(" to ");          
                 if (keyWordToPosition > 0) {
-                    startDateRegion = dateRegion.substring(0, keyWordToPosition + 4);
-                    endDateRegion = dateRegion.substring(keyWordToPosition + 4);
+                    firstDateRegion = dateRegion.substring(0, keyWordToPosition + 4);
+                    secondDateRegion = dateRegion.substring(keyWordToPosition + 4);
                 } else {
-                    startDateRegion = dateRegion;
+                    firstDateRegion = dateRegion;
                 }
             } else {
-                startDateRegion = dateRegion;
+                firstDateRegion = dateRegion;
             }
         } else {
             tagPosition = getTagPosition(userInput);
@@ -58,14 +58,14 @@ public class AddBreakRegion {
         
         description = description.trim();
         keyWord = keyWord.trim();
-        startDateRegion = startDateRegion.trim();
-        endDateRegion = endDateRegion.trim();
+        firstDateRegion = firstDateRegion.trim();
+        secondDateRegion = secondDateRegion.trim();
         
         System.out.println();
         System.out.println("BreakRegion------------------------------------------");
         System.out.println("Description: |" + description + "|");
-        System.out.println("startDateRegion: |" + startDateRegion + "|");
-        System.out.println("endDateRegion: |" + endDateRegion + "|");
+        System.out.println("startDateRegion: |" + firstDateRegion + "|");
+        System.out.println("endDateRegion: |" + secondDateRegion + "|");
         System.out.println("TagRegion: |" + tagRegion + "|");
         System.out.println("KeyWord: |" + keyWord + "|");
         System.out.println("------------------------------------------BreakRegion");
@@ -75,12 +75,12 @@ public class AddBreakRegion {
         return description;
     }
     
-    public String getStartDateRegion() {
-        return startDateRegion;
+    public String getFirstDateRegion() {
+        return firstDateRegion;
     }
     
-    public String getEndDateRegion() {
-        return endDateRegion;
+    public String getSecondDateRegion() {
+        return secondDateRegion;
     }
     
     public String getTagRegion() {

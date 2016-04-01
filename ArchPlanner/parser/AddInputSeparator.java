@@ -44,15 +44,32 @@ public class AddInputSeparator {
         
         AddBreakRegion breakUserInput = new AddBreakRegion(userInput);
         _keyWord = determineKeyWordType(breakUserInput.getKeyWord());
-        String startDateRegion = breakUserInput.getStartDateRegion();
-        if (_keyWord == KeyWordType.FROM && isPartialToPresent(startDateRegion)) {
-            startDateRegion = startDateRegion.substring(0, getPartialToIndex(startDateRegion)).trim();
-            _hasPartialKeyWordTo = true;
-        } else {
-            _hasPartialKeyWordTo = false;
+        
+        String startDateRegion = "";
+        String endDateRegion = "";
+        switch (_keyWord) {
+            case ON :
+                startDateRegion = breakUserInput.getFirstDateRegion();
+                break;
+            case BY :
+                endDateRegion = breakUserInput.getFirstDateRegion();
+                break;
+            case FROM :
+                startDateRegion = breakUserInput.getFirstDateRegion();
+                endDateRegion = breakUserInput.getSecondDateRegion();
+                if (isPartialToPresent(startDateRegion)) {
+                    startDateRegion = startDateRegion.substring(0, getPartialToIndex(startDateRegion)).trim();
+                    _hasPartialKeyWordTo = true;
+                } else {
+                    _hasPartialKeyWordTo = false;
+                }
+                break;
+            default:
+                break;
         }
+       
         AddBreakDateRegion breakStartDateRegion = new AddBreakDateRegion(startDateRegion);
-        AddBreakDateRegion breakEndDateRegion = new AddBreakDateRegion(breakUserInput.getEndDateRegion());
+        AddBreakDateRegion breakEndDateRegion = new AddBreakDateRegion(endDateRegion);
         
         _hasSpace = isSpacePresent(userInput) || !breakUserInput.getTagRegion().isEmpty();
         _hasDescription = !breakUserInput.getDescription().isEmpty();
@@ -83,13 +100,13 @@ public class AddInputSeparator {
         if (_startDateTime == null && _endDateTime == null) {
             _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
             _hasPartialKeyWordTo = false;
-            if (!breakUserInput.getStartDateRegion().isEmpty() || _hasTag) {
+            if (!breakUserInput.getFirstDateRegion().isEmpty() || _hasTag) {
                 _keyWord = KeyWordType.UNKNOWN;
             }
         }
         if (_keyWord == KeyWordType.FROM && _endDateTime == null) {
             _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
-            if (!breakUserInput.getEndDateRegion().isEmpty() || _hasTag) {
+            if (!breakUserInput.getSecondDateRegion().isEmpty() || _hasTag) {
                 _keyWord = KeyWordType.UNKNOWN;
                 _hasPartialKeyWordTo = false;
                 _startDate = null;
