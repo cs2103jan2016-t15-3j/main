@@ -6,59 +6,63 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
-import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class DeleteCommand implements Command {
 
-	private int _index;
-	private int _toIndex;
+	private int _firstIndex;
+	private int _lastIndex;
 
 	public DeleteCommand(int index) {
-		_index = index - 1;
+		_firstIndex = index - 1;
+		_lastIndex = index - 1;
 	}
 
-	public DeleteCommand(int index, int toIndex) {
-		_index = index - 1;
-		_toIndex = toIndex - 1;
+	public DeleteCommand(int firstIndex, int lastIndex) {
+		_firstIndex = firstIndex - 1;
+		_lastIndex = lastIndex - 1;
 	}
 
-	public int getIndex() {
-		return _index;
+	public int getfirstIndex() {
+		return _firstIndex;
 	}
 
-	public int getToIndex() {
-		return _toIndex;
+	public int getLastIndex() {
+		return _lastIndex;
 	}
 
-	public boolean execute() {
-		return false;
+	public Command execute() {
+		return null;
 	}
-	
-	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
 
+	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
+		assert((_lastIndex >= 0) && (_lastIndex < listsManager.getViewList().size()));
+		/*
 		if (!isWithinList(listsManager.getViewList(), _index)) {
 			return false;
 		}
+		 */
+		int numOfDeletion = _lastIndex - _firstIndex + 1;
+		for (int i = 0; i < numOfDeletion; i++) {
+			Task oldTask = listsManager.getViewList().get(_firstIndex);
+			listsManager.getMainList().remove(oldTask);
 
-		//System.out.println(_index);
-		Task oldTask = listsManager.getViewList().get(_index);
-		listsManager.getMainList().remove(oldTask);
-		
-		listsManager.getViewList().remove(oldTask);
-		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		listsManager.updateLists();
+			listsManager.getViewList().remove(oldTask);
+			listsManager.updateLists();
 
-		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);
+			RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);
 
-		historyManager.getUndoList().add(rollbackItem);
-		historyManager.setRedoList(new ArrayList<RollbackItem>());
+			historyManager.getUndoList().add(rollbackItem);
+			historyManager.setRedoList(new ArrayList<RollbackItem>());
+		}
 		System.out.println("undoList size: " + historyManager.getUndoList().size());
-		return true;
+		return null;
 	}
-
+	/*
 	private boolean isWithinList(ArrayList<Task> list, int index) {
 		boolean isWithinList = false;
 		isWithinList = ((index < list.size()) && (index >= 0));
 		return isWithinList;
 	}
+	 */
 }

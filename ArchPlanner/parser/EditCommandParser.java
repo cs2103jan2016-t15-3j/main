@@ -74,7 +74,7 @@ public class EditCommandParser extends CommandParser {
                 return new InvalidCommand("Keyword not found!");
             } else if (parameter.startsWith("#")) {
                 if (parameter.equalsIgnoreCase("# remove")) {
-                    return new EditCommand(index, result, EditCommand.RemoveType.TAG);
+                    return new EditCommand(index, result, EditCommand.REMOVE_TYPE.TAG);
                 }
                 String[] tags = parameter.split("\\s+");
                 for (String tag : tags) {
@@ -106,7 +106,7 @@ public class EditCommandParser extends CommandParser {
                     return new EditCommand(index, result);
                 case START_TIME:
                     if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.RemoveType.START_TIME);
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START_TIME);
                     }
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid Start Time");
@@ -120,7 +120,7 @@ public class EditCommandParser extends CommandParser {
                     }
                 case START_DATE:
                     if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.RemoveType.START_DATE);
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START_DATE);
                     }
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid Start Time");
@@ -134,7 +134,7 @@ public class EditCommandParser extends CommandParser {
                     }
                 case END_TIME:
                     if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.RemoveType.END_TIME);
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END_TIME);
                     }
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid End Time");
@@ -148,7 +148,7 @@ public class EditCommandParser extends CommandParser {
                     }
                 case END_DATE:
                     if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.RemoveType.END_DATE);
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END_DATE);
                     }
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid End Date");
@@ -162,10 +162,10 @@ public class EditCommandParser extends CommandParser {
                     }
             }
             if (parameter.equalsIgnoreCase("start remove")) {
-                return new EditCommand(index, result, EditCommand.RemoveType.START);
+                return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START);
             }
             if (parameter.equalsIgnoreCase("end remove")) {
-                return new EditCommand(index, result, EditCommand.RemoveType.END);
+                return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END);
             }
         }
 

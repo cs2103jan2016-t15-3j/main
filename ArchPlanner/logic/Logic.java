@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import logic.commands.Command;
 import logic.commands.InvalidCommand;
@@ -42,27 +41,27 @@ public class Logic {
 
 	public Command executeCommand(String userInput) {
 		Parser parser = new Parser();
-		Command commandObj = parser.parseCommand(userInput, listsManager.getViewList().size(),
-				historyManager.getUndoList().size(), historyManager.getRedoList().size(), (ArrayList<Tag>) listsManager.getTagsList().clone());
 
-//		Command commandObj = parser.parseCommand(userInput);
+		@SuppressWarnings("unchecked")
+		ArrayList<Tag> tagsListClone = (ArrayList<Tag>) listsManager.getTagsList().clone();
+		
+		Command commandInputObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
+				historyManager.getUndoList().size(), historyManager.getRedoList().size(), tagsListClone);
 
-		boolean isSuccessful;
-		//if (commandObj instanceof InvalidCommand) {
-		//	return false;
-		//}
+		Command commandReturnObj = runCommand(commandInputObj);
+		
+		historyManager.getPreviousUserInputList().add(userInput);
+		historyManager.setPreviousUserInputCounter(-1);
 
-		isSuccessful = runCommand(commandObj);
-
-		if (isSuccessful) {
-			historyManager.getPreviousUserInputList().add(userInput);
-			historyManager.setPreviousUserInputCounter(-1);
+		if ((commandReturnObj != null) && (commandReturnObj instanceof InvalidCommand)) {
+			return commandReturnObj;
 		}
-		save(commandObj);
-		return commandObj;
+		System.out.println("here");
+		save(commandInputObj);
+		return commandInputObj;
 	}
 
-	private boolean runCommand(Command commandObj) {
+	private Command runCommand(Command commandObj) {
 		String strCommandType = commandObj.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
@@ -135,11 +134,11 @@ public class Logic {
 		CATEGORY_TYPE categoryType = listsManager.getCategoryType();
 		switch (categoryType) {
 
-		case CATEGORY_DEADLINES:
+		case CATEGORY_DEADLINES : 
 			return "Deadlines";
-		case CATEGORY_EVENTS:
+		case CATEGORY_EVENTS: 
 			return "Events";
-		case CATEGORY_TASKS:
+		case CATEGORY_TASKS : 
 			return "Tasks";
 		default : 
 			return "All";
@@ -219,7 +218,7 @@ public class Logic {
 		System.out.println("next: " + "counter: " + historyManager.getPreviousUserInputCounter());
 		return "";
 	}
-
+/*
 	public boolean testLogicFramework(Command commandObj) {
 		boolean isSuccessful;
 		if (commandObj instanceof InvalidCommand) {
@@ -228,4 +227,5 @@ public class Logic {
 		isSuccessful = runCommand(commandObj);
 		return isSuccessful;
 	}
+	*/
 }

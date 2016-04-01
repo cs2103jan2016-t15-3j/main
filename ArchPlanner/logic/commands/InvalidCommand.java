@@ -7,12 +7,12 @@ public class InvalidCommand implements Command {
 
     private String _error_message;
 
-    public boolean execute() {
-		return false;
+    public Command execute() {
+		return null;
 	}
     
-	public boolean execute(ListsManager listsmanager, HistoryManager historyManager) {
-		return false;
+	public Command execute(ListsManager listsmanager, HistoryManager historyManager) {
+		return null;
 	}
 
     public InvalidCommand(String _error_message) {

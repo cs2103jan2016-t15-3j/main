@@ -6,12 +6,12 @@ import logic.ListsManager;
 
 public class ExitCommand implements Command {
 
-	public boolean execute() {
+	public Command execute() {
 		System.exit(0);
-		return true;
+		return null;
 	}
 	
-	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		return false;
+	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+		return null;
 	}
 }

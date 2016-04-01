@@ -19,11 +19,11 @@ public class ViewCommand implements Command {
 		_categoryType = categoryType;
 		_task = taskParameters;
 	}
-	public boolean execute() {
-		return false;
+	public Command execute() {
+		return null;
 	}
 
-	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
+	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
 		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		if (_viewType != null) {
 			if (_viewType.equals(VIEW_TYPE.VIEW_ALL)) {
@@ -56,7 +56,7 @@ public class ViewCommand implements Command {
 			for (int i = 0; i < listsManager.getViewList().size(); i++) {
 				Task task = listsManager.getViewList().get(i);
 				if (listsManager.getViewList().get(i).getDescription() != null && 
-						!task.getDescription().contains(_task.getDescription())) {
+						!task.getDescription().toLowerCase().contains(_task.getDescription().toLowerCase())) {
 					listsManager.getViewList().remove(i);
 					i--;
 				}
@@ -159,6 +159,6 @@ public class ViewCommand implements Command {
 		}
 
 		listsManager.setCurrentViewType(currentViewType);
-		return true;
+		return null;
 	}
 }

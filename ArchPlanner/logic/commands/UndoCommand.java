@@ -1,11 +1,10 @@
 package logic.commands;
 
-import java.util.ArrayList;
-
 import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class UndoCommand implements Command {
@@ -24,27 +23,22 @@ public class UndoCommand implements Command {
 		return _times;
 	}
 
-	public boolean execute() {
-		return false;
+	public Command execute() {
+		return null;
 	}
 
-	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-
-		System.out.println("undostack size 1 1 1 1: " + historyManager.getUndoList().size());
-		System.out.println("redostack size 1 1 1 1: " + historyManager.getRedoList().size());
-
+	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+		assert((_times > 0) && (_times <= historyManager.getUndoList().size()));
+		/*
 		if (!isWithinList(historyManager.getUndoList(), _times)) {
 			return false;
 		}
-
-		//System.out.println("test");
+		 */
 
 		for (int i = 0; i < _times; i++) {
-			System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 			RollbackItem rollbackItem = new RollbackItem(null, null, null);
 			rollbackItem = historyManager.getUndoList().remove(historyManager.getUndoList().size() - 1);
 			System.out.println("helo:" + rollbackItem.getCommandType());
-
 			if (rollbackItem.getCommandType().equals("add")) {
 				listsManager.getMainList().remove(rollbackItem.getNewTask());
 				rollbackItem.setCommandType("delete");
@@ -82,14 +76,19 @@ public class UndoCommand implements Command {
 			}
 			historyManager.getRedoList().add(rollbackItem);
 		}
-		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.getSelectedTagsList().clear();
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		return true;
+		System.out.println("undostack size 1 1 1 1: " + historyManager.getUndoList().size());
+		System.out.println("redostack size 1 1 1 1: " + historyManager.getRedoList().size());
+		return null;
 	}
-
+	/*
 	private boolean isWithinList(ArrayList<RollbackItem> list, int times) {
 		boolean isWithinStack = false;
 		isWithinStack = ((times <= list.size()) && (times > 0));
 		return isWithinStack;
 	}
+	 */
 }

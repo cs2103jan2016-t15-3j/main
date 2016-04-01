@@ -14,13 +14,11 @@ public class SetCommand implements Command {
         _filePath = filePath;
     }
 
-    @Override
-    public boolean execute() {
-        return false;
+    public Command execute() {
+        return null;
     }
 
-    @Override
-    public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-        return false;
+    public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+        return null;
     }
 }

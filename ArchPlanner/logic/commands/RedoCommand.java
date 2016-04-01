@@ -1,11 +1,10 @@
 package logic.commands;
 
-import java.util.ArrayList;
-
 import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 
 public class RedoCommand implements Command {
@@ -24,35 +23,29 @@ public class RedoCommand implements Command {
 		return _times;
 	}
 
-	public boolean execute() {
-		return false;
+	public Command execute() {
+		return null;
 	}
-	
-	public boolean execute(ListsManager listsManager, HistoryManager historyManager) {
-		
-		System.out.println("undostack size 2 2 2 2: " + historyManager.getUndoList().size());
-		System.out.println("redostack size 2 2 2 2: " + historyManager.getRedoList().size());
 
+	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+		assert((_times > 0) && (_times <= historyManager.getRedoList().size()));
+		/*
 		if (!isWithinList(historyManager.getRedoList(), _times)) {
 			return false;
 		}
-
-		//System.out.println("test");
+		 */
 
 		for (int i = 0; i < _times; i++) {
-			System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 			RollbackItem rollbackItem = new RollbackItem(null, null, null);
 			rollbackItem = historyManager.getRedoList().remove(historyManager.getRedoList().size() - 1);
-			System.out.println("helo:" + rollbackItem.getCommandType());
 			if (rollbackItem.getCommandType().equals("add")) {
 				listsManager.getMainList().remove(rollbackItem.getNewTask());
 				rollbackItem.setCommandType("delete");
 				rollbackItem.setOldTask(rollbackItem.getNewTask());
 				rollbackItem.setNewTask(null);
 				int j = 0;
-				System.out.println("DSSSSSSSSSSSSSSSSSSSS");
 				while (!historyManager.getUndoList().isEmpty() && j < historyManager.getUndoList().size()) {
-					System.out.println("undo: " + historyManager.getUndoList().get(i).getNewTask().getDescription());
+					System.out.println("redo: " + historyManager.getUndoList().get(i).getNewTask().getDescription());
 					j++;
 				}
 			} else if (rollbackItem.getCommandType().equals("delete")) {
@@ -87,14 +80,16 @@ public class RedoCommand implements Command {
 			}
 			historyManager.getUndoList().add(rollbackItem);
 		}
-		//listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		return true;
+		return null;
 	}
-	
+	/*
 	private boolean isWithinList(ArrayList<RollbackItem> list, int times) {
 		boolean isWithinStack = false;
 		isWithinStack = ((times <= list.size()) && (times > 0));
 		return isWithinStack;
 	}
+	 */
 }
