@@ -8,6 +8,7 @@ import logic.RollbackItem;
 import logic.Task;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
+import storage.Storage;
 
 public class DoneCommand implements Command {
 
@@ -35,47 +36,49 @@ public class DoneCommand implements Command {
 	public Command execute() {
 		return null;
 	}
+	
+	public Command execute(Storage storage) {
+		return null;
+	}
 
 	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
-		assert((_lastIndex >= 0) && (_lastIndex < listsManager.getViewList().size()));
-		/*
-		if (!isWithinList(listsManager.getViewList(), _index)) {
-			return false;
-		}
-		 */
+		
 		int numOfDone = _lastIndex - _firstIndex + 1;
 		for (int i = 0; i < numOfDone; i++) {
 			Task oldTask = listsManager.getViewList().get(_firstIndex);
 			listsManager.getMainList().remove(oldTask);
 			Task newTask = new Task();
-			newTask.setDescription(oldTask.getDescription());
-			newTask.setTagsList(oldTask.getTagsList());
-			newTask.setStartDate(oldTask.getStartDate());
-			newTask.setStartTime(oldTask.getStartTime());
-			newTask.setEndDate(oldTask.getEndDate());
-			newTask.setEndTime(oldTask.getEndTime());
-			newTask.setIsOverdue(oldTask.getIsOverdue());
-			newTask.setIsDone(true);
-			listsManager.getMainList().add(newTask);
-			listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-			listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
-			listsManager.updateLists();
-
-			RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask);
-
-			historyManager.getUndoList().add(rollbackItem);
-			historyManager.setRedoList(new ArrayList<RollbackItem>());
+			initializeNewTask(oldTask, newTask);
+			updateListsManager(listsManager, newTask);
+			updateHistoryManager(historyManager, oldTask, newTask, numOfDone);
 		}
-		System.out.println("undolist size: " + historyManager.getUndoList().size());
 		return null;
 
 	}
-	/*
-	private boolean isWithinList(ArrayList<Task> list, int index) {
-		boolean isWithinList = false;
-		isWithinList = ((index < list.size()) && (index >= 0));
-		return isWithinList;
+
+	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask, int numOfDone) {
+		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask, numOfDone);
+		historyManager.getUndoList().add(rollbackItem);
+		historyManager.setRedoList(new ArrayList<RollbackItem>());
 	}
-	 */
+
+	private void updateListsManager(ListsManager listsManager, Task newTask) {
+		listsManager.getMainList().add(newTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
+		listsManager.updateLists();
+		listsManager.setIndex(newTask);
+	}
+
+	private void initializeNewTask(Task oldTask, Task newTask) {
+		newTask.setDescription(oldTask.getDescription());
+		newTask.setTagsList(oldTask.getTagsList());
+		newTask.setStartDate(oldTask.getStartDate());
+		newTask.setStartTime(oldTask.getStartTime());
+		newTask.setEndDate(oldTask.getEndDate());
+		newTask.setEndTime(oldTask.getEndTime());
+		newTask.setIsOverdue(oldTask.getIsOverdue());
+		newTask.setIsDone(true);
+	}
 }

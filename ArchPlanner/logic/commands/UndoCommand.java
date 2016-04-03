@@ -6,10 +6,20 @@ import logic.RollbackItem;
 import logic.Task;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
+import storage.Storage;
 
 public class UndoCommand implements Command {
 
 	private int _times;
+	private final String ADD = "add";
+	private final String DELETE = "delete";
+	private final String EDIT = "edit";
+	private final String DONE = "done";
+	private final String UNDONE = "undone";
+
+	enum UNDO_TYPE {
+		ADD, DELETE, EDIT, DONE, UNDONE, INVALID
+	};
 
 	public UndoCommand() {
 		_times = 1;
@@ -27,68 +37,127 @@ public class UndoCommand implements Command {
 		return null;
 	}
 
+	public Command execute(Storage storage) {
+		return null;
+	}
+
 	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_times > 0) && (_times <= historyManager.getUndoList().size()));
-		/*
-		if (!isWithinList(historyManager.getUndoList(), _times)) {
-			return false;
-		}
-		 */
 
+		Task newTask = new Task();
 		for (int i = 0; i < _times; i++) {
-			RollbackItem rollbackItem = new RollbackItem(null, null, null);
-			rollbackItem = historyManager.getUndoList().remove(historyManager.getUndoList().size() - 1);
-			System.out.println("helo:" + rollbackItem.getCommandType());
-			if (rollbackItem.getCommandType().equals("add")) {
-				listsManager.getMainList().remove(rollbackItem.getNewTask());
-				rollbackItem.setCommandType("delete");
-				rollbackItem.setOldTask(rollbackItem.getNewTask());
-				rollbackItem.setNewTask(null);
-			} else if (rollbackItem.getCommandType().equals("delete")) {
-				listsManager.getMainList().add(rollbackItem.getOldTask());
-				rollbackItem.setCommandType("add");
-				rollbackItem.setNewTask(rollbackItem.getOldTask());
-				rollbackItem.setOldTask(null);
-			} else if (rollbackItem.getCommandType().equals("edit")) {
-				listsManager.getMainList().remove(rollbackItem.getNewTask());
-				listsManager.getMainList().add(rollbackItem.getOldTask());
-				rollbackItem.setCommandType("edit");
-				Task tempTask = new Task();
-				tempTask = rollbackItem.getNewTask();
-				rollbackItem.setNewTask(rollbackItem.getOldTask());
-				rollbackItem.setOldTask(tempTask);
-			} else if (rollbackItem.getCommandType().equals("done")) {
-				listsManager.getMainList().remove(rollbackItem.getNewTask());
-				listsManager.getMainList().add(rollbackItem.getOldTask());
-				rollbackItem.setCommandType("undone");
-				Task tempTask = new Task();
-				tempTask = rollbackItem.getNewTask();
-				rollbackItem.setNewTask(rollbackItem.getOldTask());
-				rollbackItem.setOldTask(tempTask);
-			} else if (rollbackItem.getCommandType().equals("undone")) {
-				listsManager.getMainList().remove(rollbackItem.getNewTask());
-				listsManager.getMainList().add(rollbackItem.getOldTask());
-				rollbackItem.setCommandType("done");
-				Task tempTask = new Task();
-				tempTask = rollbackItem.getNewTask();
-				rollbackItem.setNewTask(rollbackItem.getOldTask());
-				rollbackItem.setOldTask(tempTask);
-			}
-			historyManager.getRedoList().add(rollbackItem);
+			executeUndoCommand(listsManager, historyManager, newTask);
 		}
+		updateListsManager(listsManager, newTask);
+		return null;
+	}
+
+	private void executeUndoCommand(ListsManager listsManager, HistoryManager historyManager, Task newTask) {
+		RollbackItem rollbackItem = new RollbackItem(null, null, null);
+		rollbackItem = historyManager.getUndoList().remove(historyManager.getUndoList().size() - 1);
+		for (int i = 0; i < rollbackItem.getTimes(); i++) {
+			System.out.println("test: " + rollbackItem.getTimes());
+			UNDO_TYPE undoType = getUndoType(rollbackItem.getCommandType());
+			undoAddCommand(listsManager, newTask, rollbackItem, undoType);
+			undoDeleteCommand(listsManager, newTask, rollbackItem, undoType);
+			undoEditCommand(listsManager, newTask, rollbackItem, undoType);
+			undoDoneCommand(listsManager, newTask, rollbackItem, undoType);
+			undoUndoneCommand(listsManager, newTask, rollbackItem, undoType);
+			historyManager.getRedoList().add(rollbackItem);
+			if (i < rollbackItem.getTimes() - 1) {
+				rollbackItem = historyManager.getUndoList().remove(historyManager.getUndoList().size() - 1);
+			}
+		}
+	}
+
+	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getSelectedTagsList().clear();
 		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		System.out.println("undostack size 1 1 1 1: " + historyManager.getUndoList().size());
-		System.out.println("redostack size 1 1 1 1: " + historyManager.getRedoList().size());
-		return null;
+		if (_times == 1) {
+			listsManager.setIndex(newTask);
+		}
 	}
-	/*
-	private boolean isWithinList(ArrayList<RollbackItem> list, int times) {
-		boolean isWithinStack = false;
-		isWithinStack = ((times <= list.size()) && (times > 0));
-		return isWithinStack;
+
+	private void undoUndoneCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem,
+			UNDO_TYPE undoType) {
+		if (undoType.equals(UNDO_TYPE.UNDONE)) {
+			listsManager.getMainList().remove(rollbackItem.getNewTask());
+			listsManager.getMainList().add(rollbackItem.getOldTask());
+			rollbackItem.setCommandType(DONE);
+			Task tempTask = new Task();
+			tempTask = rollbackItem.getNewTask();
+			rollbackItem.setNewTask(rollbackItem.getOldTask());
+			rollbackItem.setOldTask(tempTask);
+			newTask = rollbackItem.getOldTask();
+		}
 	}
-	 */
+
+	private void undoDoneCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem,
+			UNDO_TYPE undoType) {
+		if (undoType.equals(UNDO_TYPE.DONE)) {
+			listsManager.getMainList().remove(rollbackItem.getNewTask());
+			listsManager.getMainList().add(rollbackItem.getOldTask());
+			rollbackItem.setCommandType(UNDONE);
+			Task tempTask = new Task();
+			tempTask = rollbackItem.getNewTask();
+			rollbackItem.setNewTask(rollbackItem.getOldTask());
+			rollbackItem.setOldTask(tempTask);
+			newTask = rollbackItem.getOldTask();
+		}
+	}
+
+	private void undoEditCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem,
+			UNDO_TYPE undoType) {
+		if (undoType.equals(UNDO_TYPE.EDIT)) {
+			listsManager.getMainList().remove(rollbackItem.getNewTask());
+			listsManager.getMainList().add(rollbackItem.getOldTask());
+			rollbackItem.setCommandType(EDIT);
+			Task tempTask = new Task();
+			tempTask = rollbackItem.getNewTask();
+			rollbackItem.setNewTask(rollbackItem.getOldTask());
+			rollbackItem.setOldTask(tempTask);
+			newTask = rollbackItem.getOldTask();
+		}
+	}
+
+	private void undoDeleteCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem,
+			UNDO_TYPE undoType) {
+		if (undoType.equals(UNDO_TYPE.DELETE)) {
+			listsManager.getMainList().add(rollbackItem.getOldTask());
+			rollbackItem.setCommandType(ADD);
+			rollbackItem.setNewTask(rollbackItem.getOldTask());
+			rollbackItem.setOldTask(null);
+			newTask = rollbackItem.getOldTask();
+		}
+	}
+
+	private Task undoAddCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem, 
+			UNDO_TYPE undoType) {
+		if (undoType.equals(UNDO_TYPE.ADD)) {
+			listsManager.getMainList().remove(rollbackItem.getNewTask());
+			rollbackItem.setCommandType(DELETE);
+			rollbackItem.setOldTask(rollbackItem.getNewTask());
+			rollbackItem.setNewTask(null);
+			newTask = new Task();
+		}
+		return newTask;
+	}
+
+	private UNDO_TYPE getUndoType(String strUndoType) {
+		if (strUndoType.equals(ADD)) {
+			return UNDO_TYPE.ADD;
+		} else if (strUndoType.equals(DELETE)) {
+			return UNDO_TYPE.DELETE;
+		} else if (strUndoType.equals(EDIT)) {
+			return UNDO_TYPE.EDIT;
+		} else if (strUndoType.equals(DONE)) {
+			return UNDO_TYPE.DONE;
+		} else if (strUndoType.equals(UNDONE)) {
+			return UNDO_TYPE.UNDONE;
+		}else {
+			return UNDO_TYPE.INVALID;
+		}
+	}
 }

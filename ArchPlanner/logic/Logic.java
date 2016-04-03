@@ -19,56 +19,151 @@ import parser.Parser;
  */
 public class Logic {
 	enum COMMAND_TYPE {
-		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, INVALID
+		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, SET, INVALID
 	};
 
-	private Storage storage;
-	private ListsManager listsManager;
-	private HistoryManager historyManager;
+	private Storage _storage;
+	private ListsManager _listsManager;
+	private HistoryManager _historyManager;
+	private Parser _parser;
 
 	public Logic() {
-		storage = new Storage();
-		listsManager = new ListsManager();
-		historyManager = new HistoryManager();
+		_storage = new Storage();
+		_listsManager = new ListsManager();
+		_historyManager = new HistoryManager();
+		_parser = new Parser();
 	}
 
 	public void loadFile() {
-		storage.loadStorageFile();
+		_storage.loadStorageFile();
 		ArrayList<Task> mainList = new ArrayList<Task>();
-		mainList = storage.getMasterList();
-		listsManager.setUpLists(mainList);
+		mainList = _storage.getMasterList();
+		_listsManager.setUpLists(mainList);
 	}
 
 	public Command executeCommand(String userInput) {
-		Parser parser = new Parser();
+		ArrayList<Tag> tagsListClone = getTagsListClone();
 
-		@SuppressWarnings("unchecked")
-		ArrayList<Tag> tagsListClone = (ArrayList<Tag>) listsManager.getTagsList().clone();
+		Command commandInput = _parser.parseCommand(userInput, _listsManager.getViewList().size(), 
+				_historyManager.getUndoList().size(), _historyManager.getRedoList().size(), 
+				tagsListClone);
+		Command commandReturn = runCommand(commandInput);
 		
-		Command commandInputObj = parser.parseCommand(userInput, listsManager.getViewList().size(), 
-				historyManager.getUndoList().size(), historyManager.getRedoList().size(), tagsListClone);
-
-		Command commandReturnObj = runCommand(commandInputObj);
-		
-		historyManager.getPreviousUserInputList().add(userInput);
-		historyManager.setPreviousUserInputCounter(-1);
-
-		if ((commandReturnObj != null) && (commandReturnObj instanceof InvalidCommand)) {
-			return commandReturnObj;
-		}
-		System.out.println("here");
-		save(commandInputObj);
-		return commandInputObj;
+		return save(userInput, commandInput, commandReturn);
 	}
 
-	private Command runCommand(Command commandObj) {
-		String strCommandType = commandObj.getClass().getSimpleName();
+	public void setSelectedCategory(String selectedCategory) {
+		System.out.print(selectedCategory);
+		CATEGORY_TYPE categoryType = getCategoryType(selectedCategory);
+		_listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		_listsManager.setCategoryType(categoryType);
+		_listsManager.updateLists();
+	}
+
+	public void setSelectedTag(String tagName, boolean isSelected) {
+		if (isSelected) {
+			_listsManager.updateSelectedTagsList(tagName, true);
+		} else {
+			_listsManager.updateSelectedTagsList(tagName, false);
+			updateTagsList(tagName);
+		}
+		_listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		_listsManager.updateLists();
+	}
+
+	public String getPreviousUserInput() {
+		_historyManager.setPreviousUserInputCounter(_historyManager.getPreviousUserInputCounter() + 1);
+		int previousUserInputListIndex = _historyManager.getPreviousUserInputList().size() - 
+				_historyManager.getPreviousUserInputCounter() - 1;
+		if ((previousUserInputListIndex >= 0) 
+				&& (_historyManager.getPreviousUserInputList().size() > previousUserInputListIndex)) {
+			String previousUserInput = _historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			return previousUserInput;
+		}
+		_historyManager.setPreviousUserInputCounter(_historyManager.getPreviousUserInputList().size() - 1);
+		return "";
+	}
+
+	public String getNextUserInput() {
+		_historyManager.setPreviousUserInputCounter(_historyManager.getPreviousUserInputCounter() - 1);
+		int previousUserInputListIndex = _historyManager.getPreviousUserInputList().size() 
+				- _historyManager.getPreviousUserInputCounter() - 1;
+		if ((previousUserInputListIndex >= 0) && 
+				(_historyManager.getPreviousUserInputList().size() > previousUserInputListIndex)) {
+			String previousUserInput = _historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
+			return previousUserInput;
+		}
+		_historyManager.setPreviousUserInputCounter(-1);
+		return "";
+	}
+	
+	public String getSelectedCategory() {
+		CATEGORY_TYPE categoryType = _listsManager.getCategoryType();
+		switch (categoryType) {
+
+		case CATEGORY_DEADLINES : 
+			return "Deadlines";
+		case CATEGORY_EVENTS: 
+			return "Events";
+		case CATEGORY_TASKS : 
+			return "Tasks";
+		default : 
+			return "All";
+		}
+	}
+
+	public String getCurrentViewType() {
+		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " 
+				+ _listsManager.getCurrentViewType();
+		return currentViewType;
+	}
+
+	public ArrayList<Task> getViewList() {
+		return _listsManager.getViewList();
+	}
+
+	public ArrayList<Task> getMainList() {
+		return _listsManager.getMainList();
+	}
+
+	public ArrayList<Tag> getTagsList() {
+		return _listsManager.getTagsList();
+	}
+
+	public int getIndex() {
+		return _listsManager.getIndex();
+	}
+
+	private ArrayList<Tag> getTagsListClone() {
+		ArrayList<Tag> tagsListClone = new ArrayList<Tag>();
+		for (int i = 0; i < _listsManager.getTagsList().size(); i++) {
+			String tagName = _listsManager.getTagsList().get(i).getName();
+			boolean tagIsSelected = _listsManager.getTagsList().get(i).getIsSelected();
+			Tag tag = new Tag(tagName, tagIsSelected);
+			tagsListClone.add(tag);
+		}
+		return tagsListClone;
+	}
+	
+	private void updateTagsList(String tagName) {
+		for (int i = 0; i < _listsManager.getTagsList().size(); i++) {
+			Tag tag = _listsManager.getTagsList().get(i);
+			if (tag.getName().equals(tagName)) {
+				tag.setIsSelected(false);
+			}
+		}
+	}
+
+	private Command runCommand(Command commandInput) {
+		String strCommandType = commandInput.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
 		if (commandType.equals(COMMAND_TYPE.EXIT)) {
-			return commandObj.execute();
+			return commandInput.execute();
+		} else if (commandType.equals(COMMAND_TYPE.SET)) {
+			return commandInput.execute(_storage);
 		} else {
-			return commandObj.execute(listsManager, historyManager);
+			return commandInput.execute(_listsManager, _historyManager);
 		}
 	}
 
@@ -91,58 +186,27 @@ public class Logic {
 			return COMMAND_TYPE.UNDONE;
 		} else if (strCommandType.equals("ViewCommand")) {
 			return COMMAND_TYPE.VIEW;
+		} else if (strCommandType.equals("SetCommand")) {
+			return COMMAND_TYPE.SET;
 		}else {
 			return COMMAND_TYPE.INVALID;
 		}
 	}
 
-	private void save(Command commandObj) {
-		String strCommandType = commandObj.getClass().getSimpleName();
-
-		COMMAND_TYPE commandType = getCommandType(strCommandType);
-		if (commandObj.equals(COMMAND_TYPE.VIEW) || commandType.equals(COMMAND_TYPE.EXIT)) {
-			return;
+	private Command save(String userInput, Command commandInput, Command commandReturn) {
+		if ((commandReturn != null) && (commandReturn instanceof InvalidCommand)) {
+			return commandReturn;
+		} else if ((commandReturn == null) && (commandInput instanceof InvalidCommand)) {
+			return commandInput;
 		}
-		storage.writeStorageFile(listsManager.getMainList());
+		updateUserInputList(userInput);
+		_storage.writeStorageFile(_listsManager.getMainList());
+		return commandInput;
 	}
 
-	public void setSelectedCategory(String selectedCategory) {
-		System.out.print(selectedCategory);
-		CATEGORY_TYPE categoryType = getCategoryType(selectedCategory);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		listsManager.setCategoryType(categoryType);
-		System.out.println(categoryType.toString());
-		listsManager.updateLists();
-	}
-
-	public String getSelectedView() {
-		VIEW_TYPE viewType = listsManager.getViewType();
-		switch (viewType) {
-
-		case VIEW_ALL : 
-			return "";
-		case VIEW_DONE: 
-			return "Done";
-		case VIEW_UNDONE : 
-			return "Undone";
-		default : 
-			return "Overdue";
-		}
-	}
-
-	public String getSelectedCategory() {
-		CATEGORY_TYPE categoryType = listsManager.getCategoryType();
-		switch (categoryType) {
-
-		case CATEGORY_DEADLINES : 
-			return "Deadlines";
-		case CATEGORY_EVENTS: 
-			return "Events";
-		case CATEGORY_TASKS : 
-			return "Tasks";
-		default : 
-			return "All";
-		}
+	private void updateUserInputList(String userInput) {
+		_historyManager.getPreviousUserInputList().add(userInput);
+		_historyManager.setPreviousUserInputCounter(-1);
 	}
 
 	private CATEGORY_TYPE getCategoryType(String selectedCategory) {
@@ -158,74 +222,18 @@ public class Logic {
 		}
 	}
 
-	public ArrayList<Task> getViewList() {
-		return listsManager.getViewList();
-	}
+	private String getSelectedView() {
+		VIEW_TYPE viewType = _listsManager.getViewType();
+		switch (viewType) {
 
-	public ArrayList<Task> getMainList() {
-		return listsManager.getMainList();
-	}
-
-	public ArrayList<Tag> getTagsList() {
-		return listsManager.getTagsList();
-	}
-
-	public void setSelectedTag(String tagName, boolean isSelected) {
-		System.out.println("running setselected");
-
-		if (isSelected) {
-			listsManager.updateSelectedTagsList(tagName, true);
-		} else {
-			listsManager.updateSelectedTagsList(tagName, false);
-			for (int i = 0; i < listsManager.getTagsList().size(); i++) {
-				Tag tag = listsManager.getTagsList().get(i);
-				if (tag.getName().equals(tagName)) {
-					tag.setIsSelected(false);
-				}
-			}
+		case VIEW_ALL : 
+			return "";
+		case VIEW_DONE: 
+			return "Done";
+		case VIEW_UNDONE : 
+			return "Undone";
+		default : 
+			return "Overdue";
 		}
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		listsManager.updateLists();
 	}
-
-	public String getCurrentViewType() {
-		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " + listsManager.getCurrentViewType();
-		return currentViewType;
-	}
-
-	public String getPreviousUserInput() {
-		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() + 1);
-		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
-		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
-			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
-			System.out.println("previous: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
-			return previousUserInput;
-		}
-		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputList().size() - 1);
-		System.out.println("previous: " + "\t" + "counter: " + historyManager.getPreviousUserInputCounter());
-		return "";
-	}
-
-	public String getNextUserInput() {
-		historyManager.setPreviousUserInputCounter(historyManager.getPreviousUserInputCounter() - 1);
-		int previousUserInputListIndex = historyManager.getPreviousUserInputList().size() - historyManager.getPreviousUserInputCounter() - 1;
-		if (previousUserInputListIndex >= 0 && historyManager.getPreviousUserInputList().size() > previousUserInputListIndex) {
-			String previousUserInput = historyManager.getPreviousUserInputList().get(previousUserInputListIndex);
-			System.out.println("next: " + "\t" + previousUserInput + "counter: " + historyManager.getPreviousUserInputCounter());
-			return previousUserInput;
-		}
-		historyManager.setPreviousUserInputCounter(-1);
-		System.out.println("next: " + "counter: " + historyManager.getPreviousUserInputCounter());
-		return "";
-	}
-/*
-	public boolean testLogicFramework(Command commandObj) {
-		boolean isSuccessful;
-		if (commandObj instanceof InvalidCommand) {
-			return false;
-		}
-		isSuccessful = runCommand(commandObj);
-		return isSuccessful;
-	}
-	*/
 }

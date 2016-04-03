@@ -6,6 +6,7 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
+import storage.Storage;
 
 public class DeleteCommand implements Command {
 
@@ -33,36 +34,33 @@ public class DeleteCommand implements Command {
 	public Command execute() {
 		return null;
 	}
+	
+	public Command execute(Storage storage) {
+		return null;
+	}
+	
 
 	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
 		assert((_lastIndex >= 0) && (_lastIndex < listsManager.getViewList().size()));
-		/*
-		if (!isWithinList(listsManager.getViewList(), _index)) {
-			return false;
-		}
-		 */
+
 		int numOfDeletion = _lastIndex - _firstIndex + 1;
 		for (int i = 0; i < numOfDeletion; i++) {
 			Task oldTask = listsManager.getViewList().get(_firstIndex);
-			listsManager.getMainList().remove(oldTask);
-
-			listsManager.getViewList().remove(oldTask);
-			listsManager.updateLists();
-
-			RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null);
-
-			historyManager.getUndoList().add(rollbackItem);
-			historyManager.setRedoList(new ArrayList<RollbackItem>());
+			updateListsManager(listsManager, oldTask);
+			updateHistoryManager(historyManager, oldTask, numOfDeletion);
 		}
-		System.out.println("undoList size: " + historyManager.getUndoList().size());
 		return null;
 	}
-	/*
-	private boolean isWithinList(ArrayList<Task> list, int index) {
-		boolean isWithinList = false;
-		isWithinList = ((index < list.size()) && (index >= 0));
-		return isWithinList;
+
+	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, int numOfDeletion) {
+		RollbackItem rollbackItem = new RollbackItem("delete", oldTask, null, numOfDeletion);
+		historyManager.getUndoList().add(rollbackItem);
+		historyManager.setRedoList(new ArrayList<RollbackItem>());
 	}
-	 */
+
+	private void updateListsManager(ListsManager listsManager, Task oldTask) {
+		listsManager.getMainList().remove(oldTask);
+		listsManager.updateLists();
+	}
 }

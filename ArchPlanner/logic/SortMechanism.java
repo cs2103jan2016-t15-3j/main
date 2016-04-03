@@ -54,7 +54,6 @@ public class SortMechanism {
 			} else {
 				list.set(listIndex, top.get(topIndex));
 				topIndex++;
-				//System.out.println("test9");
 			}
 			listIndex++;
 		}

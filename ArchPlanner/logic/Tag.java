@@ -1,27 +1,27 @@
 package logic;
 
 public class Tag {
-	private String name;
-	private boolean isSelected;
+	private String _name;
+	private boolean _isSelected;
 	
 	public Tag(String name, boolean isSelected) {
-		this.name = name;
-		this.isSelected = isSelected;
+		_name = name;
+		_isSelected = isSelected;
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		_name = name;
 	}
 	
 	public void setIsSelected(boolean isSelected) {
-		this.isSelected = isSelected;
+		_isSelected = isSelected;
 	}
 	
 	public String getName() {
-		return name;
+		return _name;
 	}
 	
 	public boolean getIsSelected() {
-		return isSelected;
+		return _isSelected;
 	}
 }

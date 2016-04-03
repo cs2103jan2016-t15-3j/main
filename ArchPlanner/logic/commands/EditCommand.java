@@ -7,6 +7,7 @@ import logic.Task;
 import logic.TaskParameters;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
+import storage.Storage;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,12 +28,13 @@ public class EditCommand implements Command {
 	private String ERROR_MESSAGE_NO_START_DATE = "The task do not have start date";
 	private String ERROR_MESSAGE_NO_END_DATE = "The task do not have end date";
 
-	public enum REMOVE_TYPE {START, START_TIME, START_DATE, END, END_TIME, END_DATE, TAG}
+	public enum REMOVE_TYPE {START, START_TIME, START_DATE, END, END_TIME, END_DATE, TAG, NONE}
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
 		_task = newTaskParameters;
 		_index = index - 1;
+		_removeType= REMOVE_TYPE.NONE;
 	}
 
 	public EditCommand(int index, TaskParameters newTaskParameters, REMOVE_TYPE removeType) {
@@ -50,15 +52,15 @@ public class EditCommand implements Command {
 		return null;
 	}
 
+	public Command execute(Storage storage) {
+		return null;
+	}
+
+
 	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_index >= 0) && (_index < listsManager.getViewList().size()));
-		/*
-		if (!isWithinList(listsManager.getViewList(), _index)) {
-			return false;
-		}
-		 */
+
 		Task oldTask = listsManager.getViewList().get(_index);
-		listsManager.getMainList().remove(oldTask);
 
 		Task newTask = new Task();
 		initializeNewTask(oldTask, newTask);
@@ -68,25 +70,28 @@ public class EditCommand implements Command {
 
 		editTask(oldTask, newTask, startTime, endTime);
 
-		if (_invalidCommand == null) {
-			listsManager.getMainList().add(newTask);
-			listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-			listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
-			listsManager.updateLists();
-			RollbackItem rollbackItem = new RollbackItem("edit", oldTask, newTask);
-			historyManager.getUndoList().add(rollbackItem);
-			historyManager.setRedoList(new ArrayList<RollbackItem>());
+		if (_invalidCommand != null) {
+			return _invalidCommand;
 		}
-		System.out.println("undolist size: " + historyManager.getUndoList().size());
-		return _invalidCommand;
+		updateListsManager(listsManager, oldTask, newTask);
+		updateHistoryManager(historyManager, oldTask, newTask);
+		return null;
 	}
-	/*
-	private boolean isWithinList(ArrayList<Task> list, int index) {
-		boolean isWithinList = false;
-		isWithinList = ((index < list.size()) && (index >= 0));
-		return isWithinList;
+
+	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask) {
+		RollbackItem rollbackItem = new RollbackItem("edit", oldTask, newTask);
+		historyManager.getUndoList().add(rollbackItem);
+		historyManager.setRedoList(new ArrayList<RollbackItem>());
 	}
-	 */
+
+	private void updateListsManager(ListsManager listsManager, Task oldTask, Task newTask) {
+		listsManager.getMainList().remove(oldTask);
+		listsManager.getMainList().add(newTask);
+		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
+		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
+		listsManager.updateLists();
+		listsManager.setIndex(newTask);
+	}
 
 	private void initializeNewTask(Task oldTask, Task newTask) {
 		newTask.setDescription(oldTask.getDescription());
@@ -134,6 +139,8 @@ public class EditCommand implements Command {
 			break;
 		case TAG :
 			removeTaskTagsList(newTask);
+			break;
+		default :
 			break;
 		}
 	}
@@ -261,7 +268,12 @@ public class EditCommand implements Command {
 					(_task.getEndDate().compareTo(oldTask.getStartDate()) < 0)) {
 				_invalidCommand = new InvalidCommand(ERROR_MESSAGE_INVALID_END_DATE);
 			}
-			if ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null)) {
+			if (((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) 
+					&& (oldTask.getEndDate() == null) && (oldTask.getEndTime() == null)) 
+					|| ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) 
+							&& (oldTask.getEndDate() != null) && (oldTask.getEndTime() != null) 
+							&& (_task.getEndDate().isEqual(oldTask.getStartDate()))
+							&& (oldTask.getStartTime().isAfter(oldTask.getEndTime())))) {
 				newTask.setEndTime(endTime);
 			}
 			newTask.setEndDate(_task.getEndDate());
@@ -297,7 +309,12 @@ public class EditCommand implements Command {
 					(_task.getStartDate().compareTo(oldTask.getEndDate()) > 0)) {
 				_invalidCommand = new InvalidCommand(ERROR_MESSAGE_INVALID_START_DATE);
 			}
-			if ((oldTask.getEndDate() != null) && (oldTask.getEndTime() != null)) {
+			if (((oldTask.getStartDate() == null) && (oldTask.getStartTime() == null) 
+					&& (oldTask.getEndDate() != null) && (oldTask.getEndTime() != null)) 
+					|| ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) 
+							&& (oldTask.getEndDate() != null) && (oldTask.getEndTime() != null) 
+							&& (oldTask.getEndDate().isEqual(_task.getStartDate()))
+							&& (oldTask.getStartTime().isAfter(oldTask.getEndTime())))) {
 				newTask.setStartTime(startTime);
 			}
 			newTask.setStartDate(_task.getStartDate());
