@@ -111,13 +111,7 @@ public class AddPrompt {
                         addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + sdPrompt);
                         addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + stPrompt);
                     }
-                    break;
-                    
-                case KEYWORDTO :
-                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
-                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + edPrompt);
-                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + edPrompt + STRING_SINGLE_WHITESPACE + etPrompt);
-                    break;
+                    break;     
                     
                 case STARTDATE :
                     if (parameter.getKeyWord() == KeyWordType.FROM) {
@@ -147,6 +141,12 @@ public class AddPrompt {
                         }
                         addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + tagPrompt);
                     }
+                    break;
+                    
+                case KEYWORDTO :
+                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + etPrompt);
+                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + edPrompt);
+                    addPrompts.add(prompt + STRING_SINGLE_WHITESPACE + edPrompt + STRING_SINGLE_WHITESPACE + etPrompt);
                     break;
                     
                 case ENDDATE :

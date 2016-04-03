@@ -1,11 +1,9 @@
 package separator;
 
-import parser.AddBreakDateRegion;
-import parser.AddBreakRegion;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddInputSeparator {
@@ -121,6 +119,23 @@ public class AddInputSeparator {
         }
     
         if (_startDateTime != null && _endDateTime != null) {
+            if (!_hasStartTime && _hasEndTime) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(_startDateTime);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                _startDateTime = cal.getTime();
+            } else if (_hasStartTime && !_hasEndTime) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(_startDateTime);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                cal.set(Calendar.MILLISECOND, 99);
+                _endDateTime = cal.getTime();
+            }
             _hasValidDateRange = _startDateTime.before(_endDateTime);
         }
         
