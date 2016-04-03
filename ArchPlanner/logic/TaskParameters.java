@@ -124,10 +124,19 @@ public class TaskParameters {
 	}
 
 	private String getDateString(LocalDate date) {
+
+		LocalDate today = LocalDate.now();
+		
 		if (date == null) {
 			return "";
+		} else if (date.isEqual(today)) {
+			return "today";
+		} else if (date.compareTo(today) == -1) {
+			return "yesterday";
+		} else if (date.compareTo(today) == 1) {
+			return "tomorrow";
 		}
-
+		
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM uuuu");
 		return dateTimeFormatter.format(date);
 	}
