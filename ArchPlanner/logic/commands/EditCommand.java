@@ -19,14 +19,14 @@ public class EditCommand implements Command {
 	private int _index;
 	private REMOVE_TYPE _removeType;
 
-	private String ERROR_MESSAGE_INVALID_START_DATE = "Invalid start date";
-	private String ERROR_MESSAGE_INVALID_START_DATE_TIME = "Invalid start date and time";
-	private String ERROR_MESSAGE_INVALID_START_TIME = "Invalid start time";
-	private String ERROR_MESSAGE_INVALID_END_DATE = "Invalid end date";
-	private String ERROR_MESSAGE_INVALID_END_DATE_TIME = "Invalid end date and time";
-	private String ERROR_MESSAGE_INVALID_END_TIME = "Invalid end time";
-	private String ERROR_MESSAGE_NO_START_DATE = "The task do not have start date";
-	private String ERROR_MESSAGE_NO_END_DATE = "The task do not have end date";
+	private final String ERROR_MESSAGE_INVALID_START_DATE = "Invalid start date";
+	private final String ERROR_MESSAGE_INVALID_START_DATE_TIME = "Invalid start date and time";
+	private final String ERROR_MESSAGE_INVALID_START_TIME = "Invalid start time";
+	private final String ERROR_MESSAGE_INVALID_END_DATE = "Invalid end date";
+	private final String ERROR_MESSAGE_INVALID_END_DATE_TIME = "Invalid end date and time";
+	private final String ERROR_MESSAGE_INVALID_END_TIME = "Invalid end time";
+	private final String ERROR_MESSAGE_NO_START_DATE = "The task do not have start date";
+	private final String ERROR_MESSAGE_NO_END_DATE = "The task do not have end date";
 
 	public enum REMOVE_TYPE {START, START_TIME, START_DATE, END, END_TIME, END_DATE, TAG, NONE}
 

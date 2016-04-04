@@ -107,8 +107,8 @@ public class SortMechanism {
 	
 	private boolean hasTopTaskStartDateEarlierThanBottomTaskEndDate(Task topTask, Task bottomTask) {
 
-		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() == null) && (bottomTask.getEndDate() != null))
-				&& topTask.getStartDate().isAfter(bottomTask.getEndDate()));
+		return (((topTask.getStartDate() != null) && (bottomTask.getStartDate() == null) 
+				&& (bottomTask.getEndDate() != null)) && topTask.getStartDate().isAfter(bottomTask.getEndDate()));
 	}
 	
 	private boolean hasTopTaskStartTimeEarlierThanBottomTaskEndTime(Task topTask, Task bottomTask) {

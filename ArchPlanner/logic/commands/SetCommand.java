@@ -15,7 +15,8 @@ public class SetCommand implements Command {
 	private InvalidCommand _invalidCommand;
 
 	private String INVALID_DIRECTORY = "File Directory does not exist. Please set a different file path.";
-	private String INVALID_FILE_PATH = "A file with identical file name is found. Please set a different file name.";
+	private String INVALID_FILE_NAME = "A file with identical file name is found. Please set a different file name.";
+	private String INVALID_FILE_PATH = "Invalid file path";
 
 	public SetCommand(String filePath) {
 		_filePath = filePath;
@@ -34,14 +35,21 @@ public class SetCommand implements Command {
 	}
 
 	private void setFilePath(Storage storage) {
-		File file = new File(_filePath);
-		File fileDirectory = new File(file.getParent());
 
-		if (!file.exists() || !file.isFile()) {
-			setFilePathIfDirectoryExists(storage, fileDirectory);
-		} else {
+		File file = null;
+		File fileDirectory = null;
+		try {
+			file = new File(_filePath);
+			fileDirectory = new File(file.getParent());
+			if (!file.exists() || !file.isFile()) {
+				setFilePathIfDirectoryExists(storage, fileDirectory);
+			} else {
+				_invalidCommand = new InvalidCommand(INVALID_FILE_NAME);
+			}
+		} catch (Exception e) {
 			_invalidCommand = new InvalidCommand(INVALID_FILE_PATH);
 		}
+
 	}
 
 	private void setFilePathIfDirectoryExists(Storage storage, File fileDirectory) {

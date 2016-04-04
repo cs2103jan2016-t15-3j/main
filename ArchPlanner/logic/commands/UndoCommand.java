@@ -75,9 +75,7 @@ public class UndoCommand implements Command {
 		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		if (_times == 1) {
-			listsManager.setIndex(newTask);
-		}
+		listsManager.setIndex(newTask);
 	}
 
 	private void undoUndoneCommand(ListsManager listsManager, Task newTask, RollbackItem rollbackItem,
