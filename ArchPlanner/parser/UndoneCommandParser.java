@@ -11,19 +11,18 @@ import separator.InputSeparator;
 public class UndoneCommandParser extends CommandParser {
     private final int UNDONE_ARGUMENT_INDEX = 7;
 
-    @Override
-    public Command parse(String input) {
-        if (input.length() <= UNDONE_ARGUMENT_INDEX) {
-            return new InvalidCommand("Undone index not found");
-        }
-        else {
-            try {
-                return new UndoneCommand(Integer.parseInt(input.substring(UNDONE_ARGUMENT_INDEX)));
-            } catch (NumberFormatException e) {
-                return new InvalidCommand("Undone index should be a number");
-            }
-        }
-    }
+//    public Command parse(String input) {
+//        if (input.length() <= UNDONE_ARGUMENT_INDEX) {
+//            return new InvalidCommand("Undone index not found");
+//        }
+//        else {
+//            try {
+//                return new UndoneCommand(Integer.parseInt(input.substring(UNDONE_ARGUMENT_INDEX)));
+//            } catch (NumberFormatException e) {
+//                return new InvalidCommand("Undone index should be a number");
+//            }
+//        }
+//    }
 
     public Command parse(String input, int viewListSize) {
         if (input.length() <= UNDONE_ARGUMENT_INDEX) {

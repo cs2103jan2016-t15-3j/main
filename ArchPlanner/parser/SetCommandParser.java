@@ -9,7 +9,6 @@ import separator.InputSeparator;
  * Created by lifengshuang on 4/1/16.
  */
 public class SetCommandParser extends CommandParser {
-    @Override
     public Command parse(String input) {
         InputSeparator separator = new InputSeparator(input);
         if (separator.getID() == null

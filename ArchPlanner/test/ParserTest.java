@@ -8,6 +8,8 @@ import parser.AddCommandParser;
 import parser.DeleteCommandParser;
 import parser.EditCommandParser;
 import parser.ViewCommandParser;
+import parser.time.TimeParser;
+import parser.time.TimeParserResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -113,40 +115,40 @@ public class ParserTest {
         System.out.println();
     }
 
-    @Test
-    public void testDeleteCommandParser() throws Exception {
-        Command command1 = new DeleteCommandParser().parse("delete 1");
-        Command command2 = new DeleteCommandParser().parse("delete 1343234");
-        Command command3 = new DeleteCommandParser().parse("delete 1 23");//invalid
-        Command command4 = new DeleteCommandParser().parse("delete 0.123");//invalid
-        System.out.println();
-    }
+//    @Test
+//    public void testDeleteCommandParser() throws Exception {
+//        Command command1 = new DeleteCommandParser().parse("delete 1");
+//        Command command2 = new DeleteCommandParser().parse("delete 1343234");
+//        Command command3 = new DeleteCommandParser().parse("delete 1 23");//invalid
+//        Command command4 = new DeleteCommandParser().parse("delete 0.123");//invalid
+//        System.out.println();
+//    }
 
-    @Test
-    public void testEditCommandParser() throws Exception {
-
-        //edit <id> description ...
-        Command command1 = new EditCommandParser().parse("edit 3 description lalala");
-        Command command2 = new EditCommandParser().parse("edit 13 description");//invalid
-        Command command3 = new EditCommandParser().parse("edit 43 lalala");//invalid
-        //edit <id> start date ...
-        Command command4 = new EditCommandParser().parse("edit 1 start date this friday");
-        Command command5 = new EditCommandParser().parse("edit -1 start date this friday 3pm");//invalid
-        //edit <id> end date ...
-        Command command6 = new EditCommandParser().parse("edit 555 end date tomorrow");
-        //edit <id> start time ...
-        Command command7 = new EditCommandParser().parse("edit 3 start time 3pm");
-        Command command8 = new EditCommandParser().parse("edit -3 start time 23:23:23");//invalid
-        Command command9 = new EditCommandParser().parse("edit 3 start time tomorrow 23:23:23");//invalid
-        //edit <id> end time ...
-        Command command10 = new EditCommandParser().parse("edit 3 end time 3pm");
-        //edit <id> #tags
-        Command command11 = new EditCommandParser().parse("edit 3 #a #assignments #233");
-        Command command12 = new EditCommandParser().parse("edit 3 #123 fdsf");//invalid
-
-
-        System.out.println();
-    }
+//    @Test
+//    public void testEditCommandParser() throws Exception {
+//
+//        //edit <id> description ...
+//        Command command1 = new EditCommandParser().parse("edit 3 description lalala");
+//        Command command2 = new EditCommandParser().parse("edit 13 description");//invalid
+//        Command command3 = new EditCommandParser().parse("edit 43 lalala");//invalid
+//        //edit <id> start date ...
+//        Command command4 = new EditCommandParser().parse("edit 1 start date this friday");
+//        Command command5 = new EditCommandParser().parse("edit -1 start date this friday 3pm");//invalid
+//        //edit <id> end date ...
+//        Command command6 = new EditCommandParser().parse("edit 555 end date tomorrow");
+//        //edit <id> start time ...
+//        Command command7 = new EditCommandParser().parse("edit 3 start time 3pm");
+//        Command command8 = new EditCommandParser().parse("edit -3 start time 23:23:23");//invalid
+//        Command command9 = new EditCommandParser().parse("edit 3 start time tomorrow 23:23:23");//invalid
+//        //edit <id> end time ...
+//        Command command10 = new EditCommandParser().parse("edit 3 end time 3pm");
+//        //edit <id> #tags
+//        Command command11 = new EditCommandParser().parse("edit 3 #a #assignments #233");
+//        Command command12 = new EditCommandParser().parse("edit 3 #123 fdsf");//invalid
+//
+//
+//        System.out.println();
+//    }
 
     @Test
     public void testCalendar() throws Exception {
@@ -184,5 +186,16 @@ public class ParserTest {
             System.out.println("tree: " + syntaxTree);
         }
 
+    }
+
+    @Test
+    public void testTimeParser() throws Exception {
+        TimeParserResult timeParserResult1 = new TimeParser().parseTime("1pm to 2pm");
+        TimeParserResult timeParserResult2 = new TimeParser().parseTime("1pm to Dec 1");
+        TimeParserResult timeParserResult3 = new TimeParser().parseTime("1pm to Dec 1 2pm");
+        TimeParserResult timeParserResult4 = new TimeParser().parseTime("Dec 1 to 2pm");
+        TimeParserResult timeParserResult5 = new TimeParser().parseTime("Dec 1 to Dec 2 2pm");
+        TimeParserResult timeParserResult6 = new TimeParser().parseTime("Dec 1 1pm to 2pm");
+        TimeParserResult timeParserResult7 = new TimeParser().parseTime("Dec 1 1pm to Dec 2");
     }
 }

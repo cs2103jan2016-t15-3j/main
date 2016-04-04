@@ -78,18 +78,23 @@ public class AddInputSeparator {
         _hasPartialKeyWord = isPartialKeyWordPresent(userInput);
         _hasTag = !breakUserInput.getTagRegion().isEmpty();
         _hasValidTag = isValidTag(breakUserInput.getTagRegion());
-        _hasStartDate = breakStartDateRegion.hasDate();
-        _hasStartTime = breakStartDateRegion.hasTime();
-        _hasEndDate = breakEndDateRegion.hasDate();
-        _hasEndTime = breakEndDateRegion.hasTime();
         
         _description = breakUserInput.getDescription();
         _partialKeyWord = searchPartialKeyWord(userInput);
         if (_partialKeyWord != KeyWordType.UNKNOWN) {
             _keyWord = KeyWordType.UNKNOWN;
         }
+
         _startDateTime = breakStartDateRegion.getDateTime();
-        _endDateTime = breakEndDateRegion.getDateTime();
+        _hasStartDate = breakStartDateRegion.hasDate();
+        _hasStartTime = breakStartDateRegion.hasTime();
+
+        if (_keyWord != KeyWordType.FROM || _startDateTime != null) {
+            _endDateTime = breakEndDateRegion.getDateTime();
+            _hasEndDate = breakEndDateRegion.hasDate();
+            _hasEndTime = breakEndDateRegion.hasTime();
+        }
+
         if (_startDateTime != null) {
             _startDate = _startDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             _startTime = _startDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();

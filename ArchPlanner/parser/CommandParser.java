@@ -48,7 +48,7 @@ public abstract class CommandParser {
      * @param input string to parse
      * @return parsed Command object
      */
-    public abstract Command parse(String input);
+//    public abstract Command parse(String input);
 
     /**
      * A utility method to split a string by space

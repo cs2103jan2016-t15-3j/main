@@ -11,13 +11,12 @@ public class SearchCommandParser extends CommandParser {
     private boolean searchUndone = true;
     private boolean searchOverdue = false;
 
-    @Override
-    public Command parse(String input) {
-        this.input = parseTag(input);
-        parseDoneUndoneAndOverdue();
-
-        return null;
-    }
+//    public Command parse(String input) {
+//        this.input = parseTag(input);
+//        parseDoneUndoneAndOverdue();
+//
+//        return null;
+//    }
 
     private void parseDoneUndoneAndOverdue() {
         String[] words = split(input);

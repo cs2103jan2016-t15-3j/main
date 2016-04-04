@@ -29,7 +29,7 @@ public class Parser {
 
     public static void init() {
         new Thread(() -> {
-            new com.joestelmach.natty.Parser().parse("");
+            new com.joestelmach.natty.Parser().parse("today");
         }).start();
     }
 
@@ -40,43 +40,43 @@ public class Parser {
      * @return parsed command. If input is invalid, will return InvalidCommand
      */
 
-    public Command parseCommand(String input) {
-        if (input == null) {
-            return new InvalidCommand("Null input");
-        }
-        int commandType = detectCommandType(input);
-        switch (commandType) {
-            case COMMAND_TYPE_UNKNOWN:
-                return new InvalidCommand("Invalid command");
-            case COMMAND_TYPE_ADD:
-                return new AddCommandParser().parse(input);
-            case COMMAND_TYPE_DELETE:
-                return new DeleteCommandParser().parse(input);
-            case COMMAND_TYPE_EDIT:
-                return new EditCommandParser().parse(input);
-            case COMMAND_TYPE_VIEW:
-                return new ViewCommandParser().parse(input);
-            case COMMAND_TYPE_DONE:
-                return new DoneCommandParser().parse(input);
-            case COMMAND_TYPE_UNDONE:
-                return new UndoneCommandParser().parse(input);
-            case COMMAND_TYPE_UNDO:
-                return new UndoCommand();
-            case COMMAND_TYPE_REDO:
-                return new RedoCommand();
-            case COMMAND_TYPE_SEARCH:
-                return new SearchCommandParser().parse(input);
-            case COMMAND_TYPE_EXIT:
-                return new ExitCommand();
-        }
-        return new InvalidCommand("Failed to parse");
-    }
+//    public Command parseCommand(String input) {
+//        if (input == null) {
+//            return new InvalidCommand("Null input");
+//        }
+//        int commandType = detectCommandType(input);
+//        switch (commandType) {
+//            case COMMAND_TYPE_UNKNOWN:
+//                return new InvalidCommand("Invalid command");
+//            case COMMAND_TYPE_ADD:
+//                return new AddCommandParser().parse(input);
+//            case COMMAND_TYPE_DELETE:
+//                return new DeleteCommandParser().parse(input);
+//            case COMMAND_TYPE_EDIT:
+//                return new EditCommandParser().parse(input);
+//            case COMMAND_TYPE_VIEW:
+//                return new ViewCommandParser().parse(input);
+//            case COMMAND_TYPE_DONE:
+//                return new DoneCommandParser().parse(input);
+//            case COMMAND_TYPE_UNDONE:
+//                return new UndoneCommandParser().parse(input);
+//            case COMMAND_TYPE_UNDO:
+//                return new UndoCommand();
+//            case COMMAND_TYPE_REDO:
+//                return new RedoCommand();
+//            case COMMAND_TYPE_SEARCH:
+//                return new SearchCommandParser().parse(input);
+//            case COMMAND_TYPE_EXIT:
+//                return new ExitCommand();
+//        }
+//        return new InvalidCommand("Failed to parse");
+//    }
 
     public Command parseCommand(String input, int viewListSize, int undoListSize, int redoListSize, ArrayList<Tag> tagList) {
         if (input == null) {
             return new InvalidCommand("Null input");
         }
-//        ListInformation listInformation = new ListInformation(viewListSize, undoListSize, redoListSize, tagList);
+        input = input.trim();
         int commandType = detectCommandType(input);
         switch (commandType) {
             case COMMAND_TYPE_UNKNOWN:
@@ -94,19 +94,19 @@ public class Parser {
             case COMMAND_TYPE_UNDONE:
                 return new UndoneCommandParser().parse(input, viewListSize);
             case COMMAND_TYPE_UNDO:
-                if (undoListSize > 0) {
+                if (undoListSize > 0 && input.split(" ").length == 1) {
                     return new UndoCommand();
                 } else {
                     return new InvalidCommand("Can't undo anymore");
                 }
             case COMMAND_TYPE_REDO:
-                if (redoListSize > 0) {
+                if (redoListSize > 0 && input.split(" ").length == 1) {
                     return new RedoCommand();
                 } else {
                     return new InvalidCommand("Can't redo anymore");
                 }
-            case COMMAND_TYPE_SEARCH:
-                return new SearchCommandParser().parse(input);
+//            case COMMAND_TYPE_SEARCH:
+//                return new SearchCommandParser().parse(input);
             case COMMAND_TYPE_EXIT:
                 return new ExitCommand();
             case COMMAND_TYPE_SET:

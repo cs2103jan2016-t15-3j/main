@@ -14,25 +14,46 @@ public class EditPrompt {
     private final String EDIT_ID = "edit <Task ID>";
     private final String EDIT_DESCRIPTION = "edit <Task ID> description";
     private final String EDIT_DESCRIPTION_FULL = "edit <Task ID> description <Description>";
-    private final String EDIT_START = "edit <Task ID> start";
-    private final String EDIT_START_DATE = "edit <Task ID> start date";
-    private final String EDIT_START_DATE_FULL = "edit <Task ID> start date <Start Date>";
-    private final String EDIT_START_TIME = "edit <Task ID> start time";
-    private final String EDIT_START_TIME_FULL = "edit <Task ID> start time <Start Time>";
-    private final String EDIT_END = "edit <Task ID> end";
-    private final String EDIT_END_DATE = "edit <Task ID> end date";
-    private final String EDIT_END_DATE_FULL = "edit <Task ID> end date <End Date>";
-    private final String EDIT_END_TIME = "edit <Task ID> end time";
-    private final String EDIT_END_TIME_FULL = "edit <Task ID> end time <End Time>";
+    //    private final String EDIT_START = "edit <Task ID> start";
+//    private final String EDIT_START_DATE = "edit <Task ID> start date";
+//    private final String EDIT_START_DATE_FULL = "edit <Task ID> start date <Start Date>";
+//    private final String EDIT_START_TIME = "edit <Task ID> start time";
+//    private final String EDIT_START_TIME_FULL = "edit <Task ID> start time <Start Time>";
+    //    private final String EDIT_END = "edit <Task ID> end";
+//    private final String EDIT_END_DATE = "edit <Task ID> end date";
+//    private final String EDIT_END_DATE_FULL = "edit <Task ID> end date <End Date>";
+//    private final String EDIT_END_TIME = "edit <Task ID> end time";
+//    private final String EDIT_END_TIME_FULL = "edit <Task ID> end time <End Time>";
     private final String EDIT_TAG = "edit <Task ID> #<Tag>";
     private final String EDIT_TAG_APPENDIX = " #<Tag>";
 
+    private final String EDIT_START = "edit <Task ID> start";
+    private final String EDIT_START_REMOVE = "edit <Task ID> start remove";
+    private final String EDIT_START_10 = "edit <Task ID> start <Date>";
+    private final String EDIT_START_01 = "edit <Task ID> start <Time>";
+    private final String EDIT_START_11 = "edit <Task ID> start <Date> <Time>";
+    private final String EDIT_END = "edit <Task ID> end";
+    private final String EDIT_END_REMOVE = "edit <Task ID> end remove";
+    private final String EDIT_END_10 = "edit <Task ID> end <Date>";
+    private final String EDIT_END_01 = "edit <Task ID> end <Time>";
+    private final String EDIT_END_11 = "edit <Task ID> end <Date> <Time>";
+
+    private final String EDIT_FROM = "edit <Task ID> from";
+    private final String EDIT_FROM_1010 = "edit <Task ID> from <Start Date> to <End Date>";
+    private final String EDIT_FROM_0101 = "edit <Task ID> from <Start Time> to <End Time>";
+    private final String EDIT_FROM_1011 = "edit <Task ID> from <Start Date> to <End Date> <End Time>";
+    private final String EDIT_FROM_0111 = "edit <Task ID> from <Start Time> to <End Date> <End Time>";
+    private final String EDIT_FROM_1110 = "edit <Task ID> from <Start Date> <Start Time> to <End Date>";
+    private final String EDIT_FROM_1101 = "edit <Task ID> from <Start Date> <Start Time> to <End Time>";
+    private final String EDIT_FROM_1111 = "edit <Task ID> from <Start Date> <Start Time> to <End Date> <End Time>";
+
+
     private final String REMOVE_START = "edit <Task ID> start remove";
     private final String REMOVE_START_TIME = "edit <Task ID> start time remove";
-    private final String REMOVE_START_DATE = "edit <Task ID> start date remove";
+    //    private final String REMOVE_START_DATE = "edit <Task ID> start date remove";
     private final String REMOVE_END = "edit <Task ID> end remove";
     private final String REMOVE_END_TIME = "edit <Task ID> end time remove";
-    private final String REMOVE_END_DATE = "edit <Task ID> end date remove";
+    //    private final String REMOVE_END_DATE = "edit <Task ID> end date remove";
     private final String REMOVE_TAG = "edit <Task ID> # remove";
 
     private final String INVALID_ID = "Invalid ID: edit <Task ID>";
@@ -45,11 +66,14 @@ public class EditPrompt {
 
     private final String KEYWORD_DESCRIPTION = "description";
     private final String KEYWORD_START_REMOVE = "start remove";
-    private final String KEYWORD_START_TIME = "start time";
-    private final String KEYWORD_START_DATE = "start date";
+    private final String KEYWORD_START = "start";
+    //    private final String KEYWORD_START_TIME = "start time";
+//    private final String KEYWORD_START_DATE = "start date";
+    private final String KEYWORD_END = "end";
     private final String KEYWORD_END_REMOVE = "end remove";
-    private final String KEYWORD_END_TIME = "end time";
-    private final String KEYWORD_END_DATE = "end date";
+    //    private final String KEYWORD_END_TIME = "end time";
+//    private final String KEYWORD_END_DATE = "end date";
+    private final String KEYWORD_FROM = "from";
     private final String KEYWORD_TAG_REMOVE = "# remove";
 
 
@@ -93,23 +117,20 @@ public class EditPrompt {
                     if (KEYWORD_DESCRIPTION.startsWith(parameter)) {
                         promptList.add(EDIT_DESCRIPTION);
                     }
-                    if (KEYWORD_START_DATE.startsWith(parameter)) {
-                        promptList.add(EDIT_START_DATE);
+                    if (KEYWORD_START.startsWith(parameter)) {
+                        promptList.add(EDIT_START);
                     }
-                    if (KEYWORD_START_TIME.startsWith(parameter)) {
-                        promptList.add(EDIT_START_TIME);
-                    }
-                    if (KEYWORD_END_DATE.startsWith(parameter)) {
-                        promptList.add(EDIT_END_DATE);
-                    }
-                    if (KEYWORD_END_TIME.startsWith(parameter)) {
-                        promptList.add(EDIT_END_TIME);
+                    if (KEYWORD_END.startsWith(parameter)) {
+                        promptList.add(EDIT_END);
                     }
                     if (KEYWORD_START_REMOVE.startsWith(parameter)) {
                         promptList.add(REMOVE_START);
                     }
                     if (KEYWORD_END_REMOVE.startsWith(parameter)) {
                         promptList.add(REMOVE_END);
+                    }
+                    if (KEYWORD_FROM.startsWith(parameter)) {
+                        promptList.add(EDIT_FROM);
                     }
                 }
                 if (KEYWORD_TAG_REMOVE.startsWith(parameter)) {
@@ -122,42 +143,124 @@ public class EditPrompt {
                 case DESCRIPTION:
                     promptList.add(EDIT_DESCRIPTION_FULL);
                     break;
-                case START_DATE:
-                    if (isValidDate(result, parameter)) {
-                        promptList.add(EDIT_START_DATE_FULL);
-                        promptList.add(REMOVE_START_DATE);
-                    } else {
-                        promptList.add(INVALID_START_DATE);
+                case START:
+                    if (isToRemove(parameter)) {
+                        promptList.add(EDIT_START_REMOVE);
+                    }
+                    switch (result.getDateTimeStatus()) {
+                        //0000
+                        case 0:
+                            promptList.add(EDIT_START_10);
+                            promptList.add(EDIT_START_01);
+                            promptList.add(EDIT_START_11);
+                            break;
+                        //0100
+                        case 4:
+                            promptList.add(EDIT_START_01);
+                            break;
+                        //1000
+                        case 8:
+                            promptList.add(EDIT_START_10);
+                            promptList.add(EDIT_START_11);
+                            break;
+                        //1100
+                        case 12:
+                            promptList.add(EDIT_START_11);
+                            break;
                     }
                     break;
-                case START_TIME:
-                    if (isValidTime(result, parameter)) {
-                        promptList.add(EDIT_START_TIME_FULL);
-                        promptList.add(REMOVE_START_TIME);
-                    } else {
-                        promptList.add(INVALID_START_TIME);
+                case END:
+                    if (isToRemove(parameter)) {
+                        promptList.add(EDIT_END_REMOVE);
                     }
-
-                    break;
-                case END_DATE:
-                    if (isValidDate(result, parameter)) {
-                        promptList.add(EDIT_END_DATE_FULL);
-                        promptList.add(REMOVE_END_DATE);
-                    } else {
-                        promptList.add(INVALID_END_DATE);
+                    switch (result.getDateTimeStatus()) {
+                        //0000
+                        case 0:
+                            promptList.add(EDIT_END_10);
+                            promptList.add(EDIT_END_01);
+                            promptList.add(EDIT_END_11);
+                            break;
+                        //0100
+                        case 4:
+                            promptList.add(EDIT_END_01);
+                            break;
+                        //1000
+                        case 8:
+                            promptList.add(EDIT_END_10);
+                            promptList.add(EDIT_END_11);
+                            break;
+                        //1100
+                        case 12:
+                            promptList.add(EDIT_END_11);
+                            break;
                     }
                     break;
-                case END_TIME:
-                    if (isValidTime(result, parameter)) {
-                        promptList.add(EDIT_END_TIME_FULL);
-                        promptList.add(REMOVE_END_TIME);
-                    } else {
-                        promptList.add(INVALID_END_TIME);
+                case FROM:
+                    switch (result.getRawDateTimeStatus()) {
+                        //0000
+                        case 0:
+                            promptList.add(EDIT_FROM_1010);
+                            promptList.add(EDIT_FROM_0101);
+                            promptList.add(EDIT_FROM_1111);
+                            break;
+                        //0100:
+                        case 4:
+                            promptList.add(EDIT_FROM_0101);
+                            promptList.add(EDIT_FROM_0111);
+                            break;
+                        //0101
+                        case 5:
+                            promptList.add(EDIT_FROM_0101);
+                            break;
+                        //1000:
+                        case 8:
+                            promptList.add(EDIT_FROM_1010);
+                            promptList.add(EDIT_FROM_1111);
+                            break;
+                        //1010
+                        case 10:
+                            promptList.add(EDIT_FROM_1010);
+                            promptList.add(EDIT_FROM_1011);
+                            break;
+                        //todo: prompts?
                     }
-                    break;
+//                case START_DATE:
+//                    if (isValidDate(result, parameter)) {
+//                        promptList.add(EDIT_START_DATE_FULL);
+//                    } else {
+//                        promptList.add(INVALID_START_DATE);
+//                    }
+//                    break;
+//                case START_TIME:
+//                    if (isValidTime(result, parameter)) {
+//                        promptList.add(EDIT_START_TIME_FULL);
+//                        promptList.add(REMOVE_START_TIME);
+//                    } else {
+//                        promptList.add(INVALID_START_TIME);
+//                    }
+//
+//                    break;
+//                case END_DATE:
+//                    if (isValidDate(result, parameter)) {
+//                        promptList.add(EDIT_END_DATE_FULL);
+//                    } else {
+//                        promptList.add(INVALID_END_DATE);
+//                    }
+//                    break;
+//                case END_TIME:
+//                    if (isValidTime(result, parameter)) {
+//                        promptList.add(EDIT_END_TIME_FULL);
+//                        promptList.add(REMOVE_END_TIME);
+//                    } else {
+//                        promptList.add(INVALID_END_TIME);
+//                    }
+//                    break;
                 default:
                     break;
             }
+        }
+        if (promptList.isEmpty()) {
+            promptList.add("Invalid Edit Command");
         }
         return promptList;
     }
@@ -192,6 +295,14 @@ public class EditPrompt {
             tagPrompt += EDIT_TAG_APPENDIX;
         }
         promptList.add(tagPrompt);
+        return true;
+    }
+
+    private boolean isToRemove(String parameter) {
+        if (parameter != null) {
+            String remove = "remove";
+            return remove.startsWith(parameter.toLowerCase());
+        }
         return true;
     }
 

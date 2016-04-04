@@ -13,49 +13,8 @@ import separator.InputSeparator;
  */
 public class EditCommandParser extends CommandParser {
 
-    private int index;
-
-    private final int EDIT_ARGUMENT_INDEX = 5;
-    private final String KEYWORD_START_DATE = "start date ";
-    private final String KEYWORD_START_TIME = "start time ";
-    private final String KEYWORD_END_DATE = "end date ";
-    private final String KEYWORD_END_TIME = "end time ";
-    private final String KEYWORD_DESCRIPTION = "description ";
     private TaskParameters result = new TaskParameters();
 
-    @Override
-    public Command parse(String input) {
-        this.input = input;
-        if (input.length() <= EDIT_ARGUMENT_INDEX) {
-            return new InvalidCommand("Arguments missing");
-        }
-        String arguments = input.substring(EDIT_ARGUMENT_INDEX).trim();
-        int firstSpace = arguments.indexOf(' ');
-        if (firstSpace == -1) {
-            return new InvalidCommand("Arguments missing");
-        }
-        try {
-            index = Integer.parseInt(arguments.substring(0, firstSpace));
-        } catch (NumberFormatException e) {
-            return new InvalidCommand("Index should be a number");
-        }
-        arguments = arguments.substring(firstSpace + 1, arguments.length());
-
-        if (arguments.startsWith(KEYWORD_DESCRIPTION)) {
-            result.setDescription(arguments.substring(KEYWORD_DESCRIPTION.length()));
-            return new EditCommand(index, result);
-        } else if (arguments.startsWith(KEYWORD_START_DATE)) {
-            return parseEditStartDate(arguments);
-        } else if (arguments.startsWith(KEYWORD_END_DATE)) {
-            return parseEditEndDate(arguments);
-        } else if (arguments.startsWith(KEYWORD_START_TIME)) {
-            return parseEditStartTime(arguments);
-        } else if (arguments.startsWith(KEYWORD_END_TIME)) {
-            return parseEditEndTime(arguments);
-        } else {
-            return parseEditTag(arguments);
-        }
-    }
 
     public Command parse(String input, int viewListSize) {
         InputSeparator inputSeparator = new InputSeparator(input);
@@ -104,61 +63,89 @@ public class EditCommandParser extends CommandParser {
                 case DESCRIPTION:
                     result.setDescription(parameter);
                     return new EditCommand(index, result);
+                case START:
+                    //todo: start date remove
+                    if (isRemove) {
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START);
+                    }
+                    if (timeInvalid) {
+                        return new InvalidCommand("Invalid start date or time");
+                    }
+                    switch (timeParserResult.getDateTimeStatus()) {
+                        //0100
+                        case 4:
+                            result.setStartTime(timeParserResult.getFirstTime());
+                            return new EditCommand(index, result);
+                        //1000
+                        case 8:
+                            result.setStartDate(timeParserResult.getFirstDate());
+                            return new EditCommand(index, result);
+                        case 12:
+                            result.setStartDate(timeParserResult.getFirstDate());
+                            result.setStartTime(timeParserResult.getFirstTime());
+                            return new EditCommand(index, result);
+                        default:
+                            return new InvalidCommand("Invalid start date or time");
+                    }
+                case END:
+                    if (isRemove) {
+                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END);
+                    }
+                    if (timeInvalid) {
+                        return new InvalidCommand("Invalid end date or time");
+                    }
+                    switch (timeParserResult.getDateTimeStatus()) {
+                        //0100
+                        case 4:
+                            result.setEndTime(timeParserResult.getFirstTime());
+                            return new EditCommand(index, result);
+                        //1000
+                        case 8:
+                            result.setEndDate(timeParserResult.getFirstDate());
+                            return new EditCommand(index, result);
+                        case 12:
+                            result.setEndDate(timeParserResult.getFirstDate());
+                            result.setEndTime(timeParserResult.getFirstTime());
+                            return new EditCommand(index, result);
+                        default:
+                            return new InvalidCommand("Invalid end date or time");
+                    }
+                case FROM:
+                    if (timeInvalid) {
+                        return new InvalidCommand("Invalid date or time");
+                    }
+                    switch (timeParserResult.getDateTimeStatus()) {
+                        //0101
+                        case 5:
+                            result.setStartTime(timeParserResult.getFirstTime());
+                            result.setEndTime(timeParserResult.getSecondTime());
+                            return new EditCommand(index, result);
+                        //1010
+                        case 10:
+                            result.setStartDate(timeParserResult.getFirstDate());
+                            result.setEndDate(timeParserResult.getSecondDate());
+                            return new EditCommand(index, result);
+                        //1111
+                        case 15:
+                            result.setStartDate(timeParserResult.getFirstDate());
+                            result.setStartTime(timeParserResult.getFirstTime());
+                            result.setEndDate(timeParserResult.getSecondDate());
+                            result.setEndTime(timeParserResult.getSecondTime());
+                            return new EditCommand(index, result);
+                        default:
+                            return new InvalidCommand("Invalid date or time");
+                    }
                 case START_TIME:
                     if (isRemove) {
                         return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START_TIME);
-                    }
-                    if (timeInvalid) {
-                        return new InvalidCommand("Invalid Start Time");
                     } else {
-                        if (timeParserResult.hasNoDateAndOneTime()) {
-                            result.setStartTime(timeParserResult.getFirstTime());
-                            return new EditCommand(index, result);
-                        } else {
-                            return new InvalidCommand("Invalid Start Time");
-                        }
-                    }
-                case START_DATE:
-                    if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START_DATE);
-                    }
-                    if (timeInvalid) {
-                        return new InvalidCommand("Invalid Start Time");
-                    } else {
-                        if (timeParserResult.hasOneDateAndNoTime()) {
-                            result.setStartDate(timeParserResult.getFirstDate());
-                            return new EditCommand(index, result);
-                        } else {
-                            return new InvalidCommand("Invalid Start Date");
-                        }
+                        return new InvalidCommand("Invalid command.");
                     }
                 case END_TIME:
                     if (isRemove) {
                         return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END_TIME);
-                    }
-                    if (timeInvalid) {
-                        return new InvalidCommand("Invalid End Time");
                     } else {
-                        if (timeParserResult.hasNoDateAndOneTime()) {
-                            result.setEndTime(timeParserResult.getFirstTime());
-                            return new EditCommand(index, result);
-                        } else {
-                            return new InvalidCommand("Invalid End Time");
-                        }
-                    }
-                case END_DATE:
-                    if (isRemove) {
-                        return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END_DATE);
-                    }
-                    if (timeInvalid) {
-                        return new InvalidCommand("Invalid End Date");
-                    } else {
-                        if (timeParserResult.hasOneDateAndNoTime()) {
-                            result.setEndDate(timeParserResult.getFirstDate());
-                            return new EditCommand(index, result);
-                        } else {
-                            return new InvalidCommand("Invalid End date");
-                        }
+                        return new InvalidCommand("Invalid command.");
                     }
             }
             if (parameter.equalsIgnoreCase("start remove")) {
@@ -172,83 +159,4 @@ public class EditCommandParser extends CommandParser {
         return new InvalidCommand("Invalid Command");
     }
 
-
-    private Command parseEditTag(String arguments) {
-        String[] tags = split(arguments);
-        for (String tag : tags) {
-            if (!tag.isEmpty() && tag.charAt(0) == '#') {
-                tagList.add(tag);
-            } else {
-                return new InvalidCommand("Command Invalid!");
-            }
-        }
-        result.setTagsList(tagList);
-        return new EditCommand(index, result);
-    }
-
-    private Command parseEditStartDate(String arguments) {
-        String timeString = arguments.substring(KEYWORD_START_DATE.length());
-        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
-        if (timeParserResult.getMatchString().equals(timeString)) {
-            if (timeParserResult.getFirstDate() != null
-                    && timeParserResult.getFirstTime() == null
-                    && timeParserResult.getSecondDate() == null) {
-                result.setStartDate(timeParserResult.getFirstDate());
-                return new EditCommand(index, result);
-            } else {
-                return new InvalidCommand("The date is not valid");
-            }
-        } else {
-            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
-        }
-    }
-
-    private Command parseEditEndDate(String arguments) {
-        String timeString = arguments.substring(KEYWORD_END_DATE.length());
-        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
-        if (timeParserResult.getMatchString().equals(timeString)) {
-            if (timeParserResult.getFirstDate() != null
-                    && timeParserResult.getFirstTime() == null
-                    && timeParserResult.getSecondDate() == null) {
-                result.setEndDate(timeParserResult.getFirstDate());
-                return new EditCommand(index, result);
-            } else {
-                return new InvalidCommand("The date is not valid");
-            }
-        } else {
-            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
-        }
-    }
-
-    private Command parseEditStartTime(String arguments) {
-        String timeString = arguments.substring(KEYWORD_START_TIME.length());
-        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
-        if (timeParserResult.getMatchString().equals(timeString)) {
-            if (timeParserResult.getFirstTime() != null
-                    && timeParserResult.getFirstDate() == null) {
-                result.setStartTime(timeParserResult.getFirstTime());
-                return new EditCommand(index, result);
-            } else {
-                return new InvalidCommand("The time is not valid");
-            }
-        } else {
-            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
-        }
-    }
-
-    private Command parseEditEndTime(String arguments) {
-        String timeString = arguments.substring(KEYWORD_END_TIME.length());
-        TimeParserResult timeParserResult = new TimeParser().parseTime(arguments);
-        if (timeParserResult.getMatchString().equals(timeString)) {
-            if (timeParserResult.getFirstTime() != null
-                    && timeParserResult.getFirstDate() == null) {
-                result.setEndTime(timeParserResult.getFirstTime());
-                return new EditCommand(index, result);
-            } else {
-                return new InvalidCommand("The time is not valid");
-            }
-        } else {
-            return new InvalidCommand("Only \"" + timeParserResult.getMatchString() + "\" is recognized");
-        }
-    }
 }

@@ -14,11 +14,11 @@ import java.util.List;
 public class TimeParser {
 
     private static Parser timeParser = new Parser();
-    private int dateCount, timeCount;
+    private int dateCount, timeCount, dateTimeCount;
+    private TimeParserResult timeParserResult = new TimeParserResult();
 
     public TimeParserResult parseTime(String input) {
 
-        TimeParserResult timeParserResult = new TimeParserResult();
         if (input == null) {
             return timeParserResult;
         }
@@ -29,31 +29,44 @@ public class TimeParser {
             }
             List<Date> dates = group.getDates();
             Tree tree = group.getSyntaxTree();
-            postTraverseSyntaxTree(tree);
+            postTraverseSyntaxTree(tree, dates);
             if (dates.size() < dateCount || dates.size() < timeCount) {
                 return timeParserResult;
             }
             timeParserResult.setMatchPosition(group.getPosition());
             timeParserResult.setMatchString(group.getText());
-            for (int i = 0; i < dateCount; i++) {
-                timeParserResult.setDate(dates.get(i));
-            }
-            for (int i = 0; i < timeCount; i++) {
-                timeParserResult.setTime(dates.get(i));
-            }
-            break;
+//            for (int i = 0; i < dateCount; i++) {
+//                timeParserResult.setDate(dates.get(i));
+//            }
+//            for (int i = 0; i < timeCount; i++) {
+//                timeParserResult.setTime(dates.get(i));
+//            }
+//            break;
         }
+        timeParserResult.updateDateTime();
+        timeParserResult.checkInvalid();
         return timeParserResult;
     }
 
-    private void postTraverseSyntaxTree(Tree tree) {
+    private void postTraverseSyntaxTree(Tree tree, List<Date> dates) {
+        if (tree.getText().equals("DATE_TIME")){
+            dateTimeCount++;
+        }
         if (tree.getText().equals("RELATIVE_DATE") || tree.getText().equals("EXPLICIT_DATE")) {
-            dateCount++;
+            if (dateTimeCount == 1) {
+                timeParserResult.setFirstDate(dates.get(0));
+            } else if (dateTimeCount == 2) {
+                timeParserResult.setSecondDate(dates.get(1));
+            }
         } else if (tree.getText().equals("RELATIVE_TIME") || tree.getText().equals("EXPLICIT_TIME")) {
-            timeCount++;
+            if (dateTimeCount == 1) {
+                timeParserResult.setFirstTime(dates.get(0));
+            } else if (dateTimeCount == 2) {
+                timeParserResult.setSecondTime(dates.get(1));
+            }
         }
         for (int i = 0; i < tree.getChildCount(); i++) {
-            postTraverseSyntaxTree(tree.getChild(i));
+            postTraverseSyntaxTree(tree.getChild(i), dates);
         }
     }
 }

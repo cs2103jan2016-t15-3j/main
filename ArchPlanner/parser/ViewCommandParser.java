@@ -22,7 +22,6 @@ public class ViewCommandParser extends CommandParser {
 //    private final String KEYWORD_DESCRIPTION = "description ";
 //    private final int VIEW_INDEX = 5;
 
-    @Override
     public Command parse(String input) {
         InputSeparator separator = new InputSeparator(input);
         InputSeparator.KeywordType type = separator.getKeywordType();
@@ -88,51 +87,51 @@ public class ViewCommandParser extends CommandParser {
                 if (timeParserResult.hasTwoDateAndNoTime()) {
                     result.setStartDate(timeParserResult.getFirstDate());
                     result.setEndDate(timeParserResult.getSecondDate());
+                    return new ViewCommand(null, null, result);
                 } else {
                     return new InvalidCommand("Invalid Time");
                 }
-                break;
             case START_DATE:
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid Start Date");
                 }
                 if (timeParserResult.hasOneDateAndNoTime()) {
                     result.setStartDate(timeParserResult.getFirstDate());
+                    return new ViewCommand(null, null, result);
                 } else {
                     return new InvalidCommand("Invalid Start Date");
                 }
-                break;
             case START_TIME:
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid Start Time");
                 }
                 if (timeParserResult.hasNoDateAndOneTime()) {
                     result.setStartTime(timeParserResult.getFirstTime());
+                    return new ViewCommand(null, null, result);
                 } else {
                     return new InvalidCommand("Invalid Start Time");
                 }
-                break;
             case END_DATE:
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid End Date");
                 }
                 if (timeParserResult.hasOneDateAndNoTime()) {
                     result.setEndDate(timeParserResult.getFirstDate());
+                    return new ViewCommand(null, null, result);
                 } else {
                     return new InvalidCommand("Invalid End Date");
                 }
-                break;
             case END_TIME:
                 if (timeInvalid) {
                     return new InvalidCommand("Invalid End Time");
                 }
                 if (timeParserResult.hasNoDateAndOneTime()) {
                     result.setEndTime(timeParserResult.getFirstTime());
+                    return new ViewCommand(null, null, result);
                 } else {
                     return new InvalidCommand("Invalid End Time");
                 }
 
-                break;
         }
         return new InvalidCommand("Invalid Command");
 

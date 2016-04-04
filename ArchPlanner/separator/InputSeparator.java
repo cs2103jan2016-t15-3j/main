@@ -6,7 +6,7 @@ package separator;
 public class InputSeparator {
 
     public enum KeywordType {
-        DESCRIPTION, START_TIME, END_TIME, START_DATE, END_DATE, FROM,
+        DESCRIPTION, START_TIME, END_TIME, START_DATE, END_DATE, FROM, START, END,
         DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH
     }
 
