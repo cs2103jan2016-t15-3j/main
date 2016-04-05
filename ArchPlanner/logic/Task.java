@@ -12,6 +12,11 @@ import java.util.ArrayList;
 
 public class Task extends TaskParameters implements Serializable {
 
+	/**
+	 * This is a generated serial UID for serializing
+	 */
+	private static final long serialVersionUID = 4512516990029160337L;
+
 	public Task() {
 		super();
 	}

@@ -11,15 +11,15 @@ import storage.Storage;
  */
 public class SetCommand implements Command {
 
-	private String _filePath;
+	private String _fileDirectory;
 	private InvalidCommand _invalidCommand;
 
 	private String INVALID_DIRECTORY = "File Directory does not exist. Please set a different file path.";
 	private String INVALID_FILE_NAME = "A file with identical file name is found. Please set a different file name.";
 	private String INVALID_FILE_PATH = "Invalid file path";
 
-	public SetCommand(String filePath) {
-		_filePath = filePath;
+	public SetCommand(String fileDirectory) {
+		_fileDirectory = fileDirectory;
 	}
 
 	public Command execute() {
@@ -38,11 +38,12 @@ public class SetCommand implements Command {
 
 		File file = null;
 		File fileDirectory = null;
+		String filePath = getFilePath(storage);
 		try {
-			file = new File(_filePath);
-			fileDirectory = new File(file.getParent());
+			file = new File(filePath);
+			fileDirectory = new File(_fileDirectory);
 			if (!file.exists() || !file.isFile()) {
-				setFilePathIfDirectoryExists(storage, fileDirectory);
+				setFilePathIfDirectoryExists(storage, fileDirectory, file.getCanonicalPath());
 			} else {
 				_invalidCommand = new InvalidCommand(INVALID_FILE_NAME);
 			}
@@ -52,9 +53,14 @@ public class SetCommand implements Command {
 
 	}
 
-	private void setFilePathIfDirectoryExists(Storage storage, File fileDirectory) {
+	private String getFilePath(Storage storage) {
+		String filePath = _fileDirectory + "/" + storage.getFileName();
+		return filePath;
+	}
+
+	private void setFilePathIfDirectoryExists(Storage storage, File fileDirectory, String filePath) {
 		if (fileDirectory.exists() && fileDirectory.isDirectory()) {
-			storage.setFilePath(_filePath);
+			storage.setFilePath(filePath);
 		} else {
 			_invalidCommand = new InvalidCommand(INVALID_DIRECTORY);
 		}

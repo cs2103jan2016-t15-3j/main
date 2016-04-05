@@ -126,14 +126,16 @@ public class TaskParameters {
 	private String getDateString(LocalDate date) {
 
 		LocalDate today = LocalDate.now();
+		LocalDate yesterday = today.minusDays(1);
+		LocalDate tomorrow = today.plusDays(1);
 		
 		if (date == null) {
 			return "";
 		} else if (date.isEqual(today)) {
 			return "today";
-		} else if (date.compareTo(today) == -1) {
+		} else if (date.isEqual(yesterday)) {
 			return "yesterday";
-		} else if (date.compareTo(today) == 1) {
+		} else if (date.isEqual(tomorrow)) {
 			return "tomorrow";
 		}
 		

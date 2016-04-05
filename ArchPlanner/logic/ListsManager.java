@@ -278,6 +278,7 @@ public class ListsManager {
 		_undoneList.clear();
 		_overdueList.clear();
 		_currentViewType = "";
+		_index = -1;
 	}
 
 	private boolean hasNoTagSelected(boolean hasNoTagSlected) {
