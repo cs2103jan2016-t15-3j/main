@@ -30,6 +30,9 @@ public class AddCommandParser extends CommandParser {
             result.setEndDate(timeParserResult.getSecondDate());
             result.setEndTime(timeParserResult.getSecondTime());
             result.setTagsList(new ArrayList<>());
+            if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)){
+                return new InvalidCommand("Invalid Time!");
+            }
             if (addInputSeparator.hasValidTag()) {
                 if (addInputSeparator.getTags().length == 1 && addInputSeparator.getTags()[0].equals("#")) {
                     return new InvalidCommand("Invalid Tags");
@@ -69,5 +72,26 @@ public class AddCommandParser extends CommandParser {
         return timeParserResult;
     }
 
+    private boolean checkTimeValidWithKeyword(AddInputSeparator.KeyWordType keyword, TimeParserResult timeParserResult) {
+        if (keyword == null) {
+            return true;
+        }
+        switch (keyword) {
+            case UNKNOWN:
+                return true;
+            case ON:
+                //fallthrough
+            case BY:
+                if (timeParserResult.getFirstDate() == null || timeParserResult.getSecondDate() != null) {
+                    return false;
+                }
+                break;
+            case FROM:
+                if (timeParserResult.getFirstDate() == null || timeParserResult.getSecondDate() == null) {
+                    return false;
+                }
+        }
+        return true;
+    }
 
 }
