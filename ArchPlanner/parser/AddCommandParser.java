@@ -83,9 +83,12 @@ public class AddCommandParser extends CommandParser {
             case UNKNOWN:
                 return true;
             case ON:
-                //fallthrough
-            case BY:
                 if (timeParserResult.getFirstDate() == null || timeParserResult.getSecondDate() != null) {
+                    return false;
+                }
+                break;
+            case BY:
+                if (timeParserResult.getFirstDate() != null || timeParserResult.getSecondDate() == null) {
                     return false;
                 }
                 break;
