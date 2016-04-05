@@ -1,6 +1,5 @@
 package logic.commands;
 
-
 import logic.HistoryManager;
 import logic.ListsManager;
 import storage.Storage;

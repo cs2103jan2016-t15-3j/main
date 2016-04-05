@@ -11,15 +11,17 @@ import storage.Storage;
  */
 public class SetCommand implements Command {
 
-	private String _fileDirectory;
+	private String _filePath;
 	private InvalidCommand _invalidCommand;
 
-	private String INVALID_DIRECTORY = "File Directory does not exist. Please set a different file path.";
-	private String INVALID_FILE_NAME = "A file with identical file name is found. Please set a different file name.";
-	private String INVALID_FILE_PATH = "Invalid file path";
-
-	public SetCommand(String fileDirectory) {
-		_fileDirectory = fileDirectory;
+	private final String INVALID_DIRECTORY = "File Directory does not exist. Please set a different file path.";
+	private final String INVALID_FILE_NAME = "A file with identical file name is found. Please set a different file name.";
+	private final String INVALID_FILE_PATH = "Invalid file path";
+	
+	private final String FILE_EXTENSION = ".txt";
+	
+	public SetCommand(String filePath) {
+		_filePath = filePath + FILE_EXTENSION;
 	}
 
 	public Command execute() {
@@ -37,13 +39,10 @@ public class SetCommand implements Command {
 	private void setFilePath(Storage storage) {
 
 		File file = null;
-		File fileDirectory = null;
-		String filePath = getFilePath(storage);
 		try {
-			file = new File(filePath);
-			fileDirectory = new File(_fileDirectory);
+			file = new File(_filePath);
 			if (!file.exists() || !file.isFile()) {
-				setFilePathIfDirectoryExists(storage, fileDirectory, file.getCanonicalPath());
+				setFilePathIfDirectoryExists(storage, file.getParent());
 			} else {
 				_invalidCommand = new InvalidCommand(INVALID_FILE_NAME);
 			}
@@ -53,14 +52,10 @@ public class SetCommand implements Command {
 
 	}
 
-	private String getFilePath(Storage storage) {
-		String filePath = _fileDirectory + "/" + storage.getFileName();
-		return filePath;
-	}
-
-	private void setFilePathIfDirectoryExists(Storage storage, File fileDirectory, String filePath) {
-		if (fileDirectory.exists() && fileDirectory.isDirectory()) {
-			storage.setFilePath(filePath);
+	private void setFilePathIfDirectoryExists(Storage storage, String directory) {
+		File filePathDirectory = new File(directory);
+		if (filePathDirectory.exists() && filePathDirectory.isDirectory()) {
+			storage.setFilePath(_filePath);
 		} else {
 			_invalidCommand = new InvalidCommand(INVALID_DIRECTORY);
 		}

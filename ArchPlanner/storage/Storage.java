@@ -50,10 +50,20 @@ public class Storage {
 
 	public void loadStorageFile() {
 		_linkerFile = new File(getLinkerPath());
+		createLinkerFileIfNotExists();
+		initializeFile();
+	}
+
+	private void createLinkerFileIfNotExists() {
 		if (!_linkerFile.exists() || !_linkerFile.isFile()) {
+			createProgramFolder();
 			createFile(_linkerFile);
 		}
-		initializeFile();
+	}
+
+	private void createProgramFolder() {
+		String programFolderDirectory = getDefaultDirectory().substring(0, getDefaultDirectory().length() - 1);
+		new File(programFolderDirectory).mkdirs();
 	}
 
 	private void initializeFile() {
@@ -79,6 +89,7 @@ public class Storage {
 			_storageFile.delete();
 			_filePath = filePath;
 			_storageFile = new File(getFilePath());
+			createProgramFolder();
 			fileWriter = new FileWriter(getLinkerPath(), false);
 			fileWriter.append(getFilePath() + "\r\n");
 			fileWriter.close();
@@ -93,6 +104,8 @@ public class Storage {
 		String json = gson.toJson(list, type);
 
 		FileWriter fileWriter;
+		createLinkerFileIfNotExists();
+		
 		try {
 			fileWriter = new FileWriter(_filePath);
 			fileWriter.write(json);
@@ -142,7 +155,7 @@ public class Storage {
 	private String getDefaultDirectory() {
 		String systemDrive = System.getenv("SystemDrive");
 		String userName = System.getProperty("user.name");
-		String defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/";
+		String defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner/";
 		return defaultDirectory;
 	}
 
