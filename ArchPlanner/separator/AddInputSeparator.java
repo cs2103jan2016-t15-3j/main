@@ -124,7 +124,14 @@ public class AddInputSeparator {
         }
     
         if (_startDateTime != null && _endDateTime != null) {
-            if (!_hasStartTime && _hasEndTime) {
+            if (_hasStartDate && _hasStartTime && !_hasEndDate && _hasEndTime) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(_endDateTime);
+                cal.set(Calendar.DATE, _startDate.getDayOfMonth());
+                cal.set(Calendar.MONTH, _startDate.getMonthValue() - 1);
+                cal.set(Calendar.YEAR, _startDate.getYear());
+                _endDateTime = cal.getTime();
+            } else if (!_hasStartTime && _hasEndTime) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(_startDateTime);
                 cal.set(Calendar.HOUR_OF_DAY, 0);

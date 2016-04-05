@@ -65,7 +65,7 @@ public class Feedback {
                 case UNKNOWN:
                     if (getNumOfWords(userInput) == 1) {
                         for (CommandType type : CommandType.values()) {
-                            if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
+                            if (type != CommandType.UNKNOWN && type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
                                 prompts.add(type.name().toLowerCase());
                             }
                         }
@@ -89,7 +89,7 @@ public class Feedback {
         ArrayList<String> cmdPrompts = new ArrayList<String>();
         if (getNumOfWords(userInput) == 1) {
             for (CommandType type : CommandType.values()) {
-                if (type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
+                if (type != CommandType.UNKNOWN && type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
                     cmdPrompts.add(type.name().toLowerCase());
                 }
             }

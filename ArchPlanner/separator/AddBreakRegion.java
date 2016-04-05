@@ -25,7 +25,7 @@ public class AddBreakRegion {
             keyWord = findKeyWord(userInput);
             
             String dateRegion;
-            String afterKeyWord = userInput.substring(keyWordPosition + keyWord.length());
+            String afterKeyWord = userInput.substring(keyWordPosition + keyWord.length() + 2);
             tagPosition = getTagPosition(afterKeyWord);
             if (tagPosition >= 0) {
                 dateRegion = afterKeyWord.substring(0, tagPosition);
@@ -95,7 +95,7 @@ public class AddBreakRegion {
         input = input.toLowerCase();
         String keyWord = findKeyWord(input);
         if (!keyWord.isEmpty()) {
-            return input.lastIndexOf(keyWord);
+            return input.lastIndexOf(" " + keyWord + " ");
         } else {
             return -1;
         }

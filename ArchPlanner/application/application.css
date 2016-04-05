@@ -75,6 +75,11 @@
 	-fx-background-color: grey;
 }
 
+.context-menu .label {
+  -fx-font-size: 0.8em;
+  -fx-font-family: "System";
+}
+
 .list-cell {
     -fx-background-color: transparent;
 }

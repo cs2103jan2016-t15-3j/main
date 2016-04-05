@@ -21,7 +21,6 @@ public class MainWindow extends Application {
     
 	@Override
 	public void start(Stage primaryStage) {
-	    //SysTray systemTray = new SysTray();
 	    
 	    URL layoutURL = getClass().getResource("/application/MainWindow.fxml");
         URL cssURL = getClass().getResource("application.css");

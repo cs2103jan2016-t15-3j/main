@@ -2,12 +2,9 @@ package application;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import application.TaskPane;
-import feedback.Feedback;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
@@ -39,10 +36,14 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+
+import application.TaskPane;
+import feedback.Feedback;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
 import logic.commands.Command;
+import logic.commands.DeleteCommand;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import parser.Parser;
@@ -94,9 +95,7 @@ public class MainController implements Initializable{
     Feedback feedback;
     
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {        
-        //testMethod();
-        //--------------------------------------------------------------------          
+    public void initialize(URL arg0, ResourceBundle arg1) {                 
         feedback = new Feedback();
         logic = new Logic();
         
@@ -132,35 +131,7 @@ public class MainController implements Initializable{
         
         log.info("MainController initialzed");
     }
-    
-    //------------------------------------------------------------------------------------------------------------
-    private void testMethod() {
-        ArrayList<String> tag1 = new ArrayList<String>();
-        tag1.add("#tag1");
-        tag1.add("#tag2");
-        
-        ArrayList<String> tag2 = new ArrayList<String>();
-        tag2.add("#tag3");
-        
-        ArrayList<String> tag3 = new ArrayList<String>();
-        tag3.add("#tag2");
-        
-        ArrayList<String> tag4 = new ArrayList<String>();
-        tag4.add("#tag4");
-        tag4.add("#tag5");
-        
-        Calendar date = Calendar.getInstance();
-        date.set(Calendar.YEAR, 1999);
-        date.set(Calendar.MONTH, 7);
-        date.set(Calendar.DAY_OF_MONTH, 26);
-        
-        Calendar date2 = Calendar.getInstance();
-        date2.set(Calendar.YEAR, 2000);
-        date2.set(Calendar.MONTH, 8);
-        date2.set(Calendar.DAY_OF_MONTH, 8);
-        date2.set(Calendar.HOUR, 00);
-        date2.set(Calendar.MINUTE, 00);
-    }
+
     //------------------------------------------------------------------------------------------------------------
     
     @FXML
@@ -200,23 +171,58 @@ public class MainController implements Initializable{
         updateUi();
     }
     
-    
+    private void onTagPressed(ActionEvent event) {
+        ToggleButton clicked = (ToggleButton)event.getSource();
+        logic.setSelectedTag(clicked.getText(), clicked.isSelected());
+        updateUi();
+    }
+  
     @FXML
     private void onEnterPressed() {
         log.info("command entered");
-        Command command = logic.executeCommand(userInput.getText());
+        boolean isSuccessful = executeCommand(userInput.getText());
+        if (isSuccessful) {
+            userInput.clear();
+            log.info("cmd executed");
+        }
+    }
+    
+    private boolean executeCommand(String userInput) {
+        Command command = logic.executeCommand(userInput);
         
         if (command instanceof InvalidCommand) {
             setFeedbackWindow(false, ((InvalidCommand)command).get_error_message());
             log.info("incorrect command entered");
+            return false;
         } else {            
             updateUi();
             
             if (!(command instanceof ViewCommand)) {
-                setFeedbackWindow(true, userInput.getText());
+                setFeedbackWindow(true, userInput);
+                System.out.println("Index: " + logic.getIndex());
+                if (logic.getIndex() >= 0) {
+                    
+                    taskDisplay.applyCss();
+                    taskDisplay.layout();
+                    taskDisplay.scrollTo(logic.getIndex());
+                    taskDisplay.getItems().get(logic.getIndex());
+                    System.out.println("No of Item in list: " + taskDisplay.getItems().size());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillTransition(taskDisplay.getItems().get(logic.getIndex()));
+                            int taskLabelHeight = (int) 86 + 10;
+                            int taskPaneHeight = (int) taskDisplay.getHeight();
+                            int shiftToCenter = taskPaneHeight / taskLabelHeight / 2;
+                            taskDisplay.scrollTo(logic.getIndex() - shiftToCenter);
+                            System.out.println("shift: " + taskPaneHeight + " / " + taskLabelHeight + " / 2 = " + shiftToCenter);
+                            System.out.println("index: " + logic.getIndex());
+                            System.out.println("Scroll To plus shift: " + (logic.getIndex() - shiftToCenter));
+                        }
+                    });
+                }
             }
-            userInput.clear();
-            log.info("cmd executed");
+            return true;   
         }
     }
     
@@ -250,9 +256,14 @@ public class MainController implements Initializable{
     }
     
     @FXML
-    private void onKeyPressed(KeyEvent event) { 
+    private void onKeyPressed(KeyEvent event) {
+        System.out.println(event.getCode());
         if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
             event.consume();
+        } else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
+            executeCommand("undo");
+        } else if (event.isControlDown() && event.getCode() == KeyCode.Y) {
+            executeCommand("redo");
         }
     }
     
@@ -287,12 +298,6 @@ public class MainController implements Initializable{
             log.info("display prompt");
         }
     }
-    
-    private void onTagPressed(ActionEvent event) {
-        ToggleButton clicked = (ToggleButton)event.getSource();
-        logic.setSelectedTag(clicked.getText(), clicked.isSelected());
-        updateUi();
-    }
     //------------------------------------------------------------------------------------------------------------
     private void setFeedbackWindow(boolean isSuccessful, String message) {
         if (isSuccessful) {
@@ -323,6 +328,20 @@ public class MainController implements Initializable{
         fadeTransition.getChildren().addAll(pause, fade);
         fadeTransition.play();
     }
+    
+    private void fillTransition(GridPane taskLabel) {       
+        String endColor =  "-fx-background-color: #" + taskLabel.backgroundProperty().get().getFills().get(0).getFill().toString().substring(2, 8) + ";";
+        taskLabel.setStyle(taskLabel.getStyle() + "-fx-background-color: yellow;");
+
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                taskLabel.setStyle(taskLabel.getStyle() + endColor);
+            }
+        });
+        pause.play();
+    }
+    
     
     private void updateTaskDisplay() {       
         taskList.clear();
@@ -384,48 +403,8 @@ public class MainController implements Initializable{
         updateTaskDisplay();
         updateTagDisplay();
         updateCategoryDisplay();
+        
+        userInput.requestFocus();
+        userInput.positionCaret(userInput.getText().length() + 1);
     }
-    
-    
-    
-    /*
-    private void setFeedback(boolean isSuccessful, String message) {
-        GridPane feedbackPane = new GridPane();
-        feedbackPane.setMaxHeight(100);
-        feedbackPane.setMaxWidth(Region.USE_PREF_SIZE);
-        feedbackPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8);" + "-fx-background-radius: 20;"
-                            + "-fx-padding: 10, 10, 10, 10;");
-        
-        ColumnConstraints iconColumn = new ColumnConstraints();
-        ColumnConstraints mesageColumn = new ColumnConstraints();
-        iconColumn.setMaxWidth(100);
-        
-        feedbackPane.getColumnConstraints().addAll(iconColumn, mesageColumn);
-        
-        ImageView iconImg = new ImageView();
-        iconImg.setFitHeight(70);
-        iconImg.setFitWidth(70);
-        Label messageLabel = new Label();
-        if (isSuccessful) {
-            iconImg.setImage(new Image("/images/SuccessIcon.png"));
-            messageLabel.setText("Successfully executed command" + "\n" + message);
-        } else { 
-            iconImg.setImage(new Image("/images/FailIcon.png"));
-            messageLabel.setText("Failed to execute command" + "\n" + message);
-        }       
-        feedbackPane.addRow(0, iconImg, messageLabel);
-        
-        mainWindow.setMargin(feedbackPane, new Insets(0, 100, 0, 100));
-        mainWindow.getChildren().add(feedbackPane);
-        
-        FadeTransition fade = new FadeTransition(Duration.seconds(2), feedbackPane);
-        fade.setOnFinished((ActionEvent event) -> {
-                mainWindow.getChildren().remove(feedbackPane);
-        });
-        fade.setFromValue(1);
-        fade.setToValue(0);
-
-        fade.play();
-    }
-    */
 }
