@@ -26,6 +26,14 @@ public class Logic {
 	private ListsManager _listsManager;
 	private HistoryManager _historyManager;
 	private Parser _parser;
+	
+	private final String DEADLINES = "Deadlines";
+	private final String EVENTS = "Events";
+	private final String TASKS = "Tasks";
+	private final String DONE = "Done";
+	private final String UNDONE = "Undone";
+	private final String OVERDUE = "Overdue";
+	private final String EMPTY_STRING = "";
 
 	public Logic() {
 		_storage = new Storage();
@@ -211,11 +219,11 @@ public class Logic {
 
 	private CATEGORY_TYPE getCategoryType(String selectedCategory) {
 		switch (selectedCategory) {
-		case "Deadlines" : 
+		case DEADLINES : 
 			return CATEGORY_TYPE.CATEGORY_DEADLINES;
-		case "Events" : 
+		case EVENTS : 
 			return CATEGORY_TYPE.CATEGORY_EVENTS;
-		case "Tasks" : 
+		case TASKS : 
 			return CATEGORY_TYPE.CATEGORY_TASKS;
 		default : 
 			return CATEGORY_TYPE.CATEGORY_ALL;
@@ -227,13 +235,13 @@ public class Logic {
 		switch (viewType) {
 
 		case VIEW_ALL : 
-			return "";
+			return EMPTY_STRING;
 		case VIEW_DONE: 
-			return "Done";
+			return DONE;
 		case VIEW_UNDONE : 
-			return "Undone";
+			return UNDONE;
 		default : 
-			return "Overdue";
+			return OVERDUE;
 		}
 	}
 }
