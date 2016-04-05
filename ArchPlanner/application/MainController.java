@@ -273,7 +273,7 @@ public class MainController implements Initializable{
             bottomPrompt.setVisible(false);
             log.info("hide prompt");
         } else {
-            ArrayList<String> prompt = feedback.getPrompts(newString);
+            ArrayList<String> prompt = feedback.getPrompts(newString, tasks.size(), tags.size());
             assert(prompt != null);
             assert(prompt.size() > 0 && prompt.size() <= 4);
             if (!prompt.isEmpty()) {

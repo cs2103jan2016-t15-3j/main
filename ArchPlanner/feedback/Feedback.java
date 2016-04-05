@@ -2,6 +2,8 @@ package feedback;
 
 import java.util.ArrayList;
 
+import separator.AddInputSeparator.KeyWordType;
+
 public class Feedback {
 
     enum CommandType {
@@ -9,36 +11,26 @@ public class Feedback {
     }
 
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
-    //    private final String[] ALL_COMMANDS = {"add", "delete ", "edit ", "search ",
-//                                           "view ", "done ", "undone ", "undo ",
-//                                           "redo ", "exit "};
     private final String DELETE_PROMPT = "delete <index>";
-    private CommandType holdCmd;
     private ArrayList<String> prompts;
-    private int prevStringLength;
-    private boolean isSpace;
 
     public Feedback() {
         prompts = new ArrayList<String>();
-        holdCmd = CommandType.UNKNOWN;
-        prevStringLength = 0;
-        isSpace = false;
     }
 
-    public ArrayList<String> getPrompts(String userInput) {
+    public ArrayList<String> getPrompts(String userInput, int taskListSize, int tagListSize) {
         prompts.clear();
         if (userInput == null) {
             prompts.add("Null input");
-        } else if (userInput.trim().isEmpty()) {
-            prompts.add("Invalid command");
-        } else {
+        } else if (!userInput.trim().isEmpty()){
             String commandInString = getFirstWord(userInput);
             CommandType commandType = determineCommandType(commandInString);
             System.out.println(commandType);
 
             switch (commandType) {
                 case ADD:
-                    prompts = new AddPrompt().getPrompts(userInput.substring(3));
+                    System.out.println("IN here");
+                    prompts = new AddPrompt().getPrompts(userInput.substring(CommandType.ADD.name().length()));
                     break;
                 case EDIT:
                     prompts = new EditPrompt().getPrompts(userInput);
@@ -65,20 +57,16 @@ public class Feedback {
                 case UNKNOWN:
                     if (getNumOfWords(userInput) == 1) {
                         for (CommandType type : CommandType.values()) {
-                            if (type != CommandType.UNKNOWN && type.name().toLowerCase().startsWith(userInput.toLowerCase())) {
+                            if (type != CommandType.UNKNOWN && type.name().toLowerCase().startsWith(userInput.trim().toLowerCase())) {
                                 prompts.add(type.name().toLowerCase());
                             }
                         }
-                    } else {
-                        prompts.add("Invalid command: add | delete | edit | view | done | undone | undo | redo | exit");
                     }
                     break;
-                default:
-                    System.out.println("Not supoose to happen");
             }
         }
 
-//        System.out.println(prompts.size());
+        //System.out.println(prompts.size());
         if (prompts.size() <= 0) {
             prompts.add("Invalid command: add | delete | edit | view | done | undone | undo | redo | exit");
         }
@@ -111,40 +99,11 @@ public class Feedback {
             }
         }
         return CommandType.UNKNOWN;
-//        if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[0])) {
-//            return CommandType.ADD;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[1])) {
-//            return CommandType.DELETE;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[2])) {
-//            return CommandType.EDIT;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[3])) {
-//            return CommandType.SEARCH;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[4])) {
-//            return CommandType.VIEW;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[5])) {
-//            return CommandType.DONE;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[6])) {
-//            return CommandType.UNDONE;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[7])) {
-//            return CommandType.UNDO;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[8])) {
-//            return CommandType.REDO;
-//        } else if (commandTypeString.equalsIgnoreCase(ALL_COMMANDS[9])) {
-//            return CommandType.EXIT;
-//        } else {
-//            return CommandType.UNKNOWN;
-//        }
     }
 
     private String getFirstWord(String userInput) {
         String commandTypeString = userInput.trim().split(STRING_MULTIPLE_WHITESPACE)[0];
         return commandTypeString;
-    }
-
-    private ArrayList<String> listWithSingleString(String string) {
-        ArrayList<String> result = new ArrayList<>();
-        result.add(string);
-        return result;
     }
 
     private int getNumOfWords(String userInput) {
