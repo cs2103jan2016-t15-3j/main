@@ -88,7 +88,7 @@ public class Parser {
             case COMMAND_TYPE_EDIT:
                 return new EditCommandParser().parse(input, viewListSize);
             case COMMAND_TYPE_VIEW:
-                return new ViewCommandParser().parse(input);
+                return new ViewCommandParser().parse(input, tagList);
             case COMMAND_TYPE_DONE:
                 return new DoneCommandParser().parse(input, viewListSize);
             case COMMAND_TYPE_UNDONE:

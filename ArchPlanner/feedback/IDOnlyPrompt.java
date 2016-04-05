@@ -10,20 +10,21 @@ import java.util.ArrayList;
 public class IDOnlyPrompt {
 
     private final String COMMAND = "%s <Task ID>";
+    private final String COMMAND_RANGE = "%s <Task ID> to <Task ID>";
     private final String INVALID_ID = "Invalid ID: %s <Task ID>";
-    private final String INVALID_ARGUMENTS = "Invalid command: too many arguments";
+    private final String INVALID_COMMAND = "Invalid command";
 
     public ArrayList<String> getPrompts(String userInput, String commandName) {
         ArrayList<String> promptList = new ArrayList<>();
         InputSeparator inputSeparator = new InputSeparator(userInput);
         if (inputSeparator.getWordCount() == 1) {
             promptList.add(String.format(COMMAND, commandName));
+            promptList.add(String.format(COMMAND_RANGE, commandName));
         } else if (inputSeparator.getWordCount() == 2) {
-            if (inputSeparator.isEndWithSpace()) {
-                promptList.add(INVALID_ARGUMENTS);
-            } else if (inputSeparator.getID() != null) {
+            if (inputSeparator.getID() != null) {
                 if (inputSeparator.getID() > 0) {
                     promptList.add(String.format(COMMAND, commandName));
+                    promptList.add(String.format(COMMAND_RANGE, commandName));
                 } else {
                     promptList.add(String.format(INVALID_ID, commandName));
                 }
@@ -31,7 +32,11 @@ public class IDOnlyPrompt {
                 promptList.add(String.format(INVALID_ID, commandName));
             }
         } else {
-            promptList.add(INVALID_ARGUMENTS);
+            if (inputSeparator.mayHaveTwoValidID()) {
+                promptList.add(String.format(COMMAND_RANGE, commandName));
+            } else {
+                promptList.add(INVALID_COMMAND);
+            }
         }
         return promptList;
     }

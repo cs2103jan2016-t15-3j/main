@@ -153,6 +153,18 @@ public class InputSeparator {
         }
     }
 
+    public boolean mayHaveTwoValidID() {
+        if (parameter == null) {
+            if (id != null && secondId != null && id >= secondId) {
+                return false;
+            }
+            return true;
+        } else if (id != null && parameter.equals("t")) {
+            return true;
+        }
+        return false;
+    }
+
     public int getWordCount() {
         return wordCount;
     }

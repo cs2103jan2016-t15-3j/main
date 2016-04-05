@@ -18,30 +18,6 @@ public abstract class CommandParser {
     protected ArrayList<String> tagList = new ArrayList<>();
 
 
-    /**
-     * Parse the tags from the end of the input string
-     * @param input user's input
-     * @return string after removing the tags
-     */
-    protected String parseTag(String input) {
-        String[] words = split(input);
-        String result = "";
-
-        for (int i = words.length - 1; i >= 0; i--) {
-            if (words[i].charAt(0) == '#') {
-                if (words[i].length() == 1) {
-                    return null;
-                }
-                tagList.add(words[i]);
-            } else {
-                for (int j = 0; j <= i; j++) {
-                    result += words[j] + " ";
-                }
-                break;
-            }
-        }
-        return result.trim();
-    }
 
     /**
      * Key method for parser to parse commands.

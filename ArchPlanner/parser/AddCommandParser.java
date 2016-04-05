@@ -33,6 +33,9 @@ public class AddCommandParser extends CommandParser {
             if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)){
                 return new InvalidCommand("Invalid Time!");
             }
+            if (timeParserResult.getMatchString() != null && !timeParserResult.isTimeValid()) {
+                return new InvalidCommand("Invalid Time!");
+            }
             if (addInputSeparator.hasValidTag()) {
                 if (addInputSeparator.getTags().length == 1 && addInputSeparator.getTags()[0].equals("#")) {
                     return new InvalidCommand("Invalid Tags");

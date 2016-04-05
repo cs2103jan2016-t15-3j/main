@@ -83,37 +83,37 @@ public class ParserTest {
         System.out.println();
     }
 
-    @Test
-    public void testViewCommandParser() throws Exception {
-        //view <view_type>
-        Command command1 = new ViewCommandParser().parse("view all");
-        Command command2 = new ViewCommandParser().parse("view all things");//invalid
-        Command command3 = new ViewCommandParser().parse("view done");
-        Command command4 = new ViewCommandParser().parse("view undone");
-        Command command5 = new ViewCommandParser().parse("view overdue");
-        Command command6 = new ViewCommandParser().parse("view all done");//invalid
-        //view #tags
-        Command command7 = new ViewCommandParser().parse("view #a #b");
-        Command command8 = new ViewCommandParser().parse("view #ahhh boom");//invalid
-        Command command9 = new ViewCommandParser().parse("view #a");
-        //view description
-        Command command10 = new ViewCommandParser().parse("view description task 1");
-        //view <category_type>
-        Command command11 = new ViewCommandParser().parse("view task");
-        Command command12 = new ViewCommandParser().parse("view tasks");//invalid
-        Command command13 = new ViewCommandParser().parse("view floating");
-        Command command14 = new ViewCommandParser().parse("view deadline");
-        Command command15 = new ViewCommandParser().parse("view event");
-        //view date/time
-        Command command16 = new ViewCommandParser().parse("view start time 1pm");
-        Command command17 = new ViewCommandParser().parse("view start time 13:00 1pm");//invalid
-        Command command18 = new ViewCommandParser().parse("view end time 2:33");
-        Command command19 = new ViewCommandParser().parse("view start date Apr 19");
-        Command command20 = new ViewCommandParser().parse("view end date today");
-        Command command21 = new ViewCommandParser().parse("view end date today 3pm");//invalid
-        Command command22 = new ViewCommandParser().parse("view from May 4 to Aug 9");
-        System.out.println();
-    }
+//    @Test
+//    public void testViewCommandParser() throws Exception {
+//        //view <view_type>
+//        Command command1 = new ViewCommandParser().parse("view all");
+//        Command command2 = new ViewCommandParser().parse("view all things");//invalid
+//        Command command3 = new ViewCommandParser().parse("view done");
+//        Command command4 = new ViewCommandParser().parse("view undone");
+//        Command command5 = new ViewCommandParser().parse("view overdue");
+//        Command command6 = new ViewCommandParser().parse("view all done");//invalid
+//        //view #tags
+//        Command command7 = new ViewCommandParser().parse("view #a #b");
+//        Command command8 = new ViewCommandParser().parse("view #ahhh boom");//invalid
+//        Command command9 = new ViewCommandParser().parse("view #a");
+//        //view description
+//        Command command10 = new ViewCommandParser().parse("view description task 1");
+//        //view <category_type>
+//        Command command11 = new ViewCommandParser().parse("view task");
+//        Command command12 = new ViewCommandParser().parse("view tasks");//invalid
+//        Command command13 = new ViewCommandParser().parse("view floating");
+//        Command command14 = new ViewCommandParser().parse("view deadline");
+//        Command command15 = new ViewCommandParser().parse("view event");
+//        //view date/time
+//        Command command16 = new ViewCommandParser().parse("view start time 1pm");
+//        Command command17 = new ViewCommandParser().parse("view start time 13:00 1pm");//invalid
+//        Command command18 = new ViewCommandParser().parse("view end time 2:33");
+//        Command command19 = new ViewCommandParser().parse("view start date Apr 19");
+//        Command command20 = new ViewCommandParser().parse("view end date today");
+//        Command command21 = new ViewCommandParser().parse("view end date today 3pm");//invalid
+//        Command command22 = new ViewCommandParser().parse("view from May 4 to Aug 9");
+//        System.out.println();
+//    }
 
 //    @Test
 //    public void testDeleteCommandParser() throws Exception {
@@ -165,28 +165,7 @@ public class ParserTest {
         assertEquals("1994", calendar.get(Calendar.MONTH) + "");
     }
 
-    @Test
-    public void testNetty() throws Exception {
-        Parser parser = new Parser();
-        List<DateGroup> groups = parser.parse("add sth this thursday");
-        for (DateGroup group : groups) {
-            List<Date> dates = group.getDates();
-            int line = group.getLine();
-            int column = group.getPosition();
-            String matchingValue = group.getText();
-            String syntaxTree = group.getSyntaxTree().toStringTree();
-            Map parseMap = group.getParseLocations();
-            boolean isRecurreing = group.isRecurring();
-            Date recursUntil = group.getRecursUntil();
-            for (Date date : dates) {
-                System.out.println(date.getMonth() + " " + date.getDay() + " " + date.getHours() + " " + date.getMinutes());
-            }
-            System.out.println("column: " + column);
-            System.out.println("matching value: " + matchingValue);
-            System.out.println("tree: " + syntaxTree);
-        }
 
-    }
 
     @Test
     public void testTimeParser() throws Exception {
