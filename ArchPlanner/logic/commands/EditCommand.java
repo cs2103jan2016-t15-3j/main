@@ -29,7 +29,7 @@ public class EditCommand implements CommandInterface {
 	
 	private static final String MESSAGE_EDIT_COMMAND = "The task %1$s has been EDITED successfully";
 
-	public enum REMOVE_TYPE {START_DATE, START_TIME, END_DATE, END_TIME, TAG, NONE}
+	public enum REMOVE_TYPE {START, START_TIME, END, END_TIME, TAG, NONE}
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
@@ -122,13 +122,13 @@ public class EditCommand implements CommandInterface {
 
 	private void removeTaskParameters(Task oldTask, Task newTask) {
 		switch (_removeType) {
-		case START_DATE : 
+		case START : 
 			removeTaskStartDate(newTask);
 			break;
 		case START_TIME :
 			removeTaskStartTime(oldTask, newTask);
 			break;
-		case END_DATE :
+		case END :
 			removeTaskEndDate(oldTask, newTask);
 			break;
 		case END_TIME :

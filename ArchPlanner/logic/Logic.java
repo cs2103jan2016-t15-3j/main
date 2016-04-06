@@ -113,7 +113,8 @@ public class Logic {
 	}
 
 	public String getCurrentViewType() {
-		String currentViewType = getSelectedCategory() + " " + getSelectedView() + " " 
+		String selectedCategory = getSelectedCategory().toString().substring(9).toLowerCase();
+		String currentViewType = selectedCategory + " " + getSelectedView() + " " 
 				+ _listsManager.getCurrentViewType();
 		return currentViewType;
 	}
