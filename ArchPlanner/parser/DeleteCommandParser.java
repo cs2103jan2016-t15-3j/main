@@ -1,6 +1,6 @@
 package parser;
 
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.DeleteCommand;
 import logic.commands.InvalidCommand;
 import separator.InputSeparator;
@@ -25,7 +25,7 @@ public class DeleteCommandParser extends CommandParser {
 //        }
 //    }
 
-    public Command parse(String input, int viewListSize) {
+    public CommandInterface parse(String input, int viewListSize) {
         if (input.length() <= DELETE_ARGUMENT_INDEX) {
             return new InvalidCommand("Delete index not found");
         }

@@ -43,21 +43,24 @@ import application.TaskPane;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
+import logic.commands.ViewCommand.CATEGORY_TYPE;
 import parser.Parser;
 import prompt.Prompt;
 
 public class MainController implements Initializable{
     
-    private static final int FIRST_INDEX_OF_LIST = 0;
-
+    private static final String VIEW_SCOPE_ALL = "All";
+    private static final String STRING_EMPTY = "";
+    
     private static final String FAIL_IMAGE_PATH = "/images/FailIcon.png";
-
     private static final String SUCCESS_IMAGE_PATH = "/images/SuccessIcon.png";
-
-    private static final int _ONE_MINUTE = 60000;
+    
+    private static final int FIRST_INDEX_OF_LIST = 0;
+    private static final int NO_DELAY = 0;
+    private static final int ONE_MINUTE_INTERVAL = 60000;
 
     static Logger log = Logger.getLogger(MainController.class.getName());
     
@@ -70,6 +73,7 @@ public class MainController implements Initializable{
 
     @FXML private Button miniButton;
     @FXML private Button closeButton;
+    @FXML private Button backButton;
 
     @FXML private ToggleButton event;
     @FXML private ToggleButton deadline;
@@ -87,7 +91,7 @@ public class MainController implements Initializable{
     private ArrayList<Tag> tags = new ArrayList<Tag>();;
     private ArrayList<Task> tasks = new ArrayList<Task>();
     
-    private String categorySelected;
+    private CATEGORY_TYPE categorySelected;
     
     private ObservableList<ToggleButton> tagList = FXCollections.observableArrayList();
     private ObservableList<GridPane> taskList = FXCollections.observableArrayList();
@@ -151,7 +155,7 @@ public class MainController implements Initializable{
           };
           
         periodicChecker = new Timer();
-        periodicChecker.scheduleAtFixedRate(checkOverdue, 0, _ONE_MINUTE);
+        periodicChecker.scheduleAtFixedRate(checkOverdue, NO_DELAY, ONE_MINUTE_INTERVAL);
         
         log.info("MainController initialzed");
     }
@@ -184,14 +188,20 @@ public class MainController implements Initializable{
         stage.close();
     }
     
+    @FXML
+    private void back(ActionEvent event) {
+        log.info("back button clicked");
+        executeCommand("view all");
+    }
+    
     //------------------------------------------------------------------------------------------------------------
     @FXML
     private void onCategoryPressed(ActionEvent event) {
         ToggleButton clicked = (ToggleButton)event.getSource();
         if (clicked.isSelected()) {
-            logic.setSelectedCategory(clicked.getText());
+            logic.setSelectedCategory(logic.getCategoryType(clicked.getText()));
         } else {
-            logic.setSelectedCategory("All");
+            logic.setSelectedCategory(CATEGORY_TYPE.CATEGORY_ALL);
         }   
         updateUi();
     }
@@ -213,30 +223,33 @@ public class MainController implements Initializable{
     }
     
     private boolean executeCommand(String userInput) {
-        Command command = logic.executeCommand(userInput);
+        CommandInterface command = logic.executeCommand(userInput);
         
         if (command instanceof InvalidCommand) {
-            setFeedbackWindow(false, ((InvalidCommand)command).get_error_message());
+            setFeedbackWindow(false, ((InvalidCommand)command).getMessage());
             log.info("incorrect command entered");
             return false;
         } else {            
             updateUi();
             
             if (!(command instanceof ViewCommand)) {
-                setFeedbackWindow(true, userInput);
-                System.out.println("Index: " + logic.getIndex());
-                if (logic.getIndex() >= FIRST_INDEX_OF_LIST) {
+                setFeedbackWindow(true, command.getMessage());
+                if (logic.getIndexList() != null && !logic.getIndexList().isEmpty()) {
                     
                     taskDisplay.applyCss();
                     taskDisplay.layout();
-                    taskDisplay.scrollTo(logic.getIndex());
-                    //taskDisplay.getItems().get(logic.getIndex());
+                    for (int i = 0; i < logic.getIndexList().size(); i++) {
+                        taskDisplay.scrollTo(logic.getIndexList().get(i));                        
+                    }
                     System.out.println("No of Item in list: " + taskDisplay.getItems().size());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            fillTransition(taskDisplay.getItems().get(logic.getIndex()));
-                            taskDisplay.scrollTo(logic.getIndex());
+                            for (int i = 0; i < logic.getIndexList().size(); i++) {
+                                fillTransition((TaskPane)taskDisplay.getItems().get(logic.getIndexList().get(i)));
+                                System.out.println("fill " + logic.getIndexList().get(i));
+                            }
+                            taskDisplay.scrollTo(logic.getIndexList().get(0));
                             /*
                             int taskLabelHeight = (int) taskDisplay.getItems().get(logic.getIndex()).getHeight() + 10;
                             int taskPaneHeight = (int) taskDisplay.getHeight();
@@ -256,7 +269,7 @@ public class MainController implements Initializable{
     
     @FXML
     private void onKeyReleased(KeyEvent event) {    
-        String autoInput = "";
+        String autoInput = STRING_EMPTY;
         switch (event.getCode()) {
             case UP : 
                 autoInput = logic.getPreviousUserInput();
@@ -264,18 +277,18 @@ public class MainController implements Initializable{
                     autoInput = userInput.getText();
                 }
                 userInput.setText(autoInput);
-                userInput.positionCaret(autoInput.length() + 1);
+                userInput.positionCaret(autoInput.length());
                 break;
                 
             case DOWN :
                 autoInput = logic.getNextUserInput();
                 userInput.setText(autoInput);
-                userInput.positionCaret(autoInput.length() + 1);
+                userInput.positionCaret(autoInput.length());
                 break;
                 
             case TAB :
                 userInput.setText(feedback.getAutoComplete(userInput.getText()));
-                userInput.positionCaret(userInput.getText().length() + 1);
+                userInput.positionCaret(userInput.getText().length());
                 break;
                 
             default :
@@ -296,7 +309,7 @@ public class MainController implements Initializable{
     }
     
     public void onTextChanged(String newString) {
-        if (newString.isEmpty()) {          
+        if (newString.isEmpty()) {
             topPrompt.setVisible(false);
             bottomPrompt.setVisible(false);
             log.info("hide prompt");
@@ -357,7 +370,10 @@ public class MainController implements Initializable{
         fadeTransition.play();
     }
     
-    private void fillTransition(GridPane taskLabel) {       
+    private void fillTransition(TaskPane taskLabel) {
+        taskLabel.applyCss();
+        taskLabel.layout();
+        
         String endColor =  "-fx-background-color: #" + taskLabel.backgroundProperty().get().getFills().get(0).getFill().toString().substring(2, 8) + ";";
         taskLabel.setStyle(taskLabel.getStyle() + "-fx-background-color: yellow;");
 
@@ -365,9 +381,14 @@ public class MainController implements Initializable{
         pause.setOnFinished(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 taskLabel.setStyle(taskLabel.getStyle() + endColor);
+                System.out.println("task: " + taskLabel.getDescription());
+                taskLabel.applyCss();
+                taskLabel.layout();
+                System.out.println("pause end");
             }
         });
         pause.play();
+        System.out.println("pause play");
     }
     
     
@@ -401,18 +422,18 @@ public class MainController implements Initializable{
     
     private void updateCategoryDisplay() {
     	switch (categorySelected) {
-    		case "All" :
+    		case CATEGORY_ALL :
     			event.setSelected(false);
     			deadline.setSelected(false);
     			task.setSelected(false);
     			break;
-    		case "Events" :
+    		case CATEGORY_EVENTS :
     			event.setSelected(true);
     			break;
-    		case "Deadlines" :
+    		case CATEGORY_DEADLINES :
     			deadline.setSelected(true);
     			break;
-    		case "Tasks" :
+    		case CATEGORY_TASKS :
     			task.setSelected(true);
     			break;
     	}
@@ -427,12 +448,18 @@ public class MainController implements Initializable{
         tags = logic.getTagsList();
         categorySelected = logic.getSelectedCategory();
         viewLabel.setText(logic.getCurrentViewType());
+
+        if (!viewLabel.getText().trim().equals(VIEW_SCOPE_ALL)) {
+            backButton.setVisible(true);
+        } else {
+            backButton.setVisible(false);
+        }
         
         updateTaskDisplay();
         updateTagDisplay();
         updateCategoryDisplay();
         
         userInput.requestFocus();
-        userInput.positionCaret(userInput.getText().length() + 1);
+        userInput.positionCaret(userInput.getText().length());
     }
 }

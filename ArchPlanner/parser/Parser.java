@@ -72,7 +72,7 @@ public class Parser {
 //        return new InvalidCommand("Failed to parse");
 //    }
 
-    public Command parseCommand(String input, int viewListSize, int undoListSize, int redoListSize, ArrayList<Tag> tagList) {
+    public CommandInterface parseCommand(String input, int viewListSize, int undoListSize, int redoListSize, ArrayList<Tag> tagList) {
         if (input == null) {
             return new InvalidCommand("Null input");
         }

@@ -2,7 +2,7 @@ package parser;
 
 import logic.TaskParameters;
 import logic.commands.AddCommand;
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import parser.time.TimeParserResult;
 import separator.AddInputSeparator;
@@ -20,7 +20,7 @@ public class AddCommandParser extends CommandParser {
     private final int ADD_PARAMETER_INDEX = 4;
     TaskParameters result = new TaskParameters();
 
-    public Command parse(String input) {
+    public CommandInterface parse(String input) {
         AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
         if (addInputSeparator.hasDescription()) {
             result.setDescription(addInputSeparator.getDescription());
@@ -75,7 +75,7 @@ public class AddCommandParser extends CommandParser {
         return timeParserResult;
     }
 
-    private boolean checkTimeValidWithKeyword(AddInputSeparator.KeyWordType keyword, TimeParserResult timeParserResult) {
+    private boolean checkTimeValidWithKeyword(AddInputSeparator.AddKeyWordType keyword, TimeParserResult timeParserResult) {
         if (keyword == null) {
             return true;
         }

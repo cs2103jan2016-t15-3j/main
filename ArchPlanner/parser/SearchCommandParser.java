@@ -1,6 +1,6 @@
 package parser;
 
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 
 /**
  * Created by lifengshuang on 3/16/16.

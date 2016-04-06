@@ -2,7 +2,7 @@ package test;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import org.junit.Test;
 import parser.AddCommandParser;
 import parser.DeleteCommandParser;
@@ -29,54 +29,54 @@ public class ParserTest {
 
         /* Only date */
         //add ... on <date>
-        Command command1 = new AddCommandParser().parse("add sth123 on tomorrow");
+        CommandInterface command1 = new AddCommandParser().parse("add sth123 on tomorrow");
 
         //add ... from <date> to <date>
-        Command command2 = new AddCommandParser().parse("add lalala from today to tomorrow #a");
+        CommandInterface command2 = new AddCommandParser().parse("add lalala from today to tomorrow #a");
 
         //add ... by <date>
-        Command command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
+        CommandInterface command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
 
         /* Date and time */
         //add ... on <date> <time>
-        Command command4 = new AddCommandParser().parse("add assignments on this Thursday 3pm #assign #oh-my-god #help-me!");
+        CommandInterface command4 = new AddCommandParser().parse("add assignments on this Thursday 3pm #assign #oh-my-god #help-me!");
 
         //add ... from <date><time> to <date><time>
-        Command command5 = new AddCommandParser().parse("add a lot of things from March 22 0:00:00 to May 3 8:00");
+        CommandInterface command5 = new AddCommandParser().parse("add a lot of things from March 22 0:00:00 to May 3 8:00");
 
         //add ... from <date><time> to <time>
-        Command command6 = new AddCommandParser().parse("add movie from Friday 13:00 to 15:00");
+        CommandInterface command6 = new AddCommandParser().parse("add movie from Friday 13:00 to 15:00");
 
         //add ... by <date><time>
-        Command command7 = new AddCommandParser().parse("add manual V0.2 by next Sunday 23:59:59");
+        CommandInterface command7 = new AddCommandParser().parse("add manual V0.2 by next Sunday 23:59:59");
 
         /* Only time */
         //add ... on <time>
-        Command command8 = new AddCommandParser().parse("add sth on 3pm");
+        CommandInterface command8 = new AddCommandParser().parse("add sth on 3pm");
 
         //add ... from <time> to <time>
-        Command command9 = new AddCommandParser().parse("add movie from 13:00 to 3pm");
+        CommandInterface command9 = new AddCommandParser().parse("add movie from 13:00 to 3pm");
 
         //add ... by <time>
-        Command command10 = new AddCommandParser().parse("add sth by 11pm");
+        CommandInterface command10 = new AddCommandParser().parse("add sth by 11pm");
 
         /* No date or time */
         //add ...
-        Command command11 = new AddCommandParser().parse("add assignments 2");
+        CommandInterface command11 = new AddCommandParser().parse("add assignments 2");
 
         //add ... <without keyword> <date>/<time>
-        Command command12 = new AddCommandParser().parse("add assignments today #3");
-        Command command13 = new AddCommandParser().parse("add on from by assignments 13:00 #3");
+        CommandInterface command12 = new AddCommandParser().parse("add assignments today #3");
+        CommandInterface command13 = new AddCommandParser().parse("add on from by assignments 13:00 #3");
 
         //add ... #... ... on <date> #...
-        Command command14 = new AddCommandParser().parse("add remove #task tag on today #remove ##");
+        CommandInterface command14 = new AddCommandParser().parse("add remove #task tag on today #remove ##");
 
         /* INVALID */
-        Command command01 = new AddCommandParser().parse("add movie from Friday from 13:00 to 15:00");
-        Command command02 = new AddCommandParser().parse("add movie at Friday 13:00 to 15:00");
-        Command command03 = new AddCommandParser().parse("add movie from Friday 13:00");
-        Command command04 = new AddCommandParser().parse("add movie from Friday 23:61");
-        Command command05 = new AddCommandParser().parse("add assignments 2 on today #tag #");
+        CommandInterface command01 = new AddCommandParser().parse("add movie from Friday from 13:00 to 15:00");
+        CommandInterface command02 = new AddCommandParser().parse("add movie at Friday 13:00 to 15:00");
+        CommandInterface command03 = new AddCommandParser().parse("add movie from Friday 13:00");
+        CommandInterface command04 = new AddCommandParser().parse("add movie from Friday 23:61");
+        CommandInterface command05 = new AddCommandParser().parse("add assignments 2 on today #tag #");
         //try more
 
 

@@ -3,7 +3,7 @@ package parser;
 import parser.time.TimeParser;
 import parser.time.TimeParserResult;
 import logic.TaskParameters;
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 import separator.InputSeparator;
@@ -16,7 +16,7 @@ public class EditCommandParser extends CommandParser {
     private TaskParameters result = new TaskParameters();
 
 
-    public Command parse(String input, int viewListSize) {
+    public CommandInterface parse(String input, int viewListSize) {
         InputSeparator inputSeparator = new InputSeparator(input);
         Integer index = inputSeparator.getID();
         InputSeparator.KeywordType type = inputSeparator.getKeywordType();

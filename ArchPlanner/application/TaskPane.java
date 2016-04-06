@@ -137,4 +137,8 @@ public class TaskPane extends GridPane {
         assert(displayNumber > 0);
         number.setText(Integer.toString(displayNumber));        
     }
+    
+    public String getDescription() {
+        return description.getText();       
+    }
 }

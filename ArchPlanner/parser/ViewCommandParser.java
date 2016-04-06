@@ -4,7 +4,7 @@ import logic.Tag;
 import parser.time.TimeParser;
 import parser.time.TimeParserResult;
 import logic.TaskParameters;
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import separator.InputSeparator;
@@ -18,7 +18,7 @@ public class ViewCommandParser extends CommandParser {
 
     private TaskParameters result = new TaskParameters();
 
-    public Command parse(String input, ArrayList<Tag> currentTagList) {
+    public CommandInterface parse(String input, ArrayList<Tag> currentTagList) {
         InputSeparator separator = new InputSeparator(input);
         InputSeparator.KeywordType type = separator.getKeywordType();
         String parameter = separator.getParameter();

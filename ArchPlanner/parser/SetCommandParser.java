@@ -1,6 +1,6 @@
 package parser;
 
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.SetCommand;
 import separator.InputSeparator;
@@ -9,7 +9,7 @@ import separator.InputSeparator;
  * Created by lifengshuang on 4/1/16.
  */
 public class SetCommandParser extends CommandParser {
-    public Command parse(String input) {
+    public CommandInterface parse(String input) {
         InputSeparator separator = new InputSeparator(input);
         if (separator.getID() == null
                 && separator.getKeywordType() != null
