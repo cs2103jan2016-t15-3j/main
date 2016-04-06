@@ -16,26 +16,47 @@ public class TimeParserResult {
     private LocalTime firstTime;
     private LocalTime secondTime;
     private boolean timeValid;
-    private int rawDateTimeStatus;
+    private DateTimeStatus rawDateTimeStatus = DateTimeStatus.NONE;
 
-    public enum DateTimeStatus {START_DATE, START_DATE_START_TIME, }
-//1000
-    //1100
+    public enum DateTimeStatus {
+        NONE, END_TIME, END_DATE, END_DATE_END_TIME,
+        START_TIME, START_TIME_END_TIME, START_TIME_END_DATE, START_TIME_END_DATE_END_TIME,
+        START_DATE, START_DATE_END_TIME, START_DATE_END_DATE, START_DATE_END_DATE_END_TIME,
+        START_DATE_START_TIME, START_DATE_START_TIME_END_TIME,
+        START_DATE_START_TIME_END_DATE, START_DATE_START_TIME_END_DATE_END_TIME;
+    }
+//    public enum DateTimeStatus {
+//        NONE(0), END_TIME(1), END_DATE(2), END_DATE_END_TIME(3),
+//        START_TIME(4), START_TIME_END_TIME(5), START_TIME_END_DATE(6), START_TIME_END_DATE_END_TIME(7),
+//        START_DATE(8), START_DATE_END_TIME(9), START_DATE_END_DATE(10), START_DATE_END_DATE_END_TIME(11),
+//        START_DATE_START_TIME(12), START_DATE_START_TIME_END_TIME(13),
+//        START_DATE_START_TIME_END_DATE(14), START_DATE_START_TIME_END_DATE_END_TIME(15);
+//
+//
+//        private int value;
+//        DateTimeStatus(int value) {
+//            this.value = value;
+//        }
+//
+//        public void setValue(int value) {
+//            this.value = value;
+//        }
+//    }
     public void checkInvalid() {
         timeValid = true;
-        int status = getDateTimeStatus();
+        DateTimeStatus status = getDateTimeStatus();
         switch (status) {
             //1010
-            case 10:
+            case START_DATE_END_DATE:
                 if (firstDate.isAfter(secondDate)) {
                     timeValid = false;
                 }
                 break;
             //1111
-            case 15:
+            case START_DATE_START_TIME_END_DATE_END_TIME:
                 if (firstDate.isAfter(secondDate)) {
                     timeValid = false;
-                } else if (firstDate.isEqual(secondDate) && firstTime.isAfter(secondTime)) {
+                } else if (firstDate.isEqual(secondDate) && !firstTime.isBefore(secondTime)) {
                     timeValid = false;
                 }
                 break;
@@ -45,37 +66,37 @@ public class TimeParserResult {
 
     public void updateDateTime() {
         rawDateTimeStatus = getDateTimeStatus();
-        int status = getDateTimeStatus();
+        DateTimeStatus status = getDateTimeStatus();
         switch (status) {
             //0101
-            case 5:
+            case START_TIME_END_TIME:
                 firstDate = LocalDate.now();
                 secondDate = LocalDate.now();
                 break;
             //0110
-            case 6:
+            case START_TIME_END_DATE:
                 firstDate = LocalDate.now();
                 secondTime = LocalTime.of(23, 59, 59);
                 break;
             //0111
-            case 7:
+            case START_TIME_END_DATE_END_TIME:
                 firstDate = LocalDate.now();
                 break;
             //1001
-            case 9:
+            case START_DATE_END_TIME:
                 firstTime = LocalTime.of(0, 0, 0);
                 secondDate = LocalDate.now();
                 break;
             //1011
-            case 11:
+            case START_DATE_END_DATE_END_TIME:
                 firstTime = LocalTime.of(0, 0, 0);
                 break;
             //1101
-            case 13:
+            case START_DATE_START_TIME_END_TIME:
                 secondDate = firstDate;
                 break;
             //1110
-            case 14:
+            case START_DATE_START_TIME_END_DATE:
                 secondTime = LocalTime.of(23, 59, 59);
                 break;
             default:
@@ -83,24 +104,69 @@ public class TimeParserResult {
         }
     }
 
-    public int getDateTimeStatus() {
-        int status = 0;
+    public DateTimeStatus getDateTimeStatus() {
+        DateTimeStatus dateTimeStatus = DateTimeStatus.NONE;
         if (secondTime != null) {
-            status += 1;
+            dateTimeStatus = DateTimeStatus.END_TIME;
         }
         if (secondDate != null) {
-            status += 2;
+            switch (dateTimeStatus) {
+                case NONE:
+                    dateTimeStatus = DateTimeStatus.END_DATE;
+                    break;
+                case END_TIME:
+                    dateTimeStatus = DateTimeStatus.END_DATE_END_TIME;
+                    break;
+            }
         }
         if (firstTime != null) {
-            status += 4;
+            switch (dateTimeStatus) {
+                case NONE:
+                    dateTimeStatus = DateTimeStatus.START_TIME;
+                    break;
+                case END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_TIME_END_TIME;
+                    break;
+                case END_DATE:
+                    dateTimeStatus = DateTimeStatus.START_TIME_END_DATE;
+                    break;
+                case END_DATE_END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_TIME_END_DATE_END_TIME;
+                    break;
+            }
         }
         if (firstDate != null) {
-            status += 8;
+            switch (dateTimeStatus) {
+                case NONE:
+                    dateTimeStatus = DateTimeStatus.START_DATE;
+                    break;
+                case END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_DATE_END_TIME;
+                    break;
+                case END_DATE:
+                    dateTimeStatus = DateTimeStatus.START_DATE_END_DATE;
+                    break;
+                case END_DATE_END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_DATE_END_DATE_END_TIME;
+                    break;
+                case START_TIME:
+                    dateTimeStatus = DateTimeStatus.START_DATE_START_TIME;
+                    break;
+                case START_TIME_END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_DATE_START_TIME_END_TIME;
+                    break;
+                case START_TIME_END_DATE:
+                    dateTimeStatus = DateTimeStatus.START_DATE_START_TIME_END_DATE;
+                    break;
+                case START_TIME_END_DATE_END_TIME:
+                    dateTimeStatus = DateTimeStatus.START_DATE_START_TIME_END_DATE_END_TIME;
+                    break;
+            }
         }
-        return status;
+        return dateTimeStatus;
     }
 
-    public int getRawDateTimeStatus() {
+    public DateTimeStatus getRawDateTimeStatus() {
         return rawDateTimeStatus;
     }
 

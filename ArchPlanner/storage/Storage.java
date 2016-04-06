@@ -154,14 +154,22 @@ public class Storage {
 	}
 
 	private String getDefaultDirectory() {
+		String systemName = System.getProperty("os.name");
 		String systemDrive = System.getenv("SystemDrive");
 		String userName = System.getProperty("user.name");
-		String defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner/";
+		String defaultDirectory;
+		if (systemName.startsWith("Mac OS")) {
+			defaultDirectory = "/Users/" + userName + "/Documents/ArchPlanner/";
+		} else if (systemName.startsWith("Windows")) {
+			defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner";
+		} else {
+			defaultDirectory = "";
+		}
 		return defaultDirectory;
 	}
 
 	private String getLinkerPath() {
-		String defaultLinkerPath = getDefaultDirectory() + getLinkerName();
+		String defaultLinkerPath = getLinkerName();
 		return defaultLinkerPath;
 	}
 

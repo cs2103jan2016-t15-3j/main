@@ -3,8 +3,6 @@ package prompt;
 
 import java.util.ArrayList;
 
-import separator.AddInputSeparator.AddKeyWordType;
-
 public class Prompt { 
 
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
@@ -32,8 +30,7 @@ public class Prompt {
         if (userInput == null) {
             _prompts.add(STRING_INVALID_COMMAND);
         } else if (!userInput.trim().isEmpty()){
-            String commandInString = getFirstWord(userInput);
-            CommandType commandType = determineCommandType(commandInString);
+            CommandType commandType = determineCommandType(userInput);
             
             _promptObj = getPromptObject(commandType);
             _prompts = _promptObj.getPrompts(userInput);
@@ -91,7 +88,8 @@ public class Prompt {
         }
     }
 
-    private CommandType determineCommandType(String commandTypeString) {
+    private CommandType determineCommandType(String input) {
+        String commandTypeString = getFirstWord(input);
         if (commandTypeString.isEmpty()) {
             return CommandType.UNKNOWN;
         }

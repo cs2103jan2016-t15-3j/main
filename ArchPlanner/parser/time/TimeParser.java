@@ -35,13 +35,7 @@ public class TimeParser {
             }
             timeParserResult.setMatchPosition(group.getPosition());
             timeParserResult.setMatchString(group.getText());
-//            for (int i = 0; i < dateCount; i++) {
-//                timeParserResult.setDate(dates.get(i));
-//            }
-//            for (int i = 0; i < timeCount; i++) {
-//                timeParserResult.setTime(dates.get(i));
-//            }
-//            break;
+
         }
         timeParserResult.updateDateTime();
         timeParserResult.checkInvalid();

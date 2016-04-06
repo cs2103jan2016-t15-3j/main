@@ -1,4 +1,4 @@
-package feedback;
+package prompt;
 
 import separator.InputSeparator;
 import parser.time.TimeParser;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by lifengshuang on 3/26/16.
  */
-public class ViewPrompt {
+public class ViewPrompt implements PromptInterface {
     private final String VIEW_ALL = "view all";
     private final String VIEW_DONE = "view done";
     private final String VIEW_UNDONE = "view undone";
@@ -46,9 +46,11 @@ public class ViewPrompt {
     private final String INVALID_END_DATE = "Invalid date: view end date <End Date>";
 
     ArrayList<String> promptList = new ArrayList<>();
+    InputSeparator inputSeparator;
 
+    @Override
     public ArrayList<String> getPrompts(String command) {
-        InputSeparator inputSeparator = new InputSeparator(command);
+        this.inputSeparator = new InputSeparator(command);
         InputSeparator.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
         String lowerCaseCommand = command.toLowerCase();
@@ -60,14 +62,8 @@ public class ViewPrompt {
 //            promptList.add(VIEW_TAGS_HEADER);
             return promptList;
         }
-        if (VIEW_ALL.startsWith(lowerCaseCommand)) {
-            promptList.add(VIEW_ALL);
-        }
-        if (VIEW_DONE.startsWith(lowerCaseCommand)) {
-            promptList.add(VIEW_DONE);
-        }
-        if (VIEW_UNDONE.startsWith(lowerCaseCommand)) {
-            promptList.add(VIEW_UNDONE);
+        if (VIEW_DESCRIPTION.startsWith(lowerCaseCommand)) {
+            promptList.add(VIEW_DESCRIPTION);
         }
         if (VIEW_OVERDUE.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_OVERDUE);
@@ -81,11 +77,17 @@ public class ViewPrompt {
         if (VIEW_TASK.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_TASK);
         }
+        if (VIEW_ALL.startsWith(lowerCaseCommand)) {
+            promptList.add(VIEW_ALL);
+        }
+        if (VIEW_DONE.startsWith(lowerCaseCommand)) {
+            promptList.add(VIEW_DONE);
+        }
+        if (VIEW_UNDONE.startsWith(lowerCaseCommand)) {
+            promptList.add(VIEW_UNDONE);
+        }
         if (VIEW_FROM.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_FROM_FULL);
-        }
-        if (VIEW_DESCRIPTION.startsWith(lowerCaseCommand)) {
-            promptList.add(VIEW_DESCRIPTION);
         }
         if (VIEW_START_DATE.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_START_DATE_FULL);
@@ -191,6 +193,11 @@ public class ViewPrompt {
             }
         }
         return promptList;
+    }
+
+    @Override
+    public String getAutoWord() {
+        return inputSeparator.getPartialKeyword();
     }
 
     private boolean checkTags(String parameter, boolean endWithSpace) {

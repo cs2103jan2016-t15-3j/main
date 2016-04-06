@@ -64,23 +64,23 @@ public class EditCommandParser extends CommandParser {
                     result.setDescription(parameter);
                     return new EditCommand(index, result);
                 case START:
-                    //todo: start date remove
                     if (isRemove) {
                         return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START);
                     }
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid start date or time");
                     }
+
                     switch (timeParserResult.getDateTimeStatus()) {
                         //0100
-                        case 4:
+                        case START_TIME:
                             result.setStartTime(timeParserResult.getFirstTime());
                             return new EditCommand(index, result);
                         //1000
-                        case 8:
+                        case START_DATE:
                             result.setStartDate(timeParserResult.getFirstDate());
                             return new EditCommand(index, result);
-                        case 12:
+                        case START_DATE_START_TIME:
                             result.setStartDate(timeParserResult.getFirstDate());
                             result.setStartTime(timeParserResult.getFirstTime());
                             return new EditCommand(index, result);
@@ -96,14 +96,14 @@ public class EditCommandParser extends CommandParser {
                     }
                     switch (timeParserResult.getDateTimeStatus()) {
                         //0100
-                        case 4:
+                        case START_TIME:
                             result.setEndTime(timeParserResult.getFirstTime());
                             return new EditCommand(index, result);
                         //1000
-                        case 8:
+                        case START_DATE:
                             result.setEndDate(timeParserResult.getFirstDate());
                             return new EditCommand(index, result);
-                        case 12:
+                        case START_DATE_START_TIME:
                             result.setEndDate(timeParserResult.getFirstDate());
                             result.setEndTime(timeParserResult.getFirstTime());
                             return new EditCommand(index, result);
@@ -114,19 +114,22 @@ public class EditCommandParser extends CommandParser {
                     if (timeInvalid) {
                         return new InvalidCommand("Invalid date or time");
                     }
+                    if (!timeParserResult.isTimeValid()) {
+                        return new InvalidCommand("Invalid: Start time is after end time!");
+                    }
                     switch (timeParserResult.getDateTimeStatus()) {
                         //0101
-                        case 5:
+                        case START_TIME_END_TIME:
                             result.setStartTime(timeParserResult.getFirstTime());
                             result.setEndTime(timeParserResult.getSecondTime());
                             return new EditCommand(index, result);
                         //1010
-                        case 10:
+                        case START_DATE_END_DATE:
                             result.setStartDate(timeParserResult.getFirstDate());
                             result.setEndDate(timeParserResult.getSecondDate());
                             return new EditCommand(index, result);
                         //1111
-                        case 15:
+                        case START_DATE_START_TIME_END_DATE_END_TIME:
                             result.setStartDate(timeParserResult.getFirstDate());
                             result.setStartTime(timeParserResult.getFirstTime());
                             result.setEndDate(timeParserResult.getSecondDate());

@@ -1,4 +1,4 @@
-package feedback;
+package prompt;
 
 import separator.InputSeparator;
 
@@ -7,16 +7,20 @@ import java.util.ArrayList;
 /**
  * Created by lifengshuang on 3/29/16.
  */
-public class IDOnlyPrompt {
+public class IDOnlyPrompt implements PromptInterface{
 
     private final String COMMAND = "%s <Task ID>";
     private final String COMMAND_RANGE = "%s <Task ID> to <Task ID>";
     private final String INVALID_ID = "Invalid ID: %s <Task ID>";
     private final String INVALID_COMMAND = "Invalid command";
 
-    public ArrayList<String> getPrompts(String userInput, String commandName) {
+    InputSeparator inputSeparator;
+
+    @Override
+    public ArrayList<String> getPrompts(String userInput) {
+        String commandName = userInput.trim().toLowerCase().split("\\s+")[0];
         ArrayList<String> promptList = new ArrayList<>();
-        InputSeparator inputSeparator = new InputSeparator(userInput);
+        this.inputSeparator = new InputSeparator(userInput);
         if (inputSeparator.getWordCount() == 1) {
             promptList.add(String.format(COMMAND, commandName));
             promptList.add(String.format(COMMAND_RANGE, commandName));
@@ -39,5 +43,13 @@ public class IDOnlyPrompt {
             }
         }
         return promptList;
+    }
+
+    @Override
+    public String getAutoWord() {
+        if (inputSeparator.getID() != null) {
+            return inputSeparator.getPartialKeyword();
+        }
+        return "";
     }
 }

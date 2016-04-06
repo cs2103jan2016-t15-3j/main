@@ -1,17 +1,23 @@
 package separator;
 
+import prompt.Prompt;
+
+import java.util.HashMap;
+
 /**
  * Created by lifengshuang on 3/28/16.
  */
 public class InputSeparator {
 
     public enum KeywordType {
-        DESCRIPTION, START_TIME, END_TIME, START_DATE, END_DATE, FROM, START, END,
-        DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH
+        DESCRIPTION, DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH,
+        START_TIME, END_TIME, START_DATE, END_DATE, FROM, START, END
     }
 
+    private static final HashMap<Prompt.CommandType, KeywordType[]> commandMap = new HashMap<>();
 
-    //    private boolean isValid;
+    private String command;
+    private Prompt.CommandType commandType;
     private int wordCount;
     private Integer id;
     private Integer secondId;
@@ -23,7 +29,8 @@ public class InputSeparator {
     private boolean endWithSpace;
 
     public InputSeparator(String command) {
-//        this.isValid = isValid(command);
+        this.command = command;
+        commandType = determineCommandType(command);
         String[] breakUserInput = command.split("\\s+");
         this.wordCount = breakUserInput.length;
         this.id = parseID(breakUserInput);
@@ -48,17 +55,30 @@ public class InputSeparator {
         }
     }
 
-//    private boolean isValid(String command) {
-////        //two space is not allowed
-////        if (command.contains("  ")) {
-////            return false;
-////        }
-////        //Can't start with space
-////        if (command.startsWith(" ")) {
-////            return false;
-////        }
-//        return true;
-//    }
+    public String getPartialKeyword() {
+        String[] breakInput = command.trim().split("\\s+");
+        if (keywordType == null) {
+            for (KeywordType type : KeywordType.values()) {
+                if (commandHasKeyword(commandType, type)) {
+                    if (enumNameToString(type).startsWith(parameter)) {
+                        String[] splitType = enumNameToString(type).split("\\s+");
+                        if (splitType.length > 1) {
+                            if (parameter.contains(" ")) {
+                                return splitType[1] + " ";
+                            } else {
+                                return splitType[0] + " ";
+                            }
+                        }
+                        return enumNameToString(type) + " ";
+                    }
+//                    if (enumNameToString(type).startsWith(lastWord)) {
+//                        return enumNameToString(type);
+//                    }
+                }
+            }
+        }
+        return "";
+    }
 
     private Integer parseID(String[] input) {
         try {
@@ -77,15 +97,19 @@ public class InputSeparator {
         try {
             for (KeywordType type : KeywordType.values()) {
                 if (input[keywordPosition].equalsIgnoreCase(enumNameToString(type))) {
-                    parameterPosition++;
-                    return type;
+                    if (commandHasKeyword(commandType, type)) {
+                        parameterPosition++;
+                        return type;
+                    }
                 }
             }
             String twoWord = input[keywordPosition] + " " + input[keywordPosition + 1];
             for (KeywordType type : KeywordType.values()) {
                 if (twoWord.equalsIgnoreCase(enumNameToString(type))) {
-                    parameterPosition += 2;
-                    return type;
+                    if (commandHasKeyword(commandType, type)) {
+                        parameterPosition += 2;
+                        return type;
+                    }
                 }
             }
             return null;
@@ -172,4 +196,47 @@ public class InputSeparator {
     public boolean isEndWithSpace() {
         return endWithSpace;
     }
+
+    private Prompt.CommandType determineCommandType(String input) {
+        String commandTypeString = input.trim().split("\\s+")[0];
+        if (commandTypeString.isEmpty()) {
+            return Prompt.CommandType.UNKNOWN;
+        }
+        for (Prompt.CommandType type : Prompt.CommandType.values()) {
+            if (commandTypeString.equalsIgnoreCase(type.name())) {
+                return type;
+            }
+        }
+        return Prompt.CommandType.UNKNOWN;
+    }
+
+    private boolean commandHasKeyword(Prompt.CommandType commandType, KeywordType keywordType) {
+        if (commandMap.isEmpty()) {
+            initCommandMap();
+        }
+        KeywordType[] keywordTypes = commandMap.get(commandType);
+        for (KeywordType type : keywordTypes) {
+            if (type == keywordType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void initCommandMap() {
+        commandMap.put(Prompt.CommandType.ADD, new KeywordType[]{});
+        commandMap.put(Prompt.CommandType.DELETE, new KeywordType[]{KeywordType.TO});
+        commandMap.put(Prompt.CommandType.DONE, new KeywordType[]{KeywordType.TO});
+        commandMap.put(Prompt.CommandType.UNDONE, new KeywordType[]{KeywordType.TO});
+        commandMap.put(Prompt.CommandType.SET, new KeywordType[]{KeywordType.FILEPATH});
+        commandMap.put(Prompt.CommandType.EDIT, new KeywordType[]
+                {KeywordType.DESCRIPTION, KeywordType.END, KeywordType.START, KeywordType.FROM});
+        commandMap.put(Prompt.CommandType.VIEW, new KeywordType[]
+                {KeywordType.ALL, KeywordType.DONE, KeywordType.UNDONE, KeywordType.OVERDUE,
+                        KeywordType.DEADLINES, KeywordType.TASKS, KeywordType.EVENTS,
+                        KeywordType.DESCRIPTION, KeywordType.FROM, KeywordType.START_DATE, KeywordType.START_TIME,
+                        KeywordType.END_DATE, KeywordType.END_TIME});
+    }
+
+
 }
