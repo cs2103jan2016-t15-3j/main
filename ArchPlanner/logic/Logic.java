@@ -65,7 +65,6 @@ public class Logic {
 	}
 
 	public void setSelectedCategory(CATEGORY_TYPE selectedCategory) {
-		System.out.print(selectedCategory);
 		_listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		_listsManager.setCategoryType(selectedCategory);
 		_listsManager.updateLists();
@@ -113,7 +112,7 @@ public class Logic {
 	}
 
 	public String getCurrentViewType() {
-		String selectedCategory = getSelectedCategory().toString().substring(9).toLowerCase();
+		String selectedCategory = getSelectedCategory().toString().substring(9);
 		String currentViewType = selectedCategory + " " + getSelectedView() + " " 
 				+ _listsManager.getCurrentViewType();
 		return currentViewType;

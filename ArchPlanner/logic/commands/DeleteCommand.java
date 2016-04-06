@@ -14,8 +14,8 @@ public class DeleteCommand implements CommandInterface {
 	private int _lastIndex;
 	private String _message;
 
-	private static final String MESSAGE_DELETE_COMMAND = "The task %1$s has been deleted";
-	private static final String MESSAGE_MULTIPLE_DELETE_COMMAND = "Multiple tasks have been deleted";
+	private static final String MESSAGE_DELETE_COMMAND = "deleted \"%1$s\"";
+	private static final String MESSAGE_MULTIPLE_DELETE_COMMAND = "deleted multiple tasks";
 
 	public DeleteCommand(int index) {
 		_firstIndex = index - 1;

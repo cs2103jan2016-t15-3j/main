@@ -27,7 +27,7 @@ public class EditCommand implements CommandInterface {
 	private final String ERROR_MESSAGE_NO_START_DATE = "The task do not have start date";
 	private final String ERROR_MESSAGE_NO_END_DATE = "The task do not have end date";
 	
-	private static final String MESSAGE_EDIT_COMMAND = "The task %1$s has been EDITED successfully";
+	private static final String MESSAGE_EDIT_COMMAND = "edited \"%1$s\"";
 
 	public enum REMOVE_TYPE {START, START_TIME, END, END_TIME, TAG, NONE}
 

@@ -14,8 +14,8 @@ public class DoneCommand implements CommandInterface {
 	private int _lastIndex;
 	private String _message;
 	
-	private static final String MESSAGE_DONE_COMMAND = "The task %1$s has been done";
-	private static final String MESSAGE_MULTIPLE_DONE_COMMAND = "Multiple tasks have been done";
+	private static final String MESSAGE_DONE_COMMAND = "done \"%1$s\"";
+	private static final String MESSAGE_MULTIPLE_DONE_COMMAND = "done multiple tasks";
 
 	public DoneCommand(int index) {
 		_firstIndex = index - 1;
@@ -47,16 +47,23 @@ public class DoneCommand implements CommandInterface {
 
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
+		assert((_lastIndex >= 0) && (_lastIndex < listsManager.getViewList().size()));
 		listsManager.getIndexList().clear();
 		int numOfDone = _lastIndex - _firstIndex + 1;
 		Task oldTask = null;
+		ArrayList<Task> doneTasksList = new ArrayList<Task>();
 		for (int i = 0; i < numOfDone; i++) {
 			oldTask = listsManager.getViewList().get(_firstIndex);
 			listsManager.getMainList().remove(oldTask);
 			Task newTask = new Task();
 			initializeNewTask(oldTask, newTask);
+			doneTasksList.add(newTask);
 			updateListsManager(listsManager, newTask);
 			updateHistoryManager(historyManager, oldTask, newTask, numOfDone);
+		}
+		for (int i = 0; i < doneTasksList.size(); i++) {
+			Task doneTask = doneTasksList.get(i);
+			listsManager.updateIndexList(doneTask);
 		}
 		if (numOfDone == 1) {
 			_message = String.format(MESSAGE_DONE_COMMAND, oldTask.getDescription());
@@ -76,7 +83,6 @@ public class DoneCommand implements CommandInterface {
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);
 		listsManager.updateLists();
-		listsManager.updateIndexList(newTask);
 	}
 
 	private void initializeNewTask(Task oldTask, Task newTask) {

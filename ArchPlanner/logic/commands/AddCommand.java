@@ -16,7 +16,7 @@ public class AddCommand implements CommandInterface {
 	private TaskParameters _task;
 	private String _message;
 	
-	private static final String MESSAGE_ADD_COMMAND = "The task %1$s has been added";
+	private static final String MESSAGE_ADD_COMMAND = "added \"%1$s\"";
 
 	public AddCommand(TaskParameters newTaskParameters) {
 		_task = new TaskParameters();

@@ -210,7 +210,6 @@ public class ListsManager {
 			for (int j = 0; j < _tagsList.size() && !hasSameTag; j++) {
 				if (taskTagName.equals(_tagsList.get(j).getName())) {
 					hasSameTag = true;
-					System.out.println(tag.getName() + "\t" + tag.getIsSelected());
 				}
 			}
 			if (!hasSameTag) {

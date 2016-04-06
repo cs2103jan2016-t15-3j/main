@@ -1,5 +1,7 @@
 package logic.commands;
 
+import java.util.ArrayList;
+
 import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
@@ -19,17 +21,17 @@ public class RedoCommand implements CommandInterface {
 	private final String DONE = "done";
 	private final String UNDONE = "undone";
 
-	private static final String MESSAGE_REDO_ADD_COMMAND = "The task %1$s has been deleted";
-	private static final String MESSAGE_REDO_DELETE_COMMAND = "The task %1$s has been added";
-	private static final String MESSAGE_REDO_EDIT_COMMAND = "The task %1$s has been edited";
-	private static final String MESSAGE_REDO_DONE_COMMAND = "The task %1$s has been undone";
-	private static final String MESSAGE_REDO_UNDONE_COMMAND = "The task %1$s has been done";
+	private static final String MESSAGE_REDO_ADD_COMMAND = "deleted \"%1$s\"";
+	private static final String MESSAGE_REDO_DELETE_COMMAND = "added \"%1$s\"";
+	private static final String MESSAGE_REDO_EDIT_COMMAND = "edited \"%1$s\"";
+	private static final String MESSAGE_REDO_DONE_COMMAND = "undone \"%1$s\"";
+	private static final String MESSAGE_REDO_UNDONE_COMMAND = "done \"%1$s\"";
 
-	private static final String MESSAGE_REDO_MULTIPLE_ADD_COMMAND = "Multiple task have been deleted";
-	private static final String MESSAGE_REDO_MULTIPLE_DELETE_COMMAND = "Multiple task have been added";
-	private static final String MESSAGE_REDO_MULTIPLE_EDIT_COMMAND = "Multiple task have been edited";
-	private static final String MESSAGE_REDO_MULTIPLE_DONE_COMMAND = "Multiple task have been undone";
-	private static final String MESSAGE_REDO_MULTIPLE_UNDONE_COMMAND = "Multiple task have been done";
+	private static final String MESSAGE_REDO_MULTIPLE_ADD_COMMAND = "deleted multiple tasks";
+	private static final String MESSAGE_REDO_MULTIPLE_DELETE_COMMAND = "added multiple tasks";
+	private static final String MESSAGE_REDO_MULTIPLE_EDIT_COMMAND = "edited multiple tasks";
+	private static final String MESSAGE_REDO_MULTIPLE_DONE_COMMAND = "undone multiple tasks";
+	private static final String MESSAGE_REDO_MULTIPLE_UNDONE_COMMAND = "done multiple tasks";
 
 	enum REDO_TYPE {
 		ADD, DELETE, EDIT, DONE, UNDONE, INVALID
@@ -70,6 +72,7 @@ public class RedoCommand implements CommandInterface {
 		RollbackItem rollbackItem = new RollbackItem(null, null, null);
 		rollbackItem = historyManager.getRedoList().remove(historyManager.getRedoList().size() - 1);
 		int undoNumOfTimes = rollbackItem.getTimes();
+		ArrayList<Task> redoTasksList = new ArrayList<Task>();
 		for (int i = 0; i < rollbackItem.getTimes(); i++) {
 			REDO_TYPE redoType = getRedoType(rollbackItem.getCommandType());
 			redoAddCommand(listsManager, rollbackItem, redoType, undoNumOfTimes);
@@ -77,11 +80,16 @@ public class RedoCommand implements CommandInterface {
 			redoEditCommand(listsManager, rollbackItem, redoType, undoNumOfTimes);
 			redoDoneCommand(listsManager, rollbackItem, redoType, undoNumOfTimes);
 			redoUndoneCommand(listsManager, rollbackItem, redoType, undoNumOfTimes);
+			redoTasksList.add(rollbackItem.getNewTask());
 			historyManager.getUndoList().add(rollbackItem);
 			updateListsManager(listsManager, rollbackItem.getNewTask());
 			if (i < rollbackItem.getTimes() - 1) {
 				rollbackItem = historyManager.getRedoList().remove(historyManager.getRedoList().size() - 1);
 			}
+		}
+		for (int i = 0; i < redoTasksList.size(); i++) {
+			Task doneTask = redoTasksList.get(i);
+			listsManager.updateIndexList(doneTask);
 		}
 	}
 
@@ -90,7 +98,6 @@ public class RedoCommand implements CommandInterface {
 		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		listsManager.updateIndexList(newTask);
 	}
 
 	private void redoUndoneCommand(ListsManager listsManager, RollbackItem rollbackItem,

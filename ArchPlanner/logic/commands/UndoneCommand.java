@@ -14,8 +14,8 @@ public class UndoneCommand implements CommandInterface {
 	private int _lastIndex;
 	private String _message;
 
-	private static final String MESSAGE_UNDONE_COMMAND = "The task %1$s has been undone";
-	private static final String MESSAGE_MULTIPLE_UNDONE_COMMAND = "Multiple tasks have been undone";
+	private static final String MESSAGE_UNDONE_COMMAND = "undone \"%1$s\"";
+	private static final String MESSAGE_MULTIPLE_UNDONE_COMMAND = "undone multiple tasks";
 
 	public UndoneCommand(int index) {
 		_firstIndex = index - 1;
@@ -51,13 +51,19 @@ public class UndoneCommand implements CommandInterface {
 		listsManager.getIndexList().clear();
 		int numOfUndone = _lastIndex - _firstIndex + 1;
 		Task oldTask = null;
+		ArrayList<Task> undoneTasksList = new ArrayList<Task>();
 		for (int i = 0; i < numOfUndone; i++) {
-			oldTask = listsManager.getViewList().get(_firstIndex);
+			oldTask = listsManager.getViewList().get(_lastIndex);
 			listsManager.getMainList().remove(oldTask);
 			Task newTask = new Task();
 			initializeNewTask(oldTask, newTask);
+			undoneTasksList.add(newTask);
 			updateListsManager(listsManager, newTask);
 			updateHistoryManager(historyManager, oldTask, newTask, numOfUndone);
+		}
+		for (int i = 0; i < undoneTasksList.size(); i++) {
+			Task undoneTask = undoneTasksList.get(i);
+			listsManager.updateIndexList(undoneTask);
 		}
 		if (numOfUndone == 1) {
 			_message = String.format(MESSAGE_UNDONE_COMMAND, oldTask.getDescription());
@@ -68,7 +74,7 @@ public class UndoneCommand implements CommandInterface {
 	}
 
 	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask, int numOfUndone) {
-		RollbackItem rollbackItem = new RollbackItem("done", oldTask, newTask, numOfUndone);
+		RollbackItem rollbackItem = new RollbackItem("undone", oldTask, newTask, numOfUndone);
 		historyManager.getUndoList().add(rollbackItem);
 		historyManager.setRedoList(new ArrayList<RollbackItem>());
 	}
@@ -76,7 +82,6 @@ public class UndoneCommand implements CommandInterface {
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);
 		listsManager.updateLists();
-		listsManager.updateIndexList(newTask);
 	}
 
 	private void initializeNewTask(Task oldTask, Task newTask) {
