@@ -1,3 +1,4 @@
+//@@author A0140034B
 package prompt;
 
 import java.util.ArrayList;
@@ -45,10 +46,13 @@ public class Prompt {
     }
 
     public String getAutoComplete(String userInput) {
+        if (userInput.isEmpty()) {
+            return userInput;
+        }
         if (userInput.charAt(userInput.length() - LAST_INDEX_OFFSET) != CHAR_SPACE) {
             String autoWords = _promptObj.getAutoWord();
     
-            if (autoWords.isEmpty()) {
+            if (autoWords == null || autoWords.isEmpty()) {
                 return userInput;
             } else {
                 return removeLastWord(userInput) + autoWords;

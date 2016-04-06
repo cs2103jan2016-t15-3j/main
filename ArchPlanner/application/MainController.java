@@ -1,3 +1,4 @@
+//@@author A0140034B
 package application;
 
 import java.net.URL;
@@ -36,7 +37,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import application.TaskPane;
@@ -52,13 +52,12 @@ import prompt.Prompt;
 
 public class MainController implements Initializable{
     
-    private static final String VIEW_SCOPE_ALL = "All";
+    private static final String VIEW_SCOPE_ALL = "ALL";
     private static final String STRING_EMPTY = "";
     
     private static final String FAIL_IMAGE_PATH = "/images/FailIcon.png";
     private static final String SUCCESS_IMAGE_PATH = "/images/SuccessIcon.png";
     
-    private static final int FIRST_INDEX_OF_LIST = 0;
     private static final int NO_DELAY = 0;
     private static final int ONE_MINUTE_INTERVAL = 60000;
 
@@ -234,36 +233,15 @@ public class MainController implements Initializable{
             
             if (!(command instanceof ViewCommand)) {
                 setFeedbackWindow(true, command.getMessage());
-                if (logic.getIndexList() != null && !logic.getIndexList().isEmpty()) {
-                    
-                    taskDisplay.applyCss();
-                    taskDisplay.layout();
+                if (logic.getIndexList() != null && !logic.getIndexList().isEmpty()) {   
                     for (int i = 0; i < logic.getIndexList().size(); i++) {
-                        taskDisplay.scrollTo(logic.getIndexList().get(i));                        
+                        fillTransition((TaskPane)taskDisplay.getItems().get(logic.getIndexList().get(i)));
+                        System.out.println("fill " + logic.getIndexList().get(i));
                     }
-                    System.out.println("No of Item in list: " + taskDisplay.getItems().size());
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < logic.getIndexList().size(); i++) {
-                                fillTransition((TaskPane)taskDisplay.getItems().get(logic.getIndexList().get(i)));
-                                System.out.println("fill " + logic.getIndexList().get(i));
-                            }
-                            taskDisplay.scrollTo(logic.getIndexList().get(0));
-                            /*
-                            int taskLabelHeight = (int) taskDisplay.getItems().get(logic.getIndex()).getHeight() + 10;
-                            int taskPaneHeight = (int) taskDisplay.getHeight();
-                            int shiftToCenter = taskPaneHeight / taskLabelHeight / 2;
-                            taskDisplay.scrollTo(logic.getIndex() - shiftToCenter);
-                            System.out.println("shift: " + taskPaneHeight + " / " + taskLabelHeight + " / 2 = " + shiftToCenter);
-                            System.out.println("index: " + logic.getIndex());
-                            System.out.println("Scroll To plus shift: " + (logic.getIndex() - shiftToCenter));
-                            */
-                        }
-                    });
+                    taskDisplay.scrollTo(logic.getIndexList().get(0));
                 }
             }
-            return true;   
+            return true;
         }
     }
     
@@ -298,7 +276,6 @@ public class MainController implements Initializable{
     
     @FXML
     private void onKeyPressed(KeyEvent event) {
-        System.out.println(event.getCode());
         if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
             event.consume();
         } else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
@@ -343,10 +320,10 @@ public class MainController implements Initializable{
     private void setFeedbackWindow(boolean isSuccessful, String message) {
         if (isSuccessful) {
             feedbackIcon.setImage(successIcon);
-            feedbackLabel.setText("Successfully executed command" + "\n" + message);
+            feedbackLabel.setText("Success" + "\n" + message);
         } else {
             feedbackIcon.setImage(failIcon);
-            feedbackLabel.setText("Failed to execute command" + "\n" + message);
+            feedbackLabel.setText("Failed" + "\n" + message);
         }
         createFader(feedbackWindow);
     }
@@ -370,14 +347,12 @@ public class MainController implements Initializable{
         fadeTransition.play();
     }
     
-    private void fillTransition(TaskPane taskLabel) {
-        taskLabel.applyCss();
-        taskLabel.layout();
-        
-        String endColor =  "-fx-background-color: #" + taskLabel.backgroundProperty().get().getFills().get(0).getFill().toString().substring(2, 8) + ";";
+    private void fillTransition(TaskPane taskLabel) {   
+        int indexOfBgColor = taskLabel.getStyle().indexOf("-fx-background-color:");
+        String endColor =  taskLabel.getStyle().substring(indexOfBgColor).split(";")[0] + ";";
         taskLabel.setStyle(taskLabel.getStyle() + "-fx-background-color: yellow;");
 
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        PauseTransition pause = new PauseTransition(Duration.millis(2000));
         pause.setOnFinished(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 taskLabel.setStyle(taskLabel.getStyle() + endColor);
@@ -449,7 +424,7 @@ public class MainController implements Initializable{
         categorySelected = logic.getSelectedCategory();
         viewLabel.setText(logic.getCurrentViewType());
 
-        if (!viewLabel.getText().trim().equals(VIEW_SCOPE_ALL)) {
+        if (!viewLabel.getText().trim().equalsIgnoreCase(VIEW_SCOPE_ALL)) {
             backButton.setVisible(true);
         } else {
             backButton.setVisible(false);
