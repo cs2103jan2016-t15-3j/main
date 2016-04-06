@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by lifengshuang on 3/29/16.
  */
-public class IDOnlyPrompt implements PromptInterface{
+public class IdOnlyPrompt implements PromptInterface{
 
     private final String COMMAND = "%s <Task ID>";
     private final String COMMAND_RANGE = "%s <Task ID> to <Task ID>";
