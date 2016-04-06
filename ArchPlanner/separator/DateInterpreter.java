@@ -1,3 +1,4 @@
+//@@author A0140034B
 package separator;
 
 import java.util.Date;
