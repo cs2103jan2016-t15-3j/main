@@ -7,19 +7,30 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddInputSeparator {
+
+    private static final int PARAMETERS_MIN_NUM = 1;
+    private static final int MINIMUM_WORD_BEFORE_KEYWORD = 1;
+    private static final int INITIAL_INDEX = 0;
+    private static final int LAST_INDEX_OFFSET = 1;
+    private static final int NOT_FOUND = -1;
     
-    public enum KeyWordType {
+    private static final String PARTIAL_KEYWORD_TO = "t";
+    private static final String KEYWORD_TO = "to";
+    private static final String KEYWORD_TAG = "#";
+    private static final String INVALID_TAG_2 = " # ";
+    private static final String INVALID_TAG_1 = "# ";
+  
+    private static final String STRING_EMPTY = "";
+    private static final String STRING_SINGLE_WHITESPACE = " ";
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+    
+    public enum AddKeyWordType {
         ON, BY, FROM, UNKNOWN
     };
     
-    public final String[] KEY_WORDS = {"on", "by", "from"};
-    
-    private final String STRING_SINGLE_WHITESPACE = " ";
-    private final String STRING_MULTIPLE_WHITESPACE = "\\s+";
-    
     private String _description;
-    private KeyWordType _keyWord;
-    private KeyWordType _partialKeyWord;
+    private AddKeyWordType _keyWord;
+    private AddKeyWordType _partialKeyWord;
     private Date _startDateTime;
     private Date _endDateTime;
     private LocalDate _startDate;
@@ -43,11 +54,11 @@ public class AddInputSeparator {
     
     public AddInputSeparator(String userInput) {
         
-        AddBreakRegion breakUserInput = new AddBreakRegion(userInput);
+        AddRegionSeparator breakUserInput = new AddRegionSeparator(userInput);
         _keyWord = determineKeyWordType(breakUserInput.getKeyWord());
         
-        String startDateRegion = "";
-        String endDateRegion = "";
+        String startDateRegion = STRING_EMPTY;
+        String endDateRegion = STRING_EMPTY;
         switch (_keyWord) {
             case ON :
                 startDateRegion = breakUserInput.getFirstDateRegion();
@@ -69,8 +80,8 @@ public class AddInputSeparator {
                 break;
         }
        
-        AddBreakDateRegion breakStartDateRegion = new AddBreakDateRegion(startDateRegion);
-        AddBreakDateRegion breakEndDateRegion = new AddBreakDateRegion(endDateRegion);
+        DateInterpreter breakStartDateRegion = new DateInterpreter(startDateRegion);
+        DateInterpreter breakEndDateRegion = new DateInterpreter(endDateRegion);
         
         _hasSpace = isSpacePresent(userInput) || !breakUserInput.getTagRegion().isEmpty();
         _hasDescription = !breakUserInput.getDescription().isEmpty();
@@ -81,15 +92,15 @@ public class AddInputSeparator {
         
         _description = breakUserInput.getDescription();
         _partialKeyWord = searchPartialKeyWord(userInput);
-        if (_partialKeyWord != KeyWordType.UNKNOWN) {
-            _keyWord = KeyWordType.UNKNOWN;
+        if (_partialKeyWord != AddKeyWordType.UNKNOWN) {
+            _keyWord = AddKeyWordType.UNKNOWN;
         }
 
         _startDateTime = breakStartDateRegion.getDateTime();
         _hasStartDate = breakStartDateRegion.hasDate();
         _hasStartTime = breakStartDateRegion.hasTime();
 
-        if (_keyWord != KeyWordType.FROM || _startDateTime != null) {
+        if (_keyWord != AddKeyWordType.FROM || _startDateTime != null) {
             _endDateTime = breakEndDateRegion.getDateTime();
             _hasEndDate = breakEndDateRegion.hasDate();
             _hasEndTime = breakEndDateRegion.hasTime();
@@ -104,16 +115,16 @@ public class AddInputSeparator {
             _endTime = _endDateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         }
         if (_startDateTime == null && _endDateTime == null) {
-            _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
+            _description = userInput.substring(INITIAL_INDEX, userInput.length() - breakUserInput.getTagRegion().length()).trim();
             _hasPartialKeyWordTo = false;
             if (!breakUserInput.getFirstDateRegion().isEmpty() || _hasTag) {
-                _keyWord = KeyWordType.UNKNOWN;
+                _keyWord = AddKeyWordType.UNKNOWN;
             }
         }
-        if (_keyWord == KeyWordType.FROM && _endDateTime == null) {
-            _description = userInput.substring(0, userInput.length() - breakUserInput.getTagRegion().length()).trim();
+        if (_keyWord == AddKeyWordType.FROM && _endDateTime == null) {
+            _description = userInput.substring(INITIAL_INDEX, userInput.length() - breakUserInput.getTagRegion().length()).trim();
             if (!breakUserInput.getSecondDateRegion().isEmpty() || _hasTag) {
-                _keyWord = KeyWordType.UNKNOWN;
+                _keyWord = AddKeyWordType.UNKNOWN;
                 _hasPartialKeyWordTo = false;
                 _startDate = null;
                 _startTime = null;
@@ -152,7 +163,7 @@ public class AddInputSeparator {
         }
         
         _tags = getTags(breakUserInput.getTagRegion());
-        _hasKeyWord = _keyWord != KeyWordType.UNKNOWN;
+        _hasKeyWord = _keyWord != AddKeyWordType.UNKNOWN;
         
         System.out.println("InputParameters------------------------------------------");
         System.out.println("userInput: |" + userInput + "|");
@@ -173,21 +184,19 @@ public class AddInputSeparator {
     }
     
     private boolean isSpacePresent(String userInput) {
-        if (userInput.length() <= 0) {
+        if (userInput.length() < PARAMETERS_MIN_NUM) {
             return false;
         }
-        return userInput.substring(userInput.length() - 1).equals(STRING_SINGLE_WHITESPACE);
+        return userInput.substring(userInput.length() - LAST_INDEX_OFFSET).equals(STRING_SINGLE_WHITESPACE);
     }
     
     private boolean isValidTag(String tagRegion) {
-        System.out.println("Tag Region: " + tagRegion);
-        if (tagRegion.startsWith("# ") || tagRegion.contains(" # ")) {
+        if (tagRegion.startsWith(INVALID_TAG_1) || tagRegion.contains(INVALID_TAG_2)) {
             return false;
         }
         String[] tags = tagRegion.split(STRING_MULTIPLE_WHITESPACE);
-        for (int i = 0; i < tags.length; i++) {
-            System.out.println("tag - " + tags[i]);
-            if(!tags[i].startsWith("#")) {
+        for (int i = INITIAL_INDEX; i < tags.length; i++) {
+            if(!tags[i].startsWith(KEYWORD_TAG)) {
                 return false;
             }
         }
@@ -199,62 +208,59 @@ public class AddInputSeparator {
     }
     
     private boolean isPartialToPresent(String input) {
-        return getPartialToIndex(input) != -1;
+        return getPartialToIndex(input) != NOT_FOUND;
     }
     
     private int getPartialToIndex(String input) {
         if (input.trim().isEmpty()) {
-            return -1;
+            return NOT_FOUND;
         }
         input = input.toLowerCase();
         String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
-        if (splitInput.length < 2) {
-            return -1;
+        if (splitInput.length <= MINIMUM_WORD_BEFORE_KEYWORD) {
+            return NOT_FOUND;
         }
-        if ("to".startsWith(splitInput[splitInput.length - 1])) {
-            return input.lastIndexOf("t");
+        if (KEYWORD_TO.startsWith(splitInput[splitInput.length - LAST_INDEX_OFFSET])) {
+            return input.lastIndexOf(PARTIAL_KEYWORD_TO);
         } else {
-            return -1;
+            return NOT_FOUND;
         }
     }
     
     private boolean isPartialKeyWordPresent(String input) {
-        return searchPartialKeyWord(input) != KeyWordType.UNKNOWN;
+        return searchPartialKeyWord(input) != AddKeyWordType.UNKNOWN;
     }
     
     
-    private KeyWordType searchPartialKeyWord(String input) {
+    private AddKeyWordType searchPartialKeyWord(String input) {
         if (input.trim().isEmpty()) {
-            return KeyWordType.UNKNOWN;
+            return AddKeyWordType.UNKNOWN;
         }
-        input = input.toLowerCase();
+
         String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
-        if (splitInput.length < 2) {
-            return KeyWordType.UNKNOWN;
+        if (splitInput.length <= MINIMUM_WORD_BEFORE_KEYWORD) {
+            return AddKeyWordType.UNKNOWN;
         }
-        KeyWordType foundKey = KeyWordType.UNKNOWN;
-        for (int i = 0; i < KEY_WORDS.length; i++) {
-            if (KEY_WORDS[i].startsWith(splitInput[splitInput.length - 1])) {
-                foundKey = determineKeyWordType(KEY_WORDS[i]);
+        
+        for (AddKeyWordType type : AddKeyWordType.values()) {
+            if ((type.name().startsWith(splitInput[splitInput.length - LAST_INDEX_OFFSET].toUpperCase()))) {
+                return type;
             }
         }
-        return foundKey;
+        return AddKeyWordType.UNKNOWN;
     }
 
-    private KeyWordType determineKeyWordType(String KeyWordString) {
+    private AddKeyWordType determineKeyWordType(String KeyWordString) {
         if (KeyWordString.isEmpty()) {
-            return KeyWordType.UNKNOWN;
+            return AddKeyWordType.UNKNOWN;
         }
-
-        if (KEY_WORDS[0].equalsIgnoreCase(KeyWordString)) {
-            return KeyWordType.ON;
-        } else if (KEY_WORDS[1].equalsIgnoreCase(KeyWordString)) {
-            return KeyWordType.BY;
-        } else if (KEY_WORDS[2].equalsIgnoreCase(KeyWordString)) {
-            return KeyWordType.FROM;
-        } else {
-            return KeyWordType.UNKNOWN;
+        
+        for (AddKeyWordType type : AddKeyWordType.values()) {
+            if (KeyWordString.equalsIgnoreCase(type.name())) {
+                return type;
+            }
         }
+        return AddKeyWordType.UNKNOWN;
     }
     
     public boolean hasSpace() {
@@ -309,11 +315,11 @@ public class AddInputSeparator {
         return _description;
     }
     
-    public KeyWordType getKeyWord() {
+    public AddKeyWordType getKeyWord() {
         return _keyWord;
     }
     
-    public KeyWordType getPartialKeyWord() {
+    public AddKeyWordType getPartialKeyWord() {
         return _partialKeyWord;
     }
     

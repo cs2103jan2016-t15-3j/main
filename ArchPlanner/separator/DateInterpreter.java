@@ -5,20 +5,22 @@ import java.util.Date;
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
 
-public class AddBreakDateRegion {
-    private Date dateTime;   
-    private boolean hasDate;
-    private boolean hasTime;
+public class DateInterpreter {
+    private static final int INDEX_OF_FIRST_DATE = 0;
     
-    public AddBreakDateRegion(String dateRegion) {
-        hasDate = false;
-        hasTime = false;
+    private Date _dateTime;
+    private boolean _hasDate;
+    private boolean _hasTime;
+    
+    public DateInterpreter(String dateRegion) {
+        _hasDate = false;
+        _hasTime = false;
         dateRegion = dateRegion.toLowerCase();
 
         Parser parser = new Parser();
         try {
             System.out.println(dateRegion);
-            DateGroup dateGroup = parser.parse(dateRegion).get(0);
+            DateGroup dateGroup = parser.parse(dateRegion).get(INDEX_OF_FIRST_DATE);
             if (dateGroup.getDates().size() > 1) {
                 System.out.println("Got more than 1 Dates");
                 throw new Exception();
@@ -28,12 +30,12 @@ public class AddBreakDateRegion {
                 System.out.println("dateRegion|" + dateRegion + "|");
                 if (dateGroup.getText().equals(dateRegion)) {  
                     System.out.println("No rubbish in start date");
-                    dateTime = dateGroup.getDates().get(0);
+                    _dateTime = dateGroup.getDates().get(INDEX_OF_FIRST_DATE);
                     if (!dateGroup.isDateInferred())  {
-                        hasDate = true;
+                        _hasDate = true;
                     }
                     if (!dateGroup.isTimeInferred()) {
-                        hasTime = true;
+                        _hasTime = true;
                     }
                 } else {
                     System.out.println("Got rubbish in start date");
@@ -42,30 +44,30 @@ public class AddBreakDateRegion {
             }
         } catch (Exception e) {
             System.out.println("Exception");
-            hasDate = false;
-            hasTime = false;
+            _hasDate = false;
+            _hasTime = false;
         }
         
         System.out.println();
         System.out.println("BreakDateRegion--------------------------------------");
         System.out.println("DateRegion: " + dateRegion + "|");
-        System.out.println("hasStartDate: " + hasDate + "|");
-        System.out.println("hasStartTime: " + hasTime + "|");
+        System.out.println("hasStartDate: " + _hasDate + "|");
+        System.out.println("hasStartTime: " + _hasTime + "|");
         
-        if (dateTime != null)
-            System.out.println("StartDateTiime: " + dateTime);
+        if (_dateTime != null)
+            System.out.println("StartDateTiime: " + _dateTime);
         System.out.println("--------------------------------------BreakDateRegion");
     }
     
     public boolean hasDate() {
-        return hasDate;
+        return _hasDate;
     }
     
     public boolean hasTime() {
-        return hasTime;
+        return _hasTime;
     }
     
     public Date getDateTime() {
-        return dateTime;
+        return _dateTime;
     }
 }

@@ -3,6 +3,8 @@ package application;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import javafx.animation.FadeTransition;
@@ -38,18 +40,25 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import application.TaskPane;
-import feedback.Feedback;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
 import logic.commands.Command;
-import logic.commands.DeleteCommand;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import parser.Parser;
+import prompt.Prompt;
 
 public class MainController implements Initializable{
     
+    private static final int FIRST_INDEX_OF_LIST = 0;
+
+    private static final String FAIL_IMAGE_PATH = "/images/FailIcon.png";
+
+    private static final String SUCCESS_IMAGE_PATH = "/images/SuccessIcon.png";
+
+    private static final int _ONE_MINUTE = 60000;
+
     static Logger log = Logger.getLogger(MainController.class.getName());
     
     @FXML private Label viewLabel;
@@ -91,12 +100,14 @@ public class MainController implements Initializable{
 
     private SequentialTransition fadeTransition = new SequentialTransition ();
     
+    private Timer periodicChecker;
+    
     Logic logic;
-    Feedback feedback;
+    Prompt feedback;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {                 
-        feedback = new Feedback();
+        feedback = new Prompt();
         logic = new Logic();
         
         logic.loadFile();
@@ -111,8 +122,8 @@ public class MainController implements Initializable{
             }
         });
         
-        successIcon = new Image("/images/SuccessIcon.png");
-        failIcon = new Image("/images/FailIcon.png");
+        successIcon = new Image(SUCCESS_IMAGE_PATH);
+        failIcon = new Image(FAIL_IMAGE_PATH);
         
         screenBound = Screen.getPrimary().getVisualBounds();
         int width = (int) screenBound.getMaxX() * 3 / 5;
@@ -127,7 +138,20 @@ public class MainController implements Initializable{
             public void run() {
                 userInput.requestFocus();
             }
-        });
+        });     
+        
+        //-------------------------------------------------------------------
+        
+        TimerTask checkOverdue = new TimerTask() {
+            @Override
+            public void run() {
+                //logic.updateTaskList();
+                //updateUi();
+            }
+          };
+          
+        periodicChecker = new Timer();
+        periodicChecker.scheduleAtFixedRate(checkOverdue, 0, _ONE_MINUTE);
         
         log.info("MainController initialzed");
     }
@@ -155,8 +179,9 @@ public class MainController implements Initializable{
     @FXML
     private void close(ActionEvent event) {
         log.info("closed button clicked");
+        periodicChecker.cancel();
         Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        stage.close();
     }
     
     //------------------------------------------------------------------------------------------------------------
@@ -200,24 +225,27 @@ public class MainController implements Initializable{
             if (!(command instanceof ViewCommand)) {
                 setFeedbackWindow(true, userInput);
                 System.out.println("Index: " + logic.getIndex());
-                if (logic.getIndex() >= 0) {
+                if (logic.getIndex() >= FIRST_INDEX_OF_LIST) {
                     
                     taskDisplay.applyCss();
                     taskDisplay.layout();
                     taskDisplay.scrollTo(logic.getIndex());
-                    taskDisplay.getItems().get(logic.getIndex());
+                    //taskDisplay.getItems().get(logic.getIndex());
                     System.out.println("No of Item in list: " + taskDisplay.getItems().size());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             fillTransition(taskDisplay.getItems().get(logic.getIndex()));
-                            int taskLabelHeight = (int) 86 + 10;
+                            taskDisplay.scrollTo(logic.getIndex());
+                            /*
+                            int taskLabelHeight = (int) taskDisplay.getItems().get(logic.getIndex()).getHeight() + 10;
                             int taskPaneHeight = (int) taskDisplay.getHeight();
                             int shiftToCenter = taskPaneHeight / taskLabelHeight / 2;
                             taskDisplay.scrollTo(logic.getIndex() - shiftToCenter);
                             System.out.println("shift: " + taskPaneHeight + " / " + taskLabelHeight + " / 2 = " + shiftToCenter);
                             System.out.println("index: " + logic.getIndex());
                             System.out.println("Scroll To plus shift: " + (logic.getIndex() - shiftToCenter));
+                            */
                         }
                     });
                 }
