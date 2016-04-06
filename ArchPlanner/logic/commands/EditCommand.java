@@ -5,19 +5,18 @@ import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
 import logic.TaskParameters;
-import logic.commands.ViewCommand.CATEGORY_TYPE;
-import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class EditCommand implements Command {
+public class EditCommand implements CommandInterface {
 
 	private TaskParameters _task;
 	private InvalidCommand _invalidCommand;
 	private int _index;
 	private REMOVE_TYPE _removeType;
+	private String _message;
 
 	private final String ERROR_MESSAGE_INVALID_START_DATE = "Invalid start date";
 	private final String ERROR_MESSAGE_INVALID_START_DATE_TIME = "Invalid start date and time";
@@ -27,14 +26,17 @@ public class EditCommand implements Command {
 	private final String ERROR_MESSAGE_INVALID_END_TIME = "Invalid end time";
 	private final String ERROR_MESSAGE_NO_START_DATE = "The task do not have start date";
 	private final String ERROR_MESSAGE_NO_END_DATE = "The task do not have end date";
+	
+	private static final String MESSAGE_EDIT_COMMAND = "The task %1$s has been EDITED successfully";
 
-	public enum REMOVE_TYPE {START, START_TIME, START_DATE, END, END_TIME, END_DATE, TAG, NONE}
+	public enum REMOVE_TYPE {START_DATE, START_TIME, END_DATE, END_TIME, TAG, NONE}
 
 	public EditCommand(int index, TaskParameters newTaskParameters) {
 		assert(index >= 1);
 		_task = newTaskParameters;
 		_index = index - 1;
 		_removeType= REMOVE_TYPE.NONE;
+		_message = "";
 	}
 
 	public EditCommand(int index, TaskParameters newTaskParameters, REMOVE_TYPE removeType) {
@@ -42,24 +44,26 @@ public class EditCommand implements Command {
 		_task = newTaskParameters;
 		_index = index - 1;
 		_removeType = removeType;
+		_message = "";
 	}
 
 	public void setRemoveType(REMOVE_TYPE removeType) {
 		_removeType = removeType;
 	}
 
-	public Command execute() {
+	public CommandInterface execute() {
 		return null;
 	}
 
-	public Command execute(Storage storage) {
+	public CommandInterface execute(ListsManager listsManager, Storage storage) {
 		return null;
 	}
 
 
-	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_index >= 0) && (_index < listsManager.getViewList().size()));
 
+		listsManager.getIndexList().clear();
 		Task oldTask = listsManager.getViewList().get(_index);
 
 		Task newTask = new Task();
@@ -73,6 +77,7 @@ public class EditCommand implements Command {
 		if (_invalidCommand != null) {
 			return _invalidCommand;
 		}
+		_message = String.format(MESSAGE_EDIT_COMMAND, newTask.getDescription());
 		updateListsManager(listsManager, oldTask, newTask);
 		updateHistoryManager(historyManager, oldTask, newTask);
 		return null;
@@ -87,10 +92,8 @@ public class EditCommand implements Command {
 	private void updateListsManager(ListsManager listsManager, Task oldTask, Task newTask) {
 		listsManager.getMainList().remove(oldTask);
 		listsManager.getMainList().add(newTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		listsManager.setIndex(newTask);
+		listsManager.updateIndexList(newTask);
 	}
 
 	private void initializeNewTask(Task oldTask, Task newTask) {
@@ -119,17 +122,11 @@ public class EditCommand implements Command {
 
 	private void removeTaskParameters(Task oldTask, Task newTask) {
 		switch (_removeType) {
-		case START : 
-			removeTaskStartDateTime(newTask);
-			break;
 		case START_DATE : 
 			removeTaskStartDate(newTask);
 			break;
 		case START_TIME :
 			removeTaskStartTime(oldTask, newTask);
-			break;
-		case END :
-			removeTaskEndDateTime(newTask);
 			break;
 		case END_DATE :
 			removeTaskEndDate(oldTask, newTask);
@@ -162,12 +159,6 @@ public class EditCommand implements Command {
 		newTask.setEndTime(null);
 	}
 
-	private void removeTaskEndDateTime(Task newTask) {
-		newTask.setStartTime(null);
-		newTask.setEndDate(null);
-		newTask.setEndTime(null);
-	}
-
 	private void removeTaskStartTime(Task oldTask, Task newTask) {
 		if ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) 
 				&& (oldTask.getEndDate() != null) && (oldTask.getEndTime() != null)) {
@@ -179,12 +170,6 @@ public class EditCommand implements Command {
 	private void removeTaskStartDate(Task newTask) {
 		newTask.setStartDate(null);
 		newTask.setStartTime(null);
-	}
-
-	private void removeTaskStartDateTime(Task newTask) {
-		newTask.setStartDate(null);
-		newTask.setStartTime(null);
-		newTask.setEndTime(null);
 	}
 
 	private void editTaskStartDateTimeEndDateTime(Task oldTask, Task newTask, LocalTime endTime) {
@@ -332,4 +317,12 @@ public class EditCommand implements Command {
 			newTask.setDescription(_task.getDescription());
 		}
 	}
+	
+	public String getMessage() {
+        return _message;
+    }
+	
+	public void getMessage(String message) {
+        _message = message;
+    }
 }

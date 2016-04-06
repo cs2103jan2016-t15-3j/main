@@ -3,6 +3,7 @@ package logic;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
@@ -18,13 +19,15 @@ public class ListsManager {
 	private ArrayList<Task> _doneList;
 	private ArrayList<Task> _undoneList;
 	private ArrayList<Task> _overdueList;
+	private ArrayList<Integer> _indexList;
 
 	private ArrayList<Tag> _tagsList;
 	private ArrayList<String> _selectedTagsList;
 	private VIEW_TYPE _viewType;
 	private CATEGORY_TYPE _categoryType;
-	private String _currentViewType;	
-	private int _index;
+	private String _currentViewType;
+	
+	private SortMechanism sort;
 
 	public ListsManager() {
 		_mainList = new ArrayList<Task>();
@@ -38,10 +41,12 @@ public class ListsManager {
 
 		_tagsList = new ArrayList<Tag>();
 		_selectedTagsList = new ArrayList<String>();
+		_indexList = new ArrayList<Integer>();
 		_viewType = VIEW_TYPE.VIEW_ALL;
 		_categoryType = CATEGORY_TYPE.CATEGORY_ALL;
 		_currentViewType = "";
-		_index = 0;
+		
+		sort = new SortMechanism();
 	}
 
 	public void setUpLists(ArrayList<Task> list) {
@@ -68,11 +73,13 @@ public class ListsManager {
 			_selectedTagsList.remove(tagName);
 		}
 	}
-	
-	public void setIndex(Task task) {
+
+	public void updateIndexList(Task task) {
 		for (int i = _viewList.size() - 1; i >= 0; i--) {
 			if (_viewList.get(i).equals(task)) {
-				_index = i;
+				_indexList.add(i);
+				Collections.sort(_indexList);
+				return;
 			}
 		}
 	}
@@ -150,8 +157,8 @@ public class ListsManager {
 		return _selectedTagsList;
 	}
 	
-	public int getIndex() {
-		return _index;
+	public ArrayList<Integer> getIndexList() {
+		return _indexList;
 	}
 
 	private void populateAllLists() {
@@ -246,7 +253,6 @@ public class ListsManager {
 	}
 	
 	private void setSelectedTag() {
-		SortMechanism sort = new SortMechanism();
 		for (int j = 0; j < _selectedTagsList.size(); j++) {
 			_currentViewType += "\"" + _selectedTagsList.get(j) + "\" ";
 			boolean hasSameTag = false;
@@ -261,7 +267,6 @@ public class ListsManager {
 	}
 	
 	private void sortMainList() {
-		SortMechanism sort = new SortMechanism();
 		sort.sortListByDescription(_mainList);
 		sort.sortListByDateTime(_mainList);
 		sort.sortListByOverdue(_mainList);
@@ -278,7 +283,6 @@ public class ListsManager {
 		_undoneList.clear();
 		_overdueList.clear();
 		_currentViewType = "";
-		_index = -1;
 	}
 
 	private boolean hasNoTagSelected(boolean hasNoTagSlected) {

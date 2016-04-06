@@ -8,19 +8,25 @@ import logic.RollbackItem;
 import logic.Task;
 import storage.Storage;
 
-public class DeleteCommand implements Command {
+public class DeleteCommand implements CommandInterface {
 
 	private int _firstIndex;
 	private int _lastIndex;
+	private String _message;
+
+	private static final String MESSAGE_DELETE_COMMAND = "The task %1$s has been deleted";
+	private static final String MESSAGE_MULTIPLE_DELETE_COMMAND = "Multiple tasks have been deleted";
 
 	public DeleteCommand(int index) {
 		_firstIndex = index - 1;
 		_lastIndex = index - 1;
+		_message = "";
 	}
 
 	public DeleteCommand(int firstIndex, int lastIndex) {
 		_firstIndex = firstIndex - 1;
 		_lastIndex = lastIndex - 1;
+		_message = "";
 	}
 
 	public int getfirstIndex() {
@@ -31,24 +37,30 @@ public class DeleteCommand implements Command {
 		return _lastIndex;
 	}
 
-	public Command execute() {
+	public CommandInterface execute() {
 		return null;
 	}
-	
-	public Command execute(Storage storage) {
-		return null;
-	}
-	
 
-	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsManager, Storage storage) {
+		return null;
+	}
+
+
+	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
 		assert((_lastIndex >= 0) && (_lastIndex < listsManager.getViewList().size()));
-
+		listsManager.getIndexList().clear();
+		Task oldTask = null;
 		int numOfDeletion = _lastIndex - _firstIndex + 1;
 		for (int i = 0; i < numOfDeletion; i++) {
-			Task oldTask = listsManager.getViewList().get(_firstIndex);
+			oldTask = listsManager.getViewList().get(_firstIndex);
 			updateListsManager(listsManager, oldTask);
 			updateHistoryManager(historyManager, oldTask, numOfDeletion);
+		}
+		if (numOfDeletion == 1) {
+			_message = String.format(MESSAGE_DELETE_COMMAND, oldTask.getDescription());
+		} else {
+			_message = MESSAGE_MULTIPLE_DELETE_COMMAND;
 		}
 		return null;
 	}
@@ -62,5 +74,13 @@ public class DeleteCommand implements Command {
 	private void updateListsManager(ListsManager listsManager, Task oldTask) {
 		listsManager.getMainList().remove(oldTask);
 		listsManager.updateLists();
+	}
+
+	public String getMessage() {
+		return _message;
+	}
+
+	public void getMessage(String message) {
+		_message = message;
 	}
 }

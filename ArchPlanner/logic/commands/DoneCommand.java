@@ -6,23 +6,27 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import logic.RollbackItem;
 import logic.Task;
-import logic.commands.ViewCommand.CATEGORY_TYPE;
-import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
 
-public class DoneCommand implements Command {
+public class DoneCommand implements CommandInterface {
 
 	private int _firstIndex;
 	private int _lastIndex;
+	private String _message;
+	
+	private static final String MESSAGE_DONE_COMMAND = "The task %1$s has been done";
+	private static final String MESSAGE_MULTIPLE_DONE_COMMAND = "Multiple tasks have been done";
 
 	public DoneCommand(int index) {
 		_firstIndex = index - 1;
 		_lastIndex = index - 1;
+		_message = "";
 	}
 	
 	public DoneCommand(int firstIndex, int lastIndex) {
 		_firstIndex = firstIndex - 1;
 		_lastIndex = lastIndex - 1;
+		_message = "";
 	}
 
 	public int getfirstIndex() {
@@ -33,25 +37,31 @@ public class DoneCommand implements Command {
 		return _lastIndex;
 	}
 
-	public Command execute() {
+	public CommandInterface execute() {
 		return null;
 	}
 	
-	public Command execute(Storage storage) {
+	public CommandInterface execute(ListsManager listsManager, Storage storage) {
 		return null;
 	}
 
-	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((_firstIndex >= 0) && (_firstIndex < listsManager.getViewList().size()));
-		
+		listsManager.getIndexList().clear();
 		int numOfDone = _lastIndex - _firstIndex + 1;
+		Task oldTask = null;
 		for (int i = 0; i < numOfDone; i++) {
-			Task oldTask = listsManager.getViewList().get(_firstIndex);
+			oldTask = listsManager.getViewList().get(_firstIndex);
 			listsManager.getMainList().remove(oldTask);
 			Task newTask = new Task();
 			initializeNewTask(oldTask, newTask);
 			updateListsManager(listsManager, newTask);
 			updateHistoryManager(historyManager, oldTask, newTask, numOfDone);
+		}
+		if (numOfDone == 1) {
+			_message = String.format(MESSAGE_DONE_COMMAND, oldTask.getDescription());
+		} else {
+			_message = MESSAGE_MULTIPLE_DONE_COMMAND;
 		}
 		return null;
 
@@ -65,10 +75,8 @@ public class DoneCommand implements Command {
 
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);
-		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		listsManager.setCategoryType(CATEGORY_TYPE.CATEGORY_ALL);
 		listsManager.updateLists();
-		listsManager.setIndex(newTask);
+		listsManager.updateIndexList(newTask);
 	}
 
 	private void initializeNewTask(Task oldTask, Task newTask) {
@@ -81,4 +89,12 @@ public class DoneCommand implements Command {
 		newTask.setIsOverdue(oldTask.getIsOverdue());
 		newTask.setIsDone(true);
 	}
+	
+	public String getMessage() {
+        return _message;
+    }
+	
+	public void getMessage(String message) {
+        _message = message;
+    }
 }

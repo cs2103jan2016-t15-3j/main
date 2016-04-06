@@ -4,31 +4,31 @@ import logic.HistoryManager;
 import logic.ListsManager;
 import storage.Storage;
 
-public class InvalidCommand implements Command {
+public class InvalidCommand implements CommandInterface {
 
     private String _errorMessage;
 
-    public Command execute() {
+    public CommandInterface execute() {
 		return null;
 	}
     
-    public Command execute(Storage storage) {
+    public CommandInterface execute(ListsManager listsManager, Storage storage) {
 		return null;
-    }
+	}
     
-	public Command execute(ListsManager listsmanager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsmanager, HistoryManager historyManager) {
 		return null;
 	}
 
-    public InvalidCommand(String _error_message) {
-        _errorMessage = _error_message;
+    public InvalidCommand(String errorMessage) {
+        _errorMessage = errorMessage;
     }
 
-    public String get_error_message() {
+    public String getMessage() {
         return _errorMessage;
     }
 
-    public void set_error_message(String errorMessage) {
+    public void setMessage(String errorMessage) {
         _errorMessage = errorMessage;
     }
 }

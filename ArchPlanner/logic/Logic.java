@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-import logic.commands.Command;
+import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
@@ -26,7 +26,7 @@ public class Logic {
 	private ListsManager _listsManager;
 	private HistoryManager _historyManager;
 	private Parser _parser;
-	
+
 	private final String DEADLINES = "Deadlines";
 	private final String EVENTS = "Events";
 	private final String TASKS = "Tasks";
@@ -49,22 +49,25 @@ public class Logic {
 		_listsManager.setUpLists(mainList);
 	}
 
-	public Command executeCommand(String userInput) {
+	public void updateLists() {
+		_listsManager.updateLists();
+	}
+
+	public CommandInterface executeCommand(String userInput) {
 		ArrayList<Tag> tagsListClone = getTagsListClone();
 
-		Command commandInput = _parser.parseCommand(userInput, _listsManager.getViewList().size(), 
+		CommandInterface commandInput = _parser.parseCommand(userInput, _listsManager.getViewList().size(), 
 				_historyManager.getUndoList().size(), _historyManager.getRedoList().size(), 
 				tagsListClone);
-		Command commandReturn = runCommand(commandInput);
-		
+		CommandInterface commandReturn = runCommand(commandInput);
+
 		return save(userInput, commandInput, commandReturn);
 	}
 
-	public void setSelectedCategory(String selectedCategory) {
+	public void setSelectedCategory(CATEGORY_TYPE selectedCategory) {
 		System.out.print(selectedCategory);
-		CATEGORY_TYPE categoryType = getCategoryType(selectedCategory);
 		_listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
-		_listsManager.setCategoryType(categoryType);
+		_listsManager.setCategoryType(selectedCategory);
 		_listsManager.updateLists();
 	}
 
@@ -104,20 +107,9 @@ public class Logic {
 		_historyManager.setPreviousUserInputCounter(-1);
 		return "";
 	}
-	
-	public String getSelectedCategory() {
-		CATEGORY_TYPE categoryType = _listsManager.getCategoryType();
-		switch (categoryType) {
 
-		case CATEGORY_DEADLINES : 
-			return "Deadlines";
-		case CATEGORY_EVENTS: 
-			return "Events";
-		case CATEGORY_TASKS : 
-			return "Tasks";
-		default : 
-			return "All";
-		}
+	public CATEGORY_TYPE getSelectedCategory() {
+		return _listsManager.getCategoryType();
 	}
 
 	public String getCurrentViewType() {
@@ -138,8 +130,8 @@ public class Logic {
 		return _listsManager.getTagsList();
 	}
 
-	public int getIndex() {
-		return _listsManager.getIndex();
+	public ArrayList<Integer> getIndexList() {
+		return _listsManager.getIndexList();
 	}
 
 	private ArrayList<Tag> getTagsListClone() {
@@ -152,7 +144,7 @@ public class Logic {
 		}
 		return tagsListClone;
 	}
-	
+
 	private void updateTagsList(String tagName) {
 		for (int i = 0; i < _listsManager.getTagsList().size(); i++) {
 			Tag tag = _listsManager.getTagsList().get(i);
@@ -162,14 +154,14 @@ public class Logic {
 		}
 	}
 
-	private Command runCommand(Command commandInput) {
+	private CommandInterface runCommand(CommandInterface commandInput) {
 		String strCommandType = commandInput.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
 		if (commandType.equals(COMMAND_TYPE.EXIT)) {
 			return commandInput.execute();
 		} else if (commandType.equals(COMMAND_TYPE.SET)) {
-			return commandInput.execute(_storage);
+			return commandInput.execute(_listsManager, _storage);
 		} else {
 			return commandInput.execute(_listsManager, _historyManager);
 		}
@@ -201,7 +193,7 @@ public class Logic {
 		}
 	}
 
-	private Command save(String userInput, Command commandInput, Command commandReturn) {
+	private CommandInterface save(String userInput, CommandInterface commandInput, CommandInterface commandReturn) {
 		if ((commandReturn != null) && (commandReturn instanceof InvalidCommand)) {
 			return commandReturn;
 		} else if ((commandReturn == null) && (commandInput instanceof InvalidCommand)) {
@@ -217,7 +209,7 @@ public class Logic {
 		_historyManager.setPreviousUserInputCounter(-1);
 	}
 
-	private CATEGORY_TYPE getCategoryType(String selectedCategory) {
+	public CATEGORY_TYPE getCategoryType(String selectedCategory) {
 		switch (selectedCategory) {
 		case DEADLINES : 
 			return CATEGORY_TYPE.CATEGORY_DEADLINES;

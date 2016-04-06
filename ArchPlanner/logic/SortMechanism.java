@@ -3,10 +3,10 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import comparator.DescriptionComparator;
-import comparator.DoneComparator;
-import comparator.OverdueComparator;
-import comparator.TagComparator;
+import logic.comparator.DescriptionComparator;
+import logic.comparator.DoneComparator;
+import logic.comparator.OverdueComparator;
+import logic.comparator.TagComparator;
 
 
 public class SortMechanism {
@@ -32,8 +32,6 @@ public class SortMechanism {
 		bottom = sortListByDateTime(bottom);
 
 		merge(list, top, bottom);
-		//for (int i = 0; i < list.size(); i++)
-		//System.out.println("merge" + i + "\t" + list.get(i).getDescription());
 		return list;
 	}
 

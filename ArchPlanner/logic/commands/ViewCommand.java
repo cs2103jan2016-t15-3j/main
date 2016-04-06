@@ -7,7 +7,7 @@ import logic.Task;
 import logic.TaskParameters;
 import storage.Storage;
 
-public class ViewCommand implements Command {
+public class ViewCommand implements CommandInterface {
 	public enum VIEW_TYPE {VIEW_ALL, VIEW_DONE, VIEW_UNDONE, VIEW_OVERDUE};
 	public enum CATEGORY_TYPE {CATEGORY_ALL, CATEGORY_EVENTS, CATEGORY_DEADLINES, CATEGORY_TASKS};
 
@@ -21,21 +21,22 @@ public class ViewCommand implements Command {
 		_task = taskParameters;
 	}
 
-	public Command execute() {
+	public CommandInterface execute() {
 		return null;
 	}
 
-	public Command execute(Storage storage) {
+	public CommandInterface execute(ListsManager listsManager, Storage storage) {
 		return null;
 	}
 
-	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		String currentViewType = "";
 		listsManager.setViewType(VIEW_TYPE.VIEW_ALL);
 		setViewIfViewTypeIsNotNull(listsManager);
 		setViewIfCategoryTypeIsNotNull(listsManager);
 		updateSelectedTagsList(listsManager);
 
+		listsManager.getIndexList().clear();
 		listsManager.updateLists();
 
 		currentViewType = updateViewListWithDescriptionOnly(listsManager, currentViewType);
@@ -76,7 +77,7 @@ public class ViewCommand implements Command {
 					i--;
 				}
 			}
-			currentViewType += appendCurrentViewType(currentViewType, _task.getStartDateString()) + "to" 
+			currentViewType += appendCurrentViewType(currentViewType, _task.getStartDateString()) + "to " 
 					+ appendCurrentViewType(currentViewType, _task.getEndDateString());;
 		}
 		return currentViewType;
@@ -192,5 +193,9 @@ public class ViewCommand implements Command {
 			}
 			listsManager.setViewType(_viewType);
 		}
+	}
+
+	public String getMessage() {
+		return "";
 	}
 }

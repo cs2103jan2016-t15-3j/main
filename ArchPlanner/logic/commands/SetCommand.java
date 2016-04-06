@@ -9,11 +9,13 @@ import storage.Storage;
 /**
  * Created by lifengshuang on 4/1/16.
  */
-public class SetCommand implements Command {
+public class SetCommand implements CommandInterface {
 
 	private String _filePath;
 	private InvalidCommand _invalidCommand;
+	private String _message;
 
+	private static final String MESSAGE_SET_COMMAND = "The filepath %1$s has been added";
 	private final String INVALID_DIRECTORY = "File Directory does not exist. Please set a different file path.";
 	private final String INVALID_FILE_NAME = "A file with identical file name is found. Please set a different file name.";
 	private final String INVALID_FILE_PATH = "Invalid file path";
@@ -22,13 +24,15 @@ public class SetCommand implements Command {
 	
 	public SetCommand(String filePath) {
 		_filePath = filePath + FILE_EXTENSION;
+		_message = "";
 	}
 
-	public Command execute() {
+	public CommandInterface execute() {
 		return null;
 	}
 
-	public Command execute(Storage storage) {
+	public CommandInterface execute(ListsManager listsManager, Storage storage) {
+		listsManager.getIndexList().clear();
 		setFilePath(storage);
 		if (_invalidCommand != null) {
 			return _invalidCommand;
@@ -43,6 +47,7 @@ public class SetCommand implements Command {
 			file = new File(_filePath);
 			if (!file.exists() || !file.isFile()) {
 				setFilePathIfDirectoryExists(storage, file.getParent());
+				_message = String.format(MESSAGE_SET_COMMAND, file.getCanonicalPath());
 			} else {
 				_invalidCommand = new InvalidCommand(INVALID_FILE_NAME);
 			}
@@ -61,7 +66,15 @@ public class SetCommand implements Command {
 		}
 	}
 
-	public Command execute(ListsManager listsManager, HistoryManager historyManager) {
+	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		return null;
 	}
+	
+	public String getMessage() {
+        return _message;
+    }
+	
+	public void setMessage(String message) {
+        _message = message;
+    }
 }
