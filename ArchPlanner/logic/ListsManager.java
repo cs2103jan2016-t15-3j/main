@@ -179,7 +179,7 @@ public class ListsManager {
 	}
 
 	private void populateOverdueList(Task task) {
-		if (task.getIsOverdue() == true) {
+		if ((task.getIsOverdue() == true) && (!task.getIsDone())) {
 			_overdueList.add(task);
 		}
 	}
