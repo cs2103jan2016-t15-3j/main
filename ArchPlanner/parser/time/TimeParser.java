@@ -24,9 +24,9 @@ public class TimeParser {
         }
         List<DateGroup> groups = timeParser.parse(input);
         for (DateGroup group : groups){
-            if (group.getText().length() < 3){
-                continue;
-            }
+//            if (group.getText().length() < 3){
+//                continue;
+//            }
             if (dateTimeCount > 0) {
                 break;
             }
