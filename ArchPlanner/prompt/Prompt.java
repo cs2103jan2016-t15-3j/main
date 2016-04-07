@@ -30,7 +30,7 @@ public class Prompt {
         if (userInput == null) {
             _prompts.add(STRING_INVALID_COMMAND);
         } else if (!userInput.trim().isEmpty()) {
-            userInput = removeMultipleSpace(userInput);
+//            userInput = removeMultipleSpace(userInput);
             CommandType commandType = determineCommandType(userInput);
 
             _promptObj = getPromptObject(commandType);

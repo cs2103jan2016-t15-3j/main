@@ -17,6 +17,7 @@ public class EditPrompt implements PromptInterface {
     private final String EDIT_TAG = "edit <Task ID> #<Tag>";
     private final String EDIT_TAG_APPENDIX = " #<Tag>";
 
+    private final String EDIT_TIME = "edit <Task ID> start | end | from";
     private final String EDIT_START = "edit <Task ID> start";
     private final String EDIT_START_REMOVE = "edit <Task ID> start remove";
     private final String EDIT_START_10 = "edit <Task ID> start <Date>";
@@ -85,8 +86,7 @@ public class EditPrompt implements PromptInterface {
         if (keyword == null) {
             if (parameter == null) {
                 promptList.add(EDIT_DESCRIPTION);
-                promptList.add(EDIT_START);
-                promptList.add(EDIT_END);
+                promptList.add(EDIT_TIME);
                 promptList.add(EDIT_TAG);
             } else {
                 //check tags
