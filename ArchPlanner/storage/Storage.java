@@ -161,7 +161,7 @@ public class Storage {
 		if (systemName.startsWith("Mac OS")) {
 			defaultDirectory = "/Users/" + userName + "/Documents/ArchPlanner/";
 		} else if (systemName.startsWith("Windows")) {
-			defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner";
+			defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner/";
 		} else {
 			defaultDirectory = "";
 		}

@@ -118,6 +118,7 @@ public class EditCommand implements CommandInterface {
 		editTaskEndTimeOnly(oldTask, newTask, startTime);
 		editTaskEndDateTime(oldTask, newTask, startTime);
 		editTaskStartDateTimeEndDateTime(oldTask, newTask, endTime);
+		editTaskStartDateEndDate(oldTask, newTask, endTime);
 		removeTaskParameters(oldTask, newTask);
 	}
 
@@ -172,6 +173,16 @@ public class EditCommand implements CommandInterface {
 		newTask.setStartDate(null);
 		newTask.setStartTime(null);
 	}
+	
+	private void editTaskStartDateEndDate(Task oldTask, Task newTask, LocalTime endTime) {
+		if ((_task.getStartDate() != null) && (_task.getStartTime() == null) 
+				&& (_task.getEndDate() != null) && (_task.getEndTime() == null)) {
+			newTask.setStartDate(_task.getStartDate());
+			newTask.setEndDate(_task.getEndDate());
+			newTask.setStartTime(null);
+			newTask.setEndTime(null);
+		}
+	}
 
 	private void editTaskStartDateTimeEndDateTime(Task oldTask, Task newTask, LocalTime endTime) {
 		if ((_task.getStartDate() != null) && (_task.getStartTime() != null) 
@@ -189,10 +200,10 @@ public class EditCommand implements CommandInterface {
 			if ((oldTask.getStartDate() != null) && 
 					(oldTask.getStartDate().compareTo(_task.getEndDate()) > 0)) {
 				_invalidCommand = new InvalidCommand(ERROR_MESSAGE_INVALID_END_DATE);
-			}
+			}		
 
 			if ((oldTask.getStartDate() != null) && (oldTask.getStartTime() == null)) {
-				newTask.setEndTime(startTime);
+				newTask.setStartTime(startTime);
 			}
 
 			if ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) 
@@ -200,7 +211,8 @@ public class EditCommand implements CommandInterface {
 					&& ((_task.getEndTime().compareTo(oldTask.getStartTime())) < 0)) {
 				_invalidCommand = new InvalidCommand(ERROR_MESSAGE_INVALID_END_DATE_TIME);
 			}
-			newTask.setStartDate(_task.getStartDate());
+			newTask.setEndDate(_task.getEndDate());
+			newTask.setEndTime(_task.getEndTime());
 		}
 	}
 
@@ -222,6 +234,7 @@ public class EditCommand implements CommandInterface {
 				_invalidCommand = new InvalidCommand(ERROR_MESSAGE_INVALID_START_DATE_TIME);
 			}
 			newTask.setStartDate(_task.getStartDate());
+			newTask.setStartTime(_task.getStartTime());
 		}
 	}
 
