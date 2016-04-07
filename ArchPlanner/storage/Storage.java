@@ -46,7 +46,7 @@ public class Storage {
 	public Storage() {
 		_storageFile = null;
 		_linkerFile = null;
-		//setDefaultFilePath();
+		setDefaultFilePath();
 	}
 
 	public void loadStorageFile() {
@@ -169,7 +169,7 @@ public class Storage {
 	}
 
 	private String getLinkerPath() {
-		String defaultLinkerPath = getLinkerName();
+		String defaultLinkerPath = getDefaultDirectory() + getLinkerName();
 		return defaultLinkerPath;
 	}
 

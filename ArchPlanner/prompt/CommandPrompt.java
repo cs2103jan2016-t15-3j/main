@@ -10,9 +10,11 @@ public class CommandPrompt implements PromptInterface{
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
     
     private ArrayList<String> commandPrompts;
+    private CommandType partialCommand;
     
     public CommandPrompt() {
         commandPrompts = new ArrayList<String>();
+        partialCommand = CommandType.UNKNOWN;
     }
     
     @Override
@@ -21,7 +23,13 @@ public class CommandPrompt implements PromptInterface{
             for (CommandType type : CommandType.values()) {
                 if (type != CommandType.UNKNOWN && type.name().toLowerCase().startsWith(input.trim().toLowerCase())) {
                     commandPrompts.add(type.name().toLowerCase());
+                    if (partialCommand == CommandType.UNKNOWN) {
+                        partialCommand = type;
+                    }
                 }
+            }
+            if (commandPrompts.size() <= 0) {
+                partialCommand = CommandType.UNKNOWN;
             }
         }
         return commandPrompts;
@@ -29,8 +37,8 @@ public class CommandPrompt implements PromptInterface{
 
     @Override
     public String getAutoWord() {
-        if (commandPrompts.size() == 1) {
-            return commandPrompts.get(0);
+        if (partialCommand != CommandType.UNKNOWN) {
+            return partialCommand.toString().toLowerCase();
         } else {
             return "";
         }
