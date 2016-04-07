@@ -17,15 +17,16 @@ public class InputSeparator {
 
     private static final HashMap<Prompt.CommandType, KeywordType[]> commandMap = new HashMap<>();
 
+    private final int INITIAL_PARSE_INDEX = 1;
     private Prompt.CommandType commandType;
     private int wordCount;
     private Integer id;
     private Integer secondId;
     private KeywordType keywordType;
     private String parameter;
-    private int idPosition = 1;
-    private int keywordPosition = 1;
-    private int parameterPosition = 1;
+    private int idPosition = INITIAL_PARSE_INDEX;
+    private int keywordPosition = INITIAL_PARSE_INDEX;
+    private int parameterPosition = INITIAL_PARSE_INDEX;
     private boolean endWithSpace;
 
     public InputSeparator(String command) {

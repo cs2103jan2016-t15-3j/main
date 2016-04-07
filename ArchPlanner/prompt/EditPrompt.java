@@ -48,6 +48,8 @@ public class EditPrompt implements PromptInterface {
 
     private final String INVALID_ID = "Invalid ID: edit <Task ID>";
     private final String INVALID_TIME = "Invalid Time";
+    private final String INVALID_START = "Invalid Time: edit <Task ID> start <Date> <Time>";
+    private final String INVALID_END = "Invalid Time: edit <Task ID> end <Date> <Time>";
     private final String INVALID_TAG = "Invalid tag: edit <Task ID> #<Tag>";
 
     private final String KEYWORD_DESCRIPTION = "description";
@@ -158,6 +160,8 @@ public class EditPrompt implements PromptInterface {
                             case START_DATE_START_TIME:
                                 promptList.add(EDIT_START_11);
                                 break;
+                            default:
+                                promptList.add(INVALID_START);
                         }
                     }
                     break;
@@ -192,6 +196,8 @@ public class EditPrompt implements PromptInterface {
                             case START_DATE_START_TIME:
                                 promptList.add(EDIT_END_11);
                                 break;
+                            default:
+                                promptList.add(INVALID_END);
                         }
                     }
                     break;
