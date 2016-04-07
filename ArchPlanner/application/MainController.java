@@ -4,13 +4,14 @@ package application;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,17 +53,19 @@ import prompt.Prompt;
 
 public class MainController implements Initializable{
     
+    static Logger log = Logger.getLogger(MainController.class.getName());
+    
     private static final String VIEW_SCOPE_ALL = "ALL";
     private static final String STRING_EMPTY = "";
     
     private static final String FAIL_IMAGE_PATH = "/images/FailIcon.png";
     private static final String SUCCESS_IMAGE_PATH = "/images/SuccessIcon.png";
-    
-    private static final int NO_DELAY = 0;
-    private static final int ONE_MINUTE_INTERVAL = 60000;
 
-    static Logger log = Logger.getLogger(MainController.class.getName());
-    
+    private static final int REFRESH_DELAY_IN_MS = 60000;
+    private static final int LIGHT_UP_DELAY_IN_MS = 2000;
+    private static final int DISPLAY_FEEDBACK_DELAY_IN_MS = 1500;
+    private static final int FADE_AWAY_FEEDBACK_DELAY_IN_MS = 500;
+ 
     @FXML private Label viewLabel;
     @FXML private Label topPrompt;
     @FXML private Label bottomPrompt;
@@ -103,8 +106,6 @@ public class MainController implements Initializable{
 
     private SequentialTransition fadeTransition = new SequentialTransition ();
     
-    private Timer periodicChecker;
-    
     Logic logic;
     Prompt feedback;
     
@@ -144,17 +145,7 @@ public class MainController implements Initializable{
         });     
         
         //-------------------------------------------------------------------
-        
-        TimerTask checkOverdue = new TimerTask() {
-            @Override
-            public void run() {
-                //logic.updateTaskList();
-                //updateUi();
-            }
-          };
-          
-        periodicChecker = new Timer();
-        periodicChecker.scheduleAtFixedRate(checkOverdue, NO_DELAY, ONE_MINUTE_INTERVAL);
+        refreshDisplay();
         
         log.info("MainController initialzed");
     }
@@ -182,7 +173,6 @@ public class MainController implements Initializable{
     @FXML
     private void close(ActionEvent event) {
         log.info("closed button clicked");
-        periodicChecker.cancel();
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -233,10 +223,11 @@ public class MainController implements Initializable{
             
             if (!(command instanceof ViewCommand)) {
                 setFeedbackWindow(true, command.getMessage());
-                if (logic.getIndexList() != null && !logic.getIndexList().isEmpty()) {   
+                if (logic.getIndexList() != null && !logic.getIndexList().isEmpty()) {
+                    taskDisplay.layout();
+                    taskDisplay.applyCss();
                     for (int i = 0; i < logic.getIndexList().size(); i++) {
                         fillTransition((TaskPane)taskDisplay.getItems().get(logic.getIndexList().get(i)));
-                        System.out.println("fill " + logic.getIndexList().get(i));
                     }
                     taskDisplay.scrollTo(logic.getIndexList().get(0));
                 }
@@ -332,8 +323,8 @@ public class MainController implements Initializable{
         fadeTransition.stop();
         node.setVisible(true);
         
-        PauseTransition pause = new PauseTransition(Duration.millis(1500));
-        FadeTransition fade = new FadeTransition(Duration.millis(500), node);
+        PauseTransition pause = new PauseTransition(Duration.millis(DISPLAY_FEEDBACK_DELAY_IN_MS));
+        FadeTransition fade = new FadeTransition(Duration.millis(FADE_AWAY_FEEDBACK_DELAY_IN_MS), node);
         fade.setFromValue(1);
         fade.setToValue(0);
         
@@ -352,18 +343,24 @@ public class MainController implements Initializable{
         String endColor =  taskLabel.getStyle().substring(indexOfBgColor).split(";")[0] + ";";
         taskLabel.setStyle(taskLabel.getStyle() + "-fx-background-color: yellow;");
 
-        PauseTransition pause = new PauseTransition(Duration.millis(2000));
+        PauseTransition pause = new PauseTransition(Duration.millis(LIGHT_UP_DELAY_IN_MS));
         pause.setOnFinished(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 taskLabel.setStyle(taskLabel.getStyle() + endColor);
-                System.out.println("task: " + taskLabel.getDescription());
                 taskLabel.applyCss();
                 taskLabel.layout();
-                System.out.println("pause end");
             }
         });
         pause.play();
-        System.out.println("pause play");
+    }
+    
+    private void refreshDisplay() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(REFRESH_DELAY_IN_MS), event -> {
+            logic.updateViewList();
+            updateUi();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
     
     

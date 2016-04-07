@@ -46,7 +46,7 @@ public class Storage {
 	public Storage() {
 		_storageFile = null;
 		_linkerFile = null;
-		//setDefaultFilePath();
+		setDefaultFilePath();
 	}
 
 	public void loadStorageFile() {
@@ -161,7 +161,7 @@ public class Storage {
 		if (systemName.startsWith("Mac OS")) {
 			defaultDirectory = "/Users/" + userName + "/Documents/ArchPlanner/";
 		} else if (systemName.startsWith("Windows")) {
-			defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner";
+			defaultDirectory = systemDrive + "/Users/" + userName + "/AppData/Local/ArchPlanner/";
 		} else {
 			defaultDirectory = "";
 		}
@@ -169,7 +169,7 @@ public class Storage {
 	}
 
 	private String getLinkerPath() {
-		String defaultLinkerPath = getLinkerName();
+		String defaultLinkerPath = getDefaultDirectory() + getLinkerName();
 		return defaultLinkerPath;
 	}
 

@@ -60,7 +60,7 @@ public class ListsManager {
 
 	public void updateLists() {
 		clearAllLists();
-		updateTaskOverdueStatus();
+		updateTaskOverdueStatus(_mainList);
 		sortMainList();
 		populateAllLists();
 		setSelectedTag();
@@ -102,6 +102,10 @@ public class ListsManager {
 		hasNoTagSlected = hasNoTagSelected(hasNoTagSlected);
 		updateViewListWithSelectedTags(list, hasNoTagSlected);
 		setViewList(list);
+	}
+	
+	public void refreshViewList() {
+		updateTaskOverdueStatus(_viewList);
 	}
 	
 	public void setCurrentViewType(String currentViewType) {
@@ -175,7 +179,7 @@ public class ListsManager {
 	}
 
 	private void populateOverdueList(Task task) {
-		if (task.getIsOverdue() == true) {
+		if ((task.getIsOverdue() == true) && (!task.getIsDone())) {
 			_overdueList.add(task);
 		}
 	}
@@ -219,13 +223,13 @@ public class ListsManager {
 		}
 	}
 	
-	private void updateTaskOverdueStatus() {
+	private void updateTaskOverdueStatus(ArrayList<Task> list) {
 
 		LocalDate currentDate = LocalDate.now();
 		LocalTime currentTime = LocalTime.now();
 
-		for (int i = 0; i < _mainList.size(); i++) {
-			Task task = _mainList.get(i);
+		for (int i = 0; i < list.size(); i++) {
+			Task task = list.get(i);
 			task.setIsOverdue(false);
 			if (((task.getStartDate() != null) && (task.getEndDate() != null)) || 
 					((task.getStartDate() != null) && (task.getEndDate() == null))) {
