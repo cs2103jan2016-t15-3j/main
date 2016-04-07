@@ -50,8 +50,8 @@ public class Logic {
 		_listsManager.setUpLists(mainList);
 	}
 
-	public void updateLists() {
-		_listsManager.updateLists();
+	public void updateViewList() {
+		_listsManager.refreshViewList();
 	}
 
 	public CommandInterface executeCommand(String userInput) {
