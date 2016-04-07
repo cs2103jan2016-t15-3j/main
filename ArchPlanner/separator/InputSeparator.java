@@ -56,7 +56,6 @@ public class InputSeparator {
     }
 
     public String getPartialKeyword() {
-        String[] breakInput = command.trim().split("\\s+");
         if (keywordType == null) {
             for (KeywordType type : KeywordType.values()) {
                 if (commandHasKeyword(commandType, type)) {
@@ -64,16 +63,13 @@ public class InputSeparator {
                         String[] splitType = enumNameToString(type).split("\\s+");
                         if (splitType.length > 1) {
                             if (parameter.contains(" ")) {
-                                return splitType[1] + " ";
+                                return splitType[1] + keywordFollowSpace(type);
                             } else {
-                                return splitType[0] + " ";
+                                return splitType[0] + keywordFollowSpace(type);
                             }
                         }
-                        return enumNameToString(type) + " ";
+                        return enumNameToString(type) + keywordFollowSpace(type);
                     }
-//                    if (enumNameToString(type).startsWith(lastWord)) {
-//                        return enumNameToString(type);
-//                    }
                 }
             }
         }
@@ -151,10 +147,6 @@ public class InputSeparator {
         return this.parameter;
     }
 
-//    public boolean isValid() {
-//        return isValid;
-//    }
-
     public boolean isIdOnly() {
         return id != null && keywordType == null && parameter == null;
     }
@@ -221,6 +213,21 @@ public class InputSeparator {
             }
         }
         return false;
+    }
+
+    private String keywordFollowSpace(KeywordType type) {
+        switch (type) {
+            case ALL:
+            case DONE:
+            case UNDONE:
+            case OVERDUE:
+            case DEADLINES:
+            case TASKS:
+            case EVENTS:
+                return "";
+            default:
+                return " ";
+        }
     }
 
     private void initCommandMap() {

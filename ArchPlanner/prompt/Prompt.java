@@ -29,9 +29,10 @@ public class Prompt {
         
         if (userInput == null) {
             _prompts.add(STRING_INVALID_COMMAND);
-        } else if (!userInput.trim().isEmpty()){
+        } else if (!userInput.trim().isEmpty()) {
+            userInput = removeMultipleSpace(userInput);
             CommandType commandType = determineCommandType(userInput);
-            
+
             _promptObj = getPromptObject(commandType);
             _prompts = _promptObj.getPrompts(userInput);
         }
@@ -110,5 +111,14 @@ public class Prompt {
         String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
         int indexOfLastWord = input.lastIndexOf(splitInput[splitInput.length - LAST_INDEX_OFFSET]);
         return input.substring(INITIAL_INDEX, indexOfLastWord);
+    }
+
+    private String removeMultipleSpace(String input) {
+        String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
+        String result = "";
+        for (String part : splitInput) {
+            result += part + " ";
+        }
+        return result.trim();
     }
 }

@@ -59,7 +59,6 @@ public class ViewPrompt implements PromptInterface {
             promptList.add(VIEW_CATEGORY);
             promptList.add(VIEW_TYPE);
             promptList.add(VIEW_TIME);
-//            promptList.add(VIEW_TAGS_HEADER);
             return promptList;
         }
         if (VIEW_DESCRIPTION.startsWith(lowerCaseCommand)) {
@@ -104,6 +103,11 @@ public class ViewPrompt implements PromptInterface {
         boolean hasTags = checkTags(inputSeparator.getParameter(), inputSeparator.isEndWithSpace());
         if (type != null) {
             switch (type) {
+                case DESCRIPTION:
+                    if (parameter != null) {
+                        promptList.add(VIEW_DESCRIPTION);
+                    }
+                    break;
                 case FROM:
                     if (parameter != null) {
                         TimeParserResult result = new TimeParser().parseTime(parameter);
