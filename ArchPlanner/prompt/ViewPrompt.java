@@ -7,7 +7,8 @@ import parser.time.TimeParserResult;
 import java.util.ArrayList;
 
 /**
- * Created by lifengshuang on 3/26/16.
+ * @@author A0149647N
+ * ViewPrompt return the prompts of view command for the user input
  */
 public class ViewPrompt implements PromptInterface {
     private final String VIEW_ALL = "view all";

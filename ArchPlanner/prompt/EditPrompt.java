@@ -6,8 +6,10 @@ import parser.time.TimeParserResult;
 
 import java.util.ArrayList;
 
+
 /**
- * Created by lifengshuang on 3/29/16.
+ * @@author A0149647N
+ * EditPrompt return the prompts of edit command for the user input
  */
 public class EditPrompt implements PromptInterface {
 
@@ -114,7 +116,7 @@ public class EditPrompt implements PromptInterface {
                     }
                 } else if (KEYWORD_TAG_REMOVE.startsWith(parameter)) {
                     promptList.add(REMOVE_TAG);
-                } else {
+                } else if (!promptList.isEmpty()){
                     promptList.add(INVALID_TAG);
                 }
             }

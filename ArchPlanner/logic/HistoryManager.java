@@ -1,8 +1,8 @@
-//@@author A0140021J
 package logic;
 
 import java.util.ArrayList;
 
+//@@author A0140021J
 public class HistoryManager {
 	private int _previousUserInputCounter;
 	private ArrayList<String> _previousUserInputList;

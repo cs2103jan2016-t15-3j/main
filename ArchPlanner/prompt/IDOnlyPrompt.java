@@ -5,7 +5,8 @@ import separator.InputSeparator;
 import java.util.ArrayList;
 
 /**
- * Created by lifengshuang on 3/29/16.
+ * @@author A0149647N
+ * IdOnlyPrompt return the prompts of id only command for the user input
  */
 public class IdOnlyPrompt implements PromptInterface{
 

@@ -6,8 +6,8 @@ import logic.ListsManager;
 import storage.Storage;
 
 public interface CommandInterface {
-	public CommandInterface execute();
-	public CommandInterface execute(ListsManager listsManager, Storage storage);
-	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager);
-	public String getMessage();
+	CommandInterface execute();
+	CommandInterface execute(ListsManager listsManager, Storage storage);
+	CommandInterface execute(ListsManager listsManager, HistoryManager historyManager);
+	String getMessage();
 }

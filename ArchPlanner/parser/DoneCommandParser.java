@@ -6,24 +6,12 @@ import logic.commands.InvalidCommand;
 import separator.InputSeparator;
 
 /**
- * Created by lifengshuang on 3/15/16.
+ * @@author A0149647N
+ * DoneCommandParser parse done command with InputSeparator
  */
-public class DoneCommandParser extends CommandParser {
+public class DoneCommandParser {
 
     private final int DONE_ARGUMENT_INDEX = 5;
-
-//    public Command parse(String input) {
-//        if (input.length() <= DONE_ARGUMENT_INDEX) {
-//            return new InvalidCommand("Done index not found");
-//        }
-//        else {
-//            try {
-//                return new DoneCommand(Integer.parseInt(input.substring(DONE_ARGUMENT_INDEX)));
-//            } catch (NumberFormatException e) {
-//                return new InvalidCommand("Done index should be a number");
-//            }
-//        }
-//    }
 
     public CommandInterface parse(String input, int viewListSize) {
         if (input.length() <= DONE_ARGUMENT_INDEX) {

@@ -5,7 +5,8 @@ import prompt.Prompt;
 import java.util.HashMap;
 
 /**
- * Created by lifengshuang on 3/28/16.
+ * @@author A0149647N
+ * InputSeparator return the parsed components of a command
  */
 public class InputSeparator {
 
@@ -16,7 +17,6 @@ public class InputSeparator {
 
     private static final HashMap<Prompt.CommandType, KeywordType[]> commandMap = new HashMap<>();
 
-    private String command;
     private Prompt.CommandType commandType;
     private int wordCount;
     private Integer id;
@@ -29,7 +29,6 @@ public class InputSeparator {
     private boolean endWithSpace;
 
     public InputSeparator(String command) {
-        this.command = command;
         commandType = determineCommandType(command);
         String[] breakUserInput = command.split("\\s+");
         this.wordCount = breakUserInput.length;
@@ -213,21 +212,6 @@ public class InputSeparator {
             }
         }
         return false;
-    }
-
-    private String keywordFollowSpace(KeywordType type) {
-        switch (type) {
-            case ALL:
-            case DONE:
-            case UNDONE:
-            case OVERDUE:
-            case DEADLINES:
-            case TASKS:
-            case EVENTS:
-                return "";
-            default:
-                return " ";
-        }
     }
 
     private void initCommandMap() {

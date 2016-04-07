@@ -5,7 +5,8 @@ import separator.InputSeparator;
 import java.util.ArrayList;
 
 /**
- * Created by lifengshuang on 4/1/16.
+ * @@author A0149647N
+ * SetPrompt return the prompts of set command for the user input
  */
 public class SetPrompt implements PromptInterface{
     private final String SET_PROMPT = "set filepath <New File Path>";

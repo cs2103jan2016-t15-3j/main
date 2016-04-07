@@ -6,7 +6,9 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * Created by lifengshuang on 3/22/16.
+ * @@author A0149647N
+ * TimeParserResult hold the result after parse time with Natty.
+ * TimeParserResult also check the time and update it according to the rule.
  */
 public class TimeParserResult {
     private int matchPosition;
@@ -25,34 +27,15 @@ public class TimeParserResult {
         START_DATE_START_TIME, START_DATE_START_TIME_END_TIME,
         START_DATE_START_TIME_END_DATE, START_DATE_START_TIME_END_DATE_END_TIME;
     }
-//    public enum DateTimeStatus {
-//        NONE(0), END_TIME(1), END_DATE(2), END_DATE_END_TIME(3),
-//        START_TIME(4), START_TIME_END_TIME(5), START_TIME_END_DATE(6), START_TIME_END_DATE_END_TIME(7),
-//        START_DATE(8), START_DATE_END_TIME(9), START_DATE_END_DATE(10), START_DATE_END_DATE_END_TIME(11),
-//        START_DATE_START_TIME(12), START_DATE_START_TIME_END_TIME(13),
-//        START_DATE_START_TIME_END_DATE(14), START_DATE_START_TIME_END_DATE_END_TIME(15);
-//
-//
-//        private int value;
-//        DateTimeStatus(int value) {
-//            this.value = value;
-//        }
-//
-//        public void setValue(int value) {
-//            this.value = value;
-//        }
-//    }
     public void checkInvalid() {
         timeValid = true;
         DateTimeStatus status = getDateTimeStatus();
         switch (status) {
-            //1010
             case START_DATE_END_DATE:
                 if (firstDate.isAfter(secondDate)) {
                     timeValid = false;
                 }
                 break;
-            //1111
             case START_DATE_START_TIME_END_DATE_END_TIME:
                 if (firstDate.isAfter(secondDate)) {
                     timeValid = false;

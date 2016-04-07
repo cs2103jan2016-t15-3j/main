@@ -6,9 +6,10 @@ import logic.commands.UndoneCommand;
 import separator.InputSeparator;
 
 /**
- * Created by lifengshuang on 3/15/16.
+ * @@author A0149647N
+ * UndoneCommandParser parse undone command with InputSeparator
  */
-public class UndoneCommandParser extends CommandParser {
+public class UndoneCommandParser {
     private final int UNDONE_ARGUMENT_INDEX = 7;
 
 //    public Command parse(String input) {

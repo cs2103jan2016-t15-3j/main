@@ -8,10 +8,13 @@ import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 import separator.InputSeparator;
 
+import java.util.ArrayList;
+
 /**
- * Created by lifengshuang on 3/5/16.
+ * @@author A0149647N
+ * EditCommandParser parse edit command with InputSeparator
  */
-public class EditCommandParser extends CommandParser {
+public class EditCommandParser {
 
     private TaskParameters result = new TaskParameters();
 
@@ -35,6 +38,7 @@ public class EditCommandParser extends CommandParser {
                 if (parameter.equalsIgnoreCase("# remove")) {
                     return new EditCommand(index, result, EditCommand.REMOVE_TYPE.TAG);
                 }
+                ArrayList<String> tagList = new ArrayList<>();
                 String[] tags = parameter.split("\\s+");
                 for (String tag : tags) {
                     if (tag.startsWith("#")) {

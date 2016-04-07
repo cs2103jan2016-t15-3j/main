@@ -12,9 +12,10 @@ import separator.InputSeparator;
 import java.util.ArrayList;
 
 /**
- * Created by lifengshuang on 3/16/16.
+ * @@author A0149647N
+ * ViewCommandParser parse view command with InputSeparator
  */
-public class ViewCommandParser extends CommandParser {
+public class ViewCommandParser {
 
     private TaskParameters result = new TaskParameters();
 
@@ -30,6 +31,7 @@ public class ViewCommandParser extends CommandParser {
                 return new InvalidCommand("View command incomplete");
             } else if (parameter.startsWith("#")) {
                 String[] tags = parameter.split("\\s+");
+                ArrayList<String> tagList = new ArrayList<>();
                 for (String tag : tags) {
                     if (tag.startsWith("#")) {
                         if (tag.length() > 1) {

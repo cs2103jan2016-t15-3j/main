@@ -8,9 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by lifengshuang on 3/22/16.
+ * @@author A0149647N
+ * TimeParser parse time with Natty and return a TimeParserResult object.
  */
-//getCase(1,0,1,1,1,0,0,0,1,1,0)
 public class TimeParser {
 
     private static Parser timeParser = new Parser();
@@ -24,9 +24,6 @@ public class TimeParser {
         }
         List<DateGroup> groups = timeParser.parse(input);
         for (DateGroup group : groups){
-//            if (group.getText().length() < 3){
-//                continue;
-//            }
             if (dateTimeCount > 0) {
                 break;
             }

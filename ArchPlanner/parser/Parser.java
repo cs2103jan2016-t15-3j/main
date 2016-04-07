@@ -6,7 +6,8 @@ import logic.commands.*;
 import java.util.ArrayList;
 
 /**
- * Created by lifengshuang on 3/23/16.
+ * @@author A0149647N
+ * Parser receives user input and dispatch it to specific parser to parse it.
  */
 public class Parser {
     private static final int COMMAND_TYPE_UNKNOWN = -1;

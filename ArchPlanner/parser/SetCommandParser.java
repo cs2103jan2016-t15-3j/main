@@ -6,9 +6,13 @@ import logic.commands.SetCommand;
 import separator.InputSeparator;
 
 /**
- * Created by lifengshuang on 4/1/16.
+ * @@author A0149647N
+ * SetCommandParser parse delete command with InputSeparator
  */
-public class SetCommandParser extends CommandParser {
+public class SetCommandParser {
+
+    private final String DEFAULT = "default";
+
     public CommandInterface parse(String input) {
         InputSeparator separator = new InputSeparator(input);
         if (separator.getID() == null
@@ -17,6 +21,9 @@ public class SetCommandParser extends CommandParser {
             if (separator.getParameter() == null) {
                 return new InvalidCommand("Path missing!");
             } else {
+                if (separator.getParameter().equalsIgnoreCase(DEFAULT)) {
+                    return new SetCommand(null);
+                }
                 return new SetCommand(separator.getParameter());
             }
         }

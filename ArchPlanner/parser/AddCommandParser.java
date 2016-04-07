@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Created by lifengshuang on 3/5/16.
+ * @@author A0149647N
+ * AddCommandParser parse add command with AddInputSeparator
  */
-public class AddCommandParser extends CommandParser {
+public class AddCommandParser {
 
     private final int ADD_PARAMETER_INDEX = 4;
     TaskParameters result = new TaskParameters();
