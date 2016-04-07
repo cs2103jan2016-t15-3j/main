@@ -2,6 +2,7 @@ package parser;
 
 import logic.Tag;
 import logic.commands.*;
+import prompt.Prompt;
 
 import java.util.ArrayList;
 
@@ -10,23 +11,13 @@ import java.util.ArrayList;
  * Parser receives user input and dispatch it to specific parser to parse it.
  */
 public class Parser {
-    private static final int COMMAND_TYPE_UNKNOWN = -1;
-    private static final int COMMAND_TYPE_ADD = 0;
-    private static final int COMMAND_TYPE_DELETE = 1;
-    private static final int COMMAND_TYPE_EDIT = 2;
-    private static final int COMMAND_TYPE_VIEW = 3;
-    private static final int COMMAND_TYPE_DONE = 4;
-    private static final int COMMAND_TYPE_UNDONE = 5;
-    private static final int COMMAND_TYPE_UNDO = 6;
-    private static final int COMMAND_TYPE_REDO = 7;
-    private static final int COMMAND_TYPE_SEARCH = 8;
-    private static final int COMMAND_TYPE_EXIT = 9;
-    private static final int COMMAND_TYPE_SET = 10;
 
-    private static final String[] ALL_COMMANDS =
-            {"add", "delete", "edit",
-                    "view", "done", "undone",
-                    "undo", "redo", "search", "exit", "set"};
+    enum CommandType {
+        ADD, DELETE, EDIT, VIEW, DONE, UNDONE, UNDO, REDO, EXIT, UNKNOWN, SET
+    }
+
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+    private static final int INITIAL_INDEX = 0;
 
     public static void init() {
         new Thread(() -> {
@@ -45,40 +36,37 @@ public class Parser {
         if (input == null) {
             return new InvalidCommand("Null input");
         }
-//        input = removeMultipleSpace(input);
-        int commandType = detectCommandType(input);
+        CommandType commandType = determineCommandType(input);
         switch (commandType) {
-            case COMMAND_TYPE_UNKNOWN:
+            case UNKNOWN:
                 return new InvalidCommand("Invalid command");
-            case COMMAND_TYPE_ADD:
+            case ADD:
                 return new AddCommandParser().parse(input);
-            case COMMAND_TYPE_DELETE:
+            case DELETE:
                 return new DeleteCommandParser().parse(input, viewListSize);
-            case COMMAND_TYPE_EDIT:
+            case EDIT:
                 return new EditCommandParser().parse(input, viewListSize);
-            case COMMAND_TYPE_VIEW:
+            case VIEW:
                 return new ViewCommandParser().parse(input, tagList);
-            case COMMAND_TYPE_DONE:
+            case DONE:
                 return new DoneCommandParser().parse(input, viewListSize);
-            case COMMAND_TYPE_UNDONE:
+            case UNDONE:
                 return new UndoneCommandParser().parse(input, viewListSize);
-            case COMMAND_TYPE_UNDO:
+            case UNDO:
                 if (undoListSize > 0 && input.split(" ").length == 1) {
                     return new UndoCommand();
                 } else {
                     return new InvalidCommand("Can't undo anymore");
                 }
-            case COMMAND_TYPE_REDO:
+            case REDO:
                 if (redoListSize > 0 && input.split(" ").length == 1) {
                     return new RedoCommand();
                 } else {
                     return new InvalidCommand("Can't redo anymore");
                 }
-//            case COMMAND_TYPE_SEARCH:
-//                return new SearchCommandParser().parse(input);
-            case COMMAND_TYPE_EXIT:
+            case EXIT:
                 return new ExitCommand();
-            case COMMAND_TYPE_SET:
+            case SET:
                 return new SetCommandParser().parse(input);
         }
         return new InvalidCommand("Failed to parse");
@@ -90,19 +78,22 @@ public class Parser {
      * @param input The user's input
      * @return detected type code
      */
-    private int detectCommandType(String input) {
-        for (int i = 0; i < ALL_COMMANDS.length; i++) {
-            if (input.startsWith(ALL_COMMANDS[i])) {
-                if (i <= COMMAND_TYPE_UNDONE
-                        && input.length() > ALL_COMMANDS[i].length()
-                        && input.charAt(ALL_COMMANDS[i].length()) != ' ') {
-                    return COMMAND_TYPE_UNKNOWN;
-                } else {
-                    return i;
-                }
+    private CommandType determineCommandType(String input) {
+        String commandTypeString = getFirstWord(input);
+        if (commandTypeString.isEmpty()) {
+            return CommandType.UNKNOWN;
+        }
+        for (CommandType type : CommandType.values()) {
+            if (commandTypeString.equalsIgnoreCase(type.name())) {
+                return type;
             }
         }
-        return COMMAND_TYPE_UNKNOWN;
+        return CommandType.UNKNOWN;
+    }
+
+    private String getFirstWord(String input) {
+        String commandTypeString = input.trim().split(STRING_MULTIPLE_WHITESPACE)[INITIAL_INDEX];
+        return commandTypeString;
     }
 
 }

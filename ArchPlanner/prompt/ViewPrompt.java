@@ -51,7 +51,8 @@ public class ViewPrompt implements PromptInterface {
 
     @Override
     public ArrayList<String> getPrompts(String command) {
-        this.inputSeparator = new InputSeparator(removeMultipleSpace(command));
+        command = removeMultipleSpace(command);
+        this.inputSeparator = new InputSeparator(command);
         InputSeparator.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
         String lowerCaseCommand = command.toLowerCase();

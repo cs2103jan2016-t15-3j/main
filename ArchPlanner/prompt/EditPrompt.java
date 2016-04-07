@@ -47,6 +47,7 @@ public class EditPrompt implements PromptInterface {
     private final String REMOVE_TAG = "edit <Task ID> # remove";
 
     private final String INVALID_ID = "Invalid ID: edit <Task ID>";
+    private final String INVALID_TIME = "Invalid Time";
     private final String INVALID_TAG = "Invalid tag: edit <Task ID> #<Tag>";
 
     private final String KEYWORD_DESCRIPTION = "description";
@@ -116,7 +117,7 @@ public class EditPrompt implements PromptInterface {
                     }
                 } else if (KEYWORD_TAG_REMOVE.startsWith(parameter)) {
                     promptList.add(REMOVE_TAG);
-                } else if (!promptList.isEmpty()){
+                } else if (promptList.isEmpty()) {
                     promptList.add(INVALID_TAG);
                 }
             }
@@ -134,6 +135,8 @@ public class EditPrompt implements PromptInterface {
                         promptList.add(EDIT_START_REMOVE);
                     } else if (isToRemove(parameter)) {
                         promptList.add(EDIT_START_REMOVE);
+                    } else if (isTimeInvalid(result)) {
+                        promptList.add(INVALID_TIME);
                     } else {
                         switch (result.getDateTimeStatus()) {
                             //0000
@@ -166,6 +169,8 @@ public class EditPrompt implements PromptInterface {
                         promptList.add(EDIT_END_REMOVE);
                     } else if (isToRemove(parameter)) {
                         promptList.add(EDIT_END_REMOVE);
+                    } else if (isTimeInvalid(result)) {
+                        promptList.add(INVALID_TIME);
                     } else {
                         switch (result.getDateTimeStatus()) {
                             //0000
@@ -308,29 +313,19 @@ public class EditPrompt implements PromptInterface {
         return true;
     }
 
-    private boolean isValidDate(TimeParserResult result, String parameter) {
-        if (parameter == null) {
-            return true;
+    private boolean isTimeInvalid(TimeParserResult timeParserResult) {
+        String parameter = inputSeparator.getParameter();
+        if (parameter != null) {
+            int parameterCount = parameter.split("\\s+").length;
+            if (timeParserResult.getMatchString() == null) {
+                return parameterCount > 1;
+            }
+            int timeCount = timeParserResult.getMatchString().split("\\s+").length;
+            if (parameterCount - timeCount > 1) {
+                return true;
+            }
         }
-        if (result.getMatchString() == null) {
-            return false;
-        }
-        boolean hasOneDate = result.getFirstDate() != null && result.getSecondDate() == null;
-        boolean hasNoTime = result.getFirstTime() == null;
-        boolean stringMatch = result.getMatchString().equals(parameter);
-        return hasOneDate && hasNoTime && stringMatch;
+        return false;
     }
 
-    private boolean isValidTime(TimeParserResult result, String parameter) {
-        if (parameter == null) {
-            return true;
-        }
-        if (result.getMatchString() == null) {
-            return false;
-        }
-        boolean hasNoDate = result.getFirstDate() == null;
-        boolean hasOneTime = result.getFirstTime() != null && result.getSecondTime() == null;
-        boolean stringMatch = result.getMatchString().equals(parameter);
-        return hasNoDate && hasOneTime && stringMatch;
-    }
 }
