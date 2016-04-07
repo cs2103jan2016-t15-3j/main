@@ -103,12 +103,5 @@ public class Parser {
         }
         return COMMAND_TYPE_UNKNOWN;
     }
-    private String removeMultipleSpace(String input) {
-        String[] splitInput = input.trim().split("\\s+");
-        String result = "";
-        for (String part : splitInput) {
-            result += part + " ";
-        }
-        return result.trim();
-    }
+
 }

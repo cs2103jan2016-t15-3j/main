@@ -50,7 +50,7 @@ public class ViewPrompt implements PromptInterface {
 
     @Override
     public ArrayList<String> getPrompts(String command) {
-        this.inputSeparator = new InputSeparator(command);
+        this.inputSeparator = new InputSeparator(removeMultipleSpace(command));
         InputSeparator.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
         String lowerCaseCommand = command.toLowerCase();
@@ -235,6 +235,15 @@ public class ViewPrompt implements PromptInterface {
         }
         promptList.add(tagPrompt);
         return true;
+    }
+
+    private String removeMultipleSpace(String input) {
+        String[] splitInput = input.trim().split("\\s+");
+        String result = "";
+        for (String part : splitInput) {
+            result += part + " ";
+        }
+        return result.trim();
     }
 
 }

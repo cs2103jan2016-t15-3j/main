@@ -63,12 +63,12 @@ public class InputSeparator {
                         String[] splitType = enumNameToString(type).split("\\s+");
                         if (splitType.length > 1) {
                             if (parameter.contains(" ")) {
-                                return splitType[1] + keywordFollowSpace(type);
+                                return splitType[1];
                             } else {
-                                return splitType[0] + keywordFollowSpace(type);
+                                return splitType[0];
                             }
                         }
-                        return enumNameToString(type) + keywordFollowSpace(type);
+                        return enumNameToString(type);
                     }
                 }
             }
