@@ -1,4 +1,3 @@
-//@@author A0140034B
 package application;
 
 import java.net.URL;
@@ -51,6 +50,7 @@ import logic.commands.ViewCommand.CATEGORY_TYPE;
 import parser.Parser;
 import prompt.Prompt;
 
+//@@author A0140034B
 public class MainController implements Initializable{
     
     static Logger log = Logger.getLogger(MainController.class.getName());
@@ -82,6 +82,7 @@ public class MainController implements Initializable{
     @FXML private ToggleButton task;
     
     @FXML private StackPane mainWindow;
+    @FXML private GridPane visibleWindow;
     @FXML private GridPane taskWindow;
     @FXML private GridPane feedbackWindow;   
     
@@ -154,27 +155,50 @@ public class MainController implements Initializable{
     
     @FXML
     private void onWindowPressed(MouseEvent event) {
-        xPos = taskWindow.getScene().getWindow().getX() - event.getScreenX();
-        yPos = taskWindow.getScene().getWindow().getY() - event.getScreenY();
+        Stage stage = (Stage) taskWindow.getScene().getWindow();
+        if (!stage.isFullScreen()) {
+            xPos = stage.getX() - event.getScreenX();
+            yPos = stage.getY() - event.getScreenY();
+        }
     }
     
     @FXML
     private void onWindowDragged(MouseEvent event) {
-        taskWindow.getScene().getWindow().setX(event.getScreenX() + xPos);
-        taskWindow.getScene().getWindow().setY(event.getScreenY() + yPos);
+        Stage stage = (Stage) taskWindow.getScene().getWindow();
+        if (!stage.isFullScreen()) {
+            stage.setX(event.getScreenX() + xPos);
+            stage.setY(event.getScreenY() + yPos);
+        } 
     }
     
     @FXML
     private void minimize(ActionEvent event) {
-        log.info("minimise button clicked");
+        log.info("minimize button clicked");
         ((Stage) miniButton.getScene().getWindow()).setIconified(true);
+        userInput.requestFocus();
+        userInput.end();
+    }
+    
+    @FXML
+    private void maxOrRestore(ActionEvent event) {
+        log.info("maxorRestore button clicked");
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        if (!stage.isFullScreen()) {
+            stage.setFullScreen(true);
+            stage.setHeight(screenBound.getMaxY() + 140);
+            visibleWindow.setStyle("-fx-background-color: #651b1b;");
+        } else {
+            stage.setFullScreen(false);
+            visibleWindow.setStyle("-fx-background-color: transparent;");
+        }
+        userInput.requestFocus();
+        userInput.end();
     }
     
     @FXML
     private void close(ActionEvent event) {
         log.info("closed button clicked");
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
+        ((Stage) closeButton.getScene().getWindow()).close();
     }
     
     @FXML
@@ -269,6 +293,8 @@ public class MainController implements Initializable{
     private void onKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
             event.consume();
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            visibleWindow.setStyle("-fx-background-color: transparent;");
         } else if (event.isControlDown() && event.getCode() == KeyCode.Z) {
             executeCommand("undo");
         } else if (event.isControlDown() && event.getCode() == KeyCode.Y) {
@@ -282,7 +308,7 @@ public class MainController implements Initializable{
             bottomPrompt.setVisible(false);
             log.info("hide prompt");
         } else {
-            ArrayList<String> prompt = feedback.getPrompts(newString, tasks.size(), tags.size());
+            ArrayList<String> prompt = feedback.getPrompts(newString);
             assert(prompt != null);
             assert(prompt.size() > 0 && prompt.size() <= 4);
             if (!prompt.isEmpty()) {
@@ -432,6 +458,6 @@ public class MainController implements Initializable{
         updateCategoryDisplay();
         
         userInput.requestFocus();
-        userInput.positionCaret(userInput.getText().length());
+        userInput.end();
     }
 }

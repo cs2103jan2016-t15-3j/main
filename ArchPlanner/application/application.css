@@ -4,7 +4,6 @@
     -fx-background-color: transparent;
 }
 
-
 #taskWindow {
 	/*-fx-background-image: url('/Images/bg.jpg');*/
 	/*-fx-background-size: 100% 100%;*/
@@ -34,6 +33,8 @@
 	-fx-border-color: #651b1b;
 	
 	-fx-font-size: 2em;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
 }
 
 #viewLabel {
@@ -52,6 +53,26 @@
     -fx-text-fill: white;
 	-fx-padding: 10 25 10 25;
 	-fx-font: 1.2em System;
+}
+
+#maxiButton {
+	-fx-background-image: url('/Images/maxiImage.png');
+	-fx-background-size: 100% 100%;
+}
+
+#miniButton {
+	-fx-background-image: url('/Images/miniImage.png');
+	-fx-background-size: 100% 100%;
+}
+
+#closeButton {
+	-fx-background-image: url('/Images/closeImage.png');
+	-fx-background-size: 100% 100%;
+}
+
+#backButton {
+	-fx-background-image: url('/Images/backImage.png');
+	-fx-background-size: 100% 100%;
 }
 
 .label {
@@ -76,8 +97,12 @@
 }
 
 .context-menu .label {
-  -fx-font-size: 0.8em;
-  -fx-font-family: "System";
+  	-fx-font-size: 0.8em;
+  	-fx-font-family: "System";
+}
+
+.tooltip {
+	-fx-font-size: 1.5em;
 }
 
 .list-cell {

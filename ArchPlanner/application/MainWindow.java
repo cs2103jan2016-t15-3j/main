@@ -1,4 +1,3 @@
-//@@author A0140034B
 package application;
 	
 import java.net.URL;
@@ -12,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 
+//@@author A0140034B
 public class MainWindow extends Application {
  
     static Logger log = Logger.getLogger(MainWindow.class.getName());
