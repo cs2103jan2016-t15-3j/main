@@ -41,6 +41,9 @@ public class DoneCommandParser extends CommandParser {
             if (separator.hasTwoValidId(viewListSize)) {
                 return new DoneCommand(separator.getID(), separator.getSecondId());
             }
+            if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
+                return new InvalidCommand("Done index out of range!");
+            }
             return new InvalidCommand("Done command is invalid!");
         }
     }

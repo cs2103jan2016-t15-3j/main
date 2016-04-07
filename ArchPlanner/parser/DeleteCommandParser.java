@@ -28,8 +28,7 @@ public class DeleteCommandParser extends CommandParser {
     public CommandInterface parse(String input, int viewListSize) {
         if (input.length() <= DELETE_ARGUMENT_INDEX) {
             return new InvalidCommand("Delete index not found");
-        }
-        else {
+        } else {
             InputSeparator separator = new InputSeparator(input);
             if (separator.isIdOnly()) {
                 if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
@@ -41,6 +40,10 @@ public class DeleteCommandParser extends CommandParser {
             if (separator.hasTwoValidId(viewListSize)) {
                 return new DeleteCommand(separator.getID(), separator.getSecondId());
             }
+            if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
+                return new InvalidCommand("Delete index out of range!");
+            }
+
             return new InvalidCommand("Delete command is invalid!");
         }
     }

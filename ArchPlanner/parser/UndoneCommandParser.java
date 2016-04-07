@@ -40,6 +40,9 @@ public class UndoneCommandParser extends CommandParser {
             if (separator.hasTwoValidId(viewListSize)) {
                 return new UndoneCommand(separator.getID(), separator.getSecondId());
             }
+            if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
+                return new InvalidCommand("Done index out of range!");
+            }
             return new InvalidCommand("Undone command is invalid!");
         }
     }

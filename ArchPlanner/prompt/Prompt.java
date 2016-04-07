@@ -74,7 +74,7 @@ public class Prompt {
             case DONE :
                 //fallthrough
             case UNDONE :
-                return new IdOnlyPrompt();
+                return new IDOnlyPrompt();
             case UNDO :
                 //fallthrough
             case REDO :

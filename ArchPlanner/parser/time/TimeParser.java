@@ -14,7 +14,7 @@ import java.util.List;
 public class TimeParser {
 
     private static Parser timeParser = new Parser();
-    private int dateCount, timeCount, dateTimeCount;
+    private int dateTimeCount;
     private TimeParserResult timeParserResult = new TimeParserResult();
 
     public TimeParserResult parseTime(String input) {
@@ -27,15 +27,14 @@ public class TimeParser {
             if (group.getText().length() < 3){
                 continue;
             }
+            if (dateTimeCount > 0) {
+                break;
+            }
             List<Date> dates = group.getDates();
             Tree tree = group.getSyntaxTree();
             postTraverseSyntaxTree(tree, dates);
-            if (dates.size() < dateCount || dates.size() < timeCount) {
-                return timeParserResult;
-            }
             timeParserResult.setMatchPosition(group.getPosition());
             timeParserResult.setMatchString(group.getText());
-
         }
         timeParserResult.updateDateTime();
         timeParserResult.checkInvalid();
