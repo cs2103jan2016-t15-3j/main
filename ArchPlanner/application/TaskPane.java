@@ -1,16 +1,17 @@
-//@@author A0140034B
 package application;
 
 import logic.Task;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
+//@@author A0140034B
 public class TaskPane extends GridPane {
        
     private ColumnConstraints numColumn = new ColumnConstraints();
@@ -28,6 +29,9 @@ public class TaskPane extends GridPane {
     private Label endDate = new Label();
     private Label endTime = new Label();
     private Label tag = new Label();
+    
+    private Tooltip desciptionHover = new Tooltip();
+    private Tooltip tagHover = new Tooltip();
     
     public TaskPane(int displayNumber, Task task, ReadOnlyDoubleProperty maxWidth) {        
         initialize();
@@ -117,11 +121,15 @@ public class TaskPane extends GridPane {
         endDate.setText(task.getEndDateString());
         endTime.setText(task.getEndTimeString());
         
-        String allTag = "";
+        String allTagHorizontal = "";
+        String allTagVertical = "";
         for(int i = 0; i < task.getTagsList().size(); i++) {
-            allTag += task.getTagsList().get(i) + "   ";
+            allTagHorizontal += task.getTagsList().get(i) + "   ";
+            allTagVertical += task.getTagsList().get(i) + "\n";
         }
-        tag.setText(allTag);
+        tag.setText(allTagHorizontal);
+        tagHover.setText(allTagVertical);
+        tag.setTooltip(tagHover);
         
         if(task.getIsDone()) {
             this.setStyle(this.getStyle() + ("-fx-background-color: lightgreen;"));
@@ -132,14 +140,13 @@ public class TaskPane extends GridPane {
                 this.setStyle(this.getStyle() + ("-fx-background-color: lightgray;"));
             }
         }
+        
+        desciptionHover.setText(task.getDescription());
+        description.setTooltip(desciptionHover);
     }
     
     public void setNumber(int displayNumber) {
         assert(displayNumber > 0);
         number.setText(Integer.toString(displayNumber));        
-    }
-    
-    public String getDescription() {
-        return description.getText();       
     }
 }
