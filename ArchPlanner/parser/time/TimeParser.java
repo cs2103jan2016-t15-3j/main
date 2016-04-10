@@ -26,8 +26,8 @@ public class TimeParser {
 
 
     private static Parser timeParser = new Parser();
-    private int dateTimeCount;
     private TimeParserResult timeParserResult = new TimeParserResult();
+    private int dateTimeCount;
 
     /**
      * Parse time string with Natty and return a TimeParserResult object
@@ -52,25 +52,32 @@ public class TimeParser {
         return timeParserResult;
     }
 
-    private void postTraverseSyntaxTree(Tree tree, List<Date> dates) {
-        if (tree.getText().equals(NATTY_DATE_TIME)){
+    /**
+     * Recursively post traverse the syntax tree.
+     * Retrieve the recognized date and time and its position in the syntax tree.
+     * It's used to figure a date/time as start date/time or end date/time.
+     * @param node the current traversed tree node
+     * @param dates the recognized date list
+     */
+    private void postTraverseSyntaxTree(Tree node, List<Date> dates) {
+        if (node.getText().equals(NATTY_DATE_TIME)){
             dateTimeCount++;
         }
-        if (tree.getText().equals(NATTY_RELATIVE_DATE) || tree.getText().equals(NATTY_EXPLICIT_DATE)) {
+        if (node.getText().equals(NATTY_RELATIVE_DATE) || node.getText().equals(NATTY_EXPLICIT_DATE)) {
             if (dateTimeCount == ONE_DATE_TIME) {
                 timeParserResult.setFirstDate(dates.get(FIRST_DATE_INDEX));
             } else if (dateTimeCount == TWO_DATE_TIME) {
                 timeParserResult.setSecondDate(dates.get(SECOND_DATE_INDEX));
             }
-        } else if (tree.getText().equals(NATTY_RELATIVE_TIME) || tree.getText().equals(NATTY_EXPLICIT_TIME)) {
+        } else if (node.getText().equals(NATTY_RELATIVE_TIME) || node.getText().equals(NATTY_EXPLICIT_TIME)) {
             if (dateTimeCount == ONE_DATE_TIME) {
                 timeParserResult.setFirstTime(dates.get(FIRST_DATE_INDEX));
             } else if (dateTimeCount == TWO_DATE_TIME) {
                 timeParserResult.setSecondTime(dates.get(SECOND_DATE_INDEX));
             }
         }
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            postTraverseSyntaxTree(tree.getChild(i), dates);
+        for (int i = 0; i < node.getChildCount(); i++) {
+            postTraverseSyntaxTree(node.getChild(i), dates);
         }
     }
 }

@@ -26,105 +26,105 @@ public class ParserTest {
         /* Only date */
         //add ... on <date>
         CommandInterface onlyDateKeywordOn = new AddCommandParser().parse("add sth123 on tomorrow");
-        assertEquals("sth123", ((AddCommand) onlyDateKeywordOn).getTask().getDescription());
-        assertEquals(tomorrow, ((AddCommand) onlyDateKeywordOn).getTask().getStartDate());
+        assertEquals("sth123", ((AddCommand) onlyDateKeywordOn).getTaskParameters().getDescription());
+        assertEquals(tomorrow, ((AddCommand) onlyDateKeywordOn).getTaskParameters().getStartDate());
 
         //add ... from <date> to <date>
         CommandInterface onlyDateKeywordFrom = new AddCommandParser().parse("add lalala from today to tomorrow #a");
-        assertEquals("lalala", ((AddCommand) onlyDateKeywordFrom).getTask().getDescription());
-        assertEquals(dateNow, ((AddCommand) onlyDateKeywordFrom).getTask().getStartDate());
-        assertEquals(tomorrow, ((AddCommand) onlyDateKeywordFrom).getTask().getEndDate());
+        assertEquals("lalala", ((AddCommand) onlyDateKeywordFrom).getTaskParameters().getDescription());
+        assertEquals(dateNow, ((AddCommand) onlyDateKeywordFrom).getTaskParameters().getStartDate());
+        assertEquals(tomorrow, ((AddCommand) onlyDateKeywordFrom).getTaskParameters().getEndDate());
 
         //add ... by <date>
         CommandInterface onlyDateKeywordBy = new AddCommandParser().parse("add miao by Mar 7 #a #b");
         LocalDate mar7 = LocalDate.of(dateNow.getYear(), 3, 7);
-        assertEquals(mar7, ((AddCommand) onlyDateKeywordBy).getTask().getEndDate());
-        assertEquals("#a", ((AddCommand) onlyDateKeywordBy).getTask().getTagsList().get(0));
-        assertEquals("#b", ((AddCommand) onlyDateKeywordBy).getTask().getTagsList().get(1));
+        assertEquals(mar7, ((AddCommand) onlyDateKeywordBy).getTaskParameters().getEndDate());
+        assertEquals("#a", ((AddCommand) onlyDateKeywordBy).getTaskParameters().getTagsList().get(0));
+        assertEquals("#b", ((AddCommand) onlyDateKeywordBy).getTaskParameters().getTagsList().get(1));
 
         /* Date and time */
         //add ... on <date> <time>
         CommandInterface dateTimeKeywordOn = new AddCommandParser().parse("add assignments on this Thursday 3pm #assign #oh-my-god #help-me!");
         LocalTime threePm = LocalTime.of(15, 0);
-        assertEquals(threePm, ((AddCommand) dateTimeKeywordOn).getTask().getStartTime());
-        assertEquals("#assign", ((AddCommand) dateTimeKeywordOn).getTask().getTagsList().get(0));
-        assertEquals("#oh-my-god", ((AddCommand) dateTimeKeywordOn).getTask().getTagsList().get(1));
-        assertEquals("#help-me!", ((AddCommand) dateTimeKeywordOn).getTask().getTagsList().get(2));
+        assertEquals(threePm, ((AddCommand) dateTimeKeywordOn).getTaskParameters().getStartTime());
+        assertEquals("#assign", ((AddCommand) dateTimeKeywordOn).getTaskParameters().getTagsList().get(0));
+        assertEquals("#oh-my-god", ((AddCommand) dateTimeKeywordOn).getTaskParameters().getTagsList().get(1));
+        assertEquals("#help-me!", ((AddCommand) dateTimeKeywordOn).getTaskParameters().getTagsList().get(2));
 
         //add ... from <date><time> to <date><time>
         CommandInterface dateTimeDateTime = new AddCommandParser().parse("add a lot of things from March 22 0:00:00 to May 3 8:00");
-        assertEquals("a lot of things", ((AddCommand) dateTimeDateTime).getTask().getDescription());
+        assertEquals("a lot of things", ((AddCommand) dateTimeDateTime).getTaskParameters().getDescription());
         LocalDate mar22 = LocalDate.of(dateNow.getYear(), 3, 22);
         LocalDate may3 = LocalDate.of(dateNow.getYear(), 5, 3);
-        assertEquals(mar22, ((AddCommand) dateTimeDateTime).getTask().getStartDate());
-        assertEquals(may3, ((AddCommand) dateTimeDateTime).getTask().getEndDate());
+        assertEquals(mar22, ((AddCommand) dateTimeDateTime).getTaskParameters().getStartDate());
+        assertEquals(may3, ((AddCommand) dateTimeDateTime).getTaskParameters().getEndDate());
         LocalTime zero = LocalTime.of(0, 0, 0);
         LocalTime eight = LocalTime.of(8, 0, 0);
-        assertEquals(zero, ((AddCommand) dateTimeDateTime).getTask().getStartTime());
-        assertEquals(eight, ((AddCommand) dateTimeDateTime).getTask().getEndTime());
+        assertEquals(zero, ((AddCommand) dateTimeDateTime).getTaskParameters().getStartTime());
+        assertEquals(eight, ((AddCommand) dateTimeDateTime).getTaskParameters().getEndTime());
 
         //add ... from <date><time> to <time>
         CommandInterface dateTimeToTime = new AddCommandParser().parse("add movie from May 9 13:00 to 15:00");
         LocalDate may9 = LocalDate.of(dateNow.getYear(), 5, 9);
-        assertEquals(may9, ((AddCommand) dateTimeToTime).getTask().getStartDate());
-        assertEquals(may9, ((AddCommand) dateTimeToTime).getTask().getEndDate());
+        assertEquals(may9, ((AddCommand) dateTimeToTime).getTaskParameters().getStartDate());
+        assertEquals(may9, ((AddCommand) dateTimeToTime).getTaskParameters().getEndDate());
 
         //add ... by <date><time>
         CommandInterface dateTimeKeywordBy = new AddCommandParser().parse("add manual V0.2 by next Sunday 23:59:59");
         LocalDate nextSunday = dateNow.plusDays(2 * 7 - dateNow.getDayOfWeek().getValue());
-        assertEquals(nextSunday, ((AddCommand) dateTimeKeywordBy).getTask().getEndDate());
+        assertEquals(nextSunday, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getEndDate());
         LocalTime endOfDay = LocalTime.of(23, 59, 59);
-        assertEquals(endOfDay, ((AddCommand) dateTimeKeywordBy).getTask().getEndTime());
-        assertEquals(null, ((AddCommand) dateTimeKeywordBy).getTask().getStartDate());
-        assertEquals(null, ((AddCommand) dateTimeKeywordBy).getTask().getStartTime());
+        assertEquals(endOfDay, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getEndTime());
+        assertEquals(null, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getStartDate());
+        assertEquals(null, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getStartTime());
 
         /* Only time */
         //add ... on <time>
         CommandInterface timeKeywordOn = new AddCommandParser().parse("add sth on 3pm");
-        assertEquals(dateNow, ((AddCommand) timeKeywordOn).getTask().getStartDate());
-        assertEquals(threePm, ((AddCommand) timeKeywordOn).getTask().getStartTime());
+        assertEquals(dateNow, ((AddCommand) timeKeywordOn).getTaskParameters().getStartDate());
+        assertEquals(threePm, ((AddCommand) timeKeywordOn).getTaskParameters().getStartTime());
 
 
         //add ... from <time> to <time>
         CommandInterface timeToTimeKeywordFrom = new AddCommandParser().parse("add movie from 13:00 to 3pm");
         LocalTime onePm = LocalTime.of(13, 0, 0);
-        assertEquals(dateNow, ((AddCommand) timeToTimeKeywordFrom).getTask().getStartDate());
-        assertEquals(dateNow, ((AddCommand) timeToTimeKeywordFrom).getTask().getEndDate());
-        assertEquals(onePm, ((AddCommand) timeToTimeKeywordFrom).getTask().getStartTime());
-        assertEquals(threePm, ((AddCommand) timeToTimeKeywordFrom).getTask().getEndTime());
+        assertEquals(dateNow, ((AddCommand) timeToTimeKeywordFrom).getTaskParameters().getStartDate());
+        assertEquals(dateNow, ((AddCommand) timeToTimeKeywordFrom).getTaskParameters().getEndDate());
+        assertEquals(onePm, ((AddCommand) timeToTimeKeywordFrom).getTaskParameters().getStartTime());
+        assertEquals(threePm, ((AddCommand) timeToTimeKeywordFrom).getTaskParameters().getEndTime());
 
         //add ... by <time>
         CommandInterface timeKeywordBy = new AddCommandParser().parse("add sth by 11pm");
-        assertEquals(dateNow, ((AddCommand) timeKeywordBy).getTask().getEndDate());
+        assertEquals(dateNow, ((AddCommand) timeKeywordBy).getTaskParameters().getEndDate());
         LocalTime elevenPm = LocalTime.of(23, 0, 0);
-        assertEquals(elevenPm, ((AddCommand) timeKeywordBy).getTask().getEndTime());
+        assertEquals(elevenPm, ((AddCommand) timeKeywordBy).getTaskParameters().getEndTime());
 
         /* No date or time */
         //add ...
         CommandInterface onlyDescription = new AddCommandParser().parse("add assignments 2");
-        assertEquals("assignments 2", ((AddCommand) onlyDescription).getTask().getDescription());
+        assertEquals("assignments 2", ((AddCommand) onlyDescription).getTaskParameters().getDescription());
 
         //add ... <without keyword> <date>/<time>
         CommandInterface manyKeywords = new AddCommandParser().parse("add on from by assignments 13:00 #3");
-        assertEquals("on from by assignments 13:00", ((AddCommand) manyKeywords).getTask().getDescription());
-        assertEquals("#3", ((AddCommand) manyKeywords).getTask().getTagsList().get(0));
+        assertEquals("on from by assignments 13:00", ((AddCommand) manyKeywords).getTaskParameters().getDescription());
+        assertEquals("#3", ((AddCommand) manyKeywords).getTaskParameters().getTagsList().get(0));
 
         //add ... #... ... on <date> #...
         CommandInterface mixedTagNotation = new AddCommandParser().parse("add remove #task tag on today #remove ##");
-        assertEquals("remove #task tag", ((AddCommand) mixedTagNotation).getTask().getDescription());
-        assertEquals(dateNow, ((AddCommand) mixedTagNotation).getTask().getStartDate());
-        assertEquals("#remove", ((AddCommand) mixedTagNotation).getTask().getTagsList().get(0));
-        assertEquals("##", ((AddCommand) mixedTagNotation).getTask().getTagsList().get(1));
+        assertEquals("remove #task tag", ((AddCommand) mixedTagNotation).getTaskParameters().getDescription());
+        assertEquals(dateNow, ((AddCommand) mixedTagNotation).getTaskParameters().getStartDate());
+        assertEquals("#remove", ((AddCommand) mixedTagNotation).getTaskParameters().getTagsList().get(0));
+        assertEquals("##", ((AddCommand) mixedTagNotation).getTaskParameters().getTagsList().get(1));
 
         /* wrong or invalid */
         CommandInterface wrongKeyword = new AddCommandParser().parse("add movie at Friday 13:00 to 15:00");
-        assertEquals("movie at Friday 13:00 to 15:00", ((AddCommand) wrongKeyword).getTask().getDescription());
+        assertEquals("movie at Friday 13:00 to 15:00", ((AddCommand) wrongKeyword).getTaskParameters().getDescription());
 
         CommandInterface unmatchedKeyword = new AddCommandParser().parse("add movie from Friday 13:00");
-        assertEquals("movie from Friday 13:00", ((AddCommand) unmatchedKeyword).getTask().getDescription());
+        assertEquals("movie from Friday 13:00", ((AddCommand) unmatchedKeyword).getTaskParameters().getDescription());
 
         CommandInterface wrongTime = new AddCommandParser().parse("add movie from Friday 23:61");
-        assertEquals("movie from Friday 23:61", ((AddCommand) wrongTime).getTask().getDescription());
+        assertEquals("movie from Friday 23:61", ((AddCommand) wrongTime).getTaskParameters().getDescription());
 
         CommandInterface invalidTag = new AddCommandParser().parse("add assignments 2 on today #tag #");
         assertTrue(invalidTag instanceof InvalidCommand);
@@ -163,8 +163,8 @@ public class ParserTest {
         tagArrayList.add(new Tag("#a", false));
 
         CommandInterface command7 = new ViewCommandParser().parse("view #a #b", tagArrayList);
-        assertEquals("#a", ((ViewCommand) command7).getTask().getTagsList().get(0));
-        assertEquals("#b", ((ViewCommand) command7).getTask().getTagsList().get(1));
+        assertEquals("#a", ((ViewCommand) command7).getTaskParameters().getTagsList().get(0));
+        assertEquals("#b", ((ViewCommand) command7).getTaskParameters().getTagsList().get(1));
 
         CommandInterface command8 = new ViewCommandParser().parse("view #ahhh boom", tagArrayList);//invalid
         assertTrue(command8 instanceof InvalidCommand);
@@ -175,17 +175,17 @@ public class ParserTest {
 
         //view description
         CommandInterface command10 = new ViewCommandParser().parse("view description task 1", tagArrayList);
-        assertEquals("task 1", ((ViewCommand) command10).getTask().getDescription());
+        assertEquals("task 1", ((ViewCommand) command10).getTaskParameters().getDescription());
 
         //view <category_type>
         CommandInterface command11 = new ViewCommandParser().parse("view task", tagArrayList);
-        assertEquals("task", ((ViewCommand) command11).getTask().getDescription());
+        assertEquals("task", ((ViewCommand) command11).getTaskParameters().getDescription());
 
         CommandInterface command12 = new ViewCommandParser().parse("view tasks", tagArrayList);
         assertEquals(ViewCommand.CATEGORY_TYPE.TASKS, ((ViewCommand) command12)._categoryType);
 
         CommandInterface command13 = new ViewCommandParser().parse("view floating", tagArrayList);
-        assertEquals("floating", ((ViewCommand) command13).getTask().getDescription());
+        assertEquals("floating", ((ViewCommand) command13).getTaskParameters().getDescription());
 
         CommandInterface command14 = new ViewCommandParser().parse("view deadlines", tagArrayList);
         assertEquals(ViewCommand.CATEGORY_TYPE.DEADLINES, ((ViewCommand) command14)._categoryType);
@@ -197,21 +197,21 @@ public class ParserTest {
         LocalDate dateNow = LocalDate.now();
         CommandInterface command16 = new ViewCommandParser().parse("view start time 1pm", tagArrayList);
         LocalTime onePm = LocalTime.of(13, 0, 0);
-        assertEquals(onePm, ((ViewCommand)command16).getTask().getStartTime());
+        assertEquals(onePm, ((ViewCommand)command16).getTaskParameters().getStartTime());
 
         CommandInterface command17 = new ViewCommandParser().parse("view start time 13:00 1pm", tagArrayList);//invalid
         assertTrue(command17 instanceof InvalidCommand);
 
         CommandInterface command18 = new ViewCommandParser().parse("view end time 2:33", tagArrayList);
         LocalTime two33 = LocalTime.of(2, 33, 0);
-        assertEquals(two33, ((ViewCommand)command18).getTask().getEndTime());
+        assertEquals(two33, ((ViewCommand)command18).getTaskParameters().getEndTime());
 
         CommandInterface command19 = new ViewCommandParser().parse("view start date Apr 19", tagArrayList);
         LocalDate apr19 = LocalDate.of(dateNow.getYear(), 4, 19);
-        assertEquals(apr19, ((ViewCommand)command19).getTask().getStartDate());
+        assertEquals(apr19, ((ViewCommand)command19).getTaskParameters().getStartDate());
 
         CommandInterface command20 = new ViewCommandParser().parse("view end date today", tagArrayList);
-        assertEquals(dateNow, ((ViewCommand)command20).getTask().getEndDate());
+        assertEquals(dateNow, ((ViewCommand)command20).getTaskParameters().getEndDate());
 
         CommandInterface command21 = new ViewCommandParser().parse("view end date today 3pm", tagArrayList);//invalid
         assertTrue(command21 instanceof InvalidCommand);
@@ -219,8 +219,8 @@ public class ParserTest {
         CommandInterface command22 = new ViewCommandParser().parse("view from May 4 to Aug 9", tagArrayList);
         LocalDate may4 = LocalDate.of(dateNow.getYear(), 5, 4);
         LocalDate aug9 = LocalDate.of(dateNow.getYear(), 8, 9);
-        assertEquals(may4, ((ViewCommand)command22).getTask().getStartDate());
-        assertEquals(aug9, ((ViewCommand)command22).getTask().getEndDate());
+        assertEquals(may4, ((ViewCommand)command22).getTaskParameters().getStartDate());
+        assertEquals(aug9, ((ViewCommand)command22).getTaskParameters().getEndDate());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class ParserTest {
 
         //edit <id> description ...
         CommandInterface command1 = new EditCommandParser().parse("edit 3 description lalala", 10);
-        assertEquals("lalala", ((EditCommand)command1).getTask().getDescription());
+        assertEquals("lalala", ((EditCommand)command1).getTaskParameters().getDescription());
 
         CommandInterface command2 = new EditCommandParser().parse("edit 8 description", 10);
         assertTrue(command2 instanceof InvalidCommand);
@@ -264,7 +264,7 @@ public class ParserTest {
         CommandInterface command4 = new EditCommandParser().parse("edit 1 start May 5", 10);
         LocalDate dateNow = LocalDate.now();
         LocalDate may5 = LocalDate.of(dateNow.getYear(), 5, 5);
-        assertEquals(may5, ((EditCommand)command4).getTask().getStartDate());
+        assertEquals(may5, ((EditCommand)command4).getTaskParameters().getStartDate());
 
         CommandInterface command5 = new EditCommandParser().parse("edit -1 start this friday 3pm", 10);//invalid
         assertTrue(command5 instanceof InvalidCommand);
@@ -276,24 +276,24 @@ public class ParserTest {
 
         CommandInterface command7 = new EditCommandParser().parse("edit 3 start 23:23:23", 10);//invalid
         LocalTime command7Time = LocalTime.of(23, 23, 23);
-        assertEquals(command7Time, ((EditCommand)command7).getTask().getStartTime());
+        assertEquals(command7Time, ((EditCommand)command7).getTaskParameters().getStartTime());
 
         //edit <id> end ...
         CommandInterface command9 = new EditCommandParser().parse("edit 5 end tomorrow 1pm", 10);
-        assertEquals(dateNow.plusDays(1), ((EditCommand) command9).getTask().getEndDate());
+        assertEquals(dateNow.plusDays(1), ((EditCommand) command9).getTaskParameters().getEndDate());
         LocalTime onePm = LocalTime.of(13, 0, 0);
-        assertEquals(onePm, ((EditCommand)command9).getTask().getEndTime());
+        assertEquals(onePm, ((EditCommand)command9).getTaskParameters().getEndTime());
 
         CommandInterface command10 = new EditCommandParser().parse("edit 3 end 3pm", 10);
-//        assertEquals(dateNow, ((EditCommand)command10).getTask().getEndDate());
+//        assertEquals(dateNow, ((EditCommand)command10).getTaskParameters().getEndDate());
         LocalTime threePm = LocalTime.of(15, 0, 0);
-        assertEquals(threePm, ((EditCommand)command10).getTask().getEndTime());
+        assertEquals(threePm, ((EditCommand)command10).getTaskParameters().getEndTime());
 
         //edit <id> #tags
         CommandInterface command11 = new EditCommandParser().parse("edit 3 #a #assignments #233", 10);
-        assertEquals("#a", ((EditCommand)command11).getTask().getTagsList().get(0));
-        assertEquals("#assignments", ((EditCommand)command11).getTask().getTagsList().get(1));
-        assertEquals("#233", ((EditCommand)command11).getTask().getTagsList().get(2));
+        assertEquals("#a", ((EditCommand)command11).getTaskParameters().getTagsList().get(0));
+        assertEquals("#assignments", ((EditCommand)command11).getTaskParameters().getTagsList().get(1));
+        assertEquals("#233", ((EditCommand)command11).getTaskParameters().getTagsList().get(2));
 
         CommandInterface command12 = new EditCommandParser().parse("edit 3 #123 fdsf", 10);//invalid
         assertTrue(command12 instanceof InvalidCommand);

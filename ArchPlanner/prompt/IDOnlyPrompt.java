@@ -55,6 +55,10 @@ public class IdOnlyPrompt implements PromptInterface{
         return promptList;
     }
 
+    /**
+     * Get auto complete word of current input
+     * @return The auto complete word
+     */
     @Override
     public String getAutoWord() {
         if (inputSeparator.getID() != null) {

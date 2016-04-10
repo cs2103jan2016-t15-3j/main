@@ -15,8 +15,6 @@ public class Parser {
         ADD, DELETE, EDIT, VIEW, DONE, UNDONE, UNDO, REDO, EXIT, UNKNOWN, SET
     }
 
-
-
     private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
     private static final String NATTY_INIT = "today";
     private static final int INITIAL_INDEX = 0;
@@ -32,8 +30,11 @@ public class Parser {
         init();
     }
 
+    /**
+     * Initialization start a new thread calling Natty at beginning to avoid lag of Natty initialization
+     */
     public static void init() {
-        //start a new thread calling Natty at beginning to avoid lag of Natty initialization
+
         new Thread(() -> {
             new com.joestelmach.natty.Parser().parse(NATTY_INIT);
         }).start();
@@ -77,6 +78,13 @@ public class Parser {
         return new InvalidCommand(INVALID_FAILED);
     }
 
+    /**
+     * Parse undo command.
+     * May return UndoCommand or InvalidCommand
+     * @param input This is user's command
+     * @param undoListSize This is the size of current list
+     * @return Parsed result
+     */
     private CommandInterface parseUndoCommand(String input, int undoListSize) {
         if (input.split(STRING_MULTIPLE_WHITESPACE).length != 1) {
             return new InvalidCommand(INVALID_UNDO_LENGTH);
@@ -87,6 +95,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parse redo command.
+     * May return RedoCommand or InvalidCommand
+     * @param input This is user's command
+     * @param redoListSize This is the size of current list
+     * @return Parsed result
+     */
     private CommandInterface parseRedoCommand(String input, int redoListSize) {
         if (input.split(STRING_MULTIPLE_WHITESPACE).length != 1) {
             return new InvalidCommand(INVALID_REDO_LENGTH);
@@ -97,6 +112,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Determine the command type of user's input
+     * @param input This is user's command
+     * @return Recognized command type
+     */
     private CommandType determineCommandType(String input) {
         String commandTypeString = getFirstWord(input);
         if (commandTypeString.isEmpty()) {
@@ -110,6 +130,11 @@ public class Parser {
         return CommandType.UNKNOWN;
     }
 
+    /**
+     * Get the first word of a string
+     * @param input This is the initial string
+     * @return The first word of the string
+     */
     private String getFirstWord(String input) {
         return input.trim().split(STRING_MULTIPLE_WHITESPACE)[INITIAL_INDEX];
     }

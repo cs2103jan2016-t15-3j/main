@@ -41,6 +41,8 @@ public class EditCommandParser {
 
     /**
      * Parse edit command with InputSeparator
+     * @param input User's input
+     * @param viewListSize Current view list's size
      * @return Parsed command object
      */
     public CommandInterface parse(String input, int viewListSize) {
@@ -65,6 +67,13 @@ public class EditCommandParser {
         }
     }
 
+    /**
+     * Parse user input which doesn't have keyword
+     * The input is editing tags or the input is invalid
+     * @param parameter This is the parameter
+     * @param index This is the index to edit
+     * @return Parsed result
+     */
     private CommandInterface parserNoKeywordCase(String parameter, Integer index) {
         if (parameter == null) {
             return new InvalidCommand(INVALID_NO_KEYWORD);
@@ -75,6 +84,13 @@ public class EditCommandParser {
         }
     }
 
+    /**
+     * Parse the tag string to tag ArrayList
+     * This method may return EditCommand with tags or InvalidCommand
+     * @param parameter This is the parameter
+     * @param index This is the index to edit
+     * @return Parsed result
+     */
     private CommandInterface parseTag(String parameter, Integer index){
         if (parameter.equalsIgnoreCase(TAG_REMOVE)) {
             return new EditCommand(index, result, EditCommand.REMOVE_TYPE.TAG);
@@ -96,6 +112,14 @@ public class EditCommandParser {
         return new EditCommand(index, result);
     }
 
+    /**
+     * Parse edit command with keyword and its parameter
+     * There are four possible case: view description, view start, view end and view from
+     * @param parameter This is the parameter of the keyword
+     * @param index This is the index to edit
+     * @param type This is the keyword type
+     * @return Parsed result
+     */
     private CommandInterface parserKeywordWithParameter(String parameter, Integer index, InputSeparator.KeywordType type) {
         TimeParserResult timeParserResult = new TimeParser().parseTime(parameter);
         boolean timeInvalid = timeParserResult.getMatchString() == null || !timeParserResult.getMatchString().equals(parameter);
@@ -122,6 +146,15 @@ public class EditCommandParser {
         return new InvalidCommand(INVALID_COMMAND);
     }
 
+    /**
+     * Parse "view start" command.
+     * May return parsed EditCommand or InvalidCommand
+     * @param isRemove True if the command is to remove start date and time
+     * @param timeInvalid True if time is invalid
+     * @param index This is the index to edit
+     * @param timeParserResult This is the parsed time object
+     * @return Parsed result
+     */
     private CommandInterface parseStart(boolean isRemove, boolean timeInvalid, Integer index, TimeParserResult timeParserResult) {
         if (isRemove) {
             return new EditCommand(index, result, EditCommand.REMOVE_TYPE.START);
@@ -146,6 +179,15 @@ public class EditCommandParser {
         }
     }
 
+    /**
+     * Parse "view end" command.
+     * May return parsed EditCommand or InvalidCommand
+     * @param isRemove True if the command is to remove end date and time
+     * @param timeInvalid True if time is invalid
+     * @param index This is the index to edit
+     * @param timeParserResult This is the parsed time object
+     * @return Parsed result
+     */
     private CommandInterface parseEnd(boolean isRemove, boolean timeInvalid, Integer index, TimeParserResult timeParserResult) {
         if (isRemove) {
             return new EditCommand(index, result, EditCommand.REMOVE_TYPE.END);
@@ -169,6 +211,14 @@ public class EditCommandParser {
         }
     }
 
+    /**
+     * Parse "view from" command.
+     * May return parsed EditCommand or InvalidCommand
+     * @param timeInvalid True if time is invalid
+     * @param index This is the index to edit
+     * @param timeParserResult This is the parsed time object
+     * @return Parsed result
+     */
     private CommandInterface parseFrom(boolean timeInvalid, Integer index, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_DATE_TIME);

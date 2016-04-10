@@ -57,6 +57,13 @@ public class ViewCommandParser {
         return parserKeywordWithParameter(parameter, type);
     }
 
+    /**
+     * Parse view command with keyword and its parameter
+     * May return parsed ViewCommand or InvalidCommand
+     * @param parameter This is the parameter of the keyword
+     * @param type This is the keyword typr
+     * @return Parsed result
+     */
     private CommandInterface parserKeywordWithParameter(String parameter, InputSeparator.KeywordType type) {
         TimeParserResult timeParserResult = new TimeParser().parseTime(parameter);
         boolean timeInvalid = timeParserResult.getMatchString() == null || !timeParserResult.getMatchString().equals(parameter);
@@ -78,11 +85,23 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse "view description" command
+     * @param parameter This is the description to view
+     * @return Parsed result
+     */
     private CommandInterface parseDescription(String parameter) {
         result.setDescription(parameter);
         return new ViewCommand(null, null, result);
     }
 
+    /**
+     * Parse "view from" command
+     * May return parsed ViewCommand or InvalidCommand
+     * @param timeInvalid True if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return Parsed result
+     */
     private CommandInterface parseFrom(boolean timeInvalid, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_TIME);
@@ -96,6 +115,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse "view start time" command
+     * May return parsed ViewCommand or InvalidCommand
+     * @param timeInvalid True if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return Parsed result
+     */
     private CommandInterface parseStartTime(boolean timeInvalid, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_START_TIME);
@@ -108,6 +134,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse "view start date" command
+     * May return parsed ViewCommand or InvalidCommand
+     * @param timeInvalid True if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return Parsed result
+     */
     private CommandInterface parseStartDate(boolean timeInvalid, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_START_DATE);
@@ -120,6 +153,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse "view end time" command
+     * May return parsed ViewCommand or InvalidCommand
+     * @param timeInvalid True if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return Parsed result
+     */
     private CommandInterface parseEndTime(boolean timeInvalid, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_END_TIME);
@@ -132,6 +172,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse "view end date" command
+     * May return parsed ViewCommand or InvalidCommand
+     * @param timeInvalid True if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return Parsed result
+     */
     private CommandInterface parseEndDate(boolean timeInvalid, TimeParserResult timeParserResult) {
         if (timeInvalid) {
             return new InvalidCommand(INVALID_END_DATE);
@@ -144,6 +191,14 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse view command without keyword
+     * If the command is to view tag, parse the tags
+     * Else, the parameter will be processed as partial description
+     * @param parameter This is the parameter
+     * @param currentTagList This is the current tag list. Tag to view should in this list
+     * @return Parsed result
+     */
     private CommandInterface parseNoKeywordCase(String parameter, ArrayList<Tag> currentTagList) {
         if (parameter == null) {
             return new InvalidCommand(INVALID_INCOMPLETE);
@@ -155,6 +210,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse view command with only keyword
+     * The command is to view types or categories
+     * The command maybe invalid if keyword doesn't match
+     * @param type This is the command type
+     * @return Parsed result
+     */
     private CommandInterface parseKeywordOnlyCase(InputSeparator.KeywordType type) {
         switch (type) {
             case ALL:
@@ -176,6 +238,13 @@ public class ViewCommandParser {
         }
     }
 
+    /**
+     * Parse the tag string to a tag list
+     * The tag in the string should be in the global tag list
+     * @param parameter This is the tag string
+     * @param currentTagList This is the current global tag list
+     * @return Parsed result
+     */
     private CommandInterface parseTag(String parameter, ArrayList<Tag> currentTagList) {
         String[] tags = parameter.split(STRING_MULTIPLE_WHITESPACE);
         ArrayList<String> tagList = new ArrayList<>();
@@ -195,6 +264,12 @@ public class ViewCommandParser {
         return new ViewCommand(null, null, result);
     }
 
+    /**
+     * Check whether the tag is in the global tag list
+     * @param tagName This is the tag name to check
+     * @param currentTagList This is the current global tag list
+     * @return True if the tag name is in the tag list
+     */
     private boolean containTag(String tagName, ArrayList<Tag> currentTagList) {
         for (Tag tag : currentTagList) {
             if (tag.getName().equals(tagName)) {

@@ -20,44 +20,56 @@ public class AddCommandParser {
     private static final int ADD_PARAMETER_INDEX = 4;
     private static final String INVALID_TIME = "Invalid Time!";
     private static final String INVALID_TAG = "Invalid Tags";
+    private static final String INVALID_EMPTY = "Invalid empty command";
 
     TaskParameters result = new TaskParameters();
 
     /**
      * Parse add command with AddInputSeparator
+     * @param input user's command
      * @return Parsed command object
      */
     public CommandInterface parse(String input) {
         AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
         if (addInputSeparator.hasDescription()) {
-            result.setDescription(addInputSeparator.getDescription());
-            TimeParserResult timeParserResult = getDateTime(addInputSeparator);
-            result.setStartDate(timeParserResult.getFirstDate());
-            result.setStartTime(timeParserResult.getFirstTime());
-            result.setEndDate(timeParserResult.getSecondDate());
-            result.setEndTime(timeParserResult.getSecondTime());
-            result.setTagsList(new ArrayList<>());
-            if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)){
-                return new InvalidCommand(INVALID_TIME);
-            }
-            if (timeParserResult.getMatchString() != null && !timeParserResult.isTimeValid()) {
-                return new InvalidCommand(INVALID_TIME);
-            }
-            if (addInputSeparator.hasValidTag()) {
-                if (addInputSeparator.getTags()[addInputSeparator.getTags().length - 1].equals("#")) {
-                    return new InvalidCommand(INVALID_TAG);
-                } else {
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    Collections.addAll(arrayList, addInputSeparator.getTags());
-                    result.setTagsList(arrayList);
-                }
-            } else if (addInputSeparator.hasTag()) {
+            return new InvalidCommand(INVALID_EMPTY);
+        }
+        result.setDescription(addInputSeparator.getDescription());
+        TimeParserResult timeParserResult = getDateTime(addInputSeparator);
+        result.setStartDate(timeParserResult.getFirstDate());
+        result.setStartTime(timeParserResult.getFirstTime());
+        result.setEndDate(timeParserResult.getSecondDate());
+        result.setEndTime(timeParserResult.getSecondTime());
+        result.setTagsList(new ArrayList<>());
+        if (!timeParserResult.isTimeValid()) {
+            return new InvalidCommand(INVALID_TIME);
+        }
+        if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)) {
+            return new InvalidCommand(INVALID_TIME);
+        }
+        if (timeParserResult.getMatchString() != null && !timeParserResult.isTimeValid()) {
+            return new InvalidCommand(INVALID_TIME);
+        }
+        if (addInputSeparator.hasValidTag()) {
+            if (addInputSeparator.getTags()[addInputSeparator.getTags().length - 1].equals("#")) {
                 return new InvalidCommand(INVALID_TAG);
+            } else {
+                ArrayList<String> arrayList = new ArrayList<>();
+                Collections.addAll(arrayList, addInputSeparator.getTags());
+                result.setTagsList(arrayList);
             }
+        } else if (addInputSeparator.hasTag()) {
+            return new InvalidCommand(INVALID_TAG);
         }
         return new AddCommand(result);
     }
 
+    /**
+     * Get date and time from AddInputSeparator and return a TimeParserResult object
+     * This method also update data for some default values
+     * @param addInputSeparator The separator which contains initial data
+     * @return Reformed TimeParserResult object
+     */
     private TimeParserResult getDateTime(AddInputSeparator addInputSeparator) {
         TimeParserResult timeParserResult = new TimeParserResult();
         if (addInputSeparator.hasStartDate()) {
@@ -82,6 +94,12 @@ public class AddCommandParser {
         return timeParserResult;
     }
 
+    /**
+     * check if the time is valid for the keyword
+     * @param keyword This is the keyword
+     * @param timeParserResult This contains all the date and time date
+     * @return true if valid, else false
+     */
     private boolean checkTimeValidWithKeyword(AddInputSeparator.AddKeyWordType keyword, TimeParserResult timeParserResult) {
         if (keyword == null) {
             return true;

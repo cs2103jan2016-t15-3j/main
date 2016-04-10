@@ -107,6 +107,11 @@ public class EditPrompt implements PromptInterface {
         return promptList;
     }
 
+    /**
+     * Prompt edit command without keyword
+     * @param parameter This is the parameter
+     * @param endWithSpace True if user's input end with space
+     */
     private void handleNoKeywordCase(String parameter, boolean endWithSpace) {
         if (parameter == null) {
             promptList.add(EDIT_DESCRIPTION);
@@ -143,6 +148,11 @@ public class EditPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt edit command with a keyword and its parameter
+     * @param keyword This is the keyword
+     * @param parameter This is the parameter of the keyword
+     */
     private void handleKeywordWithParameter(InputSeparator.KeywordType keyword, String parameter) {
         TimeParserResult result = new TimeParser().parseTime(parameter);
         switch (keyword) {
@@ -162,6 +172,10 @@ public class EditPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Get auto complete word of current input
+     * @return The auto complete word
+     */
     @Override
     public String getAutoWord() {
         if (inputSeparator.getID() != null) {
@@ -177,6 +191,12 @@ public class EditPrompt implements PromptInterface {
         return EMPTY_STRING;
     }
 
+    /**
+     * Prompt "edit <Task ID> start" case
+     * This command may edit start date, start time or remove start date and time
+     * @param parameter This is the parameter
+     * @param result This is the TimeParserResult which contains data
+     */
     private void handleStart(String parameter, TimeParserResult result) {
         if (parameter == null) {
             promptList.add(EDIT_START_10);
@@ -210,6 +230,12 @@ public class EditPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "edit <Task ID> end" case
+     * This command may edit end date, end time or remove end date and time
+     * @param parameter This is the parameter
+     * @param result This is the TimeParserResult which contains data
+     */
     private void handleEnd(String parameter, TimeParserResult result) {
         if (parameter == null) {
             promptList.add(EDIT_END_10);
@@ -243,6 +269,11 @@ public class EditPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "edit <Task ID> from" case
+     * This command will edit both start time and end time
+     * @param result This is the TimeParserResult which contains data
+     */
     private void handleFrom(TimeParserResult result) {
         switch (result.getRawDateTimeStatus()) {
             case NONE:
@@ -293,6 +324,12 @@ public class EditPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Check if the command is to edit tag and add tag prompt if true
+     * @param parameter This is the parameter
+     * @param endWithSpace True if the user's input end with space
+     * @return True if the command is to edit tag
+     */
     private boolean checkTags(String parameter, boolean endWithSpace) {
         if (parameter == null) {
             return false;
@@ -321,7 +358,11 @@ public class EditPrompt implements PromptInterface {
         return true;
     }
 
-
+    /**
+     * Check whether the parameter is "remove" or halfway typing "remove".
+     * @param parameter This is the parameter
+     * @return True if user may wants to type remove
+     */
     private boolean isToRemove(String parameter) {
         if (parameter != null) {
             String remove = REMOVE;
@@ -330,6 +371,11 @@ public class EditPrompt implements PromptInterface {
         return true;
     }
 
+    /**
+     * Check if the time is valid
+     * @param timeParserResult This is the TimeParserResult object which contains data
+     * @return True if time is valid
+     */
     private boolean isTimeInvalid(TimeParserResult timeParserResult) {
         String parameter = inputSeparator.getParameter();
         if (parameter != null) {

@@ -27,6 +27,9 @@ public class TimeParserResult {
     private boolean timeValid;
     private DateTimeStatus rawDateTimeStatus = DateTimeStatus.NONE;
 
+    /**
+     * 16 enum to represent all possible recognized time type
+     */
     public enum DateTimeStatus {
         NONE, END_TIME, END_DATE, END_DATE_END_TIME,
         START_TIME, START_TIME_END_TIME, START_TIME_END_DATE, START_TIME_END_DATE_END_TIME,
@@ -35,6 +38,9 @@ public class TimeParserResult {
         START_DATE_START_TIME_END_DATE, START_DATE_START_TIME_END_DATE_END_TIME;
     }
 
+    /**
+     * Check whether end time is after start time
+     */
     public void checkInvalidTimeRange() {
         timeValid = true;
         DateTimeStatus status = getDateTimeStatus();
@@ -56,7 +62,10 @@ public class TimeParserResult {
         }
     }
 
-
+    /**
+     * Update date and time with default setting
+     * e.g. from today 1pm to 3pm. End date is initially null. The method will set end date as today.
+     */
     public void updateDateTime() {
         rawDateTimeStatus = getDateTimeStatus();
         switch (rawDateTimeStatus) {
@@ -225,14 +234,23 @@ public class TimeParserResult {
         return timeValid;
     }
 
+    /**
+     * True if the time result only have a time and no date
+     */
     public boolean hasNoDateAndOneTime() {
         return firstDate == null && secondDate == null && firstTime != null && secondTime == null;
     }
 
+    /**
+     * True if the time result only have a date and no time
+     */
     public boolean hasOneDateAndNoTime() {
         return firstDate != null && secondDate == null && firstTime == null && secondTime == null;
     }
 
+    /**
+     * True if the time result have two date and no time
+     */
     public boolean hasTwoDateAndNoTime() {
         return firstDate != null && secondDate != null && firstTime == null && secondTime == null;
     }

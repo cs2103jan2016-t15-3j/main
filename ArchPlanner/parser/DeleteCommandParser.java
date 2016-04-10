@@ -17,6 +17,8 @@ public class DeleteCommandParser {
 
     /**
      * Parse delete command with InputSeparator
+     * @param input User's input
+     * @param viewListSize Current view list's size
      * @return Parsed command object
      */
     public CommandInterface parse(String input, int viewListSize) {

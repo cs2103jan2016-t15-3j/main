@@ -14,8 +14,8 @@ import storage.Storage;
  *
  */
 public class ViewCommand implements CommandInterface {
-	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE};
-	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS};
+	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE}
+	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS}
 
 	//This is the view type of the ViewCommand object.
 	private VIEW_TYPE _viewType;
@@ -424,7 +424,4 @@ public class ViewCommand implements CommandInterface {
 		listsManager.getSelectedTagsList().clear();
 	}
 
-	public TaskParameters getTask() {
-		return _taskParameters;
-	}
 }

@@ -83,16 +83,9 @@ public class ViewPrompt implements PromptInterface {
         return promptList;
     }
 
-    private void handleUnrecognizedCase(boolean hasTags) {
-        if (promptList.isEmpty()) {
-            if (hasTags) {
-                promptList.add(INVALID_COMMAND);
-            } else {
-                promptList.add(VIEW_DESCRIPTION_WITHOUT_KEYWORD);
-            }
-        }
-    }
-
+    /**
+     * Prompt the message when user types only "view"
+     */
     private void handleEmptyCase() {
         promptList.add(VIEW_DESCRIPTION);
         promptList.add(VIEW_CATEGORY);
@@ -100,6 +93,10 @@ public class ViewPrompt implements PromptInterface {
         promptList.add(VIEW_TIME);
     }
 
+    /**
+     * Prompt possible view command when user is typing keyword halfway
+     * @param lowerCaseCommand This is the lower case of user's input
+     */
     private void handleKeywordTypingCase(String lowerCaseCommand) {
         if (VIEW_DESCRIPTION.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_DESCRIPTION);
@@ -142,6 +139,11 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt view command with keyword and its parameter
+     * @param type This is the keyword
+     * @param parameter This is the parameter of the keyword
+     */
     private void handleKeywordWithParameter(InputSeparator.KeywordType type, String parameter) {
         switch (type) {
             case DESCRIPTION:
@@ -167,12 +169,20 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "view description" case
+     * @param parameter This is the parameter
+     */
     private void handleDescription(String parameter) {
         if (parameter != null) {
             promptList.add(VIEW_DESCRIPTION);
         }
     }
 
+    /**
+     * Prompt "view from" case
+     * @param parameter This is the parameter
+     */
     private void handleFrom(String parameter) {
         if (parameter == null) {
             return;
@@ -192,6 +202,10 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "view start date" case
+     * @param parameter This is the parameter
+     */
     private void handleStartDate(String parameter) {
         if (parameter == null) {
             return;
@@ -209,6 +223,10 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "view start time" case
+     * @param parameter This is the parameter
+     */
     private void handleStartTime(String parameter) {
         if (parameter == null) {
             return;
@@ -226,6 +244,10 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "view end date" case
+     * @param parameter This is the parameter
+     */
     private void handleEndDate(String parameter) {
         if (parameter == null) {
             return;
@@ -243,6 +265,10 @@ public class ViewPrompt implements PromptInterface {
         }
     }
 
+    /**
+     * Prompt "view end time" case
+     * @param parameter This is the parameter
+     */
     private void handleEndTime(String parameter) {
         if (parameter == null) {
             return;
@@ -261,11 +287,21 @@ public class ViewPrompt implements PromptInterface {
 
     }
 
+    /**
+     * Get auto complete word of current input
+     * @return The auto complete word
+     */
     @Override
     public String getAutoWord() {
         return inputSeparator.getPartialKeyword();
     }
 
+    /**
+     * Check if the command is to edit tag and add tag prompt if true
+     * @param parameter This is the parameter
+     * @param endWithSpace True if the user's input end with space
+     * @return True if the command is to edit tag
+     */
     private boolean checkTags(String parameter, boolean endWithSpace) {
         if (parameter == null) {
             return false;
@@ -299,6 +335,25 @@ public class ViewPrompt implements PromptInterface {
         return true;
     }
 
+    /**
+     * If the prompt list is still empty, check if it's partial description or invalid and prompt message
+     * @param hasTags True if the view command contains tag
+     */
+    private void handleUnrecognizedCase(boolean hasTags) {
+        if (promptList.isEmpty()) {
+            if (hasTags) {
+                promptList.add(INVALID_COMMAND);
+            } else {
+                promptList.add(VIEW_DESCRIPTION_WITHOUT_KEYWORD);
+            }
+        }
+    }
+
+    /**
+     * Remove multiple spaces in user's input
+     * @param input User's input
+     * @return The string which has removed multiple spaces
+     */
     private String removeMultipleSpace(String input) {
         String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
         String result = EMPTY_STRING;
