@@ -425,6 +425,6 @@ public class ViewCommand implements CommandInterface {
 	}
 
 	public TaskParameters getTask() {
-		return _task;
+		return _taskParameters;
 	}
 }

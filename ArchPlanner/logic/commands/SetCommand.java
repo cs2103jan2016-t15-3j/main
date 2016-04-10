@@ -207,20 +207,4 @@ public class SetCommand implements CommandInterface {
 			_invalidCommand = new InvalidCommand(INVALID_DIRECTORY);
 		}
 	}
-
-	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
-		return null;
-	}
-	
-	public String getMessage() {
-        return _message;
-    }
-	
-	public void setMessage(String message) {
-        _message = message;
-    }
-
-	public String getFilePath() {
-		return _filePath;
-	}
 }

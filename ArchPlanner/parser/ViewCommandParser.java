@@ -158,19 +158,19 @@ public class ViewCommandParser {
     private CommandInterface parseKeywordOnlyCase(InputSeparator.KeywordType type) {
         switch (type) {
             case ALL:
-                return new ViewCommand(ViewCommand.VIEW_TYPE.VIEW_ALL, null, result);
+                return new ViewCommand(ViewCommand.VIEW_TYPE.ALL, null, result);
             case DONE:
-                return new ViewCommand(ViewCommand.VIEW_TYPE.VIEW_DONE, null, result);
+                return new ViewCommand(ViewCommand.VIEW_TYPE.DONE, null, result);
             case UNDONE:
-                return new ViewCommand(ViewCommand.VIEW_TYPE.VIEW_UNDONE, null, result);
+                return new ViewCommand(ViewCommand.VIEW_TYPE.UNDONE, null, result);
             case OVERDUE:
-                return new ViewCommand(ViewCommand.VIEW_TYPE.VIEW_OVERDUE, null, result);
+                return new ViewCommand(ViewCommand.VIEW_TYPE.OVERDUE, null, result);
             case TASKS:
-                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_TASKS, result);
+                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.TASKS, result);
             case DEADLINES:
-                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_DEADLINES, result);
+                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.DEADLINES, result);
             case EVENTS:
-                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.CATEGORY_EVENTS, result);
+                return new ViewCommand(null, ViewCommand.CATEGORY_TYPE.EVENTS, result);
             default:
                 return new InvalidCommand(INVALID_INCOMPLETE);
         }

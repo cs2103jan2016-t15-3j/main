@@ -139,19 +139,19 @@ public class ParserTest {
 
         //view <view_type>
         CommandInterface command1 = new ViewCommandParser().parse("view all", tagArrayList);
-        assertEquals(ViewCommand.VIEW_TYPE.VIEW_ALL, ((ViewCommand) command1)._viewType);
+        assertEquals(ViewCommand.VIEW_TYPE.ALL, ((ViewCommand) command1).getViewType());
 
         CommandInterface command2 = new ViewCommandParser().parse("view all things", tagArrayList);//invalid
         assertTrue(command2 instanceof InvalidCommand);
 
         CommandInterface command3 = new ViewCommandParser().parse("view done", tagArrayList);
-        assertEquals(ViewCommand.VIEW_TYPE.VIEW_DONE, ((ViewCommand) command3)._viewType);
+        assertEquals(ViewCommand.VIEW_TYPE.DONE, ((ViewCommand) command3).getViewType());
 
         CommandInterface command4 = new ViewCommandParser().parse("view undone", tagArrayList);
-        assertEquals(ViewCommand.VIEW_TYPE.VIEW_UNDONE, ((ViewCommand) command4)._viewType);
+        assertEquals(ViewCommand.VIEW_TYPE.UNDONE, ((ViewCommand) command4).getViewType());
 
         CommandInterface command5 = new ViewCommandParser().parse("view overdue", tagArrayList);
-        assertEquals(ViewCommand.VIEW_TYPE.VIEW_OVERDUE, ((ViewCommand) command5)._viewType);
+        assertEquals(ViewCommand.VIEW_TYPE.OVERDUE, ((ViewCommand) command5).getViewType());
 
         CommandInterface command6 = new ViewCommandParser().parse("view all done", tagArrayList);//invalid
         assertTrue(command6 instanceof InvalidCommand);
@@ -182,16 +182,16 @@ public class ParserTest {
         assertEquals("task", ((ViewCommand) command11).getTask().getDescription());
 
         CommandInterface command12 = new ViewCommandParser().parse("view tasks", tagArrayList);
-        assertEquals(ViewCommand.CATEGORY_TYPE.CATEGORY_TASKS, ((ViewCommand) command12)._categoryType);
+        assertEquals(ViewCommand.CATEGORY_TYPE.TASKS, ((ViewCommand) command12)._categoryType);
 
         CommandInterface command13 = new ViewCommandParser().parse("view floating", tagArrayList);
         assertEquals("floating", ((ViewCommand) command13).getTask().getDescription());
 
         CommandInterface command14 = new ViewCommandParser().parse("view deadlines", tagArrayList);
-        assertEquals(ViewCommand.CATEGORY_TYPE.CATEGORY_DEADLINES, ((ViewCommand) command14)._categoryType);
+        assertEquals(ViewCommand.CATEGORY_TYPE.DEADLINES, ((ViewCommand) command14)._categoryType);
 
         CommandInterface command15 = new ViewCommandParser().parse("view events", tagArrayList);
-        assertEquals(ViewCommand.CATEGORY_TYPE.CATEGORY_EVENTS, ((ViewCommand) command15)._categoryType);
+        assertEquals(ViewCommand.CATEGORY_TYPE.EVENTS, ((ViewCommand) command15)._categoryType);
 
         //view date/time
         LocalDate dateNow = LocalDate.now();
@@ -226,7 +226,7 @@ public class ParserTest {
     @Test
     public void testDeleteCommandParser() throws Exception {
         CommandInterface command1 = new DeleteCommandParser().parse("delete 1", 2);
-        assertEquals(0, ((DeleteCommand)command1).getfirstIndex());
+        assertEquals(0, ((DeleteCommand)command1).getFirstIndex());
 
         CommandInterface command2 = new DeleteCommandParser().parse("delete 1343234", 100);//invalid
         assertTrue(command2 instanceof InvalidCommand);
@@ -237,7 +237,7 @@ public class ParserTest {
         assertEquals("Invalid: ID not found", command3.getMessage());
 
         CommandInterface command4 = new DeleteCommandParser().parse("delete 2 to 40", 100);
-        assertEquals(1, ((DeleteCommand)command4).getfirstIndex());
+        assertEquals(1, ((DeleteCommand)command4).getFirstIndex());
         assertEquals(39, ((DeleteCommand)command4).getLastIndex());
 
         CommandInterface command5 = new DeleteCommandParser().parse("delete 1 to 400", 100);//invalid

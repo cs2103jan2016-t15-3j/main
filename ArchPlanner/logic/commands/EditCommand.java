@@ -676,4 +676,8 @@ public class EditCommand implements CommandInterface {
 	private boolean hasTaskParametersStartDateEqualsNullAndStartTimeNotEqualsNull() {
 		return getTaskParameters().getStartDate() == null && getTaskParameters().getStartTime() != null;
 	}
+
+	public TaskParameters getTask() {
+		return _taskParameters;
+	}
 }

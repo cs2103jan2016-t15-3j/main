@@ -153,4 +153,8 @@ public class AddCommand implements CommandInterface {
 		listsManager.updateLists();
 		listsManager.updateIndexList(newTask);
 	}
+
+	public TaskParameters getTask() {
+		return _taskParameters;
+	}
 }
