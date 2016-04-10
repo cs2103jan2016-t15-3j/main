@@ -46,6 +46,14 @@ public class ViewPrompt implements PromptInterface {
     private final String INVALID_END_TIME = "Invalid time: view end time <End Time>";
     private final String INVALID_END_DATE = "Invalid date: view end date <End Date>";
 
+    private static final String TAG_NOTATION = "#";
+    private static final String EMPTY_STRING = "";
+    private static final String SPACE_STRING = " ";
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+
+    private static final int FIRST_INDEX = 0;
+    private static final int ONE_WORD = 1;
+
     ArrayList<String> promptList = new ArrayList<>();
     InputSeparator inputSeparator;
 
@@ -56,13 +64,43 @@ public class ViewPrompt implements PromptInterface {
         InputSeparator.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
         String lowerCaseCommand = command.toLowerCase();
-        if (inputSeparator.getWordCount() == 1) {
-            promptList.add(VIEW_DESCRIPTION);
-            promptList.add(VIEW_CATEGORY);
-            promptList.add(VIEW_TYPE);
-            promptList.add(VIEW_TIME);
+
+        if (inputSeparator.getWordCount() == ONE_WORD) {
+            handleEmptyCase();
             return promptList;
         }
+
+        handleKeywordTypingCase(lowerCaseCommand);
+
+        boolean hasTags = checkTags(inputSeparator.getParameter(), inputSeparator.isEndWithSpace());
+
+        if (type != null) {
+            handleKeywordWithParameter(type, parameter);
+        }
+
+        handleUnrecognizedCase(hasTags);
+
+        return promptList;
+    }
+
+    private void handleUnrecognizedCase(boolean hasTags) {
+        if (promptList.isEmpty()) {
+            if (hasTags) {
+                promptList.add(INVALID_COMMAND);
+            } else {
+                promptList.add(VIEW_DESCRIPTION_WITHOUT_KEYWORD);
+            }
+        }
+    }
+
+    private void handleEmptyCase() {
+        promptList.add(VIEW_DESCRIPTION);
+        promptList.add(VIEW_CATEGORY);
+        promptList.add(VIEW_TYPE);
+        promptList.add(VIEW_TIME);
+    }
+
+    private void handleKeywordTypingCase(String lowerCaseCommand) {
         if (VIEW_DESCRIPTION.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_DESCRIPTION);
         }
@@ -102,103 +140,125 @@ public class ViewPrompt implements PromptInterface {
         if (VIEW_END_TIME.startsWith(lowerCaseCommand)) {
             promptList.add(VIEW_END_TIME_FULL);
         }
-        boolean hasTags = checkTags(inputSeparator.getParameter(), inputSeparator.isEndWithSpace());
-        if (type != null) {
-            switch (type) {
-                case DESCRIPTION:
-                    if (parameter != null) {
-                        promptList.add(VIEW_DESCRIPTION);
-                    }
-                    break;
-                case FROM:
-                    if (parameter != null) {
-                        TimeParserResult result = new TimeParser().parseTime(parameter);
-                        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
-                            promptList.add(INVALID_FROM);
-                        } else {
-                            if (result.getFirstDate() != null && result.getSecondDate() != null) {
-                                if (result.getFirstTime() == null && result.getSecondTime() == null) {
-                                    promptList.add(VIEW_FROM_FULL);
-                                }
-                            } else {
-                                promptList.add(INVALID_FROM);
-                            }
-                        }
-                    }
-                    break;
-                case START_DATE:
-                    if (parameter != null) {
-                        TimeParserResult result = new TimeParser().parseTime(parameter);
-                        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
-                            promptList.add(INVALID_START_DATE);
-                        } else {
-                            if (result.getFirstDate() != null && result.getSecondDate() == null
-                                    && result.getFirstTime() == null && result.getSecondTime() == null) {
-                                promptList.add(VIEW_START_DATE_FULL);
-                            } else {
-                                promptList.add(INVALID_START_DATE);
-                            }
-                        }
-                    }
-                    break;
-                case START_TIME:
-                    if (parameter != null) {
-                        TimeParserResult result = new TimeParser().parseTime(parameter);
-                        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
-                            promptList.add(INVALID_START_TIME);
-                        } else {
-                            if (result.getFirstDate() == null && result.getSecondDate() == null
-                                    && result.getFirstTime() != null && result.getSecondTime() == null) {
-                                promptList.add(VIEW_START_TIME_FULL);
-                            } else {
-                                promptList.add(INVALID_START_TIME);
-                            }
-                        }
-                    }
-                    break;
-                case END_DATE:
-                    if (parameter != null) {
-                        TimeParserResult result = new TimeParser().parseTime(parameter);
-                        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
-                            promptList.add(INVALID_END_DATE);
-                        } else {
-                            if (result.getFirstDate() != null && result.getSecondDate() == null
-                                    && result.getFirstTime() == null && result.getSecondTime() == null) {
-                                promptList.add(VIEW_END_DATE_FULL);
-                            } else {
-                                promptList.add(INVALID_END_DATE);
-                            }
-                        }
-                    }
-                    break;
-                case END_TIME:
-                    if (parameter != null) {
-                        TimeParserResult result = new TimeParser().parseTime(parameter);
-                        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
-                            promptList.add(INVALID_END_TIME);
-                        } else {
-                            if (result.getFirstDate() == null && result.getSecondDate() == null
-                                    && result.getFirstTime() != null && result.getSecondTime() == null) {
-                                promptList.add(VIEW_END_TIME_FULL);
-                            } else {
-                                promptList.add(INVALID_END_TIME);
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    break;
+    }
+
+    private void handleKeywordWithParameter(InputSeparator.KeywordType type, String parameter) {
+        switch (type) {
+            case DESCRIPTION:
+                handleDescription(parameter);
+                break;
+            case FROM:
+                handleFrom(parameter);
+                break;
+            case START_DATE:
+                handleStartDate(parameter);
+                break;
+            case START_TIME:
+                handleStartTime(parameter);
+                break;
+            case END_DATE:
+                handleEndDate(parameter);
+                break;
+            case END_TIME:
+                handleEndTime(parameter);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void handleDescription(String parameter) {
+        if (parameter != null) {
+            promptList.add(VIEW_DESCRIPTION);
+        }
+    }
+
+    private void handleFrom(String parameter) {
+        if (parameter == null) {
+            return;
+        }
+        TimeParserResult result = new TimeParser().parseTime(parameter);
+        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
+            promptList.add(INVALID_FROM);
+        } else {
+            if (result.getFirstDate() != null && result.getSecondDate() != null) {
+                if (result.getFirstTime() == null && result.getSecondTime() == null) {
+                    promptList.add(VIEW_FROM_FULL);
+                }
+            } else {
+                promptList.add(INVALID_FROM);
+            }
+
+        }
+    }
+
+    private void handleStartDate(String parameter) {
+        if (parameter == null) {
+            return;
+        }
+        TimeParserResult result = new TimeParser().parseTime(parameter);
+        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
+            promptList.add(INVALID_START_DATE);
+        } else {
+            if (result.getFirstDate() != null && result.getSecondDate() == null
+                    && result.getFirstTime() == null && result.getSecondTime() == null) {
+                promptList.add(VIEW_START_DATE_FULL);
+            } else {
+                promptList.add(INVALID_START_DATE);
+            }
+        }
+    }
+
+    private void handleStartTime(String parameter) {
+        if (parameter == null) {
+            return;
+        }
+        TimeParserResult result = new TimeParser().parseTime(parameter);
+        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
+            promptList.add(INVALID_START_TIME);
+        } else {
+            if (result.getFirstDate() == null && result.getSecondDate() == null
+                    && result.getFirstTime() != null && result.getSecondTime() == null) {
+                promptList.add(VIEW_START_TIME_FULL);
+            } else {
+                promptList.add(INVALID_START_TIME);
+            }
+        }
+    }
+
+    private void handleEndDate(String parameter) {
+        if (parameter == null) {
+            return;
+        }
+        TimeParserResult result = new TimeParser().parseTime(parameter);
+        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
+            promptList.add(INVALID_END_DATE);
+        } else {
+            if (result.getFirstDate() != null && result.getSecondDate() == null
+                    && result.getFirstTime() == null && result.getSecondTime() == null) {
+                promptList.add(VIEW_END_DATE_FULL);
+            } else {
+                promptList.add(INVALID_END_DATE);
+            }
+        }
+    }
+
+    private void handleEndTime(String parameter) {
+        if (parameter == null) {
+            return;
+        }
+        TimeParserResult result = new TimeParser().parseTime(parameter);
+        if (result.getMatchString() == null || !result.getMatchString().equals(parameter)) {
+            promptList.add(INVALID_END_TIME);
+        } else {
+            if (result.getFirstDate() == null && result.getSecondDate() == null
+                    && result.getFirstTime() != null && result.getSecondTime() == null) {
+                promptList.add(VIEW_END_TIME_FULL);
+            } else {
+                promptList.add(INVALID_END_TIME);
             }
         }
 
-        if (promptList.isEmpty()) {
-            if (hasTags) {
-                promptList.add(INVALID_COMMAND);
-            } else {
-                promptList.add(VIEW_DESCRIPTION_WITHOUT_KEYWORD);
-            }
-        }
-        return promptList;
     }
 
     @Override
@@ -210,17 +270,17 @@ public class ViewPrompt implements PromptInterface {
         if (parameter == null) {
             return false;
         }
-        String[] possibleTags = parameter.split("\\s+");
+        String[] possibleTags = parameter.split(STRING_MULTIPLE_WHITESPACE);
         for (int i = 0; i < possibleTags.length; i++) {
             String possibleTag = possibleTags[i];
-            if (!possibleTag.startsWith("#")) {
-                if (i == 0) {
+            if (!possibleTag.startsWith(TAG_NOTATION)) {
+                if (i == FIRST_INDEX) {
                     return false;
                 }
                 promptList.add(INVALID_TAG);
                 return true;
             }
-            if (possibleTag.equals("#")) {
+            if (possibleTag.equals(TAG_NOTATION)) {
                 if (endWithSpace || i != possibleTags.length - 1) {
                     promptList.add(INVALID_TAG);
                     return true;
@@ -240,10 +300,10 @@ public class ViewPrompt implements PromptInterface {
     }
 
     private String removeMultipleSpace(String input) {
-        String[] splitInput = input.trim().split("\\s+");
-        String result = "";
+        String[] splitInput = input.trim().split(STRING_MULTIPLE_WHITESPACE);
+        String result = EMPTY_STRING;
         for (String part : splitInput) {
-            result += part + " ";
+            result += part + SPACE_STRING;
         }
         return result.trim();
     }

@@ -65,4 +65,8 @@ public class AddCommand implements CommandInterface {
 	public void setMessage(String message) {
         _message = message;
     }
+
+	public TaskParameters getTask() {
+		return _task;
+	}
 }

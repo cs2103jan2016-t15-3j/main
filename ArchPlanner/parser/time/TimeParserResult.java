@@ -11,7 +11,14 @@ import java.util.Date;
  * TimeParserResult also check the time and update it according to the rule.
  */
 public class TimeParserResult {
-    private int matchPosition;
+
+    private static final int FIRST_HOUR_OF_DAY = 0;
+    private static final int FIRST_MINUTE_OF_HOUR = 0;
+    private static final int FIRST_SECOND_OF_MINUTE = 0;
+    private static final int LAST_HOUR_OF_DAY = 23;
+    private static final int LAST_MINUTE_OF_HOUR = 59;
+    private static final int LAST_SECOND_OF_MINUTE = 59;
+
     private String matchString;
     private LocalDate firstDate;
     private LocalDate secondDate;
@@ -27,7 +34,8 @@ public class TimeParserResult {
         START_DATE_START_TIME, START_DATE_START_TIME_END_TIME,
         START_DATE_START_TIME_END_DATE, START_DATE_START_TIME_END_DATE_END_TIME;
     }
-    public void checkInvalid() {
+
+    public void checkInvalidTimeRange() {
         timeValid = true;
         DateTimeStatus status = getDateTimeStatus();
         switch (status) {
@@ -43,50 +51,48 @@ public class TimeParserResult {
                     timeValid = false;
                 }
                 break;
+            default:
+                break;
         }
     }
 
 
     public void updateDateTime() {
         rawDateTimeStatus = getDateTimeStatus();
-        DateTimeStatus status = getDateTimeStatus();
-        switch (status) {
-            //0101
+        switch (rawDateTimeStatus) {
             case START_TIME_END_TIME:
                 firstDate = LocalDate.now();
                 secondDate = LocalDate.now();
                 break;
-            //0110
             case START_TIME_END_DATE:
                 firstDate = LocalDate.now();
-                secondTime = LocalTime.of(23, 59, 59);
+                secondTime = LocalTime.of(LAST_HOUR_OF_DAY, LAST_MINUTE_OF_HOUR, LAST_SECOND_OF_MINUTE);
                 break;
-            //0111
             case START_TIME_END_DATE_END_TIME:
                 firstDate = LocalDate.now();
                 break;
-            //1001
             case START_DATE_END_TIME:
-                firstTime = LocalTime.of(0, 0, 0);
+                firstTime = LocalTime.of(FIRST_HOUR_OF_DAY, FIRST_MINUTE_OF_HOUR, FIRST_SECOND_OF_MINUTE);
                 secondDate = LocalDate.now();
                 break;
-            //1011
             case START_DATE_END_DATE_END_TIME:
-                firstTime = LocalTime.of(0, 0, 0);
+                firstTime = LocalTime.of(FIRST_HOUR_OF_DAY, FIRST_MINUTE_OF_HOUR, FIRST_SECOND_OF_MINUTE);
                 break;
-            //1101
             case START_DATE_START_TIME_END_TIME:
                 secondDate = firstDate;
                 break;
-            //1110
             case START_DATE_START_TIME_END_DATE:
-                secondTime = LocalTime.of(23, 59, 59);
+                secondTime = LocalTime.of(LAST_HOUR_OF_DAY, LAST_MINUTE_OF_HOUR, LAST_SECOND_OF_MINUTE);
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * Cast the time result to an enum instance
+     * This method is used to simplify further condition control
+     */
     public DateTimeStatus getDateTimeStatus() {
         DateTimeStatus dateTimeStatus = DateTimeStatus.NONE;
         if (secondTime != null) {
@@ -99,6 +105,8 @@ public class TimeParserResult {
                     break;
                 case END_TIME:
                     dateTimeStatus = DateTimeStatus.END_DATE_END_TIME;
+                    break;
+                default:
                     break;
             }
         }
@@ -115,6 +123,8 @@ public class TimeParserResult {
                     break;
                 case END_DATE_END_TIME:
                     dateTimeStatus = DateTimeStatus.START_TIME_END_DATE_END_TIME;
+                    break;
+                default:
                     break;
             }
         }
@@ -144,6 +154,8 @@ public class TimeParserResult {
                 case START_TIME_END_DATE_END_TIME:
                     dateTimeStatus = DateTimeStatus.START_DATE_START_TIME_END_DATE_END_TIME;
                     break;
+                default:
+                    break;
             }
         }
         return dateTimeStatus;
@@ -151,14 +163,6 @@ public class TimeParserResult {
 
     public DateTimeStatus getRawDateTimeStatus() {
         return rawDateTimeStatus;
-    }
-
-    public int getMatchPosition() {
-        return matchPosition;
-    }
-
-    public void setMatchPosition(int matchPosition) {
-        this.matchPosition = matchPosition;
     }
 
     public String getMatchString() {
@@ -170,7 +174,6 @@ public class TimeParserResult {
     }
 
     public void setFirstDate(Date date) {
-
         firstDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
@@ -185,24 +188,6 @@ public class TimeParserResult {
     public void setSecondTime(Date date) {
         secondTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
     }
-
-//    public void setDate(Date date) {
-//        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        if (firstDate == null) {
-//            firstDate = localDate;
-//        } else if (secondDate == null) {
-//            secondDate = localDate;
-//        }
-//    }
-//
-//    public void setTime(Date date) {
-//        LocalTime localTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-//        if (firstTime == null) {
-//            firstTime = localTime;
-//        } else if (secondTime == null) {
-//            secondTime = localTime;
-//        }
-//    }
 
     public LocalDate getFirstDate() {
         return firstDate;

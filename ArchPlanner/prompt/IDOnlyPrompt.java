@@ -10,24 +10,33 @@ import java.util.ArrayList;
  */
 public class IdOnlyPrompt implements PromptInterface{
 
-    private final String COMMAND = "%s <Task ID>";
-    private final String COMMAND_RANGE = "%s <Task ID> to <Task ID>";
-    private final String INVALID_ID = "Invalid ID: %s <Task ID>";
-    private final String INVALID_COMMAND = "Invalid command";
+    private static final String COMMAND = "%s <Task ID>";
+    private static final String COMMAND_RANGE = "%s <Task ID> to <Task ID>";
+    private static final String INVALID_ID = "Invalid ID: %s <Task ID>";
+    private static final String INVALID_COMMAND = "Invalid command";
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+    private static final String EMPTY_STRING = "";
+    private static final int FIRST_INDEX = 0;
+    private static final int ONE_WORD = 1;
+    private static final int TWO_WORD = 2;
+    private static final int MINIMUM_ID = 1;
 
     InputSeparator inputSeparator;
 
+    /**
+     * Get the prompt of ID only command: delete, done and undone.
+     */
     @Override
     public ArrayList<String> getPrompts(String userInput) {
-        String commandName = userInput.trim().toLowerCase().split("\\s+")[0];
+        String commandName = userInput.trim().toLowerCase().split(STRING_MULTIPLE_WHITESPACE)[FIRST_INDEX];
         ArrayList<String> promptList = new ArrayList<>();
         this.inputSeparator = new InputSeparator(userInput);
-        if (inputSeparator.getWordCount() == 1) {
+        if (inputSeparator.getWordCount() == ONE_WORD) {
             promptList.add(String.format(COMMAND, commandName));
             promptList.add(String.format(COMMAND_RANGE, commandName));
-        } else if (inputSeparator.getWordCount() == 2) {
+        } else if (inputSeparator.getWordCount() == TWO_WORD) {
             if (inputSeparator.getID() != null) {
-                if (inputSeparator.getID() > 0) {
+                if (inputSeparator.getID() >= MINIMUM_ID) {
                     promptList.add(String.format(COMMAND, commandName));
                     promptList.add(String.format(COMMAND_RANGE, commandName));
                 } else {
@@ -51,6 +60,6 @@ public class IdOnlyPrompt implements PromptInterface{
         if (inputSeparator.getID() != null) {
             return inputSeparator.getPartialKeyword();
         }
-        return "";
+        return EMPTY_STRING;
     }
 }

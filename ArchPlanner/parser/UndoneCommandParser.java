@@ -10,41 +10,33 @@ import separator.InputSeparator;
  * UndoneCommandParser parse undone command with InputSeparator
  */
 public class UndoneCommandParser {
-    private final int UNDONE_ARGUMENT_INDEX = 7;
 
-//    public Command parse(String input) {
-//        if (input.length() <= UNDONE_ARGUMENT_INDEX) {
-//            return new InvalidCommand("Undone index not found");
-//        }
-//        else {
-//            try {
-//                return new UndoneCommand(Integer.parseInt(input.substring(UNDONE_ARGUMENT_INDEX)));
-//            } catch (NumberFormatException e) {
-//                return new InvalidCommand("Undone index should be a number");
-//            }
-//        }
-//    }
+    private static final String INVALID_ID = "Invalid: ID not found";
+    private static final String INVALID_COMMAND = "Undone command is invalid!";
+    private static final String INVALID_OUT_OF_RANGE = "Undone index out of range!";
 
+    /**
+     * Parse delete command with InputSeparator
+     * @return Parsed command object
+     */
     public CommandInterface parse(String input, int viewListSize) {
-        if (input.length() <= UNDONE_ARGUMENT_INDEX) {
-            return new InvalidCommand("Undone index not found");
+        InputSeparator separator = new InputSeparator(input);
+        if (separator.getID() == null) {
+            return new InvalidCommand(INVALID_ID);
         }
-        else {
-            InputSeparator separator = new InputSeparator(input);
-            if (separator.isIdOnly()) {
-                if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
-                    return new UndoneCommand(separator.getID());
-                } else {
-                    return new InvalidCommand("Undone index out of range!");
-                }
+        if (separator.isIdOnly()) {
+            if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
+                return new UndoneCommand(separator.getID());
+            } else {
+                return new InvalidCommand(INVALID_OUT_OF_RANGE);
             }
-            if (separator.hasTwoValidId(viewListSize)) {
-                return new UndoneCommand(separator.getID(), separator.getSecondId());
-            }
-            if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
-                return new InvalidCommand("Done index out of range!");
-            }
-            return new InvalidCommand("Undone command is invalid!");
         }
+        if (separator.hasTwoValidId(viewListSize)) {
+            return new UndoneCommand(separator.getID(), separator.getSecondId());
+        }
+        if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
+            return new InvalidCommand(INVALID_OUT_OF_RANGE);
+        }
+        return new InvalidCommand(INVALID_COMMAND);
     }
 }

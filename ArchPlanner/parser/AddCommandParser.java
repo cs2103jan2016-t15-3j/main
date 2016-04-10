@@ -8,7 +8,6 @@ import parser.time.TimeParserResult;
 import separator.AddInputSeparator;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,9 +17,16 @@ import java.util.Collections;
  */
 public class AddCommandParser {
 
-    private final int ADD_PARAMETER_INDEX = 4;
+    private static final int ADD_PARAMETER_INDEX = 4;
+    private static final String INVALID_TIME = "Invalid Time!";
+    private static final String INVALID_TAG = "Invalid Tags";
+
     TaskParameters result = new TaskParameters();
 
+    /**
+     * Parse add command with AddInputSeparator
+     * @return Parsed command object
+     */
     public CommandInterface parse(String input) {
         AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
         if (addInputSeparator.hasDescription()) {
@@ -32,21 +38,21 @@ public class AddCommandParser {
             result.setEndTime(timeParserResult.getSecondTime());
             result.setTagsList(new ArrayList<>());
             if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)){
-                return new InvalidCommand("Invalid Time!");
+                return new InvalidCommand(INVALID_TIME);
             }
             if (timeParserResult.getMatchString() != null && !timeParserResult.isTimeValid()) {
-                return new InvalidCommand("Invalid Time!");
+                return new InvalidCommand(INVALID_TIME);
             }
             if (addInputSeparator.hasValidTag()) {
                 if (addInputSeparator.getTags().length == 1 && addInputSeparator.getTags()[0].equals("#")) {
-                    return new InvalidCommand("Invalid Tags");
+                    return new InvalidCommand(INVALID_TAG);
                 } else {
                     ArrayList<String> arrayList = new ArrayList<>();
                     Collections.addAll(arrayList, addInputSeparator.getTags());
                     result.setTagsList(arrayList);
                 }
             } else if (addInputSeparator.hasTag()) {
-                return new InvalidCommand("Invalid Tags");
+                return new InvalidCommand(INVALID_TAG);
             }
         }
         return new AddCommand(result);
@@ -97,6 +103,9 @@ public class AddCommandParser {
                 if (timeParserResult.getFirstDate() == null || timeParserResult.getSecondDate() == null) {
                     return false;
                 }
+                break;
+            default:
+                break;
         }
         return true;
     }

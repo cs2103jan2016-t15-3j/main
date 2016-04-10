@@ -2,6 +2,7 @@ package test;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
+import logic.commands.AddCommand;
 import logic.commands.CommandInterface;
 import org.junit.Test;
 import parser.AddCommandParser;
@@ -13,6 +14,8 @@ import parser.time.TimeParserResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,15 +30,28 @@ public class ParserTest {
     @Test
     public void testAddCommandParser() throws Exception {
 
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+        LocalDate tomorrow = dateNow.plusDays(1);
+
         /* Only date */
         //add ... on <date>
-        CommandInterface command1 = new AddCommandParser().parse("add sth123 on tomorrow");
+        CommandInterface onlyDateKeywordOn = new AddCommandParser().parse("add sth123 on tomorrow");
+        assertEquals(tomorrow.getMonth(), ((AddCommand)onlyDateKeywordOn).getTask().getStartDate().getMonth());
+        assertEquals(tomorrow.getDayOfMonth(), ((AddCommand)onlyDateKeywordOn).getTask().getStartDate().getDayOfMonth());
 
         //add ... from <date> to <date>
-        CommandInterface command2 = new AddCommandParser().parse("add lalala from today to tomorrow #a");
+        CommandInterface onlyDateKeywordFrom = new AddCommandParser().parse("add lalala from today to tomorrow #a");
+        assertEquals(dateNow.getMonth(), ((AddCommand)onlyDateKeywordFrom).getTask().getStartDate().getMonth());
+        assertEquals(dateNow.getDayOfMonth(), ((AddCommand)onlyDateKeywordFrom).getTask().getStartDate().getDayOfMonth());
+        assertEquals(tomorrow.getMonth(), ((AddCommand)onlyDateKeywordFrom).getTask().getEndDate().getMonth());
+        assertEquals(tomorrow.getDayOfMonth(), ((AddCommand)onlyDateKeywordFrom).getTask().getEndDate().getDayOfMonth());
 
         //add ... by <date>
-        CommandInterface command3 = new AddCommandParser().parse("add miao by Mar 7 #a #b");
+        CommandInterface onlyDateKeywordBy = new AddCommandParser().parse("add miao by Mar 7 #a #b");
+        LocalDate mar7 = LocalDate.of(dateNow.getYear(), 3, 7);
+        assertEquals(mar7.getMonth(), ((AddCommand)onlyDateKeywordBy).getTask().getEndDate().getMonth());
+        assertEquals(mar7.getDayOfMonth(), ((AddCommand)onlyDateKeywordBy).getTask().getEndDate().getDayOfMonth());
 
         /* Date and time */
         //add ... on <date> <time>

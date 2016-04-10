@@ -12,12 +12,21 @@ public class InputSeparator {
 
     public enum KeywordType {
         DESCRIPTION, DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH,
-        START_TIME, END_TIME, START_DATE, END_DATE, FROM, START, END
+        START_TIME, END_TIME, START_DATE, END_DATE, FROM, START, END;
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase().replace('_', ' ');
+        }
     }
 
     private static final HashMap<Prompt.CommandType, KeywordType[]> commandMap = new HashMap<>();
 
-    private final int INITIAL_PARSE_INDEX = 1;
+    private static final int INITIAL_PARSE_INDEX = 1;
+    private static final String STRING_MULTIPLE_WHITESPACE = "\\s+";
+    private static final String EMPTY_STRING = "";
+    private static final String SPACE_STRING = " ";
+
     private Prompt.CommandType commandType;
     private int wordCount;
     private Integer id;
@@ -31,13 +40,13 @@ public class InputSeparator {
 
     public InputSeparator(String command) {
         commandType = determineCommandType(command);
-        String[] breakUserInput = command.split("\\s+");
+        String[] breakUserInput = command.split(STRING_MULTIPLE_WHITESPACE);
         this.wordCount = breakUserInput.length;
         this.id = parseID(breakUserInput);
         this.keywordType = parseKeyword(breakUserInput);
         this.secondId = parseSecondId(breakUserInput);
         this.parameter = parseParameter(breakUserInput);
-        this.endWithSpace = command.endsWith(" ");
+        this.endWithSpace = command.endsWith(SPACE_STRING);
     }
 
     private Integer parseSecondId(String[] input) {
@@ -56,24 +65,27 @@ public class InputSeparator {
     }
 
     public String getPartialKeyword() {
-        if (keywordType == null) {
-            for (KeywordType type : KeywordType.values()) {
-                if (commandHasKeyword(commandType, type)) {
-                    if (enumNameToString(type).startsWith(parameter)) {
-                        String[] splitType = enumNameToString(type).split("\\s+");
-                        if (splitType.length > 1) {
-                            if (parameter.contains(" ")) {
-                                return splitType[1];
-                            } else {
-                                return splitType[0];
-                            }
-                        }
-                        return enumNameToString(type);
-                    }
-                }
+        if (keywordType != null) {
+            return EMPTY_STRING;
+        }
+        for (KeywordType type : KeywordType.values()) {
+            if (commandHasKeyword(commandType, type) && type.toString().startsWith(parameter)) {
+                return getAutoCompleteWord(type);
             }
         }
-        return "";
+        return EMPTY_STRING;
+    }
+
+    public String getAutoCompleteWord(KeywordType type) {
+        String[] splitType = type.toString().split(STRING_MULTIPLE_WHITESPACE);
+        if (splitType.length > 1) {
+            if (parameter.contains(SPACE_STRING)) {
+                return splitType[1];
+            } else {
+                return splitType[0];
+            }
+        }
+        return type.toString();
     }
 
     private Integer parseID(String[] input) {
@@ -92,20 +104,18 @@ public class InputSeparator {
     private KeywordType parseKeyword(String[] input) {
         try {
             for (KeywordType type : KeywordType.values()) {
-                if (input[keywordPosition].equalsIgnoreCase(enumNameToString(type))) {
-                    if (commandHasKeyword(commandType, type)) {
-                        parameterPosition++;
-                        return type;
-                    }
+                if (input[keywordPosition].equalsIgnoreCase(type.toString())
+                        && commandHasKeyword(commandType, type)) {
+                    parameterPosition++;
+                    return type;
                 }
             }
-            String twoWord = input[keywordPosition] + " " + input[keywordPosition + 1];
+            String twoWord = input[keywordPosition] + SPACE_STRING + input[keywordPosition + 1];
             for (KeywordType type : KeywordType.values()) {
-                if (twoWord.equalsIgnoreCase(enumNameToString(type))) {
-                    if (commandHasKeyword(commandType, type)) {
-                        parameterPosition += 2;
-                        return type;
-                    }
+                if (twoWord.equalsIgnoreCase(type.toString())
+                        && commandHasKeyword(commandType, type)) {
+                    parameterPosition += 2;
+                    return type;
                 }
             }
             return null;
@@ -118,17 +128,11 @@ public class InputSeparator {
         if (input.length == parameterPosition) {
             return null;
         }
-        String result = "";
+        String result = EMPTY_STRING;
         for (int i = parameterPosition; i < input.length; i++) {
-            result += input[i] + " ";
+            result += input[i] + SPACE_STRING;
         }
         return result.trim();
-    }
-
-    private String enumNameToString(KeywordType type) {
-        String result = type.name().toLowerCase();
-        result = result.replace('_', ' ');
-        return result;
     }
 
     public Integer getID() {
@@ -157,13 +161,11 @@ public class InputSeparator {
 
     public boolean hasTwoValidId(int viewListSize) {
         try {
-
             return isIdRangeValid(id, viewListSize)
                     && isIdRangeValid(secondId, viewListSize)
                     && id < secondId
                     && keywordType == KeywordType.TO
                     && parameter == null;
-
         } catch (NullPointerException e) {
             return false;
         }
@@ -171,11 +173,8 @@ public class InputSeparator {
 
     public boolean mayHaveTwoValidID() {
         if (parameter == null) {
-            if (id != null && secondId != null && id >= secondId) {
-                return false;
-            }
-            return true;
-        } else if (id != null && parameter.equals("t")) {
+            return !(id != null && secondId != null && id >= secondId);
+        } else if (id != null && KeywordType.TO.toString().startsWith(parameter.toLowerCase())) {
             return true;
         }
         return false;
@@ -190,12 +189,12 @@ public class InputSeparator {
     }
 
     private Prompt.CommandType determineCommandType(String input) {
-        String commandTypeString = input.trim().split("\\s+")[0];
+        String commandTypeString = input.trim().split(STRING_MULTIPLE_WHITESPACE)[0];
         if (commandTypeString.isEmpty()) {
             return Prompt.CommandType.UNKNOWN;
         }
         for (Prompt.CommandType type : Prompt.CommandType.values()) {
-            if (commandTypeString.equalsIgnoreCase(type.name())) {
+            if (commandTypeString.equalsIgnoreCase(type.toString())) {
                 return type;
             }
         }

@@ -11,29 +11,32 @@ import separator.InputSeparator;
  */
 public class DeleteCommandParser {
 
-    private final int DELETE_ARGUMENT_INDEX = 7;
+    private static final String INVALID_ID = "Invalid: ID not found";
+    private static final String INVALID_COMMAND = "Delete command is invalid!";
+    private static final String INVALID_OUT_OF_RANGE = "Delete index out of range!";
 
-
+    /**
+     * Parse delete command with InputSeparator
+     * @return Parsed command object
+     */
     public CommandInterface parse(String input, int viewListSize) {
-        if (input.length() <= DELETE_ARGUMENT_INDEX) {
-            return new InvalidCommand("Delete index not found");
-        } else {
-            InputSeparator separator = new InputSeparator(input);
-            if (separator.isIdOnly()) {
-                if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
-                    return new DeleteCommand(separator.getID());
-                } else {
-                    return new InvalidCommand("Delete index out of range!");
-                }
-            }
-            if (separator.hasTwoValidId(viewListSize)) {
-                return new DeleteCommand(separator.getID(), separator.getSecondId());
-            }
-            if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
-                return new InvalidCommand("Delete index out of range!");
-            }
-
-            return new InvalidCommand("Delete command is invalid!");
+        InputSeparator separator = new InputSeparator(input);
+        if (separator.getID() == null) {
+            return new InvalidCommand(INVALID_ID);
         }
+        if (separator.isIdOnly()) {
+            if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
+                return new DeleteCommand(separator.getID());
+            } else {
+                return new InvalidCommand(INVALID_OUT_OF_RANGE);
+            }
+        }
+        if (separator.hasTwoValidId(viewListSize)) {
+            return new DeleteCommand(separator.getID(), separator.getSecondId());
+        }
+        if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
+            return new InvalidCommand(INVALID_OUT_OF_RANGE);
+        }
+        return new InvalidCommand(INVALID_COMMAND);
     }
 }
