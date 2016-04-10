@@ -78,4 +78,8 @@ public class SetCommand implements CommandInterface {
 	public void setMessage(String message) {
         _message = message;
     }
+
+	public String getFilePath() {
+		return _filePath;
+	}
 }

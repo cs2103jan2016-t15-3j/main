@@ -44,7 +44,7 @@ public class AddCommandParser {
                 return new InvalidCommand(INVALID_TIME);
             }
             if (addInputSeparator.hasValidTag()) {
-                if (addInputSeparator.getTags().length == 1 && addInputSeparator.getTags()[0].equals("#")) {
+                if (addInputSeparator.getTags()[addInputSeparator.getTags().length - 1].equals("#")) {
                     return new InvalidCommand(INVALID_TAG);
                 } else {
                     ArrayList<String> arrayList = new ArrayList<>();

@@ -339,4 +339,8 @@ public class EditCommand implements CommandInterface {
 	public void getMessage(String message) {
         _message = message;
     }
+
+	public TaskParameters getTask() {
+		return _task;
+	}
 }

@@ -199,4 +199,8 @@ public class ViewCommand implements CommandInterface {
 	public String getMessage() {
 		return "";
 	}
+
+	public TaskParameters getTask() {
+		return _task;
+	}
 }
