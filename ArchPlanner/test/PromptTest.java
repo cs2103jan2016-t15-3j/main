@@ -9,7 +9,8 @@ import test.prompt.*;
  * Run all prompt tests
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({AddPromptTest.class, EditPromptTest.class, IdOnlyPromptTest.class, SetPromptTest.class, ViewPromptTest.class})
+@Suite.SuiteClasses({CommandPromptTest.class, AddPromptTest.class, EditPromptTest.class, IdOnlyPromptTest.class, 
+                     SetPromptTest.class, ViewPromptTest.class})
 public class PromptTest {
 
 }

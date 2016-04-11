@@ -9,5 +9,5 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ParserTest.class, LogicTest.class, PromptTest.class, StorageTest.class})
-public class MainTest {
+public class ArchPlannerTest {
 }

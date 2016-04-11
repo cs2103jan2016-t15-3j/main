@@ -10,7 +10,8 @@ import test.parser.*;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({AddCommandParserTest.class, EditCommandParserTest.class, DeleteCommandParserTest.class,
-        DoneCommandParserTest.class, SetCommandParserTest.class, UndoneCommandParserTest.class, ViewCommandParserTest.class})
+                     DoneCommandParserTest.class, SetCommandParserTest.class, UndoneCommandParserTest.class, 
+                     ViewCommandParserTest.class})
 public class ParserTest {
 
 }
