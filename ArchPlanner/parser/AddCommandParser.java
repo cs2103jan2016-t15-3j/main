@@ -19,6 +19,7 @@ public class AddCommandParser {
 
     private static final int ADD_PARAMETER_INDEX = 4;
     private static final String INVALID_TIME = "Invalid Time!";
+    private static final String INVALID_RANGE = "Invalid Time Range!";
     private static final String INVALID_TAG = "Invalid Tags";
     private static final String INVALID_EMPTY = "Invalid empty command";
     private static final String TAG_NOTATION = "#";
@@ -46,7 +47,7 @@ public class AddCommandParser {
         result.setEndTime(timeParserResult.getSecondTime());
         result.setTagsList(new ArrayList<>());
         if (!timeParserResult.isTimeValid()) {
-            return new InvalidCommand(INVALID_TIME);
+            return new InvalidCommand(INVALID_RANGE);
         }
         if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)) {
             return new InvalidCommand(INVALID_TIME);

@@ -1,4 +1,4 @@
-package test;
+package test.parser;
 
 import logic.commands.CommandInterface;
 import logic.commands.EditCommand;

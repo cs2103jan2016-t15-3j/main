@@ -1,5 +1,5 @@
 //@@author A0140034B
-package test;
+package test.prompt;
 
 import static org.junit.Assert.*;
 

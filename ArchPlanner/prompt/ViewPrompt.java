@@ -95,6 +95,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt possible view command when user is typing keyword halfway
+     *
      * @param lowerCaseCommand This is the lower case of user's input
      */
     private void handleKeywordTypingCase(String lowerCaseCommand) {
@@ -141,7 +142,8 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt view command with keyword and its parameter
-     * @param type This is the keyword
+     *
+     * @param type      This is the keyword
      * @param parameter This is the parameter of the keyword
      */
     private void handleKeywordWithParameter(InputSeparator.KeywordType type, String parameter) {
@@ -171,6 +173,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view description" case
+     *
      * @param parameter This is the parameter
      */
     private void handleDescription(String parameter) {
@@ -181,6 +184,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view from" case
+     *
      * @param parameter This is the parameter
      */
     private void handleFrom(String parameter) {
@@ -204,6 +208,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view start date" case
+     *
      * @param parameter This is the parameter
      */
     private void handleStartDate(String parameter) {
@@ -225,6 +230,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view start time" case
+     *
      * @param parameter This is the parameter
      */
     private void handleStartTime(String parameter) {
@@ -246,6 +252,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view end date" case
+     *
      * @param parameter This is the parameter
      */
     private void handleEndDate(String parameter) {
@@ -267,6 +274,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Prompt "view end time" case
+     *
      * @param parameter This is the parameter
      */
     private void handleEndTime(String parameter) {
@@ -289,6 +297,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Get auto complete word of current input
+     *
      * @return The auto complete word
      */
     @Override
@@ -298,7 +307,8 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Check if the command is to edit tag and add tag prompt if true
-     * @param parameter This is the parameter
+     *
+     * @param parameter    This is the parameter
      * @param endWithSpace True if the user's input end with space
      * @return True if the command is to edit tag
      */
@@ -337,6 +347,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * If the prompt list is still empty, check if it's partial description or invalid and prompt message
+     *
      * @param hasTags True if the view command contains tag
      */
     private void handleUnrecognizedCase(boolean hasTags) {
@@ -351,6 +362,7 @@ public class ViewPrompt implements PromptInterface {
 
     /**
      * Remove multiple spaces in user's input
+     *
      * @param input User's input
      * @return The string which has removed multiple spaces
      */

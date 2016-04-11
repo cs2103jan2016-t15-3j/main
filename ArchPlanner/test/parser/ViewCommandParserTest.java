@@ -1,4 +1,4 @@
-package test;
+package test.parser;
 
 import logic.Tag;
 import logic.commands.CommandInterface;
