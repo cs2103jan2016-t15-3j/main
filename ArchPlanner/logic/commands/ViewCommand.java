@@ -1,7 +1,10 @@
 package logic.commands;
 
+import java.util.logging.Logger;
+
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Tag;
 import logic.Task;
 import logic.TaskParameters;
@@ -14,8 +17,20 @@ import storage.Storage;
  *
  */
 public class ViewCommand implements CommandInterface {
+<<<<<<< HEAD
+
+	//These are enum variables of view type.
+	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE};
+
+	//these are enum variables of category type.
+	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS};
+=======
 	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE}
 	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS}
+>>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
+
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
 
 	//This is the view type of the ViewCommand object.
 	private VIEW_TYPE _viewType;
@@ -25,6 +40,10 @@ public class ViewCommand implements CommandInterface {
 
 	//This is the taskParameters of the ViewCommand object.
 	private TaskParameters _taskParameters;
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_VIEW_COMMAND = "Executing view command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_VIEW_COMMAND = "Completed view command.";
 
 	//These constant string variables are used to append messages for readability.
 	private final String STRING_EMPTY = "";
@@ -120,6 +139,8 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to set the view state as specified by the user.
 	 */
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
+		
+		log.info(LOGGER_MESSAGE_EXECUTING_VIEW_COMMAND);
 		String currentViewType = STRING_EMPTY;
 		listsManager.setViewType(VIEW_TYPE.ALL);
 		setViewIfViewTypeIsNotNull(listsManager);
@@ -138,6 +159,9 @@ public class ViewCommand implements CommandInterface {
 		currentViewType = updateViewListWithStartDateEndDateOnly(listsManager, currentViewType);
 
 		listsManager.setCurrentViewType(currentViewType);
+		
+		log.info(currentViewType);
+		log.info(LOGGER_MESSAGE_COMPLETED_VIEW_COMMAND);
 		return null;
 	}
 
@@ -423,5 +447,8 @@ public class ViewCommand implements CommandInterface {
 		}
 		listsManager.getSelectedTagsList().clear();
 	}
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
 }

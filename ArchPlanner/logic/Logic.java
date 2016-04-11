@@ -19,10 +19,13 @@ import parser.Parser;
  *
  */
 public class Logic {
+	
+	//These are enum variables of command type.
 	public enum COMMAND_TYPE {
 		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, SET, INVALID
 	};
 
+	//This is the logger used to log and observe the changes when program runs.
 	static Logger log = Logger.getLogger(Logic.class.getName());
 
 	//This is the Storage object used for accessing and saving data.
@@ -37,16 +40,20 @@ public class Logic {
 	//This is the Parser object used to translate string commands entered by user to command object.
 	private Parser _parser;
 
-	//These are the constant string of the category type.
+	//These are the constant string variables of the category type.
 	private final String STRING_DEADLINES = "Deadlines";
 	private final String STRING_EVENTS = "Events";
 	private final String STRING_TASKS = "Tasks";
 
-	//These are the constant string of the view type.
+	//These are the constant string variables of the view type.
 	private final String STRING_DONE = "Done";
 	private final String STRING_UNDONE = "Undone";
 	private final String STRING_OVERDUE = "Overdue";
 
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_ANALYZING_COMMAND_INPUT = "Analyzing command input...";
+	private final String  LOGGER_MESSAGE_CONFIRMED = "confirmed.";
+	
 	//These constant string used to append messages for readability.
 	private final String STRING_EMPTY = "";
 	private final String STRING_WHITE_SPACE = " ";
@@ -294,11 +301,11 @@ public class Logic {
 	 */
 	private CommandInterface runCommand(CommandInterface commandInput) {
 
-		log.info("Analyzing command input...");
+		log.info(LOGGER_MESSAGE_ANALYZING_COMMAND_INPUT);
 		String strCommandType = commandInput.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
-		log.info(commandType.toString() + STRING_WHITE_SPACE + "confirmed.");
+		log.info(commandType.toString() + STRING_WHITE_SPACE + LOGGER_MESSAGE_CONFIRMED);
 
 		if (commandType.equals(COMMAND_TYPE.EXIT)) {
 			return commandInput.execute();

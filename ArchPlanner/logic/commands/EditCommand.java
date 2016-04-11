@@ -2,6 +2,7 @@ package logic.commands;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Logic.COMMAND_TYPE;
 import logic.RollbackItem;
 import logic.Task;
@@ -10,6 +11,7 @@ import storage.Storage;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * This class is used to execute edit command.
@@ -18,6 +20,9 @@ import java.util.ArrayList;
  *
  */
 public class EditCommand implements CommandInterface {
+
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
 
 	//This is the taskParameters of an EditCommand object.
 	private TaskParameters _taskParameters;
@@ -46,6 +51,10 @@ public class EditCommand implements CommandInterface {
 
 	//This constant string variable is the standard format for display message upon editing of task successfully.
 	private final String MESSAGE_EDIT_COMMAND = "edited \"%1$s\"";
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_EDIT_COMMAND = "Executing edit command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_EDIT_COMMAND = "Completed edit command.";
 
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
@@ -180,6 +189,7 @@ public class EditCommand implements CommandInterface {
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert((getIndex() >= 0) && (getIndex() < listsManager.getViewList().size()));
 
+		log.info(LOGGER_MESSAGE_EXECUTING_EDIT_COMMAND);
 		clearIndexList(listsManager);
 		Task oldTask = listsManager.getViewList().get(getIndex());
 
@@ -192,11 +202,14 @@ public class EditCommand implements CommandInterface {
 		editTask(oldTask, newTask, startTime, endTime);
 
 		if (getInvalidCommand() != null) {
+			log.info(getInvalidCommand().getMessage());
 			return getInvalidCommand();
 		}
 		setMessage(String.format(MESSAGE_EDIT_COMMAND, newTask.getDescription()));
 		updateListsManager(listsManager, oldTask, newTask);
 		updateHistoryManager(historyManager, oldTask, newTask);
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_EDIT_COMMAND);
 		return null;
 	}
 
@@ -604,7 +617,7 @@ public class EditCommand implements CommandInterface {
 			newTask.setDescription(getTaskParameters().getDescription());
 		}
 	}
-	
+
 	/**
 	 * This method is used to check whether taskParameters' end date is not null and taskParameters' end time is null.
 	 * 
@@ -675,9 +688,5 @@ public class EditCommand implements CommandInterface {
 	 */
 	private boolean hasTaskParametersStartDateEqualsNullAndStartTimeNotEqualsNull() {
 		return getTaskParameters().getStartDate() == null && getTaskParameters().getStartTime() != null;
-	}
-
-	public TaskParameters getTask() {
-		return _taskParameters;
 	}
 }

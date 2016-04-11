@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import logic.DateTimeFormat;
 
 /**
  * This class defines the the properties of a TaskParameter object.
@@ -36,18 +37,6 @@ public class TaskParameters {
 	
 	//This variable indicates whether the task is overdue.
 	private boolean _isOverdue;
-	
-	//These constant string variables are used for display if the date is today, yesterday or tomorrow.
-	private final String STRING_TODAY = "today";
-	private final String STRING_YESTERDAY = "yesterday";
-	private final String STRING_TOMORROW = "tomorrow";
-	
-	//These constant string variables are used to format date and time for display.
-	private final String STRING_DATE_FORMAT = "dd MMM uuuu";
-	private final String STRING_TIME_FORMAT = "h:mma";
-	
-	//This constant string variable is used if date or time is null.
-	private final String STRING_EMPTY = "";
 
 	//This is constructor of the class.
 	public TaskParameters() {
@@ -271,21 +260,23 @@ public class TaskParameters {
 	 */
 	private String getDateString(LocalDate date) {
 
+		DateTimeFormat dateTimeFormat = new DateTimeFormat();
+		
 		LocalDate today = LocalDate.now();
 		LocalDate yesterday = today.minusDays(1);
 		LocalDate tomorrow = today.plusDays(1);
 		
 		if (date == null) {
-			return STRING_EMPTY;
+			return dateTimeFormat.getStringEmpty();
 		} else if (date.isEqual(today)) {
-			return STRING_TODAY;
+			return dateTimeFormat.getStringToday();
 		} else if (date.isEqual(yesterday)) {
-			return STRING_YESTERDAY;
+			return dateTimeFormat.getStringYesterday();
 		} else if (date.isEqual(tomorrow)) {
-			return STRING_TOMORROW;
+			return dateTimeFormat.getStringTomorrow();
 		}
 		
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(STRING_DATE_FORMAT);
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat.getStringDateFormat());
 		return dateTimeFormatter.format(date);
 	}
 
@@ -297,11 +288,14 @@ public class TaskParameters {
 	 * @return time in string format.
 	 */
 	private String getTimeString(LocalTime time) {
+		
+		DateTimeFormat dateTimeFormat = new DateTimeFormat();
+		
 		if (time == null) {
-			return STRING_EMPTY;
+			return dateTimeFormat.getStringEmpty();
 		}
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(STRING_TIME_FORMAT);
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat.getStringTimeFormat());
 		return dateTimeFormatter.format(time);
 	}
 }

@@ -1,9 +1,11 @@
 package logic.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Logic.COMMAND_TYPE;
 import logic.RollbackItem;
 import logic.Task;
@@ -20,15 +22,22 @@ import storage.Storage;
  */
 public class AddCommand implements CommandInterface {
 
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
+
 	//This is the taskParameters of an AddCommand object.
 	private TaskParameters _taskParameters;
-	
+
 	//This is the message of an AddCommand object to be displayed.
 	private String _message;
-	
+
 	//This constant string variable is the standard format for display message upon adding of task successfully.
 	private final String MESSAGE_ADD_COMMAND = "added \"%1$s\"";
-	
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_ADD_COMMAND = "Executing add command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_ADD_COMMAND = "Completed add command.";
+
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
 
@@ -38,42 +47,42 @@ public class AddCommand implements CommandInterface {
 		_taskParameters = newTaskParameters;
 		_message = STRING_EMPTY;
 	}
-	
+
 	/**
 	 * This is setter method for AddCommand's taskParameters.
 	 * 
 	 * @param taskParameters This will be the taskParameters of the AddCommand.
 	 */
 	public void setTaskParameters(Task taskParameters) {
-        _taskParameters = taskParameters;
-    }
-	
+		_taskParameters = taskParameters;
+	}
+
 	/**
 	 * This is setter method for AddCommand's message.
 	 * 
 	 * @param message This will be the message of the AddCommand.
 	 */
 	public void setMessage(String message) {
-        _message = message;
-    }
-	
+		_message = message;
+	}
+
 	/**
 	 * This is getter method for AddCommand's message.
 	 * 
 	 * @return message.
 	 */
 	public String getMessage() {
-        return _message;
-    }
-	
+		return _message;
+	}
+
 	/**
 	 * This is getter method for AddCommand's taskParameters.
 	 * 
 	 * @return taskParameters.
 	 */
 	public TaskParameters getTaskParameters() {
-        return _taskParameters;
-    }
+		return _taskParameters;
+	}
 
 	/**
 	 * This method will not be called.
@@ -81,24 +90,27 @@ public class AddCommand implements CommandInterface {
 	public CommandInterface execute() {
 		return null;
 	}
-	
+
 	/**
 	 * This method will not be called.
 	 */
 	public CommandInterface execute(ListsManager listsManager, Storage storage) {
 		return null;
 	}
-	
+
 	/**
 	 * This method is used to execute add command and add the task followed by updating the relevant lists.
 	 */
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
+		log.info(LOGGER_MESSAGE_EXECUTING_ADD_COMMAND);
 		clearIndexList(listsManager);
 		Task newTask = new Task(getTaskParameters().getDescription(), getTaskParameters().getTagsList(), 
 				getTaskParameters().getStartDate(), getTaskParameters().getStartTime(), 
 				getTaskParameters().getEndDate(), getTaskParameters().getEndTime());
 		setMessage(String.format(MESSAGE_ADD_COMMAND, getTaskParameters().getDescription()));
 		updateManagers(listsManager, historyManager, newTask);
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_ADD_COMMAND);
 		return null;
 	}
 
@@ -153,5 +165,8 @@ public class AddCommand implements CommandInterface {
 		listsManager.updateLists();
 		listsManager.updateIndexList(newTask);
 	}
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
 }

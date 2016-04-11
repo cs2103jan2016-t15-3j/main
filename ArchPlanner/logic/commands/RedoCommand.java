@@ -1,9 +1,11 @@
 package logic.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Logic.COMMAND_TYPE;
 import logic.RollbackItem;
 import logic.Task;
@@ -18,6 +20,9 @@ import storage.Storage;
  *
  */
 public class RedoCommand implements CommandInterface {
+
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
 
 	//This is the number of times of redo.
 	private int _times;
@@ -36,6 +41,10 @@ public class RedoCommand implements CommandInterface {
 	private final String MESSAGE_REDO_MULTIPLE_EDIT_COMMAND = "edited multiple tasks";
 	private final String MESSAGE_REDO_MULTIPLE_DONE_COMMAND = "undone multiple tasks";
 	private final String MESSAGE_REDO_MULTIPLE_UNDONE_COMMAND = "done multiple tasks";
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_REDO_COMMAND = "Executing redo command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_REDO_COMMAND = "Completed redo command.";
 
 	//This constant string variable is used to append messages for readability.
 	private final String EMPTY_STRING = "";
@@ -109,11 +118,14 @@ public class RedoCommand implements CommandInterface {
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert(getTimes() > 0 && getTimes() <= historyManager.getRedoList().size());
 
+		log.info(LOGGER_MESSAGE_EXECUTING_REDO_COMMAND);
 		clearIndexList(listsManager);
 
 		for (int i = 0; i < getTimes(); i++) {
 			executeRedoCommand(listsManager, historyManager);
 		}
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_REDO_COMMAND);
 		return null;
 	}
 

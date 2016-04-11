@@ -1,9 +1,11 @@
 package logic.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Logic.COMMAND_TYPE;
 import logic.RollbackItem;
 import logic.Task;
@@ -19,9 +21,12 @@ import storage.Storage;
  */
 public class UndoCommand implements CommandInterface {
 
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
+
 	//This is the number of times of undo.
 	private int _times;
-	
+
 	//This is the message of an UndoCommand object to be displayed.
 	private String _message;
 
@@ -37,6 +42,10 @@ public class UndoCommand implements CommandInterface {
 	private final String MESSAGE_UNDO_MULTIPLE_DONE_COMMAND = "undone multiple tasks";
 	private final String MESSAGE_UNDO_MULTIPLE_UNDONE_COMMAND = "done multiple tasks";
 
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_UNDO_COMMAND = "Executing undo command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_UNDO_COMMAND = "Completed undo command.";
+
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
 
@@ -51,7 +60,7 @@ public class UndoCommand implements CommandInterface {
 		_times = times;
 		_message = STRING_EMPTY;
 	}
-	
+
 	/**
 	 * This is setter method for UndoCommand's times.
 	 * 
@@ -60,7 +69,7 @@ public class UndoCommand implements CommandInterface {
 	public void setTimes(int times) {
 		_times = times;
 	}
-	
+
 	/**
 	 * This is setter method for UndoCommand's message.
 	 * 
@@ -78,7 +87,7 @@ public class UndoCommand implements CommandInterface {
 	public int getTimes() {
 		return _times;
 	}
-	
+
 	/**
 	 * This is getter method for UndoCommand's message.
 	 * 
@@ -107,10 +116,14 @@ public class UndoCommand implements CommandInterface {
 	 */
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert(getTimes() > 0 && getTimes() <= historyManager.getUndoList().size());
+		
+		log.info(LOGGER_MESSAGE_EXECUTING_UNDO_COMMAND);
 		clearIndexList(listsManager);
 		for (int i = 0; i < getTimes(); i++) {
 			executeUndoCommand(listsManager, historyManager);
 		}
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_UNDO_COMMAND);
 		return null;
 	}
 
@@ -139,7 +152,7 @@ public class UndoCommand implements CommandInterface {
 		for (int i = 0; i < undoNumOfTimes; i++) {
 			COMMAND_TYPE commandType = rollbackItem.getCommandType();
 			switch (commandType) {
-			
+
 			case ADD : 
 				undoAddCommand(listsManager, rollbackItem, undoNumOfTimes);
 				break;
@@ -204,14 +217,14 @@ public class UndoCommand implements CommandInterface {
 	 * @param undoNumOfTimes This is the number of times of undo.
 	 */
 	private void undoUndoneCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
-			listsManager.getMainList().remove(rollbackItem.getNewTask());
-			listsManager.getMainList().add(rollbackItem.getOldTask());
-			rollbackItem.setCommandType(COMMAND_TYPE.DONE);
-			Task tempTask = rollbackItem.getNewTask();
-			rollbackItem.setNewTask(rollbackItem.getOldTask());
-			rollbackItem.setOldTask(tempTask);
-			String undoUndoneCommandMesage = String.format(MESSAGE_UNDO_UNDONE_COMMAND, rollbackItem.getNewTask().getDescription());
-			updateMessage(undoUndoneCommandMesage, MESSAGE_UNDO_MULTIPLE_UNDONE_COMMAND, rollbackItem, undoNumOfTimes);
+		listsManager.getMainList().remove(rollbackItem.getNewTask());
+		listsManager.getMainList().add(rollbackItem.getOldTask());
+		rollbackItem.setCommandType(COMMAND_TYPE.DONE);
+		Task tempTask = rollbackItem.getNewTask();
+		rollbackItem.setNewTask(rollbackItem.getOldTask());
+		rollbackItem.setOldTask(tempTask);
+		String undoUndoneCommandMesage = String.format(MESSAGE_UNDO_UNDONE_COMMAND, rollbackItem.getNewTask().getDescription());
+		updateMessage(undoUndoneCommandMesage, MESSAGE_UNDO_MULTIPLE_UNDONE_COMMAND, rollbackItem, undoNumOfTimes);
 	}
 
 	/**
@@ -224,14 +237,14 @@ public class UndoCommand implements CommandInterface {
 	 * @param undoNumOfTimes This is the number of times of undo.
 	 */
 	private void undoDoneCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
-			listsManager.getMainList().remove(rollbackItem.getNewTask());
-			listsManager.getMainList().add(rollbackItem.getOldTask());
-			rollbackItem.setCommandType(COMMAND_TYPE.UNDONE);
-			Task tempTask = rollbackItem.getNewTask();
-			rollbackItem.setNewTask(rollbackItem.getOldTask());
-			rollbackItem.setOldTask(tempTask);
-			String undoDoneCommandMesage = String.format(MESSAGE_UNDO_DONE_COMMAND, rollbackItem.getNewTask().getDescription());
-			updateMessage(undoDoneCommandMesage, MESSAGE_UNDO_MULTIPLE_DONE_COMMAND, rollbackItem, undoNumOfTimes);
+		listsManager.getMainList().remove(rollbackItem.getNewTask());
+		listsManager.getMainList().add(rollbackItem.getOldTask());
+		rollbackItem.setCommandType(COMMAND_TYPE.UNDONE);
+		Task tempTask = rollbackItem.getNewTask();
+		rollbackItem.setNewTask(rollbackItem.getOldTask());
+		rollbackItem.setOldTask(tempTask);
+		String undoDoneCommandMesage = String.format(MESSAGE_UNDO_DONE_COMMAND, rollbackItem.getNewTask().getDescription());
+		updateMessage(undoDoneCommandMesage, MESSAGE_UNDO_MULTIPLE_DONE_COMMAND, rollbackItem, undoNumOfTimes);
 	}
 
 	/**
@@ -244,14 +257,14 @@ public class UndoCommand implements CommandInterface {
 	 * @param undoNumOfTimes This is the number of times of undo.
 	 */
 	private void undoEditCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
-			listsManager.getMainList().remove(rollbackItem.getNewTask());
-			listsManager.getMainList().add(rollbackItem.getOldTask());
-			rollbackItem.setCommandType(COMMAND_TYPE.EDIT);
-			Task tempTask = rollbackItem.getNewTask();
-			rollbackItem.setNewTask(rollbackItem.getOldTask());
-			rollbackItem.setOldTask(tempTask);
-			String undoEditCommandMesage = String.format(MESSAGE_UNDO_EDIT_COMMAND, rollbackItem.getNewTask().getDescription());
-			updateMessage(undoEditCommandMesage, MESSAGE_UNDO_MULTIPLE_EDIT_COMMAND, rollbackItem, undoNumOfTimes);
+		listsManager.getMainList().remove(rollbackItem.getNewTask());
+		listsManager.getMainList().add(rollbackItem.getOldTask());
+		rollbackItem.setCommandType(COMMAND_TYPE.EDIT);
+		Task tempTask = rollbackItem.getNewTask();
+		rollbackItem.setNewTask(rollbackItem.getOldTask());
+		rollbackItem.setOldTask(tempTask);
+		String undoEditCommandMesage = String.format(MESSAGE_UNDO_EDIT_COMMAND, rollbackItem.getNewTask().getDescription());
+		updateMessage(undoEditCommandMesage, MESSAGE_UNDO_MULTIPLE_EDIT_COMMAND, rollbackItem, undoNumOfTimes);
 	}
 
 	/**
@@ -264,12 +277,12 @@ public class UndoCommand implements CommandInterface {
 	 * @param undoNumOfTimes This is the number of times of undo.
 	 */
 	private void undoDeleteCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
-			listsManager.getMainList().add(rollbackItem.getOldTask());
-			rollbackItem.setCommandType(COMMAND_TYPE.ADD);
-			rollbackItem.setNewTask(rollbackItem.getOldTask());
-			rollbackItem.setOldTask(null);
-			String undoDeleteCommandMesage = String.format(MESSAGE_UNDO_DELETE_COMMAND, rollbackItem.getNewTask().getDescription());
-			updateMessage(undoDeleteCommandMesage, MESSAGE_UNDO_MULTIPLE_DELETE_COMMAND, rollbackItem, undoNumOfTimes);
+		listsManager.getMainList().add(rollbackItem.getOldTask());
+		rollbackItem.setCommandType(COMMAND_TYPE.ADD);
+		rollbackItem.setNewTask(rollbackItem.getOldTask());
+		rollbackItem.setOldTask(null);
+		String undoDeleteCommandMesage = String.format(MESSAGE_UNDO_DELETE_COMMAND, rollbackItem.getNewTask().getDescription());
+		updateMessage(undoDeleteCommandMesage, MESSAGE_UNDO_MULTIPLE_DELETE_COMMAND, rollbackItem, undoNumOfTimes);
 	}
 
 	/**
@@ -282,14 +295,14 @@ public class UndoCommand implements CommandInterface {
 	 * @param undoNumOfTimes This is the number of times of undo.
 	 */
 	private void undoAddCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
-			listsManager.getMainList().remove(rollbackItem.getNewTask());
-			rollbackItem.setCommandType(COMMAND_TYPE.DELETE);
-			rollbackItem.setOldTask(rollbackItem.getNewTask());
-			rollbackItem.setNewTask(null);
-			String undoAddCommandMesage = String.format(MESSAGE_UNDO_ADD_COMMAND, rollbackItem.getOldTask().getDescription());
-			updateMessage(undoAddCommandMesage, MESSAGE_UNDO_MULTIPLE_ADD_COMMAND, rollbackItem, undoNumOfTimes);
+		listsManager.getMainList().remove(rollbackItem.getNewTask());
+		rollbackItem.setCommandType(COMMAND_TYPE.DELETE);
+		rollbackItem.setOldTask(rollbackItem.getNewTask());
+		rollbackItem.setNewTask(null);
+		String undoAddCommandMesage = String.format(MESSAGE_UNDO_ADD_COMMAND, rollbackItem.getOldTask().getDescription());
+		updateMessage(undoAddCommandMesage, MESSAGE_UNDO_MULTIPLE_ADD_COMMAND, rollbackItem, undoNumOfTimes);
 	}
-	
+
 	/**
 	 * This method is used to update and set the message of UndoCommand.
 	 * 

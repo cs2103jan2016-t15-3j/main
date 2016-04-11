@@ -1,9 +1,11 @@
 package logic.commands;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Logic.COMMAND_TYPE;
 import logic.RollbackItem;
 import logic.Task;
@@ -17,19 +19,26 @@ import storage.Storage;
  */
 public class UndoneCommand implements CommandInterface {
 
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
+
 	//This is the first index of task in the list to be undone.
 	private int _firstIndex;
-	
+
 	//This is the last index of task in the list to be undone.
 	private int _lastIndex;
-	
+
 	//This is the message of an UndoneCommand object to be displayed.
 	private String _message;
 
 	//These constant string variables are the standard format for display message when tasks are set to undone successfully.
 	private final String MESSAGE_UNDONE_COMMAND = "undone \"%1$s\"";
 	private final String MESSAGE_MULTIPLE_UNDONE_COMMAND = "undone multiple tasks";
-	
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_UNDONE_COMMAND = "Executing undone command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_UNDONE_COMMAND = "Completed undone command.";
+
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
 
@@ -55,7 +64,7 @@ public class UndoneCommand implements CommandInterface {
 	public void setFirstIndex(int index) {
 		_firstIndex = index;
 	}
-	
+
 	/**
 	 * This is setter method for UndoneCommand's lastIndex.
 	 * 
@@ -64,15 +73,15 @@ public class UndoneCommand implements CommandInterface {
 	public void setLastIndex(int index) {
 		_lastIndex = index;
 	}
-	
+
 	/**
 	 * This is setter method for UndoneCommand's message.
 	 * 
 	 * @param message This will be the message of the UndoneCommand.
 	 */
 	public void setMessage(String message) {
-        _message = message;
-    }
+		_message = message;
+	}
 
 	/**
 	 * This is getter method for UndoneCommand's firstIndex.
@@ -91,15 +100,15 @@ public class UndoneCommand implements CommandInterface {
 	public int getLastIndex() {
 		return _lastIndex;
 	}
-	
+
 	/**
 	 * This is getter command for UndoneCommand's message.
 	 * 
 	 * @return message.
 	 */
 	public String getMessage() {
-        return _message;
-    }
+		return _message;
+	}
 
 	/**
 	 * This method will not be called.
@@ -121,9 +130,10 @@ public class UndoneCommand implements CommandInterface {
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
 		assert(getFirstIndex() >= 0 && getFirstIndex() < listsManager.getViewList().size());
 		assert(getLastIndex() >= 0 && getLastIndex() < listsManager.getViewList().size());
-		
+
+		log.info(LOGGER_MESSAGE_EXECUTING_UNDONE_COMMAND);
 		clearIndexList(listsManager);
-		
+
 		int numOfUndone = getLastIndex() - getFirstIndex() + 1;
 		Task oldTask = null;
 		ArrayList<Task> undoneTasksList = new ArrayList<Task>();
@@ -135,12 +145,25 @@ public class UndoneCommand implements CommandInterface {
 			undoneTasksList.add(newTask);
 			updateManagers(listsManager, historyManager, numOfUndone, oldTask, newTask);
 		}
+		updateIndexList(listsManager, undoneTasksList);
+		updateMessage(numOfUndone, oldTask);
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_UNDONE_COMMAND);
+		return null;
+	}
+	
+	/**
+	 * This method is used to update indexList in ListsManaer.
+	 * 
+	 * @param listsManager This is the ListsManager.
+	 * 
+	 * @param undoneTasksList This is the list of tasks to be set to undone.
+	 */
+	private void updateIndexList(ListsManager listsManager, ArrayList<Task> undoneTasksList) {
 		for (int i = 0; i < undoneTasksList.size(); i++) {
 			Task undoneTask = undoneTasksList.get(i);
 			listsManager.updateIndexList(undoneTask);
 		}
-		updateMessage(numOfUndone, oldTask);
-		return null;
 	}
 
 	/**

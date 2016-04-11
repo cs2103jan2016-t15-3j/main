@@ -1,16 +1,17 @@
-//@@author A0140021J
 package logic.commands;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import logic.HistoryManager;
 import logic.ListsManager;
+import logic.Logic;
 import logic.Task;
 import storage.Storage;
 
@@ -21,6 +22,9 @@ import storage.Storage;
  *
  */
 public class SetCommand implements CommandInterface {
+
+	//This is the logger used to log and observe the changes when program runs.
+	static Logger log = Logger.getLogger(Logic.class.getName());
 
 	//This is the file path of the storage file.
 	private String _filePath;
@@ -43,6 +47,10 @@ public class SetCommand implements CommandInterface {
 
 	//This constant string variable is file extension of the storage file.
 	private final String FILE_EXTENSION = ".txt";
+
+	//These are constant string variables for logging.
+	private final String  LOGGER_MESSAGE_EXECUTING_SET_COMMAND = "Executing set command...";
+	private final String  LOGGER_MESSAGE_COMPLETED_SET_COMMAND = "Completed set command.";
 
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
@@ -110,7 +118,7 @@ public class SetCommand implements CommandInterface {
 	public CommandInterface execute() {
 		return null;
 	}
-	
+
 	/**
 	 * This method will not be called.
 	 */
@@ -122,11 +130,15 @@ public class SetCommand implements CommandInterface {
 	 * This method is used to execute set command.
 	 */
 	public CommandInterface execute(ListsManager listsManager, Storage storage) {
+		log.info(LOGGER_MESSAGE_EXECUTING_SET_COMMAND);
 		clearIndexList(listsManager);
 		setFilePath(listsManager, storage);
-		if (_invalidCommand != null) {
-			return _invalidCommand;
+		if (getInvalidCommand() != null) {
+			log.info(getInvalidCommand().getMessage());
+			return getInvalidCommand();
 		}
+		log.info(getMessage());
+		log.info(LOGGER_MESSAGE_COMPLETED_SET_COMMAND);
 		return null;
 	}
 
@@ -148,11 +160,10 @@ public class SetCommand implements CommandInterface {
 	 */
 	private void setFilePath(ListsManager listsManager, Storage storage) {
 		if (_filePath == null) {
-			storage.setDefaultFilePath();
-			setMessage(MESSAGE_SET_DEFAULT_FILE_PATH);
+			setDefaultFilePath(listsManager, storage);
 			return;
 		}
-		
+
 		try {
 			File file = null;
 			file = new File(_filePath);
@@ -166,6 +177,19 @@ public class SetCommand implements CommandInterface {
 			_invalidCommand = new InvalidCommand(INVALID_FILE_PATH);
 		}
 
+	}
+
+	/**
+	 * This method is used to file path to the default file path.
+	 * 
+	 * @param listsManager This is the ListsManager.
+	 * 
+	 * @param storage This is the Storage.
+	 */
+	private void setDefaultFilePath(ListsManager listsManager, Storage storage) {
+		storage.setDefaultFilePath();
+		listsManager.setUpLists(storage.getMasterList());
+		setMessage(MESSAGE_SET_DEFAULT_FILE_PATH);
 	}
 
 	/**
