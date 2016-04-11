@@ -94,8 +94,8 @@ public class MainWindow extends Application {
      * Set the stage parameters.
      * The scene is assumed to be initialize.
      *  
-     * @param stage    the stage that the parameters will be applied to.
-     * @param scene   the scene that will be set to the stage.
+     * @param stage     the stage that the parameters will be applied to.
+     * @param scene     the scene that will be set to the stage.
      */
     private void setStage(Stage stage, Scene scene) {
         log.info(LOG_MESSAGE_SETTING_STAGE);
