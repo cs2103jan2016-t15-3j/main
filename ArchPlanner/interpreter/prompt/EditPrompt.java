@@ -182,7 +182,7 @@ public class EditPrompt implements PromptInterface {
             if (inputSeparator.getKeywordType() == InputSeparator.KeywordType.START
                     || inputSeparator.getKeywordType() == InputSeparator.KeywordType.END) {
                 String remove = REMOVE;
-                if (remove.startsWith(inputSeparator.getParameter())) {
+                if (remove.startsWith(inputSeparator.getParameter().toLowerCase())) {
                     return remove;
                 }
             }

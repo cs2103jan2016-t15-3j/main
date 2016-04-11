@@ -285,7 +285,6 @@ public class AddPrompt implements PromptInterface {
      * 
      * @param addPrompts    the list of prompts that will be form in this method to guide the user on the next parameter.
      * @param prompt        the string formed by the parameters that have already been inputed.
-     * @param parameter     the parameters that the user have already inputed.
      */
     private void addPromptsAfterKeyWordTo(ArrayList<String> addPrompts, String prompt) {
         addPrompts.add(prompt + PROMPT_END_TIME);

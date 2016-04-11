@@ -87,7 +87,7 @@ public class InputSeparator {
             return EMPTY_STRING;
         }
         for (KeywordType type : KeywordType.values()) {
-            if (commandHasKeyword(commandType, type) && type.toString().startsWith(parameter)) {
+            if (commandHasKeyword(commandType, type) && type.toString().startsWith(parameter.toLowerCase())) {
                 return getAutoCompleteWord(type);
             }
         }
