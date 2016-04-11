@@ -39,24 +39,24 @@ public class TaskPane extends GridPane {
     private static final int ROW_1_OF_PANE = 0;
     private static final int ROW_2_OF_PANE = 1;
     
-    private ColumnConstraints numColumn;
-    private ColumnConstraints desColumn;
-    private ColumnConstraints dateColumn;
-    private ColumnConstraints timeColumn;
+    private ColumnConstraints _numColumn;
+    private ColumnConstraints _desColumn;
+    private ColumnConstraints _dateColumn;
+    private ColumnConstraints _timeColumn;
     
-    private RowConstraints taskRow1;
-    private RowConstraints taskRow2;
+    private RowConstraints _taskRow1;
+    private RowConstraints _taskRow2;
     
-    private Label number;
-    private Label description;
-    private Label startDate;
-    private Label startTime;
-    private Label endDate;
-    private Label endTime;
-    private Label tag;
+    private Label _number;
+    private Label _description;
+    private Label _startDate;
+    private Label _startTime;
+    private Label _endDate;
+    private Label _endTime;
+    private Label _tag;
     
-    private Tooltip desciptionHover = new Tooltip();
-    private Tooltip tagHover = new Tooltip();
+    private Tooltip _desciptionHover = new Tooltip();
+    private Tooltip _tagHover = new Tooltip();
     
     /**
      * construct a new GridPane with the Task parameters and bind the its width.
@@ -80,7 +80,7 @@ public class TaskPane extends GridPane {
     public void setNumber(int displayNumber) {
         assert(displayNumber >= DISPLAY_NUMBER_MIN);
         
-        number.setText(Integer.toString(displayNumber));        
+        _number.setText(Integer.toString(displayNumber));        
     }
     
     /**
@@ -102,23 +102,23 @@ public class TaskPane extends GridPane {
     }
     
     private void setColunmProperties() {
-        numColumn = new ColumnConstraints();
-        desColumn = new ColumnConstraints();
-        dateColumn = new ColumnConstraints();
-        timeColumn = new ColumnConstraints();
+        _numColumn = new ColumnConstraints();
+        _desColumn = new ColumnConstraints();
+        _dateColumn = new ColumnConstraints();
+        _timeColumn = new ColumnConstraints();
         
-        numColumn.setMinWidth(WIDTH_OF_NUM_COLUMN);     
-        desColumn.setHgrow(Priority.SOMETIMES);
-        dateColumn.setMinWidth(Region.USE_PREF_SIZE);
-        timeColumn.setMinWidth(Region.USE_PREF_SIZE);
+        _numColumn.setMinWidth(WIDTH_OF_NUM_COLUMN);     
+        _desColumn.setHgrow(Priority.SOMETIMES);
+        _dateColumn.setMinWidth(Region.USE_PREF_SIZE);
+        _timeColumn.setMinWidth(Region.USE_PREF_SIZE);
     }
     
     private void setRowProperties() {
-        taskRow1 = new RowConstraints();
-        taskRow2 = new RowConstraints();
+        _taskRow1 = new RowConstraints();
+        _taskRow2 = new RowConstraints();
        
-        taskRow1.setVgrow(Priority.SOMETIMES);
-        taskRow2.setVgrow(Priority.SOMETIMES);
+        _taskRow1.setVgrow(Priority.SOMETIMES);
+        _taskRow2.setVgrow(Priority.SOMETIMES);
     }
 
     private void setLabelProperties() {
@@ -131,13 +131,13 @@ public class TaskPane extends GridPane {
     private void setPaneProperties() {
         this.setStyle(FX_BACKGROUND_RADIUS_OF_PANE + FX_PADDING_OF_PANE);
         
-        this.getColumnConstraints().addAll(numColumn, desColumn, dateColumn, timeColumn);
+        this.getColumnConstraints().addAll(_numColumn, _desColumn, _dateColumn, _timeColumn);
         
-        this.getRowConstraints().add(taskRow1);
-        this.getRowConstraints().add(taskRow2);
+        this.getRowConstraints().add(_taskRow1);
+        this.getRowConstraints().add(_taskRow2);
         
-        this.addRow(ROW_1_OF_PANE, number, description, startDate, startTime);
-        this.addRow(ROW_2_OF_PANE, new Label(), tag, endDate, endTime);
+        this.addRow(ROW_1_OF_PANE, _number, _description, _startDate, _startTime);
+        this.addRow(ROW_2_OF_PANE, new Label(), _tag, _endDate, _endTime);
     }
    
     private void setWidthProperty(ReadOnlyDoubleProperty maxWidth) {
@@ -145,39 +145,39 @@ public class TaskPane extends GridPane {
     }
     
     private void initLabel() {
-        number = new Label();
-        description = new Label();     
-        startDate = new Label();
-        startTime = new Label();      
-        endDate = new Label();
-        endTime = new Label();
-        tag = new Label();
+        _number = new Label();
+        _description = new Label();     
+        _startDate = new Label();
+        _startTime = new Label();      
+        _endDate = new Label();
+        _endTime = new Label();
+        _tag = new Label();
     }
     
     private void setLabelAlignment() {
-        number.setAlignment(Pos.CENTER_LEFT);
-        description.setAlignment(Pos.CENTER_LEFT);
-        startDate.setAlignment(Pos.CENTER_LEFT);
-        startTime.setAlignment(Pos.CENTER_LEFT);
-        endDate.setAlignment(Pos.CENTER_LEFT);
-        endTime.setAlignment(Pos.CENTER_LEFT);
+        _number.setAlignment(Pos.CENTER_LEFT);
+        _description.setAlignment(Pos.CENTER_LEFT);
+        _startDate.setAlignment(Pos.CENTER_LEFT);
+        _startTime.setAlignment(Pos.CENTER_LEFT);
+        _endDate.setAlignment(Pos.CENTER_LEFT);
+        _endTime.setAlignment(Pos.CENTER_LEFT);
     }
     
     private void setLabelSize() {
-        number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        startDate.setMinWidth(WIDTH_OF_DATE_COLUMN);
-        startTime.setMinWidth(WIDTH_OF_TIME_COLUMN);
-        endDate.setMinWidth(WIDTH_OF_DATE_COLUMN);
-        endTime.setMinWidth(WIDTH_OF_TIME_COLUMN);
-        tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        _number.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        _description.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        _startDate.setMinWidth(WIDTH_OF_DATE_COLUMN);
+        _startTime.setMinWidth(WIDTH_OF_TIME_COLUMN);
+        _endDate.setMinWidth(WIDTH_OF_DATE_COLUMN);
+        _endTime.setMinWidth(WIDTH_OF_TIME_COLUMN);
+        _tag.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
    
     private void setLabelTextColor() {
-        startDate.setStyle(startDate.getStyle() + FX_TEXT_FILL_START_COLOR);
-        startTime.setStyle(startTime.getStyle() + FX_TEXT_FILL_START_COLOR);
-        endDate.setStyle(endDate.getStyle() + FX_TEXT_FILL_END_COLOR);
-        endTime.setStyle(endTime.getStyle() + FX_TEXT_FILL_END_COLOR);
+        _startDate.setStyle(_startDate.getStyle() + FX_TEXT_FILL_START_COLOR);
+        _startTime.setStyle(_startTime.getStyle() + FX_TEXT_FILL_START_COLOR);
+        _endDate.setStyle(_endDate.getStyle() + FX_TEXT_FILL_END_COLOR);
+        _endTime.setStyle(_endTime.getStyle() + FX_TEXT_FILL_END_COLOR);
     }
     
     private void setTaskParameters(Task task) {
@@ -188,29 +188,29 @@ public class TaskPane extends GridPane {
         assert(task.getEndTimeString() != null);
         assert(task.getTagsList() != null);
         
-        description.setText(task.getDescription());       
-        startDate.setText(task.getStartDateString());
-        startTime.setText(task.getStartTimeString());       
-        endDate.setText(task.getEndDateString());
-        endTime.setText(task.getEndTimeString());
+        _description.setText(task.getDescription());       
+        _startDate.setText(task.getStartDateString());
+        _startTime.setText(task.getStartTimeString());       
+        _endDate.setText(task.getEndDateString());
+        _endTime.setText(task.getEndTimeString());
         String allTag = STRING_EMPTY;
         for(int i = INDEX_INITIAL; i < task.getTagsList().size(); i++) {
             allTag += task.getTagsList().get(i) + STRING_THREE_SPACE;
         }
-        tag.setText(allTag);
+        _tag.setText(allTag);
     }
 
     private void setHoverText(Task task) {        
-        desciptionHover.setText(task.getDescription());
-        description.setTooltip(desciptionHover);
+        _desciptionHover.setText(task.getDescription());
+        _description.setTooltip(_desciptionHover);
         
         String allTag = STRING_EMPTY;
         for(int i = INDEX_INITIAL; i < task.getTagsList().size(); i++) {
             allTag += task.getTagsList().get(i) + STRING_NEWLINE;
         }
         if (!allTag.isEmpty()) {
-            tagHover.setText(allTag);
-            tag.setTooltip(tagHover);
+            _tagHover.setText(allTag);
+            _tag.setTooltip(_tagHover);
         } 
     }
     
