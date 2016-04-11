@@ -31,6 +31,9 @@ public class AddCommandParser {
      * @return Parsed command object
      */
     public CommandInterface parse(String input) {
+        if (input.length() <= ADD_PARAMETER_INDEX) {
+            return new InvalidCommand(INVALID_EMPTY);
+        }
         AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
         if (!addInputSeparator.hasDescription()) {
             return new InvalidCommand(INVALID_EMPTY);
