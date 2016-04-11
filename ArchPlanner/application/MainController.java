@@ -84,7 +84,6 @@ public class MainController implements Initializable{
     private static final String STRING_NEW_LINE = "\n";
     private static final String STRING_FAILED = "Failed";
     private static final String STRING_SUCCESS = "Success";
-    private static final String VIEW_SCOPE_ALL = "ALL";
     
     private static final String SIMULATE_REDO = "redo";
     private static final String SIMULATE_UNDO = "undo";
