@@ -165,8 +165,4 @@ public class AddCommand implements CommandInterface {
 		listsManager.updateLists();
 		listsManager.updateIndexList(newTask);
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
 }

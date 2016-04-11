@@ -17,17 +17,12 @@ import storage.Storage;
  *
  */
 public class ViewCommand implements CommandInterface {
-<<<<<<< HEAD
 
 	//These are enum variables of view type.
 	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE};
 
 	//these are enum variables of category type.
 	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS};
-=======
-	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE}
-	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS}
->>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
 
 	//This is the logger used to log and observe the changes when program runs.
 	static Logger log = Logger.getLogger(Logic.class.getName());
@@ -447,8 +442,4 @@ public class ViewCommand implements CommandInterface {
 		}
 		listsManager.getSelectedTagsList().clear();
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e0d149930f879dfc252cdc391fb24a8b28f5f33
 }
