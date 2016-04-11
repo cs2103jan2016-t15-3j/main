@@ -46,6 +46,7 @@ import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
+import logic.commands.ViewCommand.VIEW_TYPE;
 import interpreter.prompt.Prompt;
 
 /**
@@ -331,7 +332,6 @@ public class MainController implements Initializable{
         ToggleButton clicked = (ToggleButton)event.getSource();
         if (clicked.isSelected()) {
             _logic.setSelectedCategory(_logic.getCategoryType(clicked.getText()));
-            //_logic.setSelectedCategory(clicked.getText().toString());
         } else {
             _logic.setSelectedCategory(CATEGORY_TYPE.ALL);
         }   
@@ -659,8 +659,7 @@ public class MainController implements Initializable{
     }
 
     private void displayBackButton(String scopeOfView) {
-        //if (!scopeOfView.trim().equalsIgnoreCase(VIEW_TYPE.ALL)) {
-        if (!scopeOfView.trim().equalsIgnoreCase(VIEW_SCOPE_ALL)) {
+        if (!scopeOfView.trim().equalsIgnoreCase(VIEW_TYPE.ALL.toString())) {
             _backButton.setVisible(true);
         } else {
             _backButton.setVisible(false);
