@@ -321,6 +321,8 @@ public class EditPrompt implements PromptInterface {
             case START_DATE_START_TIME_END_DATE_END_TIME:
                 promptList.add(EDIT_FROM_1111);
                 break;
+            default:
+                break;
         }
     }
 

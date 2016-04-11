@@ -22,12 +22,10 @@ public class ViewPrompt implements PromptInterface {
     private final String VIEW_DESCRIPTION_WITHOUT_KEYWORD = "view <Partial Description>";
     private final String VIEW_FROM = "view from ";
     private final String VIEW_FROM_FULL = "view from <Start Date> to <End Date>";
-    private final String VIEW_START = "view start";
     private final String VIEW_START_DATE = "view start date ";
     private final String VIEW_START_DATE_FULL = "view start date <Start Date>";
     private final String VIEW_START_TIME = "view start time ";
     private final String VIEW_START_TIME_FULL = "view start time <Start Time>";
-    private final String VIEW_END = "view end";
     private final String VIEW_END_DATE = "view end date ";
     private final String VIEW_END_DATE_FULL = "view end date <End Date>";
     private final String VIEW_END_TIME = "view end time ";

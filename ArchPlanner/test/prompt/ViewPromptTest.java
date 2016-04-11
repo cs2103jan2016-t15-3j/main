@@ -11,7 +11,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by lifengshuang on 4/11/16.
+ * @@author A0149647N
+ * Test ViewPrompt
  */
 public class ViewPromptTest {
 
