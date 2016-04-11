@@ -1,5 +1,11 @@
 package logic;
 
+/**
+ * This class keeps the date and time format.
+ * 
+ * @@author A0140021J
+ *
+ */
 public class DateTimeFormat {
 
 	//These constant string variables are used for display if the date is today, yesterday or tomorrow.
