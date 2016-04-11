@@ -19,10 +19,10 @@ import storage.Storage;
 public class ViewCommand implements CommandInterface {
 
 	//These are enum variables of view type.
-	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE};
+	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE}
 
 	//these are enum variables of category type.
-	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS};
+	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS}
 
 	//This is the logger used to log and observe the changes when program runs.
 	static Logger log = Logger.getLogger(Logic.class.getName());

@@ -23,7 +23,7 @@ public class Logic {
 	//These are enum variables of command type.
 	public enum COMMAND_TYPE {
 		ADD, DELETE, EDIT, EXIT, UNDO, REDO, DONE, UNDONE, VIEW, SET, INVALID
-	};
+	}
 
 	//This is the logger used to log and observe the changes when program runs.
 	static Logger log = Logger.getLogger(Logic.class.getName());

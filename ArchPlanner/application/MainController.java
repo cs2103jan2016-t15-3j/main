@@ -144,7 +144,7 @@ public class MainController implements Initializable{
     
     @FXML private ImageView _feedbackIcon;
  
-    private ArrayList<Tag> _tags = new ArrayList<Tag>();;
+    private ArrayList<Tag> _tags = new ArrayList<Tag>();
     private ArrayList<Task> _tasks = new ArrayList<Task>();
     
     private ObservableList<ToggleButton> _tagList = FXCollections.observableArrayList();

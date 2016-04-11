@@ -65,9 +65,9 @@ public class AddCommandParserTest {
         assertEquals("#b", ((AddCommand) onlyDateKeywordBy).getTaskParameters().getTagsList().get(1));
 
         //add ... by <date><time>
-        CommandInterface dateTimeKeywordBy = new AddCommandParser().parse("add manual V0.2 by next Sunday 23:59:59");
-        LocalDate nextSunday = dateNow.plusDays(2 * 7 - dateNow.getDayOfWeek().getValue());
-        assertEquals(nextSunday, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getEndDate());
+        CommandInterface dateTimeKeywordBy = new AddCommandParser().parse("add manual V0.2 by Nov 2 23:59:59");
+        LocalDate nov2 = LocalDate.of(dateNow.getYear(), 11, 2);
+        assertEquals(nov2, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getEndDate());
         LocalTime endOfDay = LocalTime.of(23, 59, 59);
         assertEquals(endOfDay, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getEndTime());
         assertEquals(null, ((AddCommand) dateTimeKeywordBy).getTaskParameters().getStartDate());
@@ -139,7 +139,9 @@ public class AddCommandParserTest {
         assertEquals("movie at Friday 13:00 to 15:00", ((AddCommand) wrongKeyword).getTaskParameters().getDescription());
 
         CommandInterface unmatchedKeyword = new AddCommandParser().parse("add movie from Friday 13:00");
-        assertEquals("movie from Friday 13:00", ((AddCommand) unmatchedKeyword).getTaskParameters().getDescription());
+//        assertEquals("movie from Friday 13:00", ((AddCommand) unmatchedKeyword).getTaskParameters().getDescription());
+        assertTrue(unmatchedKeyword instanceof InvalidCommand);
+        assertEquals("Invalid Time!", unmatchedKeyword.getMessage());
 
         CommandInterface wrongTime = new AddCommandParser().parse("add movie from Friday 23:61");
         assertEquals("movie from Friday 23:61", ((AddCommand) wrongTime).getTaskParameters().getDescription());

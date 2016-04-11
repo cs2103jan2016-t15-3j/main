@@ -21,8 +21,9 @@ public class AddCommandParser {
     private static final String INVALID_TIME = "Invalid Time!";
     private static final String INVALID_TAG = "Invalid Tags";
     private static final String INVALID_EMPTY = "Invalid empty command";
+    private static final String TAG_NOTATION = "#";
 
-    TaskParameters result = new TaskParameters();
+    private TaskParameters result = new TaskParameters();
 
     /**
      * Parse add command with AddInputSeparator
@@ -31,7 +32,7 @@ public class AddCommandParser {
      */
     public CommandInterface parse(String input) {
         AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
-        if (addInputSeparator.hasDescription()) {
+        if (!addInputSeparator.hasDescription()) {
             return new InvalidCommand(INVALID_EMPTY);
         }
         result.setDescription(addInputSeparator.getDescription());
@@ -47,11 +48,8 @@ public class AddCommandParser {
         if (!checkTimeValidWithKeyword(addInputSeparator.getKeyWord(), timeParserResult)) {
             return new InvalidCommand(INVALID_TIME);
         }
-        if (timeParserResult.getMatchString() != null && !timeParserResult.isTimeValid()) {
-            return new InvalidCommand(INVALID_TIME);
-        }
         if (addInputSeparator.hasValidTag()) {
-            if (addInputSeparator.getTags()[addInputSeparator.getTags().length - 1].equals("#")) {
+            if (addInputSeparator.getTags()[addInputSeparator.getTags().length - 1].equals(TAG_NOTATION)) {
                 return new InvalidCommand(INVALID_TAG);
             } else {
                 ArrayList<String> arrayList = new ArrayList<>();
@@ -91,6 +89,7 @@ public class AddCommandParser {
         if (timeParserResult.getSecondTime() != null && timeParserResult.getSecondDate() == null) {
             timeParserResult.setSecondDate(LocalDate.now());
         }
+        timeParserResult.checkInvalidTimeRange();
         return timeParserResult;
     }
 

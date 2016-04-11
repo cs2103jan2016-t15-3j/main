@@ -24,7 +24,7 @@ public class Prompt {
         _prompts = new ArrayList<String>();
     }
 
-    public ArrayList<String> getPrompts(String userInput, int taskListSize, int tagListSize) {
+    public ArrayList<String> getPrompts(String userInput) {
         _prompts.clear();
         
         if (userInput == null) {

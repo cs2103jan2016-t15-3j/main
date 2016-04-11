@@ -27,7 +27,7 @@ public class AddInputSeparator {
     
     public enum AddKeyWordType {
         ON, BY, FROM, UNKNOWN
-    };
+    }
     
     private String _description;
     private AddKeyWordType _keyWord;

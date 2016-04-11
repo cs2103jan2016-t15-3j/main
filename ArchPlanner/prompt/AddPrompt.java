@@ -26,7 +26,7 @@ public class AddPrompt implements PromptInterface {
     
     private enum Parameter {
         DESCRIPTION, KEYWORD, PARTIALKEYWORD, KEYWORDTO, STARTDATE, STARTTIME, ENDDATE, ENDTIME
-    };
+    }
     
     private ArrayList<String> _addPrompts;
     private String _prompt;
