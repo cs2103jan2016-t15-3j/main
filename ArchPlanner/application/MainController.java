@@ -47,6 +47,7 @@ import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
+import interpreter.Interpreter;
 import interpreter.prompt.Prompt;
 
 /**
@@ -160,7 +161,7 @@ public class MainController implements Initializable{
     private SequentialTransition _fadeTransition;
     
     private Logic _logic;
-    private Prompt _prompt;
+    private Interpreter _interpreter;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {              
@@ -187,7 +188,7 @@ public class MainController implements Initializable{
     }
 
     private void initPrompt() {
-        _prompt = new Prompt();
+        _interpreter = new Interpreter();
     }
 
     private void initFeedbackItems() {
@@ -494,7 +495,7 @@ public class MainController implements Initializable{
                 break;
                 
             case TAB :
-                autoInput = _prompt.getAutoComplete(_userInputTextField.getText());
+                autoInput = _interpreter.getAutoComplete(_userInputTextField.getText());
                 _userInputTextField.setText(autoInput);
                 setTextFieldFocus(_userInputTextField);
                 break;
@@ -579,7 +580,7 @@ public class MainController implements Initializable{
     }
     
     private void setPrompt(String newString) {
-        ArrayList<String> prompt = _prompt.getPrompts(newString);
+        ArrayList<String> prompt = _interpreter.getPrompts(newString);
         assert(prompt.size() > PROMPTS_INDEX_MIN && prompt.size() <= PROMPTS_INDEX_MAX);
         
         if (prompt != null && !prompt.isEmpty()) {

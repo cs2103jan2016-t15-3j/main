@@ -8,7 +8,7 @@ import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
-
+import interpreter.Interpreter;
 import interpreter.parser.Parser;
 
 /**
@@ -38,7 +38,7 @@ public class Logic {
 	private HistoryManager _historyManager;
 
 	//This is the Parser object used to translate string commands entered by user to command object.
-	private Parser _parser;
+	private Interpreter _interpreter;
 
 	//These are the constant string variables of the category type.
 	private final String STRING_DEADLINES = "Deadlines";
@@ -63,7 +63,7 @@ public class Logic {
 		_storage = new Storage();
 		_listsManager = new ListsManager();
 		_historyManager = new HistoryManager();
-		_parser = new Parser();
+		_interpreter = new Interpreter();
 		loadFile();
 	}
 
@@ -93,7 +93,7 @@ public class Logic {
 	public CommandInterface executeCommand(String userInput) {
 		ArrayList<Tag> tagsListClone = getTagsListClone();
 
-		CommandInterface commandInput = _parser.parseCommand(userInput, _listsManager.getViewList().size(), 
+		CommandInterface commandInput = _interpreter.parseCommand(userInput, _listsManager.getViewList().size(), 
 				_historyManager.getUndoList().size(), _historyManager.getRedoList().size(), tagsListClone);
 
 		CommandInterface commandReturn = runCommand(commandInput);
