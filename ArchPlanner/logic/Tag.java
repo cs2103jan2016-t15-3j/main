@@ -23,7 +23,7 @@ public class Tag {
 	/**
 	 * This is setter method for Tag's name.
 	 * 
-	 * @param name This will be the name of the Tag.
+	 * @param name	This will be the name of the Tag.
 	 */
 	public void setName(String name) {
 		_name = name;
@@ -32,7 +32,7 @@ public class Tag {
 	/**
 	 * This is setter method for isSelected.
 	 * 
-	 * @param isSelected This will be the status of isSelected of the Tag.
+	 * @param isSelected	This will be the status of isSelected of the Tag.
 	 */
 	public void setIsSelected(boolean isSelected) {
 		_isSelected = isSelected;
@@ -41,7 +41,7 @@ public class Tag {
 	/**
 	 * This is getter method for Tag's name.
 	 * 
-	 * @return Tag's name.
+	 * @return	Tag's name.
 	 */
 	public String getName() {
 		return _name;
@@ -50,7 +50,7 @@ public class Tag {
 	/**
 	 * This is getter method for Tag's isSelected.
 	 * 
-	 * @return Tag's isSelected that indicates whether the Tag is selected.
+	 * @return	Tag's isSelected that indicates whether the Tag is selected.
 	 */
 	public boolean getIsSelected() {
 		return _isSelected;

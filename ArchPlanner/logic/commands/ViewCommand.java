@@ -60,7 +60,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is setter method of the ViewCommand's viewType.
 	 * 
-	 * @param viewType This will be the viewType of the ViewCommand.
+	 * @param viewType	This will be the viewType of the ViewCommand.
 	 */
 	public void setViewType(VIEW_TYPE viewType) {
 		_viewType = viewType;
@@ -69,7 +69,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is setter method of the ViewCommand's categoryType.
 	 * 
-	 * @param categoryType This will be the categoryType of the ViewCommand.
+	 * @param categoryType	This will be the categoryType of the ViewCommand.
 	 */
 	public void setCategoryType(CATEGORY_TYPE categoryType) {
 		_categoryType = categoryType;
@@ -78,7 +78,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is setter method of the ViewCommand's taskParameters.
 	 * 
-	 * @param taskParameters This will be the taskParameters of the ViewCommand.
+	 * @param taskParameters	This will be the taskParameters of the ViewCommand.
 	 */
 	public void setTaskParameters(TaskParameters taskParameters) {
 		_taskParameters = taskParameters;
@@ -87,7 +87,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is getter method of the ViewCommand's viewType.
 	 * 
-	 * @return viewType.
+	 * @return	viewType.
 	 */
 	public VIEW_TYPE getViewType() {
 		return _viewType;
@@ -96,7 +96,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is getter method of the ViewCommand's categoryType.
 	 * 
-	 * @return categoryType.
+	 * @return	categoryType.
 	 */
 	public CATEGORY_TYPE getCategoryType() {
 		return _categoryType;
@@ -105,16 +105,16 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This is getter method of the ViewCommand's taskParameters.
 	 * 
-	 * @return taskParameters.
+	 * @return	taskParameters.
 	 */
 	public TaskParameters getTaskParameters() {
 		return _taskParameters;
 	}
 
 	/**
-	 * This is getter method of the ViewCommand's taskParameters.
+	 * This is getter method of the ViewCommand's message.
 	 * 
-	 * @return taskParameters.
+	 * @return	message with empty string.
 	 */
 	public String getMessage() {
 		return STRING_EMPTY;
@@ -167,7 +167,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method clear the indexList in the ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager 	his is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -176,7 +176,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method update the selectedTagsList in ListsManger.
 	 * 
-	 * @param listsManager This is the ListsManger
+	 * @param listsManager	This is the ListsManger
 	 */
 	private void updateSelectedTagsList(ListsManager listsManager) {
 		listsManager.getSelectedTagsList().clear();
@@ -189,11 +189,9 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to update view list in ListsManager with list of tasks with start date and end date that intercept
 	 * taskParameters' start date and end date time frame.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType This is the current view type.
-	 * 
-	 * @return current view type
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type
 	 */
 	private String updateViewListWithStartDateEndDateOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getStartDate() != null && getTaskParameters().getEndDate() != null) {
@@ -214,9 +212,8 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to check if the task's start date and end date intercepts taskParameters' time frame.
 	 * 
-	 * @param task This is the task in the view list to be checked.
-	 * 
-	 * @return true if task's start date and end date intercepts taskParameters' time frame or else return false.
+	 * @param task	This is the task in the view list to be checked.
+	 * @return		true if task's start date and end date intercepts taskParameters' time frame or else return false.
 	 */
 	private boolean hasTaskStartDateEndDateInterceptsTaskParametersTimeFrame(Task task) {
 		return task.getStartDate() != null && task.getEndDate() != null 
@@ -229,9 +226,8 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to check if the task's end date intercepts taskParameters' time frame.
 	 * 
-	 * @param task This is the task in the view list to be checked.
-	 * 
-	 * @return true if task's end date intercepts taskParameters' time frame or else return false.
+	 * @param task	This is the task in the view list to be checked.
+	 * @return		true if task's end date intercepts taskParameters' time frame or else return false.
 	 */
 	private boolean hasTaskEndDateInterceptsTaskParametersTimeFrame(Task task) {
 		return task.getStartDate() == null && task.getEndDate() != null
@@ -242,9 +238,8 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to check if the task's start date intercepts taskParameters' time frame.
 	 * 
-	 * @param task This is the task in the view list to be checked.
-	 * 
-	 * @return true if task's start date intercepts taskParameters' time frame or else return false.
+	 * @param task	This is the task in the view list to be checked.
+	 * @return		true if task's start date intercepts taskParameters' time frame or else return false.
 	 */
 	private boolean hasTaskStartDateInterceptsTaskParametersTimeFrame(Task task) {
 		return task.getStartDate() != null && task.getEndDate() == null 
@@ -256,11 +251,9 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to update view list with tasks' end time matches taskParameters' end time
 	 * if taskParameters' start time is null and end time is not null.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType this is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	Thisis the current view type.
+	 * @return					current view type.
 	 */
 	private String updateViewListWithEndTimeOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getStartTime() == null && getTaskParameters().getEndTime() != null) {
@@ -279,11 +272,9 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to append the current view type.
 	 * 
-	 * @param currentViewType This is the current view type.
-	 * 
-	 * @param detail This is the String to be appended to current view type.
-	 * 
-	 * @return current view type.
+	 * @param currentViewType	This is the current view type.
+	 * @param detail			This is the String to be appended to current view type.
+	 * @return					current view type.
 	 */
 	private String appendCurrentViewType(String currentViewType, String detail) {
 		currentViewType += STRING_DOUBLE_QUOTE + detail + STRING_DOUBLE_QUOTE + STRING_SINGLE_SPACE;
@@ -294,11 +285,9 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to update view list with tasks' end date matches taskParameters' end date
 	 * if taskParameters' start date is null and end date is not null.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType this is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type.
 	 */
 	private String updateViewListWithEndDateOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getStartDate() == null && getTaskParameters().getEndDate() != null) {
@@ -319,11 +308,9 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to update view list with tasks' start time matches taskParameters' start time
 	 * if taskParameters' start time is not null and end time is null.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType this is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type.
 	 */
 	private String updateViewListWithStartTimeOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getStartTime() != null && getTaskParameters().getEndTime() == null) {
@@ -344,11 +331,9 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to update view list with tasks' start date matches taskParameters' start date
 	 * if taskParameters' start date is not null and end date is null.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType this is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type.
 	 */
 	private String updateViewListWithStartDateOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getStartDate() != null && getTaskParameters().getEndDate() == null) {
@@ -368,9 +353,8 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to update and append current view type with tags' names.
 	 * 
-	 * @param currentViewType This is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type.
 	 */
 	private String updateCurrentViewTypeWithTagsList(String currentViewType) {
 		if (getTaskParameters().getTagsList() != null && !getTaskParameters().getTagsList().isEmpty()) {
@@ -384,11 +368,9 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to update view list with tasks with description that contains the taskParameters' description.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param currentViewType This is the current view type.
-	 * 
-	 * @return current view type.
+	 * @param listsManager		This is the ListsManager.
+	 * @param currentViewType	This is the current view type.
+	 * @return					current view type.
 	 */
 	private String updateViewListWithDescriptionOnly(ListsManager listsManager, String currentViewType) {
 		if (getTaskParameters().getDescription() != null && !getTaskParameters().getDescription().isEmpty()) {
@@ -408,7 +390,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to set view type if category type is not null.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void setViewIfCategoryTypeIsNotNull(ListsManager listsManager) {
 		if (getCategoryType() != null) {
@@ -422,7 +404,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to set category type if view type is not null.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void setViewIfViewTypeIsNotNull(ListsManager listsManager) {
 		if (getViewType() != null) {
@@ -437,7 +419,7 @@ public class ViewCommand implements CommandInterface {
 	/**
 	 * This method is used to set the select status of all the tags in tagsList to false, and clear selectedTagsList.
 	 *  
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void deselectAllTags(ListsManager listsManager) {
 		for (int i = 0; i < listsManager.getTagsList().size(); i++) {

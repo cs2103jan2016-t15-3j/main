@@ -51,7 +51,7 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This is setter method for AddCommand's taskParameters.
 	 * 
-	 * @param taskParameters This will be the taskParameters of the AddCommand.
+	 * @param taskParameters	This will be the taskParameters of the AddCommand.
 	 */
 	public void setTaskParameters(Task taskParameters) {
 		_taskParameters = taskParameters;
@@ -60,7 +60,7 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This is setter method for AddCommand's message.
 	 * 
-	 * @param message This will be the message of the AddCommand.
+	 * @param message	This will be the message of the AddCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -69,7 +69,7 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This is getter method for AddCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -78,7 +78,7 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This is getter method for AddCommand's taskParameters.
 	 * 
-	 * @return taskParameters.
+	 * @return	taskParameters.
 	 */
 	public TaskParameters getTaskParameters() {
 		return _taskParameters;
@@ -117,11 +117,9 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager and HistoryManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param newTask This is the task to be added.
+	 * @param listsManager		This is the ListsManager.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param newTask			This is the task to be added.
 	 */
 	private void updateManagers(ListsManager listsManager, HistoryManager historyManager, Task newTask) {
 		updateListsManager(listsManager, newTask);
@@ -131,7 +129,7 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This method is used to clear the index list in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -140,9 +138,8 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This method is used to update HistoryManager.
 	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param newTask This is the task to be added.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param newTask			This is the task to be added.
 	 */
 	private void updateHistoryManager(HistoryManager historyManager, Task newTask) {
 		RollbackItem rollbackItem = new RollbackItem(COMMAND_TYPE.ADD, null, newTask);
@@ -153,9 +150,8 @@ public class AddCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param newTask This is the task to be added.
+	 * @param listsManager	This is the ListsManager.
+	 * @param newTask		This is the task to be added.
 	 */
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);

@@ -59,7 +59,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This is setter method for DeleteCommand's firstIndex.
 	 * 
-	 * @param index This will be firstIndex of the DeleteCommand.
+	 * @param index	This will be firstIndex of the DeleteCommand.
 	 */
 	public void setFirstIndex(int index) {
 		_firstIndex = index;
@@ -68,7 +68,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 *  This is setter method for DeleteCommand's lastIndex.
 	 *  
-	 * @param index This will be lastIndex of the DeleteCommand.
+	 * @param index	This will be lastIndex of the DeleteCommand.
 	 */
 	public void setLastIndex(int index) {
 		_lastIndex = index;
@@ -77,7 +77,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This is setter method for DeleteCommand's message.
 	 * 
-	 * @param message This will be the message of the DeleteCommand.
+	 * @param message	This will be the message of the DeleteCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -86,7 +86,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This is getter method for DeleteCommand's firstIndex.
 	 * 
-	 * @return firstIndex.
+	 * @return	firstIndex.
 	 */
 	public int getFirstIndex() {
 		return _firstIndex;
@@ -95,7 +95,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This is getter method for DeleteCommand's lastIndex.
 	 * 
-	 * @return lastIndex.
+	 * @return	lastIndex.
 	 */
 	public int getLastIndex() {
 		return _lastIndex;
@@ -104,7 +104,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This is getter method for DeleteCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -150,9 +150,8 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This method is used to update message of the DeleteCommand upon deleting of tasks.
 	 * 
-	 * @param oldTask This is the task to be deleted.
-	 * 
-	 * @param numOfDeletion This is the number of tasks to be deleted.
+	 * @param oldTask		This is the task to be deleted.
+	 * @param numOfDeletion	This is the number of tasks to be deleted.
 	 */
 	private void updateMessage(Task oldTask, int numOfDeletion) {
 		if (numOfDeletion == 1) {
@@ -165,13 +164,10 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This method is used to update the ListsManager and HistoryManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param oldTask This is the task to be deleted.
-	 * 
-	 * @param numOfDeletion This is the number of tasks to be deleted.
+	 * @param listsManager		This is the ListsManager.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task to be deleted.
+	 * @param numOfDeletion		This is the number of tasks to be deleted.
 	 */
 	private void updateManagers(ListsManager listsManager, HistoryManager historyManager, Task oldTask,
 			int numOfDeletion) {
@@ -182,7 +178,7 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This method is used to clear indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -191,11 +187,9 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This method is used to update HistoryManager.
 	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param oldTask This is the task to be deleted.
-	 * 
-	 * @param numOfDeletion This is the number of tasks to be deleted.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task to be deleted.
+	 * @param numOfDeletion		This is the number of tasks to be deleted.
 	 */
 	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, int numOfDeletion) {
 		RollbackItem rollbackItem = new RollbackItem(COMMAND_TYPE.DELETE, oldTask, null, numOfDeletion);
@@ -206,9 +200,8 @@ public class DeleteCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param oldTask This is the task to be deleted.
+	 * @param listsManager	This is the ListsManager.
+	 * @param oldTask		This is the task to be deleted.
 	 */
 	private void updateListsManager(ListsManager listsManager, Task oldTask) {
 		listsManager.getMainList().remove(oldTask);

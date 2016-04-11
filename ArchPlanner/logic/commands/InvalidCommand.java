@@ -28,7 +28,7 @@ public class InvalidCommand implements CommandInterface {
 	/**
 	 * This is setter method for InvalidCommand's message.
 	 * 
-	 * @param message This will be the message of the InvalidCommand.
+	 * @param message	This will be the message of the InvalidCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -37,7 +37,7 @@ public class InvalidCommand implements CommandInterface {
 	/**
 	 * This is getter method for InvalidCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;

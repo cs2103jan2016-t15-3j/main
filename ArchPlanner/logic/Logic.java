@@ -87,9 +87,8 @@ public class Logic {
 	/**
 	 * This method is used to execute command after passing the string command to parser and got command object.
 	 * 
-	 * @param userInput This is the string command entered by user.
-	 * 
-	 * @return command object.
+	 * @param userInput	This is the string command entered by user.
+	 * @return 			command object.
 	 */
 	public CommandInterface executeCommand(String userInput) {
 		ArrayList<Tag> tagsListClone = getTagsListClone();
@@ -105,7 +104,7 @@ public class Logic {
 	/**
 	 * This method is used to update ListsManager the selected category type and reset view type and update all the lists.
 	 * 
-	 * @param selectedCategory This is the category type.
+	 * @param selectedCategory	This is the category type.
 	 */
 	public void setSelectedCategory(CATEGORY_TYPE selectedCategory) {
 		_listsManager.setViewType(VIEW_TYPE.ALL);
@@ -116,7 +115,7 @@ public class Logic {
 	/**
 	 * This method is used to update the selected tags list in ListsManager.
 	 * 
-	 * @param tagName This is the name of the selected tag
+	 * @param tagName	This is the name of the selected tag
 	 * 
 	 * @param isSelected This is the variable indicates whether the tag is selected.
 	 */
@@ -132,7 +131,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve the string of the previously executed command entered by user in HistoryManager.
 	 * 
-	 * @return string of the previously executed command by user.
+	 * @return	string of the previously executed command by user.
 	 */
 	public String getPreviousUserInput() {
 		_historyManager.setPreviousUserInputCounter(_historyManager.getPreviousUserInputCounter() + 1);
@@ -150,7 +149,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve the string of the next executed command entered by user in HistoryManager.
 	 * 
-	 * @return string of the next executed command by user.
+	 * @return	string of the next executed command by user.
 	 */
 	public String getNextUserInput() {
 		_historyManager.setPreviousUserInputCounter(_historyManager.getPreviousUserInputCounter() - 1);
@@ -168,9 +167,8 @@ public class Logic {
 	/**
 	 * This method is used to differentiate the category type.
 	 * 
-	 * @param selectedCategory This is the category selected.
-	 * 
-	 * @return category type.
+	 * @param selectedCategory	This is the category selected.
+	 * @return					category type.
 	 */
 	public CATEGORY_TYPE getCategoryType(String selectedCategory) {
 		switch (selectedCategory) {
@@ -188,7 +186,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve the selected view type.
 	 * 
-	 * @return string view type.
+	 * @return	string view type.
 	 */
 	public String getSelectedView() {
 		VIEW_TYPE viewType = _listsManager.getViewType();
@@ -208,7 +206,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve the selected category in ListsManager.
 	 * 
-	 * @return selected category.
+	 * @return	selected category.
 	 */
 	public CATEGORY_TYPE getSelectedCategory() {
 		return _listsManager.getCategoryType();
@@ -217,7 +215,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve current view type.
 	 * 
-	 * @return current view type.
+	 * @return	current view type.
 	 */
 	public String getCurrentViewType() {
 		String selectedCategory = getSelectedCategory().toString();
@@ -229,7 +227,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve view list in ListsManager.
 	 * 
-	 * @return view list.
+	 * @return	view list.
 	 */
 	public ArrayList<Task> getViewList() {
 		return _listsManager.getViewList();
@@ -238,7 +236,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve main list in ListsManager.
 	 * 
-	 * @return main list
+	 * @return	main list
 	 */
 	public ArrayList<Task> getMainList() {
 		return _listsManager.getMainList();
@@ -247,7 +245,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve tags list in ListsManager.
 	 * 
-	 * @return tags list.
+	 * @return	tags list.
 	 */
 	public ArrayList<Tag> getTagsList() {
 		return _listsManager.getTagsList();
@@ -256,7 +254,7 @@ public class Logic {
 	/**
 	 * This method is used to retrieve index list in ListsManager.
 	 * 
-	 * @return index lists.
+	 * @return	index lists.
 	 */
 	public ArrayList<Integer> getIndexList() {
 		return _listsManager.getIndexList();
@@ -265,7 +263,7 @@ public class Logic {
 	/**
 	 * This method is used to create a clone list of the tags list in ListsManager.
 	 * 
-	 * @return tags list clone
+	 * @return	tags list clone
 	 */
 	private ArrayList<Tag> getTagsListClone() {
 		ArrayList<Tag> tagsListClone = new ArrayList<Tag>();
@@ -281,7 +279,7 @@ public class Logic {
 	/**
 	 * This method is used to set tag's isSelected to false if the tag is no selected.
 	 * 
-	 * @param tagName This is the name of the tag.
+	 * @param tagName	This is the name of the tag.
 	 */
 	private void updateTagsList(String tagName) {
 		for (int i = 0; i < _listsManager.getTagsList().size(); i++) {
@@ -295,9 +293,8 @@ public class Logic {
 	/**
 	 * This method is used to differentiate the type of command and call the relevant execute method of the command.
 	 * 
-	 * @param commandInput This is the command object that the user is executing.
-	 * 
-	 * @return command object.
+	 * @param commandInput	This is the command object that the user is executing.
+	 * @return				command object.
 	 */
 	private CommandInterface runCommand(CommandInterface commandInput) {
 
@@ -319,9 +316,8 @@ public class Logic {
 	/**
 	 * This method is used to differentiate the command type.
 	 * 
-	 * @param strCommandType This is the string command type.
-	 * 
-	 * @return command type.
+	 * @param strCommandType	This is the string command type.
+	 * @return					command type.
 	 */
 	private COMMAND_TYPE getCommandType(String strCommandType) {
 		if (strCommandType.equals("AddCommand")) {
@@ -352,13 +348,10 @@ public class Logic {
 	/**
 	 * This method is used to save the updated main list in ListsManager to the file through Storage.
 	 * 
-	 * @param userInput This is the string command entered by user.
-	 * 
-	 * @param commandInput This is the command object the user is executing.
-	 * 
+	 * @param userInput		This is the string command entered by user.
+	 * @param commandInput	This is the command object the user is executing.
 	 * @param commandReturn This is the command object returned after the been executed.
-	 * 
-	 * @return the command object the user is executing.
+	 * @return				the command object the user is executing.
 	 */
 	private CommandInterface save(String userInput, CommandInterface commandInput, CommandInterface commandReturn) {
 		if (commandReturn != null && commandReturn instanceof InvalidCommand) {
@@ -374,7 +367,7 @@ public class Logic {
 	/**
 	 * This method is used to update the user input list in HistoryManager.
 	 * 
-	 * @param userInput This is the string command entered by user.
+	 * @param userInput	This is the string command entered by user.
 	 */
 	private void updateUserInputList(String userInput) {
 		_historyManager.getPreviousUserInputList().add(userInput);
@@ -384,9 +377,8 @@ public class Logic {
 	/**
 	 * This method is used to test commands executed on logic component
 	 * 
-	 * @param commandInput This is the command object to be executed for testing.
-	 * 
-	 * @return The command object.
+	 * @param commandInput	This is the command object to be executed for testing.
+	 * @return				the command object.
 	 */
 	public CommandInterface logicTestEnvironment(CommandInterface commandInput) {
 		return runCommand(commandInput);

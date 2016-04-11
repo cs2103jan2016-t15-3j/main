@@ -66,7 +66,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' description.
 	 * 
-	 * @param description This will be the description of the TaskParamters.
+	 * @param description	This will be the description of the TaskParamters.
 	 */
 	public void setDescription(String description) {
 		_description = description;
@@ -75,7 +75,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' tags list.
 	 * 
-	 * @param tagsList This will be the tags list of the TaskParamters.
+	 * @param tagsList	This will be the tags list of the TaskParamters.
 	 */
 	public void setTagsList(ArrayList<String> tagsList) {
 		_tagsList = tagsList;
@@ -84,7 +84,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' start date.
 	 * 
-	 * @param startDate This will be the start date of the TaskParameters.
+	 * @param startDate	This will be the start date of the TaskParameters.
 	 */
 	public void setStartDate(LocalDate startDate) {
 		_startDate = startDate;
@@ -94,7 +94,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' start time.
 	 * 
-	 * @param startTime This will be the start time of the TaskParameters.
+	 * @param startTime	This will be the start time of the TaskParameters.
 	 */
 	public void setStartTime(LocalTime startTime) {
 		_startTime = startTime;
@@ -104,7 +104,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' end date.
 	 * 
-	 * @param endDate This will be the end date of the TaskParameters.
+	 * @param endDate	This will be the end date of the TaskParameters.
 	 */
 	public void setEndDate(LocalDate endDate) {
 		_endDate = endDate;
@@ -114,7 +114,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' end time.
 	 * 
-	 * @param endTime This will be the end time of the TaskParameters.
+	 * @param endTime	This will be the end time of the TaskParameters.
 	 */
 	public void setEndTime(LocalTime endTime) {
 		_endTime = endTime;
@@ -124,7 +124,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' isDone.
 	 * 
-	 * @param isDone This is the done status of the TaskParameters.
+	 * @param isDone	This is the done status of the TaskParameters.
 	 */
 	public void setIsDone(boolean isDone) {
 		_isDone = isDone;
@@ -133,7 +133,7 @@ public class TaskParameters {
 	/**
 	 * This is setter method for TaskParameters' isOverdue.
 	 * 
-	 * @param isOverdue This is the overdue status of the TaskParameters.
+	 * @param isOverdue	This is the overdue status of the TaskParameters.
 	 */
 	public void setIsOverdue(boolean isOverdue) {
 		_isOverdue = isOverdue;
@@ -142,7 +142,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' description.
 	 * 
-	 * @return description of TaskParameters.
+	 * @return	description of TaskParameters.
 	 */
 	public String getDescription() {
 		return _description;
@@ -151,7 +151,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' tags list.
 	 * 
-	 * @return tags list.
+	 * @return	tags list.
 	 */
 	public ArrayList<String> getTagsList() {
 		return _tagsList;
@@ -160,7 +160,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' start date.
 	 * 
-	 * @return start date.
+	 * @return	start date.
 	 */
 	public LocalDate getStartDate() {
 		return _startDate;
@@ -169,7 +169,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' start time.
 	 * 
-	 * @return start time.
+	 * @return	start time.
 	 */
 	public LocalTime getStartTime() {
 		return _startTime;
@@ -178,7 +178,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' end date.
 	 * 
-	 * @return end date.
+	 * @return	end date.
 	 */
 	public LocalDate getEndDate() {
 		return _endDate;
@@ -187,7 +187,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' end time.
 	 * 
-	 * @return end time.
+	 * @return	end time.
 	 */
 	public LocalTime getEndTime() {
 		return _endTime;
@@ -196,7 +196,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' start date in string format.
 	 * 
-	 * @return start date in string format.
+	 * @return	start date in string format.
 	 */
 	public String getStartDateString() {
 		String startDateString = getDateString(_startDate);
@@ -206,7 +206,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' start time in string format.
 	 * 
-	 * @return start time in string format.
+	 * @return	start time in string format.
 	 */
 	public String getStartTimeString() {
 		String startTime = getTimeString(_startTime);
@@ -216,7 +216,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' end date in string format.
 	 * 
-	 * @return end date in string format.
+	 * @return	end date in string format.
 	 */
 	public String getEndDateString() {
 		String endDateString = getDateString(_endDate);
@@ -226,7 +226,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' end time in string format.
 	 * 
-	 * @return end time string format.
+	 * @return	end time in string format.
 	 */
 	public String getEndTimeString() {
 		String endTime = getTimeString(_endTime);
@@ -245,7 +245,7 @@ public class TaskParameters {
 	/**
 	 * This is getter method for TaskParameters' isOverdue.
 	 * 
-	 * @return overdue status.
+	 * @return	overdue status.
 	 */
 	public boolean getIsOverdue() {
 		return _isOverdue;
@@ -254,9 +254,8 @@ public class TaskParameters {
 	/**
 	 * This method is used to convert date from localDate to string format.
 	 * 
-	 * @param date This is the date of TaskParameters.
-	 * 
-	 * @return date in string format.
+	 * @param date	This is the date of TaskParameters.
+	 * @return		date in string format.
 	 */
 	private String getDateString(LocalDate date) {
 
@@ -283,9 +282,8 @@ public class TaskParameters {
 	/**
 	 * This method is used to convert time from localTime to string format.
 	 * 
-	 * @param time This is the time of TaskParameters.
-	 * 
-	 * @return time in string format.
+	 * @param time	This is the time of TaskParameters.
+	 * @return		time in string format.
 	 */
 	private String getTimeString(LocalTime time) {
 		

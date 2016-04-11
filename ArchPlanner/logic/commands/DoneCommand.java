@@ -59,7 +59,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for DoneCommand's firstIndex.
 	 * 
-	 * @param index This will be the firstIndex of the DoneCommand.
+	 * @param index	This will be the firstIndex of the DoneCommand.
 	 */
 	public void setFirstIndex(int index) {
 		_firstIndex = index;
@@ -68,7 +68,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for DoneCommand's lastIndex.
 	 * 
-	 * @param index This will be the lastIndex of the DoneCommand.
+	 * @param index	This will be the lastIndex of the DoneCommand.
 	 */
 	public void setLastIndex(int index) {
 		_lastIndex = index;
@@ -77,7 +77,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for DoneCommand's message.
 	 * 
-	 * @param message This will be the message of the DoneCommand.
+	 * @param message	This will be the message of the DoneCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -86,7 +86,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is getter method for DoneCommand's firstIndex.
 	 * 
-	 * @return firstIndex.
+	 * @return	firstIndex.
 	 */
 	public int getFirstIndex() {
 		return _firstIndex;
@@ -95,7 +95,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is getter command for DoneCommand's lastIndex.
 	 * 
-	 * @return lastIndex.
+	 * @return	lastIndex.
 	 */
 	public int getLastIndex() {
 		return _lastIndex;
@@ -104,7 +104,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This is getter command for DoneCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -156,9 +156,8 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update DoneCommand's message.
 	 * 
-	 * @param numOfDone This is the number of tasks to be set to done.
-	 * 
-	 * @param oldTask This is the task before been set to done.
+	 * @param numOfDone	This is the number of tasks to be set to done.
+	 * @param oldTask	This is the task before been set to done.
 	 */
 	private void updateMessage(int numOfDone, Task oldTask) {
 		if (numOfDone == 1) {
@@ -171,9 +170,8 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param doneTasksList This is the list of tasks set to done.
+	 * @param listsManager	This is the ListsManager.
+	 * @param doneTasksList	This is the list of tasks set to done.
 	 */
 	private void updateIndexList(ListsManager listsManager, ArrayList<Task> doneTasksList) {
 		for (int i = 0; i < doneTasksList.size(); i++) {
@@ -185,15 +183,11 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager and HistoryManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param numOfDone This is the number of tasks to be set to done.
-	 * 
-	 * @param oldTask This is the task before been set to done.
-	 * 
-	 * @param newTask This is the task after been set to done.
+	 * @param listsManager		This is the ListsManager.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param numOfDone			This is the number of tasks to be set to done.
+	 * @param oldTask			This is the task before been set to done.
+	 * @param newTask			This is the task after been set to done.
 	 */
 	private void updateManagers(ListsManager listsManager, HistoryManager historyManager, int numOfDone, Task oldTask,
 			Task newTask) {
@@ -204,7 +198,7 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to clear indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -213,13 +207,10 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update the HistoryManager.
 	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param oldTask This is the task before been set to done.
-	 * 
-	 * @param newTask This is the task after been set to done.
-	 * 
-	 * @param numOfDone This is the number of tasks to be set to done.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task before been set to done.
+	 * @param newTask			This is the task after been set to done.
+	 * @param numOfDone			This is the number of tasks to be set to done.
 	 */
 	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask, int numOfDone) {
 		RollbackItem rollbackItem = new RollbackItem(COMMAND_TYPE.DONE, oldTask, newTask, numOfDone);
@@ -230,9 +221,8 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param newTask This is the task to be set to done.
+	 * @param listsManager	This is the ListsManager.
+	 * @param newTask		This is the task to be set to done.
 	 */
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);
@@ -242,9 +232,8 @@ public class DoneCommand implements CommandInterface {
 	/**
 	 * This method is used to initialize the new task with the properties of old task but done status is set to true.
 	 * 
-	 * @param oldTask This is the task before been set to done.
-	 * 
-	 * @param newTask This is the task after been set to done.
+	 * @param oldTask	This is the task before been set to done.
+	 * @param newTask	This is the task after been set to done.
 	 */
 	private void initializeNewTask(Task oldTask, Task newTask) {
 		newTask.setDescription(oldTask.getDescription());

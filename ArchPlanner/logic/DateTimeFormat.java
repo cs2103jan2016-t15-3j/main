@@ -17,7 +17,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string today.
 	 * 
-	 * @return string today.
+	 * @return	string today.
 	 */
 	public String getStringToday() {
 		return STRING_TODAY;
@@ -26,7 +26,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string yesterday.
 	 * 
-	 * @return string yesterday.
+	 * @return	string yesterday.
 	 */
 	public String getStringYesterday() {
 		return STRING_YESTERDAY;
@@ -35,7 +35,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string tomorrow.
 	 * 
-	 * @return string tomorrow.
+	 * @return	string tomorrow.
 	 */
 	public String getStringTomorrow() {
 		return STRING_TOMORROW;
@@ -44,7 +44,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string date format.
 	 * 
-	 * @return string date format.
+	 * @return	string date format.
 	 */
 	public String getStringDateFormat() {
 		return STRING_DATE_FORMAT;
@@ -53,7 +53,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string time format.
 	 * 
-	 * @return string time format.
+	 * @return	string time format.
 	 */
 	public String getStringTimeFormat() {
 		return STRING_TIME_FORMAT;
@@ -62,7 +62,7 @@ public class DateTimeFormat {
 	/**
 	 * This is getter method for string empty.
 	 * 
-	 * @return string empty.
+	 * @return	string empty.
 	 */
 	public String getStringEmpty() {
 		return STRING_EMPTY;

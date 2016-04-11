@@ -59,7 +59,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for UndoneCommand's firstIndex.
 	 * 
-	 * @param index This will be the firstIndex of the UndoneCommand.
+	 * @param index	This will be the firstIndex of the UndoneCommand.
 	 */
 	public void setFirstIndex(int index) {
 		_firstIndex = index;
@@ -68,7 +68,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for UndoneCommand's lastIndex.
 	 * 
-	 * @param index This will be the lastIndex of the UndoneCommand.
+	 * @param index	This will be the lastIndex of the UndoneCommand.
 	 */
 	public void setLastIndex(int index) {
 		_lastIndex = index;
@@ -77,7 +77,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is setter method for UndoneCommand's message.
 	 * 
-	 * @param message This will be the message of the UndoneCommand.
+	 * @param message	This will be the message of the UndoneCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -86,7 +86,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is getter method for UndoneCommand's firstIndex.
 	 * 
-	 * @return firstIndex.
+	 * @return	firstIndex.
 	 */
 	public int getFirstIndex() {
 		return _firstIndex;
@@ -95,7 +95,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is getter method for UndoneCommand's lastIndex.
 	 * 
-	 * @return lastIndex.
+	 * @return	lastIndex.
 	 */
 	public int getLastIndex() {
 		return _lastIndex;
@@ -104,7 +104,7 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This is getter command for UndoneCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -155,9 +155,8 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update indexList in ListsManaer.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param undoneTasksList This is the list of tasks to be set to undone.
+	 * @param listsManager		This is the ListsManager.
+	 * @param undoneTasksList	This is the list of tasks to be set to undone.
 	 */
 	private void updateIndexList(ListsManager listsManager, ArrayList<Task> undoneTasksList) {
 		for (int i = 0; i < undoneTasksList.size(); i++) {
@@ -169,9 +168,8 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update UndoneCommand's message.
 	 * 
-	 * @param numOfUndone This is the number of tasks to be set to undone.
-	 * 
-	 * @param oldTask This is the task before been set to undone.
+	 * @param numOfUndone	This is the number of tasks to be set to undone.
+	 * @param oldTask		This is the task before been set to undone.
 	 */
 	private void updateMessage(int numOfUndone, Task oldTask) {
 		if (numOfUndone == 1) {
@@ -184,15 +182,11 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager and HistoryManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param numOfUndone This is the number of tasks to be set to undone.
-	 * 
-	 * @param oldTask This is the task before been set to undone.
-	 * 
-	 * @param newTask This is the task after been set to undone.
+	 * @param listsManager		This is the ListsManager.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param numOfUndone		This is the number of tasks to be set to undone.
+	 * @param oldTask			This is the task before been set to undone.
+	 * @param newTask			This is the task after been set to undone.
 	 */
 	private void updateManagers(ListsManager listsManager, HistoryManager historyManager, int numOfUndone, Task oldTask,
 			Task newTask) {
@@ -212,13 +206,10 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update HistoryManager.
 	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param oldTask This is the task before been set to undone.
-	 * 
-	 * @param newTask This is the task after been set to undone.
-	 * 
-	 * @param numOfUndone This is the number of tasks to be set to undone.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task before been set to undone.
+	 * @param newTask			This is the task after been set to undone.
+	 * @param numOfUndone		This is the number of tasks to be set to undone.
 	 */
 	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask, int numOfUndone) {
 		RollbackItem rollbackItem = new RollbackItem(COMMAND_TYPE.UNDONE, oldTask, newTask, numOfUndone);
@@ -229,9 +220,8 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param newTask This is the task after been set to undone.
+	 * @param listsManager	This is the ListsManager.
+	 * @param newTask		This is the task after been set to undone.
 	 */
 	private void updateListsManager(ListsManager listsManager, Task newTask) {
 		listsManager.getMainList().add(newTask);
@@ -241,9 +231,8 @@ public class UndoneCommand implements CommandInterface {
 	/**
 	 * This method is used to initialize the new task with the old task properties but done status is set to false.
 	 * 
-	 * @param oldTask This is the task before been set to undone.
-	 * 
-	 * @param newTask This is the task after been set to undone.
+	 * @param oldTask	This is the task before been set to undone.
+	 * @param newTask	This is the task after been set to undone.
 	 */
 	private void initializeNewTask(Task oldTask, Task newTask) {
 		newTask.setDescription(oldTask.getDescription());

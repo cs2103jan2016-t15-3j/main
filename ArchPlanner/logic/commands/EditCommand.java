@@ -90,7 +90,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is setter method for EditCommand's taskParameters.
 	 * 
-	 * @param taskParameters This will be the taskParameters of the EditCommand.
+	 * @param taskParameters	This will be the taskParameters of the EditCommand.
 	 */
 	public void setTaskParameters(Task taskParameters) {
 		_taskParameters = taskParameters;
@@ -99,7 +99,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is setter method for EditCommand's invalidCommand.
 	 * 
-	 * @param invalidCommand This will be the invalidCommand of the EditCommand.
+	 * @param invalidCommand	This will be the invalidCommand of the EditCommand.
 	 */
 	public void setInvalidCommand(InvalidCommand invalidCommand) {
 		_invalidCommand = invalidCommand;
@@ -108,7 +108,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is setter method for EditCommand's index.
 	 * 
-	 * @param index This will be the index of the EditCommand.
+	 * @param index	This will be the index of the EditCommand.
 	 */
 	public void setIndex(int index) {
 		_index = index;
@@ -117,7 +117,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is setter method for EditCommand's removeType.
 	 * 
-	 * @param removeType This will be the removeType of the EditCommand.
+	 * @param removeType	This will be the removeType of the EditCommand.
 	 */
 	public void setRemoveType(REMOVE_TYPE removeType) {
 		_removeType = removeType;
@@ -126,7 +126,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is setter method for EditCommand's message.
 	 * 
-	 * @param message This will be the message of EditCommand.
+	 * @param message	This will be the message of EditCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -135,7 +135,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is getter method for EditCommand's taskParameters.
 	 * 
-	 * @return taskParameters.
+	 * @return	taskParameters.
 	 */
 	public TaskParameters getTaskParameters() {
 		return _taskParameters;
@@ -144,7 +144,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is getter method for EditCommand's invalidCommand.
 	 * 
-	 * @return invalidCommand.
+	 * @return	invalidCommand.
 	 */
 	public InvalidCommand getInvalidCommand() {
 		return _invalidCommand;
@@ -153,7 +153,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is getter method for EditCommand's index.
 	 * 
-	 * @return index.
+	 * @return	index.
 	 */
 	public int getIndex() {
 		return _index;
@@ -162,7 +162,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is getter method for EditCommand's removeType.
 	 * 
-	 * @return removeType.
+	 * @return	removeType.
 	 */
 	public REMOVE_TYPE getRemoveType() {
 		return _removeType;
@@ -171,7 +171,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This is getter method for EditCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -224,7 +224,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to clear indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -233,11 +233,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to update HistoryManager.
 	 * 
-	 * @param historyManager This is the HistoryManager.
-	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask this is the task after been edited.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task before been edited.
+	 * @param newTask			This is the task after been edited.
 	 */
 	private void updateHistoryManager(HistoryManager historyManager, Task oldTask, Task newTask) {
 		RollbackItem rollbackItem = new RollbackItem(COMMAND_TYPE.EDIT, oldTask, newTask);
@@ -248,11 +246,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param historyManager	This is the HistoryManager.
+	 * @param oldTask			This is the task before been edited.
+	 * @param newTask			This is the task after been edited.
 	 */
 	private void updateListsManager(ListsManager listsManager, Task oldTask, Task newTask) {
 		listsManager.getMainList().remove(oldTask);
@@ -264,9 +260,8 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to initialize the new task with old task properties.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void initializeNewTask(Task oldTask, Task newTask) {
 		newTask.setDescription(oldTask.getDescription());
@@ -282,13 +277,10 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit the tasks based on edit command attributes.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param startTime This is the start time at 12:00am.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask		This is the task before been edited.
+	 * @param newTask		This is the task after been edited.
+	 * @param startTime		This is the start time at 12:00am.
+	 * @param endTime		This is the end time at 11:59pm.
 	 */
 	private void editTask(Task oldTask, Task newTask, LocalTime startTime, LocalTime endTime) {
 		editTaskDescription(newTask);
@@ -306,8 +298,9 @@ public class EditCommand implements CommandInterface {
 
 	/**
 	 * This method is used to differentiate the removeType and execute the respective method for removing taskParameters.
-	 * @param oldTask
-	 * @param newTask
+	 * 
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskParameters(Task oldTask, Task newTask) {
 		switch (_removeType) {
@@ -334,7 +327,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to clear tagsList of the task.
 	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskTagsList(Task newTask) {
 		newTask.getTagsList().clear();
@@ -343,9 +336,8 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to remove end time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskEndTime(Task oldTask, Task newTask) {
 		if (oldTask.getStartDate() != null && oldTask.getStartTime() != null && oldTask.getEndDate() != null 
@@ -358,9 +350,8 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to remove end time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskEndDate(Task oldTask, Task newTask) {
 		newTask.setEndDate(null);
@@ -370,9 +361,8 @@ public class EditCommand implements CommandInterface {
 	/**
 	 *This method is used to remove start time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskStartTime(Task oldTask, Task newTask) {
 		if ((oldTask.getStartDate() != null) && (oldTask.getStartTime() != null) && (oldTask.getEndDate() != null)
@@ -385,7 +375,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to remove start date of the task.
 	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void removeTaskStartDate(Task newTask) {
 		newTask.setStartDate(null);
@@ -395,11 +385,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit start date and end date of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param endTime	This is the end time at 11:59pm.
 	 */
 	private void editTaskStartDateEndDate(Task oldTask, Task newTask, LocalTime endTime) {
 		if (hasTaskParametersStartDateNotEqualsNullAndStartTimeEqualsNull() 
@@ -414,11 +402,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit start date time and end date time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param endTime	This is the end time at 11:59pm.
 	 */
 	private void editTaskStartDateTimeEndDateTime(Task oldTask, Task newTask, LocalTime endTime) {
 		if (hasTaskParametersStartDateNotEqualsNullAndStartTimeNotEqualsNull() 
@@ -433,11 +419,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit end date time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param startTime This is the start time at 12:00am.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param startTime	This is the start time at 12:00am.
 	 */
 	private void editTaskEndDateTime(Task oldTask, Task newTask, LocalTime startTime) {
 		if (hasTaskParametersStartDateEqualsNullAndStartTimeEqualsNull() 
@@ -463,11 +447,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit start date time of the task
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param endTime	This is the end time at 11:59pm.
 	 */
 	private void editTaskStartDateTime(Task oldTask, Task newTask, LocalTime endTime) {
 		if (hasTaskParametersStartDateNotEqualsNullAndStartTimeNotEqualsNull() 
@@ -494,11 +476,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit end time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param startTime This is the start time at 12:00am.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param startTime	This is the start time at 12:00am.
 	 */
 	private void editTaskEndTimeOnly(Task oldTask, Task newTask, LocalTime startTime) {
 		if (hasTaskParametersStartDateEqualsNullAndStartTimeEqualsNull() 
@@ -524,11 +504,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit end date of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param endTime	This is the end time at 11:59pm.
 	 */
 	private void editTaskEndDateOnly(Task oldTask, Task newTask, LocalTime endTime) {
 		if (hasTaskParametersStartDateEqualsNullAndStartTimeEqualsNull() 
@@ -550,11 +528,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit start time of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param endTime This is the end time at 11:59pm.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param endTime	This is the end time at 11:59pm.
 	 */
 	private void editTaskStartTimeOnly(Task oldTask, Task newTask, LocalTime endTime) {
 		if (hasTaskParametersStartDateEqualsNullAndStartTimeNotEqualsNull() 
@@ -579,11 +555,9 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit start date of the task.
 	 * 
-	 * @param oldTask This is the task before been edited.
-	 * 
-	 * @param newTask This is the task after been edited.
-	 * 
-	 * @param startTime This is the start time at 12:00am.
+	 * @param oldTask	This is the task before been edited.
+	 * @param newTask	This is the task after been edited.
+	 * @param startTime	This is the start time at 12:00am.
 	 */
 	private void editTaskStartDateOnly(Task oldTask, Task newTask, LocalTime startTime) {
 		if (getTaskParameters().getStartDate() != null && getTaskParameters().getStartTime() == null 
@@ -607,7 +581,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit the tags list of the task.
 	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void editTaskTagsList(Task newTask) {
 		if (getTaskParameters().getTagsList() != null) {
@@ -618,7 +592,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to edit the description of the task.
 	 * 
-	 * @param newTask This is the task after been edited.
+	 * @param newTask	This is the task after been edited.
 	 */
 	private void editTaskDescription(Task newTask) {
 		if (getTaskParameters().getDescription() != null) {
@@ -629,7 +603,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' end date is not null and taskParameters' end time is null.
 	 * 
-	 * @return true if taskParameters' end date is not null and taskParameters' end time is null or else return false.
+	 * @return	true if taskParameters' end date is not null and taskParameters' end time is null or else return false.
 	 */
 	private boolean hasTaskParametersEndDateNotEqualsNullAndEndTimeEqualsNull() {
 		return getTaskParameters().getEndDate() != null && getTaskParameters().getEndTime() == null;
@@ -638,7 +612,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' start date is not null and taskParameters' start time is null.
 	 * 
-	 * @return true if taskParameters' start date is not null and taskParameters' start time is null or else return false.
+	 * @return	true if taskParameters' start date is not null and taskParameters' start time is null or else return false.
 	 */
 	private boolean hasTaskParametersStartDateNotEqualsNullAndStartTimeEqualsNull() {
 		return getTaskParameters().getStartDate() != null && getTaskParameters().getStartTime() == null;
@@ -647,7 +621,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' end date is not null and taskParameters' end time is not null.
 	 * 
-	 * @return true if taskParameters' end date is not null and taskParameters' end time is not null or else return false.
+	 * @return	true if taskParameters' end date is not null and taskParameters' end time is not null or else return false.
 	 */
 	private boolean hasTaskParametersEndDateNotEqualsNullAndEndTimeNotEqualsNull() {
 		return getTaskParameters().getEndDate() != null && getTaskParameters().getEndTime() != null;
@@ -656,7 +630,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' start date is not null and taskParameters' start time is not null.
 	 * 
-	 * @return true if taskParameters' start date is not null and taskParameters' start time is not null or else return false.
+	 * @return	true if taskParameters' start date is not null and taskParameters' start time is not null or else return false.
 	 */
 	private boolean hasTaskParametersStartDateNotEqualsNullAndStartTimeNotEqualsNull() {
 		return getTaskParameters().getStartDate() != null && getTaskParameters().getStartTime() != null;
@@ -665,7 +639,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' start date is null and taskParameters' start time is null.
 	 * 
-	 * @return true if taskParameters' start date is null and taskParameters' start time is null or else return false.
+	 * @return	true if taskParameters' start date is null and taskParameters' start time is null or else return false.
 	 */
 	private boolean hasTaskParametersStartDateEqualsNullAndStartTimeEqualsNull() {
 		return getTaskParameters().getStartDate() == null && getTaskParameters().getStartTime() == null;
@@ -674,7 +648,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' end date is null and taskParameters' end time is null.
 	 * 
-	 * @return true if taskParameters' end date is null and taskParameters' end time is null or else return false.
+	 * @return	true if taskParameters' end date is null and taskParameters' end time is null or else return false.
 	 */
 	private boolean hasTaskParametersEndDateEqualsNullAndEndTimeEqualsNull() {
 		return getTaskParameters().getEndDate() == null && getTaskParameters().getEndTime() == null;
@@ -683,7 +657,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' end date is null and taskParameters' end time is not null.
 	 * 
-	 * @return true if taskParameters' end date is null and taskParameters' end time is not null or else return false.
+	 * @return	true if taskParameters' end date is null and taskParameters' end time is not null or else return false.
 	 */
 	private boolean hasTaskParametersEndDateEqualsNullAndEndTimeNotEqualsNull() {
 		return getTaskParameters().getEndDate() == null && getTaskParameters().getEndTime() != null;
@@ -692,7 +666,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to check whether taskParameters' start date is null and taskParameters' start time is not null.
 	 * 
-	 * @return true if taskParameters' start date is null and taskParameters' start time is not null or else return false.
+	 * @return	true if taskParameters' start date is null and taskParameters' start time is not null or else return false.
 	 */
 	private boolean hasTaskParametersStartDateEqualsNullAndStartTimeNotEqualsNull() {
 		return getTaskParameters().getStartDate() == null && getTaskParameters().getStartTime() != null;

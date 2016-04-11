@@ -42,7 +42,7 @@ public class RollbackItem {
 	/**
 	 * This is setter method for command type.
 	 * 
-	 * @param commandType This will be the command Type of the RollbackItem.
+	 * @param commandType	This will be the command Type of the RollbackItem.
 	 */
 	public void setCommandType(COMMAND_TYPE commandType) {
 		_commandType = commandType;
@@ -51,7 +51,7 @@ public class RollbackItem {
 	/**
 	 * This is setter method for times of rollback.
 	 * 
-	 * @param times This will be the number of times of rollback of the RollbackItem.
+	 * @param times	This will be the number of times of rollback of the RollbackItem.
 	 */
 	public void setTimes(int times) {
 		_times = times;
@@ -60,7 +60,7 @@ public class RollbackItem {
 	/**
 	 * This is setter method for old task.
 	 * 
-	 * @param oldTask This will be the oldTask of the RollbackItem.
+	 * @param oldTask	This will be the oldTask of the RollbackItem.
 	 */
 	public void setOldTask(Task oldTask) {
 		_oldTask = oldTask;
@@ -69,7 +69,7 @@ public class RollbackItem {
 	/**
 	 * This is setter method for new task.
 	 * 
-	 * @param newTask This will be newTask of the RollbackItem.
+	 * @param newTask	This will be newTask of the RollbackItem.
 	 */
 	public void setNewTask(Task newTask) {
 		_newTask = newTask;
@@ -78,7 +78,7 @@ public class RollbackItem {
 	/**
 	 * This is getter method for command type.
 	 * 
-	 * @return command type.
+	 * @return	command type.
 	 */
 	public COMMAND_TYPE getCommandType() {
 		return _commandType;
@@ -87,7 +87,7 @@ public class RollbackItem {
 	/**
 	 * This is getter method for times of rollback.
 	 * 
-	 * @return number of times of rollback.
+	 * @return	number of times of rollback.
 	 */
 	public int getTimes() {
 		return _times;
@@ -96,7 +96,7 @@ public class RollbackItem {
 	/**
 	 * This is getter method for old task.
 	 * 
-	 * @return old task.
+	 * @return	old task.
 	 */
 	public Task getOldTask() {
 		return _oldTask;
@@ -105,7 +105,7 @@ public class RollbackItem {
 	/**
 	 * This is getter method for new task.
 	 * 
-	 * @return new task.
+	 * @return	new task.
 	 */
 	public Task getNewTask() {
 		return _newTask;

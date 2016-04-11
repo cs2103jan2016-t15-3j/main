@@ -70,7 +70,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This is setter method for SetCommand's invalidCommand
 	 * 
-	 * @param invalidCommand This will be the invalidCommand of the SetCommand.
+	 * @param invalidCommand	This will be the invalidCommand of the SetCommand.
 	 */
 	public void setInvalidCommand(InvalidCommand invalidCommand) {
 		_invalidCommand = invalidCommand;
@@ -79,7 +79,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This is setter method for SetCommand's message.
 	 * 
-	 * @param message This will be the message of the SetCommand.
+	 * @param message	This will be the message of the SetCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -88,7 +88,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This is getter method for SetCommand's filePath.
 	 * 
-	 * @return file path.
+	 * @return	file path.
 	 */
 	public String getFilePath() {
 		return _filePath;
@@ -97,7 +97,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This is getter method for SetCommand's invalidCommand.
 	 * 
-	 * @return invalidCommand.
+	 * @return	invalidCommand.
 	 */
 	public InvalidCommand getInvalidCommand() {
 		return _invalidCommand;
@@ -106,7 +106,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is getter method SetCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -145,7 +145,7 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is used to clear indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -154,9 +154,8 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is used to set file path.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param storage this is the Storage.
+	 * @param listsManager	This is the ListsManager.
+	 * @param storage		This is the Storage.
 	 */
 	private void setFilePath(ListsManager listsManager, Storage storage) {
 		if (_filePath == null) {
@@ -182,9 +181,8 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is used to file path to the default file path.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param storage This is the Storage.
+	 * @param listsManager	This is the ListsManager.
+	 * @param storage		This is the Storage.
 	 */
 	private void setDefaultFilePath(ListsManager listsManager, Storage storage) {
 		storage.setDefaultFilePath();
@@ -195,11 +193,9 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is used to set file path to an existing file path.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param storage This is the Storage.
-	 * 
-	 * @param file This is the file of the filePath.
+	 * @param listsManager	This is the ListsManager.
+	 * @param storage		This is the Storage.
+	 * @param file			This is the file of the filePath.
 	 */
 	private void setFilePathToExistingFilePath(ListsManager listsManager, Storage storage, File file) {
 		Gson gson = new Gson();
@@ -219,9 +215,8 @@ public class SetCommand implements CommandInterface {
 	/**
 	 * This method is used to set new file path if directory exists.
 	 * 
-	 * @param storage This is the Storage.
-	 * 
-	 * @param directory This is the parent directory of the file path.
+	 * @param storage	This is the Storage.
+	 * @param directory	This is the parent directory of the file path.
 	 */
 	private void setNewFilePathIfDirectoryExists(Storage storage, String directory) {
 		File filePathDirectory = new File(directory);

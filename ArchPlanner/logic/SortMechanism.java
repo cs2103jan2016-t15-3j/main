@@ -19,7 +19,7 @@ public class SortMechanism {
 	/**
 	 * This method sort the list by description in ascending order.
 	 * 
-	 * @param list this is the list to be sorted.
+	 * @param list	this is the list to be sorted.
 	 */
 	public void sortListByDescription(ArrayList<Task> list) {
 		DescriptionComparator descriptionComp = new DescriptionComparator();
@@ -29,7 +29,7 @@ public class SortMechanism {
 	/**
 	 * This method sort the list by overdue status with overdue tasks on the top of the list.
 	 * 
-	 * @param list this is the list to be sorted.
+	 * @param list	this is the list to be sorted.
 	 */
 	public void sortListByOverdue(ArrayList<Task> list) {
 		OverdueComparator overdueComp = new OverdueComparator();
@@ -39,7 +39,7 @@ public class SortMechanism {
 	/**
 	 * This method sort the list by done status with done tasks on the bottom of the list.
 	 * 
-	 * @param list this is the list to be sorted.
+	 * @param list	this is the list to be sorted.
 	 */
 	public void sortListByDone(ArrayList<Task> list) {
 		DoneComparator doneComp = new DoneComparator();
@@ -49,7 +49,7 @@ public class SortMechanism {
 	/**
 	 * This method sort the list by name in ascending order.
 	 * 
-	 * @param list this is the list to be sorted.
+	 * @param list	this is the list to be sorted.
 	 */
 	public void sortTagsList(ArrayList<Tag> list) {
 		TagComparator tagComp = new TagComparator();
@@ -59,9 +59,8 @@ public class SortMechanism {
 	/**
 	 * This method is used to sort the list based on date and time from earlier task to later task.
 	 * 
-	 * @param list This is the list to be sorted.
-	 * 
-	 * @return sorted list.
+	 * @param list	This is the list to be sorted.
+	 * @return		sorted list.
 	 */
 	public ArrayList<Task> sortListByDateTime(ArrayList<Task> list) {
 
@@ -90,11 +89,9 @@ public class SortMechanism {
 	/**
 	 * This method is used to add task to bottom list.
 	 * 
-	 * @param list This is the list to be sorted.
-	 * 
-	 * @param bottom This is the bottom list.
-	 * 
-	 * @param mid This is the index of the middle of the list.
+	 * @param list		This is the list to be sorted.
+	 * @param bottom 	This is the bottom list.
+	 * @param mid 		This is the index of the middle of the list.
 	 */
 	private void updateBottomList(ArrayList<Task> list, ArrayList<Task> bottom, int mid) {
 		for (int i=mid; i<list.size(); i++) {
@@ -105,11 +102,9 @@ public class SortMechanism {
 	/**
 	 * This method is used to add task to top list.
 	 * 
-	 * @param list This is the list to be sorted.
-	 * 
-	 * @param top This is the top list.
-	 * 
-	 * @param mid This is the index of the middle of the list.
+	 * @param list	This is the list to be sorted.
+	 * @param top 	This is the top list.
+	 * @param mid 	This is the index of the middle of the list.
 	 */
 	private void updateTopList(ArrayList<Task> list, ArrayList<Task> top, int mid) {
 		for (int i=0; i<mid; i++) {
@@ -120,11 +115,9 @@ public class SortMechanism {
 	/**
 	 * This method is used to merge top and bottom list.
 	 * 
-	 * @param list This is the list to be sorted.
-	 * 
-	 * @param top This is the top list.
-	 * 
-	 * @param bottom This is the bottom list.
+	 * @param list		This is the list to be sorted.
+	 * @param top 		This is the top list.
+	 * @param bottom 	This is the bottom list.
 	 */
 	private void merge(ArrayList<Task> list, ArrayList<Task> top, ArrayList<Task> bottom) {
 
@@ -156,15 +149,11 @@ public class SortMechanism {
 	/**
 	 * This method is used to set the list index.
 	 * 
-	 * @param list This is the list to be sorted.
-	 * 
-	 * @param listIndex This is the index of the sorted list.
-	 * 
+	 * @param list			This is the list to be sorted.
+	 * @param listIndex		This is the index of the sorted list.
 	 * @param leftOverIndex This is the index of the leftOver list
-	 * 
-	 * @param leftOver This is the list of leftover tasks after merging top and bottom lists with indexes within lists' size.
-	 * 
-	 * @return lists index.
+	 * @param leftOver 		This is the list of leftover tasks after merging top and bottom lists with indexes within lists' size.
+	 * @return lists 		index.
 	 */
 	private int setListIndex(ArrayList<Task> list, int listIndex, int leftOverIndex, ArrayList<Task> leftOver) {
 		for (int i = leftOverIndex; i < leftOver.size(); i++) {
@@ -177,13 +166,10 @@ public class SortMechanism {
 	/**
 	 * This method is used to set the leftOver list with the remaining tasks after merging top and bottom lists.
 	 * 
-	 * @param top This is the top list.
-	 * 
-	 * @param bottom This is the bottom list.
-	 * 
-	 * @param topIndex This is the top list index.
-	 * 
-	 * @return leftOver list.
+	 * @param top		This is the top list.
+	 * @param bottom	This is the bottom list.
+	 * @param topIndex	This is the top list index.
+	 * @return			leftOver	list.
 	 */
 	private ArrayList<Task> setLeftOverList(ArrayList<Task> top, ArrayList<Task> bottom, int topIndex) {
 		ArrayList<Task> leftOver;
@@ -198,13 +184,10 @@ public class SortMechanism {
 	/**
 	 * This method set leftOver list index with the number of remaining tasks after merging top and bottom lists.
 	 * 
-	 * @param top This is the top list.
-	 * 
-	 * @param topIndex This is the top list index.
-	 * 
-	 * @param bottomIndex This is the bottom list index.
-	 * 
-	 * @return leftOver index.
+	 * @param top			This is the top list.
+	 * @param topIndex 		This is the top list index.
+	 * @param bottomIndex 	This is the bottom list index.
+	 * @return 				leftOver index.
 	 */
 	private int setLeftOverIndex(ArrayList<Task> top, int topIndex, int bottomIndex) {
 		int leftOverIndex;
@@ -219,11 +202,9 @@ public class SortMechanism {
 	/**
 	 * This method is used to check top task is floating task and bottom task has start or end date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task is floating task and bottom task has start or end date, or else return false.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task is floating task and bottom task has start or end date, or else return false.
 	 */
 	private boolean isTopTaskFloatingAndBottomTaskWithDate(Task topTask, Task bottomTask) {
 		return ((topTask.getStartDate() == null && topTask.getEndDate() == null)
@@ -233,11 +214,9 @@ public class SortMechanism {
 	/**
 	 * This method is used to check whether top task is earlier than bottom task.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task is earlier than bottom task or else return false.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask 	This is the bottom task.
+	 * @return 				true if top task is earlier than bottom task or else return false.
 	 */
 	private boolean hasTopTaskIsAfterBottomTask(Task topTask, Task bottomTask) {
 
@@ -255,11 +234,9 @@ public class SortMechanism {
 	 * This method is used to check whether both tasks have start date and whether 
 	 * top task's start date is after bottom task's start date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if both tasks have start date and top task's start date is after bottom task's start date.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if both tasks have start date and top task's start date is after bottom task's start date.
 	 */
 	private boolean hasTopTaskStartDateIsAfterBottomTaskStartDate(Task topTask, Task bottomTask) {
 
@@ -271,12 +248,10 @@ public class SortMechanism {
 	 * This method is used to check whether both tasks have start date and time with same date, 
 	 * and whether top task's start time is after bottom task's start time.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if both tasks have start date and time with same date, and top task's start time is after 
-	 * 		   bottom task's start time.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if both tasks have start date and time with same date, and top task's start time is after 
+	 * 		   				bottom task's start time.
 	 */
 	private boolean hasTopTaskStartTimeIsAfterBottomTaskStartTime(Task topTask, Task bottomTask) {
 
@@ -290,12 +265,10 @@ public class SortMechanism {
 	 * This method is used to check whether top task has start date and bottom task has no start date but has end date, 
 	 * and whether top task's start date is after bottom task's end date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has start date and bottom task has no start date but has end date, 
-	 * 		   and top task's start date is after than bottom task's end date.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task has start date and bottom task has no start date but has end date, 
+	 * 		  				and top task's start date is after than bottom task's end date.
 	 */
 	private boolean hasTopTaskStartDateIsAfterBottomTaskEndDate(Task topTask, Task bottomTask) {
 
@@ -308,13 +281,11 @@ public class SortMechanism {
 	 * but has end date and end time, whether top task's start date is same as bottom task's end date,
 	 * and whether top task's start time is after bottom task's end time.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has start date and time and bottom task has no start date but has end date and end time, 
-	 * 		   with top task's start date is same as bottom task's end date, and top task's start time is after
-	 *         bottom task's end time.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return 				true if top task has start date and time and bottom task has no start date but has end date and end time, 
+	 * 		   				with top task's start date is same as bottom task's end date, and top task's start time is after
+	 *         				bottom task's end time.
 	 */
 	private boolean hasTopTaskStartTimeIsAfterBottomTaskEndTime(Task topTask, Task bottomTask) {
 
@@ -328,12 +299,10 @@ public class SortMechanism {
 	 * This method is used to check whether top task has start date and end date and bottom task has start date,
 	 * and whether top task's end date is after bottom task's start date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has start date and end date and bottom task has start date,
-	 * 		   and top task's end date is after bottom task's start date.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task has start date and end date and bottom task has start date,
+	 * 		   				and top task's end date is after bottom task's start date.
 	 */
 	private boolean hasTopTaskEndDateIsAfterBottomTaskStartDate(Task topTask, Task bottomTask) {
 
@@ -346,13 +315,11 @@ public class SortMechanism {
 	 * whether top task's end date is same as bottom task's start date,
 	 * and whether top task's end time is after bottom task's start time.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has no start date, has end date and time, and bottom task has start date and time,
-	 *         with top task's end date is same as bottom task's start date,
-	 *         and top task's end time is after bottom task's start time.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task has no start date, has end date and time, and bottom task has start date and time,
+	 *         				with top task's end date is same as bottom task's start date,
+	 *         				and top task's end time is after bottom task's start time.
 	 */
 	private boolean hasTopTaskEndTimeIsAfterBottomTaskstartTime(Task topTask, Task bottomTask) {
 
@@ -366,12 +333,10 @@ public class SortMechanism {
 	 * This method is used to check whether top task has no start date but has end date, and bottom task has no start date 
 	 * but has end date, and whether top task's end date is after bottom task's end date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has no start date but has end date, and bottom task has no start date but has end date, 
-	 * 		   and top task's end date is after bottom task's end date.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task has no start date but has end date, and bottom task has no start date but has end date, 
+	 * 		   				and top task's end date is after bottom task's end date.
 	 */
 	private boolean hasTopTaskEndDateIsAfterBottomTaskEndDate(Task topTask, Task bottomTask) {
 
@@ -385,13 +350,11 @@ public class SortMechanism {
 	 * but has end date and time, whether top task's end date is same as bottom task's end date,
 	 * and whether top task's end date is after bottom task's end date.
 	 * 
-	 * @param topTask This is the top task.
-	 * 
-	 * @param bottomTask This is the bottom task.
-	 * 
-	 * @return true if top task has no start date but has end date and time, and bottom task has no start date 
-	 *         but has end date and time, with top task's end date is same as bottom task's end date,
-	 *         and top task's end date is after bottom task's end date.
+	 * @param topTask		This is the top task.
+	 * @param bottomTask	This is the bottom task.
+	 * @return				true if top task has no start date but has end date and time, and bottom task has no start date 
+	 *         				but has end date and time, with top task's end date is same as bottom task's end date,
+	 *         				and top task's end date is after bottom task's end date.
 	 */
 	private boolean hasTopTaskEndTimeIsAfterBottomTaskEndTime(Task topTask, Task bottomTask) {
 

@@ -64,7 +64,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This is setter method for UndoCommand's times.
 	 * 
-	 * @param times This will be the times of the UndoCommand.
+	 * @param times	This will be the times of the UndoCommand.
 	 */
 	public void setTimes(int times) {
 		_times = times;
@@ -73,7 +73,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This is setter method for UndoCommand's message.
 	 * 
-	 * @param message This will be the message of the UndoCommand.
+	 * @param message	This will be the message of the UndoCommand.
 	 */
 	public void setMessage(String message) {
 		_message = message;
@@ -82,7 +82,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This is getter method for UndoCommand's times.
 	 * 
-	 * @return the number of times of undo.
+	 * @return	the number of times of undo.
 	 */
 	public int getTimes() {
 		return _times;
@@ -91,7 +91,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This is getter method for UndoCommand's message.
 	 * 
-	 * @return message.
+	 * @return	message.
 	 */
 	public String getMessage() {
 		return _message;
@@ -130,7 +130,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to clear the indexList in the ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void clearIndexList(ListsManager listsManager) {
 		listsManager.getIndexList().clear();
@@ -140,9 +140,8 @@ public class UndoCommand implements CommandInterface {
 	 * This method differentiate the command type and execute the undo command based on the command type, followed by
 	 * updating the relevant lists.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param historyManager This is the HistoryManager.
+	 * @param listsManager		This is the ListsManager.
+	 * @param historyManager	This is the HistoryManager.
 	 */
 	private void executeUndoCommand(ListsManager listsManager, HistoryManager historyManager) {
 		RollbackItem rollbackItem = new RollbackItem(null, null, null);
@@ -184,9 +183,8 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to update the indexList in ListsManager.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param undoTasksList This is the list of tasks that are undo-ed.
+	 * @param listsManager	This is the ListsManager.
+	 * @param undoTasksList	This is the list of tasks that are undo-ed.
 	 */
 	private void updateIndexList(ListsManager listsManager, ArrayList<Task> undoTasksList) {
 		for (int i = 0; i < undoTasksList.size(); i++) {
@@ -198,7 +196,7 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param listsManager this is the ListsManager.
+	 * @param listsManager	This is the ListsManager.
 	 */
 	private void updateListsManager(ListsManager listsManager) {
 		listsManager.getSelectedTagsList().clear();
@@ -210,11 +208,9 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to undo an undone command.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for undo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param listsManager		This is the ListsManager.
+	 * @param rollbackItem		This is the RollbackItem used for undo command.
+	 * @param undoNumOfTimes	This is the number of times of undo.
 	 */
 	private void undoUndoneCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
 		listsManager.getMainList().remove(rollbackItem.getNewTask());
@@ -230,11 +226,9 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to undo a done command.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for undo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param listsManager		This is the ListsManager.
+	 * @param rollbackItem		This is the RollbackItem used for undo command.
+	 * @param undoNumOfTimes	This is the number of times of undo.
 	 */
 	private void undoDoneCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
 		listsManager.getMainList().remove(rollbackItem.getNewTask());
@@ -250,11 +244,9 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to undo a edit command.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for undo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param listsManager		This is the ListsManager.
+	 * @param rollbackItem		This is the RollbackItem used for undo command.
+	 * @param undoNumOfTimes	This is the number of times of undo.
 	 */
 	private void undoEditCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
 		listsManager.getMainList().remove(rollbackItem.getNewTask());
@@ -270,11 +262,9 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to undo a delete command.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for undo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param listsManager		This is the ListsManager.
+	 * @param rollbackItem		This is the RollbackItem used for undo command.
+	 * @param undoNumOfTimes	This is the number of times of undo.
 	 */
 	private void undoDeleteCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
 		listsManager.getMainList().add(rollbackItem.getOldTask());
@@ -288,11 +278,9 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to undo a add command.
 	 * 
-	 * @param listsManager This is the ListsManager.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for undo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param listsManager		This is the ListsManager.
+	 * @param rollbackItem		This is the RollbackItem used for undo command.
+	 * @param undoNumOfTimes	This is the number of times of undo.
 	 */
 	private void undoAddCommand(ListsManager listsManager, RollbackItem rollbackItem, int undoNumOfTimes) {
 		listsManager.getMainList().remove(rollbackItem.getNewTask());
@@ -306,13 +294,10 @@ public class UndoCommand implements CommandInterface {
 	/**
 	 * This method is used to update and set the message of UndoCommand.
 	 * 
-	 * @param undoOneTaskMessage This will be the message of one task been undo-ed.
-	 * 
-	 * @param undoMultipleTasksMessage This will be the message of multiple tasks been undo-ed.
-	 * 
-	 * @param rollbackItem This is the RollbackItem used for redo command.
-	 * 
-	 * @param undoNumOfTimes This is the number of times of undo.
+	 * @param undoOneTaskMessage		This will be the message of one task been undo-ed.
+	 * @param undoMultipleTasksMessage	This will be the message of multiple tasks been undo-ed.
+	 * @param rollbackItem				This is the RollbackItem used for redo command.
+	 * @param undoNumOfTimes			This is the number of times of undo.
 	 */
 	private void updateMessage(String undoOneTaskMessage, String undoMultipleTasksMessage, RollbackItem rollbackItem, int undoNumOfTimes) {
 		if (undoNumOfTimes == 1) {

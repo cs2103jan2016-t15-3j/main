@@ -28,7 +28,7 @@ public class ExitCommand implements CommandInterface {
 	/**
 	 * This is getter method for ExitCommand's message.
 	 * 
-	 * @return empty string.
+	 * @return	empty string.
 	 */
 	public String getMessage() {
 		return STRING_EMPTY;

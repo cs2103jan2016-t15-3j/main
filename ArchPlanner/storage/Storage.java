@@ -69,7 +69,7 @@ public class Storage {
 	/**
 	 * This is setter method for master list.
 	 * 
-	 * @param list This will be the master list.
+	 * @param list	This will be the master list.
 	 */
 	public void setMasterList(ArrayList<Task> list) {
 		_masterList = list;
@@ -78,7 +78,7 @@ public class Storage {
 	/**
 	 * This is the setter method for file path.
 	 * 
-	 * @param filePath This will be the file path.
+	 * @param filePath	This will be the file path.
 	 */
 	public void setFilePath(String filePath) {
 		_filePath = filePath;
@@ -87,7 +87,7 @@ public class Storage {
 	/**
 	 * This is setter method for storage file.
 	 * 
-	 * @param file This will be the storage file.
+	 * @param file	This will be the storage file.
 	 */
 	public void setStorageFile(File file) {
 		_storageFile = file;
@@ -96,7 +96,7 @@ public class Storage {
 	/**
 	 * This is setter method for linker file.
 	 * 
-	 * @param file This will be the linker file.
+	 * @param file	This will be the linker file.
 	 */
 	public void setLinkerFile(File file) {
 		_linkerFile = file;
@@ -105,7 +105,7 @@ public class Storage {
 	/**
 	 * This is getter method for master list.
 	 * 
-	 * @return master list.
+	 * @return	master list.
 	 */
 	public ArrayList<Task> getMasterList() {
 		return _masterList;
@@ -114,7 +114,7 @@ public class Storage {
 	/**
 	 * This is getter method for file path.
 	 * 
-	 * @return file path.
+	 * @return	file path.
 	 */
 	public String getFilePath() {
 		return _filePath;
@@ -123,7 +123,7 @@ public class Storage {
 	/**
 	 * This is getter method for storage file.
 	 * 
-	 * @return storage file.
+	 * @return	storage file.
 	 */
 	public File getStorageFile() {
 		return _storageFile;
@@ -132,7 +132,7 @@ public class Storage {
 	/**
 	 * This is getter method for linker file.
 	 * 
-	 * @return storage file.
+	 * @return	storage file.
 	 */
 	public File getLinkerFile() {
 		return _linkerFile;
@@ -141,7 +141,7 @@ public class Storage {
 	/**
 	 * This is getter method for file name.
 	 * 
-	 * @return file name.
+	 * @return	file name.
 	 */
 	public String getFileName() {
 		return _fileName;
@@ -150,7 +150,7 @@ public class Storage {
 	/**
 	 * This is getter method for linker file name.
 	 * 
-	 * @return linker file name.
+	 * @return	linker file name.
 	 */
 	public String getLinkerName() {
 		return _linkerName;
@@ -168,7 +168,7 @@ public class Storage {
 	/**
 	 * This method is used to set new file path.
 	 * 
-	 * @param filePath This will be the new file path.
+	 * @param filePath	This will be the new file path.
 	 */
 	public void setNewFilePath(String filePath) {
 		try {
@@ -187,7 +187,7 @@ public class Storage {
 	/**
 	 * This method is used to set file path to an existing file path.
 	 * 
-	 * @param filePath This is the exisitng file path.
+	 * @param filePath	This is the exisitng file path.
 	 */
 	public void setExistingFilePath(String filePath) {
 		try {
@@ -225,7 +225,7 @@ public class Storage {
 	/**
 	 * This method is used to write the list of tasks to the file.
 	 * 
-	 * @param list This is the lists of tasks to be saved to the file.
+	 * @param list	This is the lists of tasks to be saved to the file.
 	 */
 	public void writeStorageFile(ArrayList<Task> list) {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -302,7 +302,7 @@ public class Storage {
 	/**
 	 * this method is used to create new file.
 	 * 
-	 * @param file This is the file to be created.
+	 * @param file	This is the file to be created.
 	 */
 	private void createFile(File file) {
 		try {
@@ -315,7 +315,7 @@ public class Storage {
 	/**
 	 * This method is used to retrieve the default directory for storing of file.
 	 * 
-	 * @return default directory.
+	 * @return	default directory.
 	 */
 	private String getDefaultDirectory() {
 		String systemName = System.getProperty(SYSTEM_NAME);
@@ -334,7 +334,7 @@ public class Storage {
 	/**
 	 * This method is used to get the file path of the linker file.
 	 * 
-	 * @return linker file's file path.
+	 * @return	linker file's file path.
 	 */
 	private String getLinkerPath() {
 		String defaultLinkerPath = getDefaultDirectory() + getLinkerName();
@@ -344,7 +344,7 @@ public class Storage {
 	/**
 	 * This method is used to get the file path of the storage file.
 	 * 
-	 * @return storage file's file path.
+	 * @return	storage file's file path.
 	 */
 	private String getDefaultFilePath() {
 		String defaultLinkerPath = getDefaultDirectory() + getFileName();

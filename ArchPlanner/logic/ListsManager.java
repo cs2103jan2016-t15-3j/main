@@ -82,7 +82,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for current view type.
 	 * 
-	 * @param currentViewType This is the current view type.
+	 * @param currentViewType	This is the current view type.
 	 */
 	public void setCurrentViewType(String currentViewType) {
 		_currentViewType = currentViewType;
@@ -91,7 +91,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for main list.
 	 * 
-	 * @param list This is the list that replaces current main list.
+	 * @param list	This is the list that replaces current main list.
 	 */
 	public void setMainList(ArrayList<Task> list) {
 		_mainList.clear();
@@ -101,7 +101,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for view list.
 	 * 
-	 * @param list This is the list that replaces current view list.
+	 * @param list	This is the list that replaces current view list.
 	 */
 	public void setViewList(ArrayList<Task> list) {
 		_viewList.clear();
@@ -111,7 +111,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for tags list.
 	 * 
-	 * @param list This is the list that replaces current tags list.
+	 * @param list	This is the list that replaces current tags list.
 	 */
 	public void setTagsList(ArrayList<Tag> list) {
 		_tagsList.clear();
@@ -121,7 +121,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for view type.
 	 * 
-	 * @param viewType This is the view type to replace the current view type.
+	 * @param viewType	This is the view type to replace the current view type.
 	 */
 	public void setViewType(VIEW_TYPE viewType) {
 		_viewType = viewType;
@@ -130,7 +130,7 @@ public class ListsManager {
 	/**
 	 * This is setter method for category type.
 	 * 
-	 * @param categoryType This is the category type that replaces current category type.
+	 * @param categoryType	This is the category type that replaces current category type.
 	 */
 	public void setCategoryType(CATEGORY_TYPE categoryType) {
 		_categoryType = categoryType;
@@ -139,7 +139,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for main list.
 	 * 
-	 * @return main list.
+	 * @return	main list.
 	 */
 	public ArrayList<Task> getMainList() {
 		return _mainList;
@@ -148,7 +148,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for view list.
 	 * 
-	 * @return view list.
+	 * @return	view list.
 	 */
 	public ArrayList<Task> getViewList() {
 		return _viewList;
@@ -157,7 +157,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for tags list.
 	 * 
-	 * @return tags list.
+	 * @return	tags list.
 	 */
 	public ArrayList<Tag> getTagsList() {
 		return _tagsList;
@@ -166,7 +166,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for _deadlineList arrayList.
 	 * 
-	 * @return deadline list.
+	 * @return	deadline list.
 	 */
 	public ArrayList<Task> getDeadlineList() {
 		return _deadlineList;
@@ -175,7 +175,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for event list.
 	 * 
-	 * @return event list.
+	 * @return	event list.
 	 */
 	public ArrayList<Task> getEventList() {
 		return _eventList;
@@ -184,7 +184,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for floating list.
 	 * 
-	 * @return floating list.
+	 * @return	floating list.
 	 */
 	public ArrayList<Task> getFloatingList() {
 		return _floatingList;
@@ -193,7 +193,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for overdue list.
 	 * 
-	 * @return overdue list.
+	 * @return	overdue list.
 	 */
 	public ArrayList<Task> getOverdueList() {
 		return _overdueList;
@@ -202,7 +202,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for done list.
 	 * 
-	 * @return done list.
+	 * @return	done list.
 	 */
 	public ArrayList<Task> getDoneList() {
 		return _doneList;
@@ -211,7 +211,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for undone list.
 	 * 
-	 * @return undone list.
+	 * @return	undone list.
 	 */
 	public ArrayList<Task> getUndoneList() {
 		return _undoneList;
@@ -220,7 +220,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for current view type.
 	 * 
-	 * @return current view type.
+	 * @return	current view type.
 	 */
 	public String getCurrentViewType() {
 		return _currentViewType;
@@ -229,7 +229,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for view type.
 	 * 
-	 * @return view type.
+	 * @return	view type.
 	 */
 	public VIEW_TYPE getViewType() {
 		return _viewType;
@@ -238,7 +238,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for category type.
 	 * 
-	 * @return category type.
+	 * @return	category type.
 	 */
 	public CATEGORY_TYPE getCategoryType() {
 		return _categoryType;
@@ -247,7 +247,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for selected tags list.
 	 * 
-	 * @return selected tags list.
+	 * @return	selected tags list.
 	 */
 	public ArrayList<String> getSelectedTagsList() {
 		return _selectedTagsList;
@@ -256,7 +256,7 @@ public class ListsManager {
 	/**
 	 * This is getter method for index list.
 	 * 
-	 * @return index list.
+	 * @return	index list.
 	 */
 	public ArrayList<Integer> getIndexList() {
 		return _indexList;
@@ -265,7 +265,7 @@ public class ListsManager {
 	/**
 	 * This method is used to set up all the lists when the system just starts up.
 	 * 
-	 * @param list This is the list used to set up main list.
+	 * @param list	This is the list used to set up main list.
 	 */
 	public void setUpLists(ArrayList<Task> list) {
 		if (list == null) {
@@ -291,9 +291,8 @@ public class ListsManager {
 	 * This method is used to add or remove the tag name in selected tags list 
 	 * when a user selected or unselected a tag button displayed on UI, respectively.
 	 * 
-	 * @param tagName This is the name of the tag.
-	 * 
-	 * @param isSelected This is the status of whether the tag is selected.
+	 * @param tagName		This is the name of the tag.
+	 * @param isSelected	This is the status of whether the tag is selected.
 	 */
 	public void updateSelectedTagsList(String tagName, boolean isSelected) {
 		if (!getSelectedTagsList().contains(tagName) && isSelected) {
@@ -307,7 +306,7 @@ public class ListsManager {
 	 * This method add the index of the task that was modified or added to the  index list
 	 * follow by sorting it in ascending order.
 	 * 
-	 * @param task This is the task that is added or modified to the list.
+	 * @param task	This is the task that is added or modified to the list.
 	 */
 	public void updateIndexList(Task task) {
 		for (int i = getViewList().size() - 1; i >= 0; i--) {
@@ -343,7 +342,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list based on selected category type.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithCategoryType(ArrayList<Task> list) {
 		switch (getCategoryType()) {
@@ -364,7 +363,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list based on selected view type.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithViewType(ArrayList<Task> list) {
 		switch (getViewType()) {
@@ -416,7 +415,7 @@ public class ListsManager {
 	/**
 	 * This method is used to populate overdue list with tasks from main list that are overdue.
 	 * 
-	 * @param task This is the task that will be checked whether it is overdue.
+	 * @param task	This is the task that will be checked whether it is overdue.
 	 */
 	private void populateOverdueList(Task task) {
 		if ((task.getIsOverdue() == true) && (!task.getIsDone())) {
@@ -427,7 +426,7 @@ public class ListsManager {
 	/**
 	 * This method is used to populate undone list with tasks from main list that are undone.
 	 * 
-	 * @param task This is the task that will be checked whether it is undone.
+	 * @param task	This is the task that will be checked whether it is undone.
 	 */
 	private void populateUndoneList(Task task) {
 		if (task.getIsDone() == false){
@@ -438,7 +437,7 @@ public class ListsManager {
 	/**
 	 * This method is used to populate done list with tasks from main list that are done.
 	 * 
-	 * @param task This is the task that will be checked whether it is done.
+	 * @param task	This is the task that will be checked whether it is done.
 	 */
 	private void populateDoneList(Task task) {
 		if (task.getIsDone() == true) {
@@ -449,7 +448,7 @@ public class ListsManager {
 	/**
 	 * This method is used to populate category lists based on category type.
 	 * 
-	 * @param task This is the task that will be classified based on category type.
+	 * @param task	This is the task that will be classified based on category type.
 	 */
 	private void populateCategoryLists(Task task) {
 		if (hasNoStartDateAndNoEndDate(task)) {
@@ -464,7 +463,7 @@ public class ListsManager {
 	/**
 	 * This method is used to populate tags list from checking the tasks in the main list.
 	 * 
-	 * @param task This is the task that will be checked whether it has same tag name in tags list.
+	 * @param task	This is the task that will be checked whether it has same tag name in tags list.
 	 */
 	private void populateTagsList(Task task) {
 		for (int i = 0; i < task.getTagsList().size(); i++) {
@@ -479,11 +478,9 @@ public class ListsManager {
 	 * This method is used to check if tags list contains the name of the tag of a task
 	 * and update the update the tags list.
 	 * 
-	 * @param taskTagName This is the task's tag name to be checked.
-	 * 
-	 * @param tag This is the task' tag with isSelected set to false.
-	 * 
-	 * @param hasSameTag This is the variable to check if the task's tag name contains in tags list.
+	 * @param taskTagName	This is the task's tag name to be checked.
+	 * @param tag			This is the task' tag with isSelected set to false.
+	 * @param hasSameTag	This is the variable to check if the task's tag name contains in tags list.
 	 */
 	private void updateTagsList(String taskTagName, Tag tag, boolean hasSameTag) {
 		for (int j = 0; j < getTagsList().size() && !hasSameTag; j++) {
@@ -498,9 +495,8 @@ public class ListsManager {
 	/**
 	 * This method is used to add the tag to the tags list if not found in tags list.
 	 * 
-	 * @param tag This is the task' tag with isSelected set to false.
-	 * 
-	 * @param hasSameTag This is the variable to check if the task's tag name contains in tags list.
+	 * @param tag			This is the task' tag with isSelected set to false.
+	 * @param hasSameTag	This is the variable to check if the task's tag name contains in tags list.
 	 */
 	private void addTagIfNotFoundInTagsList(Tag tag, boolean hasSameTag) {
 		if (!hasSameTag) {
@@ -511,7 +507,7 @@ public class ListsManager {
 	/**
 	 * This method is used to check and update the list after checking for tasks that are overdue.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateTaskIsOverdueStatus(ArrayList<Task> list) {
 
@@ -528,11 +524,9 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the allocated date and time is before current date and time.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueIfBeforeCurrentTime(LocalDate currentDate, LocalTime currentTime, Task task) {
 		if (hasStartDateAndEndDate(task) || hasStartDateAndNoEndDate(task)) {
@@ -545,11 +539,9 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the end is before current.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueIfEndIsBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime, Task task) {
 		if (task.getEndTime() != null) {
@@ -562,9 +554,8 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the end date is before current date.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueIfEndDateBeforeCurrentDate(LocalDate currentDate, Task task) {
 		if (task.getEndDate().isBefore(currentDate)) {
@@ -575,11 +566,9 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the end date and time is before current date and time.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueIfEndDateTimeBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime,
 			Task task) {
@@ -591,13 +580,10 @@ public class ListsManager {
 	/**
 	 * This method is used to check if task end date and time is before current date and time.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
-	 * 
-	 * @return true if task end date and time is before current date and time or else return false
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
+	 * @return 				true if task end date and time is before current date and time or else return false
 	 */
 	private boolean hasEndDateTimeBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime, Task task) {
 		return task.getEndDate().isBefore(currentDate) || (task.getEndDate().equals(currentDate) 
@@ -607,11 +593,9 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the start is before current.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueIfStartIsBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime, Task task) {
 		if (task.getStartTime() != null) {
@@ -624,9 +608,8 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the start date is before current date
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueStartDateBeforeCurrentDate(LocalDate currentDate, Task task) {
 		if (task.getStartDate().isBefore(currentDate)) {
@@ -637,11 +620,9 @@ public class ListsManager {
 	/**
 	 * This method is used to set task to overdue if the start date and time is before current date and time.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
 	 */
 	private void setTaskIsOverdueStartDateTimeBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime,
 			Task task) {
@@ -653,13 +634,10 @@ public class ListsManager {
 	/**
 	 * This method is used to check if task start date and time is before current date and time.
 	 * 
-	 * @param currentDate This is the current date.
-	 * 
-	 * @param currentTime This is the current time.
-	 * 
-	 * @param task This is the task to be checked if it is overdue.
-	 * 
-	 * @return true if task start date and time is before current date and time or else return false
+	 * @param currentDate	This is the current date.
+	 * @param currentTime	This is the current time.
+	 * @param task			This is the task to be checked if it is overdue.
+	 * @return				true if task start date and time is before current date and time or else return false
 	 */
 	private boolean hasStartDateTimeBeforeCurrentDateTime(LocalDate currentDate, LocalTime currentTime, Task task) {
 		return task.getStartDate().isBefore(currentDate) || (task.getStartDate().equals(currentDate) 
@@ -669,9 +647,8 @@ public class ListsManager {
 	/**
 	 * This method  is used to check if task has start date and no end date.
 	 * 
-	 * @param task This is the task that is checked for start and end date.
-	 * 
-	 * @return true if task has start date and no end date or else return false.
+	 * @param task	This is the task that is checked for start and end date.
+	 * @return		true if task has start date and no end date or else return false.
 	 */
 	private boolean hasStartDateAndNoEndDate(Task task) {
 		return task.getStartDate() != null && task.getEndDate() == null;
@@ -680,9 +657,8 @@ public class ListsManager {
 	/**
 	 * This method  is used to check if task has start date and end date.
 	 * 
-	 * @param task This is the task that is checked for start and end date.
-	 * 
-	 * @return true if task has start date and end date or else return false.
+	 * @param task	This is the task that is checked for start and end date.
+	 * @return		true if task has start date and end date or else return false.
 	 */
 	private boolean hasStartDateAndEndDate(Task task) {
 		return task.getStartDate() != null && task.getEndDate() != null;
@@ -691,9 +667,8 @@ public class ListsManager {
 	/**
 	 * This method  is used to check if task has no start date and has end date.
 	 * 
-	 * @param task This is the task that is checked for start and end date.
-	 * 
-	 * @return true if task has no start date and has end date or else return false.
+	 * @param task	This is the task that is checked for start and end date.
+	 * @return		true if task has no start date and has end date or else return false.
 	 */
 	private boolean hasEndDateAndNoStartDate(Task task) {
 		return task.getStartDate() == null && task.getEndDate() != null;
@@ -702,9 +677,8 @@ public class ListsManager {
 	/**
 	 * This method  is used to check if task has no start date and no end date.
 	 * 
-	 * @param task This is the task that is checked for start and no end date.
-	 * 
-	 * @return true if task has no start date and no end date or else return false.
+	 * @param task	This is the task that is checked for start and no end date.
+	 * @return		true if task has no start date and no end date or else return false.
 	 */
 	private boolean hasNoStartDateAndNoEndDate(Task task) {
 		return task.getStartDate() == null && task.getEndDate() == null;
@@ -726,9 +700,8 @@ public class ListsManager {
 	/**
 	 * This method is used to set the tag to selected if the tag name contains in the _selectedTagsList.
 	 * 
-	 * @param selectedTagName This is the name of the selected tag.
-	 * 
-	 * @param hasSameTag This is the variable to check if the task's tag name contains in tags list.
+	 * @param selectedTagName	This is the name of the selected tag.
+	 * @param hasSameTag		This is the variable to check if the task's tag name contains in tags list.
 	 */
 	private void setTagIsSelectedStatusIfExistsInSelectedTagsList(String selectedTagName, boolean hasSameTag) {
 		for (int j = 0; j < getTagsList().size() && !hasSameTag; j++) {
@@ -753,9 +726,8 @@ public class ListsManager {
 	/**
 	 * This method is used to check if any of the tag is selected.
 	 * 
-	 * @param hasTagSelected This variable indicates if any of the tags is selected.
-	 * 
-	 * @return true if any of the tag is selected or else return false.
+	 * @param hasTagSelected	This variable indicates if any of the tags is selected.
+	 * @return					true if any of the tag is selected or else return false.
 	 */
 	private boolean hasTagSelected(boolean hasTagSelected) {
 		for (int i = 0; i < getTagsList().size() && !hasTagSelected; i++) {
@@ -768,11 +740,9 @@ public class ListsManager {
 	/**
 	 * This method is used check if the tag is selected.
 	 * 
-	 * @param hasTagSelected This variable indicates if any of the tags is selected.
-	 * 
-	 * @param tag This is the tag to be checked if it is selected
-	 * 
-	 * @return true if any of the tag is selected or else return false.
+	 * @param hasTagSelected	This variable indicates if any of the tags is selected.
+	 * @param tag				This is the tag to be checked if it is selected
+	 * @return					true if any of the tag is selected or else return false.
 	 */
 	private boolean hasTagSelected(boolean hasTagSelected, Tag tag) {
 		if (tag.getIsSelected()) {
@@ -784,9 +754,8 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list if at least one tag is selected.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
-	 * 
-	 * @param hasTagSelected This variable indicates whether any tag is selected.
+	 * @param list				This is the list of tasks after meeting previous conditions.
+	 * @param hasTagSelected	This variable indicates whether any tag is selected.
 	 */
 	private void updateViewListWithSelectedTags(ArrayList<Task> list, boolean hasTagSelected) {
 		if (!hasTagSelected) {
@@ -803,13 +772,10 @@ public class ListsManager {
 	/**
 	 * This is used to remove task from view list if it does not contain any of the tags that are selected.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
-	 * 
-	 * @param i This is the index of the task to be checked whether it has the tag that is selected.
-	 * 
-	 * @param hasSameTag This variable indicates whether any tag is selected.
-	 * 
-	 * @return the index
+	 * @param list			This is the list of tasks after meeting previous conditions.
+	 * @param i				This is the index of the task to be checked whether it has the tag that is selected.
+	 * @param hasSameTag 	This variable indicates whether any tag is selected.
+	 * @return				index of the previous checked task.
 	 */
 	private int removeTaskFromViewListIfNoSameTag(ArrayList<Task> list, int i, boolean hasSameTag) {
 		if (hasSameTag == false) {
@@ -822,11 +788,9 @@ public class ListsManager {
 	/**
 	 * This method checks if task has tag with the same name as the tag in the selected tags list.
 	 * 
-	 * @param hasSameTag This variable indicates whether any tag is selected.
-	 * 
-	 * @param task This is the task to be checked whether it has any tag that is selected.
-	 * 
-	 * @return true if task has tag with the same name as the tag in the _selectedTagsList or else return false.
+	 * @param hasSameTag	This variable indicates whether any tag is selected.
+	 * @param task			This is the task to be checked whether it has any tag that is selected.
+	 * @return				true if task has tag with the same name as the tag in the _selectedTagsList or else return false.
 	 */
 	private boolean hasSameTag(boolean hasSameTag, Task task) {
 		for (int j = 0; j < getTagsList().size() && !hasSameTag; j++) {
@@ -841,7 +805,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list with tasks that are deadline task.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithCategoryDeadlines(ArrayList<Task> list) {
 		for (int i = 0; i < list.size(); i++) {
@@ -853,13 +817,10 @@ public class ListsManager {
 	/**
 	 * This method is used to remove task from view list if it is not deadline task.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
-
-	 * @param i This is the index of the task to be checked whether it is deadline task.
-	 * 
-	 * @param task This is the task to be checked whether it is deadline task.
-	 * 
-	 * @return the index of the previous checked task.
+	 * @param list	This is the list of tasks after meeting previous conditions.
+	 * @param i 	This is the index of the task to be checked whether it is deadline task.
+	 * @param task 	This is the task to be checked whether it is deadline task.
+	 * @return		index of the previous checked task.
 	 */
 	private int removeTaskFromViewListIfIsNotCategoryDeadlines(ArrayList<Task> list, int i, Task task) {
 		if (!hasEndDateAndNoStartDate(task)) {
@@ -884,13 +845,10 @@ public class ListsManager {
 	/**
 	 * This method is used to remove task from view list if it is not event task.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
-
-	 * @param i This is the index of the task to be checked whether it is event task.
-	 * 
-	 * @param task This is the task to be checked whether it is event task.
-	 * 
-	 * @return the index of the previous checked task.
+	 * @param list	This is the list of tasks after meeting previous conditions.
+	 * @param i 	This is the index of the task to be checked whether it is event task.
+	 * @param task 	This is the task to be checked whether it is event task.
+	 * @return 		index of the previous checked task.
 	 */
 	private int removeTaskFromViewListIfIsNotCategoryEvents(ArrayList<Task> list, int i, Task task) {
 		if (!hasStartDateAndNoEndDate(task) && !hasStartDateAndEndDate(task)) {
@@ -915,13 +873,10 @@ public class ListsManager {
 	/**
 	 * This method is used to remove task from view list if it is not floating task.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
-	 * 
-	 * @param i This is the index of the task to be checked whether it is floating task.
-	 * 
-	 * @param task This is the task to be checked whether it is floating task.
-	 * 
-	 * @return the index of the previous checked task.
+	 * @param list	This is the list of tasks after meeting previous conditions.
+	 * @param i 	This is the index of the task to be checked whether it is floating task.
+	 * @param task 	This is the task to be checked whether it is floating task.
+	 * @return		index of the previous checked task.
 	 */
 	private int removeTaskFromViewListIfIsNotCategoryTasks(ArrayList<Task> list, int i, Task task) {
 		if (!hasNoStartDateAndNoEndDate(task)) {
@@ -934,7 +889,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list with overdue tasks.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithViewOverdue(ArrayList<Task> list) {
 		list.addAll(getOverdueList());
@@ -943,7 +898,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list with undone tasks.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithViewUndone(ArrayList<Task> list) {
 		list.addAll(getUndoneList());
@@ -952,7 +907,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list with done tasks.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithViewDone(ArrayList<Task> list) {
 		list.addAll(getDoneList());
@@ -961,7 +916,7 @@ public class ListsManager {
 	/**
 	 * This method is used to update view list with all tasks.
 	 * 
-	 * @param list This is the list of tasks after meeting previous conditions.
+	 * @param list	This is the list of tasks after meeting previous conditions.
 	 */
 	private void updateViewListWithViewAll(ArrayList<Task> list) {
 		list.addAll(getMainList());
