@@ -1,4 +1,4 @@
-package prompt;
+package interpreter.prompt;
 
 import java.util.ArrayList;
 

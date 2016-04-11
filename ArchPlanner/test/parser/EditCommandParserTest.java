@@ -4,7 +4,7 @@ import logic.commands.CommandInterface;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
 import org.junit.Test;
-import parser.EditCommandParser;
+import interpreter.parser.EditCommandParser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

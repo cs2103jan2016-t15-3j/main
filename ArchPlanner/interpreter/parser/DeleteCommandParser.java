@@ -1,19 +1,19 @@
-package parser;
+package interpreter.parser;
 
 import logic.commands.CommandInterface;
-import logic.commands.DoneCommand;
+import logic.commands.DeleteCommand;
 import logic.commands.InvalidCommand;
-import separator.InputSeparator;
+import interpreter.separator.InputSeparator;
 
 /**
  * @@author A0149647N
- * DoneCommandParser parse done command with InputSeparator
+ * DeleteCommandParser parse delete command with InputSeparator
  */
-public class DoneCommandParser {
+public class DeleteCommandParser {
 
     private static final String INVALID_ID = "Invalid: ID not found";
-    private static final String INVALID_COMMAND = "Done command is invalid!";
-    private static final String INVALID_OUT_OF_RANGE = "Done index out of range!";
+    private static final String INVALID_COMMAND = "Delete command is invalid!";
+    private static final String INVALID_OUT_OF_RANGE = "Delete index out of range!";
 
     /**
      * Parse delete command with InputSeparator
@@ -28,13 +28,13 @@ public class DoneCommandParser {
         }
         if (separator.isIdOnly()) {
             if (separator.isIdRangeValid(separator.getID(), viewListSize)) {
-                return new DoneCommand(separator.getID());
+                return new DeleteCommand(separator.getID());
             } else {
                 return new InvalidCommand(INVALID_OUT_OF_RANGE);
             }
         }
         if (separator.hasTwoValidId(viewListSize)) {
-            return new DoneCommand(separator.getID(), separator.getSecondId());
+            return new DeleteCommand(separator.getID(), separator.getSecondId());
         }
         if (!separator.isIdRangeValid(separator.getSecondId(), viewListSize)) {
             return new InvalidCommand(INVALID_OUT_OF_RANGE);

@@ -2,7 +2,7 @@ package test.prompt;
 
 import org.junit.Before;
 import org.junit.Test;
-import prompt.Prompt;
+import interpreter.prompt.Prompt;
 
 import java.util.ArrayList;
 

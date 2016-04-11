@@ -4,7 +4,7 @@ import logic.commands.CommandInterface;
 import logic.commands.DoneCommand;
 import logic.commands.InvalidCommand;
 import org.junit.Test;
-import parser.DoneCommandParser;
+import interpreter.parser.DoneCommandParser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

@@ -1,4 +1,4 @@
-package parser.time;
+package interpreter.parser.time;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;

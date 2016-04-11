@@ -1,8 +1,8 @@
-package prompt;
+package interpreter.prompt;
 
 import java.util.ArrayList;
 
-import prompt.Prompt.CommandType;
+import interpreter.prompt.Prompt.CommandType;
 
 /**
  * This class is used to prompt command suggestion to the user.

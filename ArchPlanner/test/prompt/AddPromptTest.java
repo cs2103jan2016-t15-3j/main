@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompt.Prompt;
+import interpreter.prompt.Prompt;
 
 /**
  * This class is used to conduct unit testing on AddPrompt class which provide prompts for add command format

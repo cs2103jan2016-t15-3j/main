@@ -1,4 +1,4 @@
-package separator;
+package interpreter.separator;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,9 +1,9 @@
-package parser;
+package interpreter.parser;
 
 import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.SetCommand;
-import separator.InputSeparator;
+import interpreter.separator.InputSeparator;
 
 /**
  * @@author A0149647N

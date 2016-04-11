@@ -1,4 +1,4 @@
-package separator;
+package interpreter.separator;
 
 import java.util.Date;
 import java.util.logging.Logger;

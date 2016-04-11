@@ -1,4 +1,4 @@
-package parser;
+package interpreter.parser;
 
 import logic.Tag;
 import logic.commands.*;
@@ -108,7 +108,7 @@ public class Parser {
         } else if (redoListSize <= 0) {
             return new InvalidCommand(INVALID_REDO_LIST_SIZE);
         } else {
-            return new UndoCommand();
+            return new RedoCommand();
         }
     }
 

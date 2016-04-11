@@ -39,7 +39,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import application.TaskPane;
 import logic.Logic;
 import logic.Tag;
 import logic.Task;
@@ -47,7 +46,7 @@ import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
-import prompt.Prompt;
+import interpreter.prompt.Prompt;
 
 /**
  * This class is used to set up the initial layout of the UI and handle all events happening on the UI

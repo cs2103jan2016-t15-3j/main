@@ -1,6 +1,6 @@
-package prompt;
+package interpreter.prompt;
 
-import separator.InputSeparator;
+import interpreter.separator.InputSeparator;
 
 import java.util.ArrayList;
 

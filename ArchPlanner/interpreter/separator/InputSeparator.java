@@ -1,6 +1,6 @@
-package separator;
+package interpreter.separator;
 
-import prompt.Prompt;
+import interpreter.prompt.Prompt;
 
 import java.util.HashMap;
 

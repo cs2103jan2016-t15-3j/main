@@ -1,9 +1,9 @@
-package prompt;
+package interpreter.prompt;
 
 import java.util.ArrayList;
 
-import separator.AddInputSeparator;
-import separator.AddInputSeparator.AddKeyWordType;
+import interpreter.separator.AddInputSeparator;
+import interpreter.separator.AddInputSeparator.AddKeyWordType;
 
 /**
  * This class is used provide the relevant add command format to be displayed to the user to guide them to enter the

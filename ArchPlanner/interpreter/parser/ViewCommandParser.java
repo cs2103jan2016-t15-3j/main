@@ -1,13 +1,13 @@
-package parser;
+package interpreter.parser;
 
 import logic.Tag;
-import parser.time.TimeParser;
-import parser.time.TimeParserResult;
+import interpreter.parser.time.TimeParser;
+import interpreter.parser.time.TimeParserResult;
 import logic.TaskParameters;
 import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
-import separator.InputSeparator;
+import interpreter.separator.InputSeparator;
 
 import java.util.ArrayList;
 

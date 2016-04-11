@@ -6,7 +6,7 @@ import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
 import org.junit.Before;
 import org.junit.Test;
-import parser.ViewCommandParser;
+import interpreter.parser.ViewCommandParser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

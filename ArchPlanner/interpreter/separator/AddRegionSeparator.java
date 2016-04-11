@@ -1,6 +1,6 @@
-package separator;
+package interpreter.separator;
 
-import separator.AddInputSeparator.AddKeyWordType;
+import interpreter.separator.AddInputSeparator.AddKeyWordType;
 
 /**
  * This class is used to separate the given string into 5 regions.

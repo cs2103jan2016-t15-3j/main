@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompt.Prompt;
+import interpreter.prompt.Prompt;
 
 /**
  * This class is used to conduct unit testing on CommandPrompt class which provide prompt the available command

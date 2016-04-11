@@ -1,8 +1,8 @@
-package prompt;
+package interpreter.prompt;
 
-import separator.InputSeparator;
-import parser.time.TimeParser;
-import parser.time.TimeParserResult;
+import interpreter.separator.InputSeparator;
+import interpreter.parser.time.TimeParser;
+import interpreter.parser.time.TimeParserResult;
 
 import java.util.ArrayList;
 
