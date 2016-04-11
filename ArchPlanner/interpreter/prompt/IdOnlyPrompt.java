@@ -1,8 +1,8 @@
 package interpreter.prompt;
 
-import interpreter.separator.InputSeparator;
-
 import java.util.ArrayList;
+
+import interpreter.separater.InputSeparater;
 
 /**
  * @@author A0149647N
@@ -21,7 +21,7 @@ public class IdOnlyPrompt implements PromptInterface{
     private static final int TWO_WORD = 2;
     private static final int MINIMUM_ID = 1;
 
-    InputSeparator inputSeparator;
+    InputSeparater inputSeparator;
 
     /**
      * Get the prompt of ID only command: delete, done and undone.
@@ -30,7 +30,7 @@ public class IdOnlyPrompt implements PromptInterface{
     public ArrayList<String> getPrompts(String userInput) {
         String commandName = userInput.trim().toLowerCase().split(STRING_MULTIPLE_WHITESPACE)[FIRST_INDEX];
         ArrayList<String> promptList = new ArrayList<>();
-        this.inputSeparator = new InputSeparator(userInput);
+        this.inputSeparator = new InputSeparater(userInput);
         if (inputSeparator.getWordCount() == ONE_WORD) {
             promptList.add(String.format(COMMAND, commandName));
             promptList.add(String.format(COMMAND_RANGE, commandName));

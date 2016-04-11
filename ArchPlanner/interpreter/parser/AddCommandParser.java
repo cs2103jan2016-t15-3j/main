@@ -5,7 +5,7 @@ import logic.commands.AddCommand;
 import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import interpreter.parser.time.TimeParserResult;
-import interpreter.separator.AddInputSeparator;
+import interpreter.separater.AddInputSeparater;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class AddCommandParser {
         if (input.length() <= ADD_PARAMETER_INDEX) {
             return new InvalidCommand(INVALID_EMPTY);
         }
-        AddInputSeparator addInputSeparator = new AddInputSeparator(input.substring(ADD_PARAMETER_INDEX));
+        AddInputSeparater addInputSeparator = new AddInputSeparater(input.substring(ADD_PARAMETER_INDEX));
         if (!addInputSeparator.hasDescription()) {
             return new InvalidCommand(INVALID_EMPTY);
         }
@@ -72,7 +72,7 @@ public class AddCommandParser {
      * @param addInputSeparator The separator which contains initial data
      * @return Reformed TimeParserResult object
      */
-    private TimeParserResult getDateTime(AddInputSeparator addInputSeparator) {
+    private TimeParserResult getDateTime(AddInputSeparater addInputSeparator) {
         TimeParserResult timeParserResult = new TimeParserResult();
         if (addInputSeparator.hasStartDate()) {
             timeParserResult.setFirstDate(addInputSeparator.getStartDate());
@@ -103,7 +103,7 @@ public class AddCommandParser {
      * @param timeParserResult This contains all the date and time date
      * @return true if valid, else false
      */
-    private boolean checkTimeValidWithKeyword(AddInputSeparator.AddKeyWordType keyword, TimeParserResult timeParserResult) {
+    private boolean checkTimeValidWithKeyword(AddInputSeparater.AddKeyWordType keyword, TimeParserResult timeParserResult) {
         if (keyword == null) {
             return true;
         }

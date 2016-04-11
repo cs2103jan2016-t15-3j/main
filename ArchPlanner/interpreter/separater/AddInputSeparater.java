@@ -1,4 +1,4 @@
-package interpreter.separator;
+package interpreter.separater;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +11,7 @@ import java.util.Date;
  * 
  * @@author A0140034B
  */
-public class AddInputSeparator {
+public class AddInputSeparater {
     public enum AddKeyWordType {
         ON, BY, FROM, UNKNOWN
     }
@@ -60,9 +60,9 @@ public class AddInputSeparator {
      * 
      * @param userInput     the string with the add command parameters.
      */
-    public AddInputSeparator(String userInput) {
+    public AddInputSeparater(String userInput) {
         
-        AddRegionSeparator breakUserInput = new AddRegionSeparator(userInput);
+        AddRegionSeparater breakUserInput = new AddRegionSeparater(userInput);
         
         _partialKeyWord = findPartialKeyWord(userInput);   
         _tags = findTags(breakUserInput.getTagRegion());
@@ -140,7 +140,7 @@ public class AddInputSeparator {
      * @param partialKeyWord    the partial keyword already found.
      * @return                  the keyword converted from the keyword region in the breakUserInput.
      */
-    private AddKeyWordType findInitialKeyWord(AddRegionSeparator breakUserInput, AddKeyWordType partialKeyWord) {
+    private AddKeyWordType findInitialKeyWord(AddRegionSeparater breakUserInput, AddKeyWordType partialKeyWord) {
         if (partialKeyWord != AddKeyWordType.UNKNOWN) {
             return AddKeyWordType.UNKNOWN;
         } else {
@@ -155,7 +155,7 @@ public class AddInputSeparator {
      * @param keyWord           the keyword already found.
      * @return                  the start date region.
      */
-    private String findStartDateRegion(AddRegionSeparator breakUserInput, AddKeyWordType keyWord) {
+    private String findStartDateRegion(AddRegionSeparater breakUserInput, AddKeyWordType keyWord) {
         switch (keyWord) {
             case ON :
                 return breakUserInput.getFirstDateRegion();
@@ -173,7 +173,7 @@ public class AddInputSeparator {
      * @param keyWord           the keyword already found.
      * @return                  the end date region.
      */
-    private String findEndDateRegion(AddRegionSeparator breakUserInput, AddKeyWordType keyWord) {
+    private String findEndDateRegion(AddRegionSeparater breakUserInput, AddKeyWordType keyWord) {
         switch (keyWord) {
             case BY :
                 return breakUserInput.getFirstDateRegion();
@@ -259,7 +259,7 @@ public class AddInputSeparator {
      * @param endDateTime       the end date used for comparing.
      * @return                  the description interpreted.
      */
-    private String findDesciption(String userInput, AddRegionSeparator breakUserInput, AddKeyWordType keyWord, 
+    private String findDesciption(String userInput, AddRegionSeparater breakUserInput, AddKeyWordType keyWord, 
                                  Date startDateTime, Date endDateTime) {
         if ((startDateTime == null && endDateTime == null) || (keyWord == AddKeyWordType.FROM && endDateTime == null)) {
             return userInput.substring(INITIAL_INDEX, userInput.length() - breakUserInput.getTagRegion().length()).trim();
@@ -378,7 +378,7 @@ public class AddInputSeparator {
         }
     }
     
-    private boolean isSpacePresent(String userInput, AddRegionSeparator breakUserInput) {
+    private boolean isSpacePresent(String userInput, AddRegionSeparater breakUserInput) {
         if (!breakUserInput.getTagRegion().isEmpty()) {
             return true;
         }

@@ -2,8 +2,8 @@ package interpreter.prompt;
 
 import java.util.ArrayList;
 
-import interpreter.separator.AddInputSeparator;
-import interpreter.separator.AddInputSeparator.AddKeyWordType;
+import interpreter.separater.AddInputSeparater;
+import interpreter.separater.AddInputSeparater.AddKeyWordType;
 
 /**
  * This class is used provide the relevant add command format to be displayed to the user to guide them to enter the
@@ -37,7 +37,7 @@ public class AddPrompt implements PromptInterface {
     private static final int MIN_NUM_OF_TAG = 0;
     private static final int INDEX_OF_FIRST_WORD = 0;
   
-    private AddInputSeparator _parameter;
+    private AddInputSeparater _parameter;
     
     /**
      * Interpret the given string to determine the relevant prompts.
@@ -47,7 +47,7 @@ public class AddPrompt implements PromptInterface {
      */
     @Override
     public ArrayList<String> getPrompts(String userInput) {             
-        _parameter = new AddInputSeparator(removeAddCommand(userInput));
+        _parameter = new AddInputSeparater(removeAddCommand(userInput));
         ArrayList<String> addPrompts = new ArrayList<String>();  
         String prompt = appendPrompt(_parameter);
         Parameter lastAppend = getLastAppend(_parameter);      
@@ -78,7 +78,7 @@ public class AddPrompt implements PromptInterface {
      * @param parameter     the parameters that the user have already inputed.
      * @return              the string formed from the present parameters.
      */
-    private String appendPrompt(AddInputSeparator parameter) {
+    private String appendPrompt(AddInputSeparater parameter) {
         String prompt = PROMPT_ADD;
         if (parameter.hasDescription()) {
             prompt += PROMPT_DESCRIPTION;
@@ -117,7 +117,7 @@ public class AddPrompt implements PromptInterface {
      * @param parameter     the parameters that the user have already inputed.
      * @return              the last parameter that user have inputed.
      */
-    private Parameter getLastAppend(AddInputSeparator parameter) {
+    private Parameter getLastAppend(AddInputSeparater parameter) {
         Parameter lastAppend = Parameter.NONE;
         if (parameter.hasDescription()) {
             lastAppend = Parameter.DESCRIPTION;
@@ -156,7 +156,7 @@ public class AddPrompt implements PromptInterface {
      * @param parameter     the parameters that the user have already inputed.
      * @param lastAppend    the last parameter that user have inputed.
      */
-    private void addPromptsAfterLastAppend(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter, Parameter lastAppend) {
+    private void addPromptsAfterLastAppend(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter, Parameter lastAppend) {
         switch (lastAppend) {
             case NONE :
                 addPromptsAfterAdd(addPrompts, prompt);
@@ -208,7 +208,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterDescription(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterDescription(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (!parameter.hasSpace()) {
             addPrompts.add(prompt);
         } else {
@@ -229,7 +229,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterKeyWord(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterKeyWord(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.BY || parameter.getPartialKeyWord() == AddKeyWordType.BY) {
             addPrompts.add(prompt + PROMPT_END_DATE);
             addPrompts.add(prompt + PROMPT_END_TIME);
@@ -246,7 +246,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterStartDate(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterStartDate(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.FROM) {
             addPrompts.add(prompt + PROMPT_KEYWORD_TO + PROMPT_END_DATE);
             addPrompts.add(prompt + PROMPT_START_TIME + PROMPT_KEYWORD_TO + PROMPT_END_TIME);
@@ -267,7 +267,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterStartTime(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterStartTime(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.FROM) {
             addPrompts.add(prompt + PROMPT_KEYWORD_TO + PROMPT_END_TIME);
             addPrompts.add(prompt + PROMPT_KEYWORD_TO + PROMPT_END_DATE);
@@ -299,7 +299,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterEndDate(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterEndDate(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.FROM && !parameter.hasValidDateRange()) {
             if (!parameter.hasSpace()) {
                 addPrompts.add(PROMPT_INVALID_DATE_RANGE  + prompt);
@@ -322,7 +322,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterEndTime(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterEndTime(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.FROM && !parameter.hasValidDateRange()) {
             if (!parameter.hasSpace()) {
                 addPrompts.add(PROMPT_INVALID_DATE_RANGE  + prompt);
@@ -344,7 +344,7 @@ public class AddPrompt implements PromptInterface {
      * @param prompt        the string formed by the parameters that have already been inputed.
      * @param parameter     the parameters that the user have already inputed.
      */
-    private void addPromptsAfterTag(ArrayList<String> addPrompts, String prompt, AddInputSeparator parameter) {
+    private void addPromptsAfterTag(ArrayList<String> addPrompts, String prompt, AddInputSeparater parameter) {
         if (parameter.getKeyWord() == AddKeyWordType.FROM && !parameter.hasValidDateRange()) {
             if (parameter.hasValidTag()) {
                 addPrompts.add(PROMPT_INVALID_DATE_RANGE  + prompt);
@@ -360,11 +360,11 @@ public class AddPrompt implements PromptInterface {
         }
     }
 
-    private boolean isValidPartialKeyWord(AddInputSeparator parameter) {
+    private boolean isValidPartialKeyWord(AddInputSeparater parameter) {
         return parameter.getPartialKeyWord() != AddKeyWordType.UNKNOWN;
     }
 
-    private boolean isValidPartialKeyWordTo(AddInputSeparator parameter) {
+    private boolean isValidPartialKeyWordTo(AddInputSeparater parameter) {
         if (parameter.getKeyWord() != AddKeyWordType.FROM) {
             return false;
         }    
@@ -377,11 +377,11 @@ public class AddPrompt implements PromptInterface {
         return true;
     }
     
-    private String getPartialKeyWordString(AddInputSeparator parameter) {
+    private String getPartialKeyWordString(AddInputSeparater parameter) {
         return parameter.getPartialKeyWord().toString().toLowerCase();
     }
 
-    private String getKeyWordString(AddInputSeparator parameter) {
+    private String getKeyWordString(AddInputSeparater parameter) {
         return parameter.getKeyWord().toString().toLowerCase();
     }
     

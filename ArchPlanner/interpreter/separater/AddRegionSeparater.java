@@ -1,6 +1,6 @@
-package interpreter.separator;
+package interpreter.separater;
 
-import interpreter.separator.AddInputSeparator.AddKeyWordType;
+import interpreter.separater.AddInputSeparater.AddKeyWordType;
 
 /**
  * This class is used to separate the given string into 5 regions.
@@ -22,7 +22,7 @@ import interpreter.separator.AddInputSeparator.AddKeyWordType;
  * 
  * @@author A0140034B
  */
-public class AddRegionSeparator {
+public class AddRegionSeparater {
    
     private static final int ONE_SPACE = 1;
     private static final int TWO_SPACE = 2;
@@ -48,7 +48,7 @@ public class AddRegionSeparator {
      * 
      * @param userInput    the string that will be separated to the different regions.
      */
-    public AddRegionSeparator(String userInput) {
+    public AddRegionSeparater(String userInput) {
         _keyWordRegion = extractKeyWordRegion(userInput);
         _tagRegion = extractTagRegion(userInput, _keyWordRegion);
         _descriptionRegion = extractDescriptionRegion(userInput, _keyWordRegion, _tagRegion);

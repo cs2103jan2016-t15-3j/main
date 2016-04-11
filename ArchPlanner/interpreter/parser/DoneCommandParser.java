@@ -1,9 +1,9 @@
 package interpreter.parser;
 
+import interpreter.separater.InputSeparater;
 import logic.commands.CommandInterface;
 import logic.commands.DoneCommand;
 import logic.commands.InvalidCommand;
-import interpreter.separator.InputSeparator;
 
 /**
  * @@author A0149647N
@@ -22,7 +22,7 @@ public class DoneCommandParser {
      * @return Parsed command object
      */
     public CommandInterface parse(String input, int viewListSize) {
-        InputSeparator separator = new InputSeparator(input);
+        InputSeparater separator = new InputSeparater(input);
         if (separator.getID() == null) {
             return new InvalidCommand(INVALID_ID);
         }

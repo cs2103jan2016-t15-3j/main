@@ -48,7 +48,6 @@ import logic.commands.ViewCommand;
 import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 import interpreter.Interpreter;
-import interpreter.prompt.Prompt;
 
 /**
  * This class is used to set up the initial layout of the UI and handle all events happening on the UI

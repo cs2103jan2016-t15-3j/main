@@ -1,8 +1,8 @@
 package interpreter.prompt;
 
-import interpreter.separator.InputSeparator;
 import interpreter.parser.time.TimeParser;
 import interpreter.parser.time.TimeParserResult;
+import interpreter.separater.InputSeparater;
 
 import java.util.ArrayList;
 
@@ -53,13 +53,13 @@ public class ViewPrompt implements PromptInterface {
     private static final int ONE_WORD = 1;
 
     ArrayList<String> promptList = new ArrayList<>();
-    InputSeparator inputSeparator;
+    InputSeparater inputSeparator;
 
     @Override
     public ArrayList<String> getPrompts(String command) {
         command = removeMultipleSpace(command);
-        this.inputSeparator = new InputSeparator(command);
-        InputSeparator.KeywordType type = inputSeparator.getKeywordType();
+        this.inputSeparator = new InputSeparater(command);
+        InputSeparater.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
         String lowerCaseCommand = command.toLowerCase();
 
@@ -144,7 +144,7 @@ public class ViewPrompt implements PromptInterface {
      * @param type      This is the keyword
      * @param parameter This is the parameter of the keyword
      */
-    private void handleKeywordWithParameter(InputSeparator.KeywordType type, String parameter) {
+    private void handleKeywordWithParameter(InputSeparater.KeywordType type, String parameter) {
         switch (type) {
             case DESCRIPTION:
                 handleDescription(parameter);

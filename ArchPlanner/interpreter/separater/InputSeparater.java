@@ -1,4 +1,4 @@
-package interpreter.separator;
+package interpreter.separater;
 
 import interpreter.prompt.Prompt;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
  * InputSeparator return the parsed components of a command
  * This class serves for all commands except add command
  */
-public class InputSeparator {
+public class InputSeparater {
 
     public enum KeywordType {
         DESCRIPTION, DONE, UNDONE, OVERDUE, ALL, DEADLINES, EVENTS, TASKS, TO, FILEPATH,
@@ -44,7 +44,7 @@ public class InputSeparator {
      *
      * @param command This is user's input
      */
-    public InputSeparator(String command) {
+    public InputSeparater(String command) {
         commandType = determineCommandType(command);
         String[] breakUserInput = command.split(STRING_MULTIPLE_WHITESPACE);
         this.wordCount = breakUserInput.length;

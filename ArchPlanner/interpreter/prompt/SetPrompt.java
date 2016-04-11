@@ -1,8 +1,8 @@
 package interpreter.prompt;
 
-import interpreter.separator.InputSeparator;
-
 import java.util.ArrayList;
+
+import interpreter.separater.InputSeparater;
 
 /**
  * @@author A0149647N
@@ -16,7 +16,7 @@ public class SetPrompt implements PromptInterface {
     private final String INVALID_KEYWORD = "Invalid keyword: set filepath <New File Path>";
     private final String INVALID_ID = "Invalid id: set filepath <New File Path>";
     ArrayList<String> promptList = new ArrayList<>();
-    InputSeparator inputSeparator;
+    InputSeparater inputSeparator;
 
     /**
      * Get prompt of set command.
@@ -25,11 +25,11 @@ public class SetPrompt implements PromptInterface {
      */
     @Override
     public ArrayList<String> getPrompts(String userInput) {
-        this.inputSeparator = new InputSeparator(userInput);
+        this.inputSeparator = new InputSeparater(userInput);
         if (inputSeparator.getID() != null) {
             promptList.add(INVALID_ID);
         }
-        if (inputSeparator.getKeywordType() != null && inputSeparator.getKeywordType() == InputSeparator.KeywordType.FILEPATH) {
+        if (inputSeparator.getKeywordType() != null && inputSeparator.getKeywordType() == InputSeparater.KeywordType.FILEPATH) {
             if (inputSeparator.getParameter() == null) {
                 promptList.add(SET_PROMPT);
                 promptList.add(SET_PROMPT_DEFAULT);
@@ -56,7 +56,7 @@ public class SetPrompt implements PromptInterface {
      */
     @Override
     public String getAutoWord() {
-        if (inputSeparator.getKeywordType() != null && inputSeparator.getKeywordType() == InputSeparator.KeywordType.FILEPATH) {
+        if (inputSeparator.getKeywordType() != null && inputSeparator.getKeywordType() == InputSeparater.KeywordType.FILEPATH) {
             if (inputSeparator.getParameter() != null && DEFAULT.startsWith(inputSeparator.getParameter().toLowerCase())) {
                 return DEFAULT;
             }

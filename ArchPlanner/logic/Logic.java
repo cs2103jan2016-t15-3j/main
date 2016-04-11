@@ -9,7 +9,6 @@ import logic.commands.ViewCommand.CATEGORY_TYPE;
 import logic.commands.ViewCommand.VIEW_TYPE;
 import storage.Storage;
 import interpreter.Interpreter;
-import interpreter.parser.Parser;
 
 /**
  * This class interact with the UI and process the operation, 

@@ -2,11 +2,11 @@ package interpreter.parser;
 
 import interpreter.parser.time.TimeParser;
 import interpreter.parser.time.TimeParserResult;
+import interpreter.separater.InputSeparater;
 import logic.TaskParameters;
 import logic.commands.CommandInterface;
 import logic.commands.EditCommand;
 import logic.commands.InvalidCommand;
-import interpreter.separator.InputSeparator;
 
 import java.util.ArrayList;
 
@@ -46,9 +46,9 @@ public class EditCommandParser {
      * @return Parsed command object
      */
     public CommandInterface parse(String input, int viewListSize) {
-        InputSeparator inputSeparator = new InputSeparator(input);
+        InputSeparater inputSeparator = new InputSeparater(input);
         Integer index = inputSeparator.getID();
-        InputSeparator.KeywordType type = inputSeparator.getKeywordType();
+        InputSeparater.KeywordType type = inputSeparator.getKeywordType();
         String parameter = inputSeparator.getParameter();
 
         if (index == null) {
@@ -120,7 +120,7 @@ public class EditCommandParser {
      * @param type This is the keyword type
      * @return Parsed result
      */
-    private CommandInterface parserKeywordWithParameter(String parameter, Integer index, InputSeparator.KeywordType type) {
+    private CommandInterface parserKeywordWithParameter(String parameter, Integer index, InputSeparater.KeywordType type) {
         TimeParserResult timeParserResult = new TimeParser().parseTime(parameter);
         boolean timeInvalid = timeParserResult.getMatchString() == null || !timeParserResult.getMatchString().equals(parameter);
         boolean isRemove = parameter.equalsIgnoreCase(REMOVE);

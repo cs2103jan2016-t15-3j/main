@@ -1,8 +1,8 @@
 package interpreter.prompt;
 
-import interpreter.separator.InputSeparator;
 import interpreter.parser.time.TimeParser;
 import interpreter.parser.time.TimeParserResult;
+import interpreter.separater.InputSeparater;
 
 import java.util.ArrayList;
 
@@ -68,7 +68,7 @@ public class EditPrompt implements PromptInterface {
     private static final int ONE_WORD = 1;
 
     ArrayList<String> promptList = new ArrayList<>();
-    InputSeparator inputSeparator;
+    InputSeparater inputSeparator;
 
     /**
      * Get prompts of edit command
@@ -76,11 +76,11 @@ public class EditPrompt implements PromptInterface {
     @Override
     public ArrayList<String> getPrompts(String userInput) {
 
-        this.inputSeparator = new InputSeparator(userInput);
+        this.inputSeparator = new InputSeparater(userInput);
         int wordCount = inputSeparator.getWordCount();
         Integer id = inputSeparator.getID();
         String parameter = inputSeparator.getParameter();
-        InputSeparator.KeywordType keyword = inputSeparator.getKeywordType();
+        InputSeparater.KeywordType keyword = inputSeparator.getKeywordType();
         boolean endWithSpace = inputSeparator.isEndWithSpace();
 
         if (id == null) {
@@ -153,7 +153,7 @@ public class EditPrompt implements PromptInterface {
      * @param keyword This is the keyword
      * @param parameter This is the parameter of the keyword
      */
-    private void handleKeywordWithParameter(InputSeparator.KeywordType keyword, String parameter) {
+    private void handleKeywordWithParameter(InputSeparater.KeywordType keyword, String parameter) {
         TimeParserResult result = new TimeParser().parseTime(parameter);
         switch (keyword) {
             case DESCRIPTION:
@@ -179,8 +179,8 @@ public class EditPrompt implements PromptInterface {
     @Override
     public String getAutoWord() {
         if (inputSeparator.getID() != null) {
-            if (inputSeparator.getKeywordType() == InputSeparator.KeywordType.START
-                    || inputSeparator.getKeywordType() == InputSeparator.KeywordType.END) {
+            if (inputSeparator.getKeywordType() == InputSeparater.KeywordType.START
+                    || inputSeparator.getKeywordType() == InputSeparater.KeywordType.END) {
                 String remove = REMOVE;
                 if (remove.startsWith(inputSeparator.getParameter().toLowerCase())) {
                     return remove;

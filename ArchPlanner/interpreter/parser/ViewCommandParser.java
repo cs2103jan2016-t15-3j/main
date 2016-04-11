@@ -3,11 +3,11 @@ package interpreter.parser;
 import logic.Tag;
 import interpreter.parser.time.TimeParser;
 import interpreter.parser.time.TimeParserResult;
+import interpreter.separater.InputSeparater;
 import logic.TaskParameters;
 import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.ViewCommand;
-import interpreter.separator.InputSeparator;
 
 import java.util.ArrayList;
 
@@ -39,8 +39,8 @@ public class ViewCommandParser {
      * @return Parsed command object
      */
     public CommandInterface parse(String input, ArrayList<Tag> currentTagList) {
-        InputSeparator separator = new InputSeparator(input);
-        InputSeparator.KeywordType type = separator.getKeywordType();
+        InputSeparater separator = new InputSeparater(input);
+        InputSeparater.KeywordType type = separator.getKeywordType();
         String parameter = separator.getParameter();
         if (separator.getID() != null) {
             return new InvalidCommand(INVALID_HAVE_ID);
@@ -64,7 +64,7 @@ public class ViewCommandParser {
      * @param type This is the keyword typr
      * @return Parsed result
      */
-    private CommandInterface parserKeywordWithParameter(String parameter, InputSeparator.KeywordType type) {
+    private CommandInterface parserKeywordWithParameter(String parameter, InputSeparater.KeywordType type) {
         TimeParserResult timeParserResult = new TimeParser().parseTime(parameter);
         boolean timeInvalid = timeParserResult.getMatchString() == null || !timeParserResult.getMatchString().equals(parameter);
         switch (type) {
@@ -217,7 +217,7 @@ public class ViewCommandParser {
      * @param type This is the command type
      * @return Parsed result
      */
-    private CommandInterface parseKeywordOnlyCase(InputSeparator.KeywordType type) {
+    private CommandInterface parseKeywordOnlyCase(InputSeparater.KeywordType type) {
         switch (type) {
             case ALL:
                 return new ViewCommand(ViewCommand.VIEW_TYPE.ALL, null, result);

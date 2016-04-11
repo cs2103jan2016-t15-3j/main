@@ -1,9 +1,9 @@
 package interpreter.parser;
 
+import interpreter.separater.InputSeparater;
 import logic.commands.CommandInterface;
 import logic.commands.InvalidCommand;
 import logic.commands.SetCommand;
-import interpreter.separator.InputSeparator;
 
 /**
  * @@author A0149647N
@@ -20,7 +20,7 @@ public class SetCommandParser {
      * @return Parsed command object
      */
     public CommandInterface parse(String input) {
-        InputSeparator separator = new InputSeparator(input);
+        InputSeparater separator = new InputSeparater(input);
         if (isValidCommand(separator)) {
             if (separator.getParameter() == null) {
                 return new InvalidCommand(INVALID_PATH_MISSING);
@@ -39,9 +39,9 @@ public class SetCommandParser {
      * @param separator This is the InputSeparator object which contains parsed result
      * @return True if the command is valid
      */
-    private boolean isValidCommand(InputSeparator separator) {
+    private boolean isValidCommand(InputSeparater separator) {
         boolean noId = separator.getID() == null;
-        boolean validKeyword = separator.getKeywordType() != null && separator.getKeywordType() == InputSeparator.KeywordType.FILEPATH;
+        boolean validKeyword = separator.getKeywordType() != null && separator.getKeywordType() == InputSeparater.KeywordType.FILEPATH;
         return noId && validKeyword;
     }
 }
