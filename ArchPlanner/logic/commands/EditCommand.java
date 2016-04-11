@@ -246,7 +246,7 @@ public class EditCommand implements CommandInterface {
 	/**
 	 * This method is used to update ListsManager.
 	 * 
-	 * @param historyManager	This is the HistoryManager.
+	 * @param listsManager		This is the listsManager.
 	 * @param oldTask			This is the task before been edited.
 	 * @param newTask			This is the task after been edited.
 	 */

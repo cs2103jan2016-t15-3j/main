@@ -63,7 +63,7 @@ public class HistoryManager {
 	/**
 	 *  This is setter method for redo list.
 	 *  
-	 * @param undoList	This is the list RollbackItem to support redo command.
+	 * @param redoList	This is the list RollbackItem to support redo command.
 	 */
 	public void setRedoList(ArrayList<RollbackItem> redoList) {
 		_redoList = new ArrayList<RollbackItem>();

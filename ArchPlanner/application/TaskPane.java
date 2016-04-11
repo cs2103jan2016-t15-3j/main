@@ -86,7 +86,7 @@ public class TaskPane extends GridPane {
     /**
      * set the task parameters to this TaskPane for display.
      * 
-     * @param displayNumber     the task with the parameters.
+     * @param task     the task with the parameters.
      */
     public void setTaskInfo(Task task) {
         setTaskParameters(task); 

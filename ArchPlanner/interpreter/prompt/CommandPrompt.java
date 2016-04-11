@@ -31,7 +31,7 @@ public class CommandPrompt implements PromptInterface{
     /**
      * Interpret the string and return the appropriate command prompts to UI to display to the user.
      * 
-     * @param userInput the string that represent the command.
+     * @param input     the string that represent the command.
      * @return          the list of command prompts to display to user.
      */
     @Override

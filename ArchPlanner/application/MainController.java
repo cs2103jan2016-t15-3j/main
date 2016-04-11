@@ -431,9 +431,8 @@ public class MainController implements Initializable{
     
     /**
      * show Feedback window to user the status of the command.
-     * 
-     * @param isSuccessful  the status of the command.
-     * @param message       the message to display to user.
+     *
+     * @param logic     to get the index of the tasks to light up
      */
     private void lightUpTasksChange(Logic logic) {
         log.info(LOG_MESSAGE_LIGHTING_UP_TASK);
@@ -473,7 +472,7 @@ public class MainController implements Initializable{
     /**
      * keys to help user input command in TextField.
      * 
-     * @param taskLabel     the key that is released in userInputTextField.
+     * @param event     the key that is released in userInputTextField.
      */
     @FXML
     private void onKeyReleased(KeyEvent event) {    
@@ -508,7 +507,7 @@ public class MainController implements Initializable{
     /**
      * hotkeys to help user execute a command.
      * 
-     * @param taskLabel     the keys that is pressed in userInputTextField.
+     * @param event     the keys that is pressed in userInputTextField.
      */
     @FXML
     private void onKeyPressed(KeyEvent event) {

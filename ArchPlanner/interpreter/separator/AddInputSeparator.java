@@ -97,7 +97,7 @@ public class AddInputSeparator {
      * Return the keyword that partially matched the last word in the string.
      * Return UNKNOWN if no keyword matched.
      * 
-     * @param userInput     the string that user inputed.
+     * @param input         the string that user inputted.
      * @return              the keyword that partially matched the last word in the string.
      */
     private AddKeyWordType findPartialKeyWord(String input) {
