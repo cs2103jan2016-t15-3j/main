@@ -17,7 +17,7 @@
 
 <!-- @@author A0140034B -->
 
-<StackPane fx:id="mainWindow" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<StackPane fx:id="_mainWindow" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
       <GridPane>
         <columnConstraints>
@@ -28,7 +28,7 @@
           <RowConstraints maxHeight="140.0" minHeight="140.0" prefHeight="140.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane fx:id="visibleWindow" onMouseDragged="#onWindowDragged" onMousePressed="#onWindowPressed">
+            <GridPane fx:id="_visibleWindow" onMouseDragged="#onWindowDragged" onMousePressed="#onWindowPressed">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -38,7 +38,7 @@
                 <RowConstraints maxHeight="70.0" minHeight="70.0" prefHeight="70.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane fx:id="taskWindow">
+                  <GridPane fx:id="_taskWindow">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
@@ -67,13 +67,13 @@
                                     <RowConstraints vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Button fx:id="miniButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" GridPane.halignment="CENTER">
+                                    <Button fx:id="_miniButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#minimize" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" GridPane.halignment="CENTER">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="maxiButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#maxOrRestore" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                                    <Button fx:id="closeButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                                    <Button fx:id="_maxiButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#maxOrRestore" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                    <Button fx:id="_closeButton" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -83,7 +83,7 @@
                                     <Insets right="10.0" />
                                  </padding>
                               </GridPane>
-                              <Label fx:id="viewLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseDragged="#onWindowDragged" onMousePressed="#onWindowPressed" text="ALL" GridPane.columnIndex="1">
+                              <Label fx:id="_scopeOfViewLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseDragged="#onWindowDragged" onMousePressed="#onWindowPressed" text="ALL" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -94,7 +94,7 @@
                                     <Insets top="10.0" />
                                  </padding>
                               </Label>
-                              <Button fx:id="backButton" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" translateX="10.0" visible="false">
+                              <Button fx:id="_backButton" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" translateX="10.0" visible="false">
                                  <font>
                                     <Font name="Agency FB Bold" size="15.0" />
                                  </font>
@@ -124,28 +124,28 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <VBox fx:id="categoryPane" spacing="8.0">
+                                    <VBox fx:id="_categoryPane" spacing="8.0">
                                        <children>
-                                          <ToggleButton fx:id="event" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Events">
+                                          <ToggleButton fx:id="_eventTButton" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Events">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="categories" />
                                              </toggleGroup>
                                           </ToggleButton>
-                                          <ToggleButton fx:id="deadline" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Deadlines" toggleGroup="$categories" />
-                                          <ToggleButton fx:id="task" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Tasks" toggleGroup="$categories" />
+                                          <ToggleButton fx:id="_deadlineTButton" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Deadlines" toggleGroup="$categories" />
+                                          <ToggleButton fx:id="_taskTButton" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCategoryPressed" text="Tasks" toggleGroup="$categories" />
                                        </children>
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </VBox>
-                                    <ListView fx:id="tagDisplay" focusTraversable="false" GridPane.rowIndex="2">
+                                    <ListView fx:id="_tagListView" focusTraversable="false" GridPane.rowIndex="2">
                                        <padding>
                                           <Insets bottom="5.0" top="5.0" />
                                        </padding>
                                     </ListView>
                                  </children>
                               </GridPane>
-                              <ListView fx:id="taskDisplay" focusTraversable="false" GridPane.columnIndex="2">
+                              <ListView fx:id="_taskListView" focusTraversable="false" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" top="5.0" />
                                  </padding>
@@ -157,7 +157,7 @@
                         </GridPane>
                      </children>
                   </GridPane>
-                  <TextField fx:id="userInput" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" GridPane.rowIndex="2">
+                  <TextField fx:id="_userInputTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEnterPressed" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" GridPane.rowIndex="2">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -176,11 +176,11 @@
           <RowConstraints maxHeight="130.0" minHeight="130.0" prefHeight="130.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="topPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.valignment="BOTTOM" />
-            <Label fx:id="bottomPrompt" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+            <Label fx:id="_topPromptLabel" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.valignment="BOTTOM" />
+            <Label fx:id="_bottomPromptLabel" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" visible="false" GridPane.rowIndex="2" GridPane.valignment="TOP" />
          </children>
       </GridPane>
-      <GridPane fx:id="feedbackWindow" alignment="CENTER" maxHeight="100.0" maxWidth="-Infinity" minHeight="100.0" prefHeight="100.0" visible="false">
+      <GridPane fx:id="_feedbackWindow" alignment="CENTER" maxHeight="100.0" maxWidth="-Infinity" minHeight="100.0" prefHeight="100.0" visible="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" />
           <ColumnConstraints hgrow="SOMETIMES" />
@@ -192,8 +192,8 @@
             <Insets left="100.0" right="100.0" />
          </StackPane.margin>
          <children>
-            <Label fx:id="feedbackLabel" GridPane.columnIndex="1" />
-            <ImageView fx:id="feedbackIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label fx:id="_feedbackLabel" GridPane.columnIndex="1" />
+            <ImageView fx:id="_feedbackIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -1,12 +1,10 @@
 /* @@author A0140034B */
 
-#mainWindow {
+#_mainWindow {
     -fx-background-color: transparent;
 }
 
-#taskWindow {
-	/*-fx-background-image: url('/Images/bg.jpg');*/
-	/*-fx-background-size: 100% 100%;*/
+#_taskWindow {
 	-fx-background-color: white;
 	-fx-background-radius: 20;
 	
@@ -15,17 +13,17 @@
 	-fx-border-color: #651b1b;
 }
 
-#feedbackWindow {
+#_feedbackWindow {
 	-fx-background-color: rgba(0, 0, 0, 0.8);
 	-fx-background-radius: 20;
 }
 
-#categoryPane {
+#_categoryPane {
 	-fx-background-radius: 15;
 	-fx-background-color: rgba(0, 0, 0, 0.05);
 }
 
-#userInput {
+#_userInputTextField {
 	-fx-background-radius: 20;
 	
 	-fx-border-radius: 15;
@@ -37,17 +35,17 @@
 	-fx-faint-focus-color: transparent;
 }
 
-#viewLabel {
+#_scopeOfViewLabel {
 	-fx-font-size: 2.5em;
 	-fx-text-fill: black;
 	-fx-padding: 20 0 0 0;
 }
 
-#feedbackLabel {
+#_feedbackLabel {
 	-fx-text-fill: white;
 }
 
-#topPrompt, #bottomPrompt{
+#_topPromptLabel, #_bottomPromptLabel{
 	-fx-background-color: rgba(0, 0, 0, 0.8);
 	-fx-background-radius: 20; 
     -fx-text-fill: white;
@@ -55,23 +53,23 @@
 	-fx-font: 1.2em System;
 }
 
-#maxiButton {
-	-fx-background-image: url('/Images/maxiImage.png');
+#_maxiButton {
+	-fx-background-image: url('/images/MaxiImage.png');
 	-fx-background-size: 100% 100%;
 }
 
-#miniButton {
-	-fx-background-image: url('/Images/miniImage.png');
+#_miniButton {
+	-fx-background-image: url('/images/MiniImage.png');
 	-fx-background-size: 100% 100%;
 }
 
-#closeButton {
-	-fx-background-image: url('/Images/closeImage.png');
+#_closeButton {
+	-fx-background-image: url('/images/CloseImage.png');
 	-fx-background-size: 100% 100%;
 }
 
-#backButton {
-	-fx-background-image: url('/Images/backImage.png');
+#_backButton {
+	-fx-background-image: url('/images/BackImage.png');
 	-fx-background-size: 100% 100%;
 }
 
@@ -123,7 +121,7 @@
 	-fx-background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* The main scrollbar */
+/* The main scroll-bar */
 .list-view .scroll-bar {
 	-fx-background-color: transparent;
 	-fx-padding:5 5 5 0;
@@ -136,7 +134,7 @@
     -fx-padding: 2px;
 }
 
-/* The main scrollbar which user interact with*/
+/* The main scroll-bar which user interact with*/
 .list-view .scroll-bar:horizontal .thumb,
 .list-view .scroll-bar:vertical .thumb {
     -fx-background-color:derive(black,90%);
