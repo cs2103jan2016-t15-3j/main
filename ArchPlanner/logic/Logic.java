@@ -56,7 +56,7 @@ public class Logic {
 	
 	//These constant string used to append messages for readability.
 	private final String STRING_EMPTY = "";
-	private final String STRING_WHITE_SPACE = " ";
+	private final String STRING_SINGLE_SPACE = " ";
 
 	//This is constructor of the class.
 	public Logic() {
@@ -221,7 +221,7 @@ public class Logic {
 	 */
 	public String getCurrentViewType() {
 		String selectedCategory = getSelectedCategory().toString();
-		String currentViewType = selectedCategory + STRING_WHITE_SPACE + getSelectedView() + STRING_WHITE_SPACE 
+		String currentViewType = selectedCategory + STRING_SINGLE_SPACE + getSelectedView() + STRING_SINGLE_SPACE 
 				+ _listsManager.getCurrentViewType();
 		return currentViewType;
 	}
@@ -305,7 +305,7 @@ public class Logic {
 		String strCommandType = commandInput.getClass().getSimpleName();
 
 		COMMAND_TYPE commandType = getCommandType(strCommandType);
-		log.info(commandType.toString() + STRING_WHITE_SPACE + LOGGER_MESSAGE_CONFIRMED);
+		log.info(commandType.toString() + STRING_SINGLE_SPACE + LOGGER_MESSAGE_CONFIRMED);
 
 		if (commandType.equals(COMMAND_TYPE.EXIT)) {
 			return commandInput.execute();

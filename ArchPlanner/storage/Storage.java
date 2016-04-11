@@ -34,11 +34,11 @@ public class Storage {
 	//This is the linker file to be manipulated by the program.
 	private File _linkerFile;
 
-	//This is the file name of the file to be manipulated by the program.
-	private String _fileName = "archplanner.txt";
+	//This is the default file name of the file to be manipulated by the program.
+	private final String _fileName = "archplanner.txt";
 
 	//This is the name of the linker file that indicates the storage file location.
-	private String _linkerName = "linker.txt";
+	private final String _linkerName = "linker.txt";
 	
 	//These are the variables used to manage the file system.
 	private final String SYSTEM_NAME = "os.name";
@@ -216,6 +216,7 @@ public class Storage {
 			fileWriter = new FileWriter(getLinkerPath(), false);
 			fileWriter.append(getFilePath() + STRING_EMPTY);
 			fileWriter.close();
+			readStorageFile();
 		} catch (Exception e) {
 			System.out.println(ERROR_MESSAGE_ACCESS_FILE_FAILED);
 		}

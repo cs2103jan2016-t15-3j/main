@@ -55,7 +55,7 @@ public class ListsManager {
 	
 	//These constant string variables are used to append messages for readability.
 	private final String STRING_DOUBLE_QUOTE = "\"";
-	private final String STRING_WHITE_SPACE = " ";
+	private final String STRING_SINGLE_SPACE = " ";
 	private final String STRING_EMPTY = "";
 
 	//This is constructor of the class.
@@ -715,7 +715,7 @@ public class ListsManager {
 	 */
 	private void setSelectedTag() {
 		for (int i = 0; i < getSelectedTagsList().size(); i++) {
-			_currentViewType += STRING_DOUBLE_QUOTE + getSelectedTagsList().get(i) + STRING_DOUBLE_QUOTE + STRING_WHITE_SPACE;
+			_currentViewType += STRING_DOUBLE_QUOTE + getSelectedTagsList().get(i) + STRING_DOUBLE_QUOTE + STRING_SINGLE_SPACE;
 			boolean hasSameTag = false;
 			String selectedTagName = getSelectedTagsList().get(i);
 			setTagIsSelectedStatusIfExistsInSelectedTagsList(selectedTagName, hasSameTag);
@@ -916,7 +916,7 @@ public class ListsManager {
 	 * This method is used to remove task from view list if it is not floating task.
 	 * 
 	 * @param list This is the list of tasks after meeting previous conditions.
-
+	 * 
 	 * @param i This is the index of the task to be checked whether it is floating task.
 	 * 
 	 * @param task This is the task to be checked whether it is floating task.

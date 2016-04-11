@@ -49,6 +49,12 @@ public class EditCommand implements CommandInterface {
 	private final String ERROR_MESSAGE_NO_START_DATE = "The task has no start date";
 	private final String ERROR_MESSAGE_NO_END_DATE = "The task has no end date";
 
+	//These constant string variables are used to indicate start and end of date and time.
+	private static final int FIRST_HOUR_OF_DAY = 0;
+	private static final int FIRST_MINUTE_OF_HOUR = 0;
+	private static final int LAST_HOUR_OF_DAY = 23;
+	private static final int LAST_MINUTE_OF_HOUR = 59;
+
 	//This constant string variable is the standard format for display message upon editing of task successfully.
 	private final String MESSAGE_EDIT_COMMAND = "edited \"%1$s\"";
 
@@ -59,7 +65,9 @@ public class EditCommand implements CommandInterface {
 	//This constant string variable is used to append messages for readability.
 	private final String STRING_EMPTY = "";
 
-	public enum REMOVE_TYPE {START, START_TIME, END, END_TIME, TAG, NONE}
+	public enum REMOVE_TYPE {
+		START, START_TIME, END, END_TIME, TAG, NONE
+	}
 
 	//This is constructor of the class.
 	public EditCommand(int index, TaskParameters newTaskParameters) {
@@ -196,8 +204,8 @@ public class EditCommand implements CommandInterface {
 		Task newTask = new Task();
 		initializeNewTask(oldTask, newTask);
 
-		LocalTime startTime = LocalTime.of(00, 00);
-		LocalTime endTime = LocalTime.of(23, 59);
+		LocalTime startTime = LocalTime.of(FIRST_HOUR_OF_DAY, FIRST_MINUTE_OF_HOUR);
+		LocalTime endTime = LocalTime.of(LAST_HOUR_OF_DAY, LAST_MINUTE_OF_HOUR);
 
 		editTask(oldTask, newTask, startTime, endTime);
 

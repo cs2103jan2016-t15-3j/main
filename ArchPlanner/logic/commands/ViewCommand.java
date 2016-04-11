@@ -19,10 +19,14 @@ import storage.Storage;
 public class ViewCommand implements CommandInterface {
 
 	//These are enum variables of view type.
-	public enum VIEW_TYPE {ALL, DONE, UNDONE, OVERDUE}
+	public enum VIEW_TYPE {
+		ALL, DONE, UNDONE, OVERDUE
+	}
 
 	//these are enum variables of category type.
-	public enum CATEGORY_TYPE {ALL, EVENTS, DEADLINES, TASKS}
+	public enum CATEGORY_TYPE {
+		ALL, EVENTS, DEADLINES, TASKS
+	}
 
 	//This is the logger used to log and observe the changes when program runs.
 	static Logger log = Logger.getLogger(Logic.class.getName());
@@ -43,7 +47,7 @@ public class ViewCommand implements CommandInterface {
 	//These constant string variables are used to append messages for readability.
 	private final String STRING_EMPTY = "";
 	private final String STRING_DOUBLE_QUOTE = "\"";
-	private final String STRING_WHITE_SPACE = " ";
+	private final String STRING_SINGLE_SPACE = " ";
 	private final String STRING_TO = "to";
 
 	//This is constructor of the class.
@@ -134,7 +138,7 @@ public class ViewCommand implements CommandInterface {
 	 * This method is used to set the view state as specified by the user.
 	 */
 	public CommandInterface execute(ListsManager listsManager, HistoryManager historyManager) {
-		
+
 		log.info(LOGGER_MESSAGE_EXECUTING_VIEW_COMMAND);
 		String currentViewType = STRING_EMPTY;
 		listsManager.setViewType(VIEW_TYPE.ALL);
@@ -154,7 +158,7 @@ public class ViewCommand implements CommandInterface {
 		currentViewType = updateViewListWithStartDateEndDateOnly(listsManager, currentViewType);
 
 		listsManager.setCurrentViewType(currentViewType);
-		
+
 		log.info(currentViewType);
 		log.info(LOGGER_MESSAGE_COMPLETED_VIEW_COMMAND);
 		return null;
@@ -202,7 +206,7 @@ public class ViewCommand implements CommandInterface {
 				}
 			}
 			currentViewType += appendCurrentViewType(currentViewType, getTaskParameters().getStartDateString()) + STRING_TO 
-					+ STRING_WHITE_SPACE + appendCurrentViewType(currentViewType, getTaskParameters().getEndDateString());
+					+ STRING_SINGLE_SPACE + appendCurrentViewType(currentViewType, getTaskParameters().getEndDateString());
 		}
 		return currentViewType;
 	}
@@ -282,7 +286,7 @@ public class ViewCommand implements CommandInterface {
 	 * @return current view type.
 	 */
 	private String appendCurrentViewType(String currentViewType, String detail) {
-		currentViewType += STRING_DOUBLE_QUOTE + detail + STRING_DOUBLE_QUOTE + STRING_WHITE_SPACE;
+		currentViewType += STRING_DOUBLE_QUOTE + detail + STRING_DOUBLE_QUOTE + STRING_SINGLE_SPACE;
 		return currentViewType;
 	}
 
